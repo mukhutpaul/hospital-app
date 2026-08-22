@@ -1,0 +1,1026 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "sqlite"
+}
+
+/*
+==========================================================
+UTILISATEURS / AUTHENTIFICATION
+==========================================================
+*/
+
+model User {
+  id          Int     @id @default(autoincrement())
+  name        String?
+  email       String? @unique
+  password    String?
+  telephone   String?
+  actif       Boolean @default(true)
+
+  roleId      Int?
+  role        Role? @relation(fields: [roleId], references: [id])
+
+  employe     Employe?
+
+  rendezVousCrees RendezVous[] @relation("RendezVousCreateur")
+  admissions      Admission[] @relation("AdmissionCreateur")
+  paiements       Paiement[] @relation("PaiementCaissier")
+  prescriptions   Prescription[] @relation("PrescriptionAuteur")
+
+  consultationsMedecin Consultation[] @relation("ConsultationMedecin")
+
+  auditLogs AuditLog[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Role {
+  id          Int     @id @default(autoincrement())
+  nom         String  @unique
+  description String?
+  actif       Boolean @default(true)
+
+  users       User[]
+  permissions RolePermission[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Permission {
+  id          Int     @id @default(autoincrement())
+  code        String  @unique
+  description String?
+
+  roles RolePermission[]
+
+  createdAt DateTime @default(now())
+}
+
+model RolePermission {
+  id           Int @id @default(autoincrement())
+
+  roleId       Int
+  permissionId Int
+
+  role       Role       @relation(fields: [roleId], references: [id], onDelete: Cascade)
+  permission Permission @relation(fields: [permissionId], references: [id], onDelete: Cascade)
+
+  @@unique([roleId, permissionId])
+}
+
+model Employe {
+  id            Int       @id @default(autoincrement())
+  matricule     String    @unique
+  nom           String
+  postNom      String?
+  prenom       String?
+  sexe          String?
+  dateNaissance DateTime?
+  telephone     String?
+  email         String?
+  adresse       String?
+  fonction      String?
+  dateEmbauche  DateTime?
+  actif         Boolean   @default(true)
+
+  userId Int?   @unique
+  user   User?  @relation(fields: [userId], references: [id])
+
+  serviceId Int?
+  service   Service? @relation(fields: [serviceId], references: [id])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+/*
+==========================================================
+STRUCTURE DE L'HÔPITAL
+==========================================================
+*/
+
+model Departement {
+  id          Int     @id @default(autoincrement())
+  code        String? @unique
+  nom         String
+  description String?
+  actif       Boolean @default(true)
+
+  services Service[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Service {
+  id          Int     @id @default(autoincrement())
+  code        String  @unique
+  nom         String
+  description String?
+  actif       Boolean @default(true)
+
+  departementId Int?
+  departement   Departement? @relation(fields: [departementId], references: [id])
+
+  employes          Employe[]
+  specialites       Specialite[]
+  medecins          Medecin[]
+  rendezVous        RendezVous[]
+  admissions        Admission[]
+  consultations     Consultation[]
+  hospitalisations Hospitalisation[]
+  chambres          Chambre[]
+  demandesLabo      DemandeLaboratoire[]
+  demandesImagerie  DemandeImagerie[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Specialite {
+  id          Int     @id @default(autoincrement())
+  code        String  @unique
+  nom         String
+  description String?
+  actif       Boolean @default(true)
+
+  serviceId Int?
+  service   Service? @relation(fields: [serviceId], references: [id])
+
+  medecins      Medecin[]
+  rendezVous    RendezVous[]
+  consultations Consultation[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Medecin {
+  id          Int     @id @default(autoincrement())
+  matricule   String  @unique
+  nom         String
+  postNom     String?
+  prenom      String
+  telephone   String?
+  email       String?
+  numeroOrdre String?
+  actif       Boolean @default(true)
+
+  serviceId Int?
+  service   Service? @relation(fields: [serviceId], references: [id])
+
+  specialiteId Int?
+  specialite   Specialite? @relation(fields: [specialiteId], references: [id])
+
+  rendezVous       RendezVous[]
+  consultations    Consultation[]
+  prescriptions    Prescription[]
+  hospitalisations Hospitalisation[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+/*
+==========================================================
+PATIENTS
+==========================================================
+*/
+
+model Patient {
+  id            Int       @id @default(autoincrement())
+  numeroDossier String    @unique
+
+  nom        String
+  postNom    String?
+  prenom     String?
+  sexe       String
+  dateNaissance DateTime?
+  lieuNaissance String?
+
+  telephone  String?
+  email      String?
+  adresse    String?
+  profession String?
+
+  nationalite   String?
+  etatCivil     String?
+  groupeSanguin String?
+  rhesus        String?
+
+  personneContact  String?
+  contactTelephone String?
+  contactLien      String?
+
+  photo  String?
+  actif  Boolean @default(true)
+
+  allergies        Allergie[]
+  antecedents      Antecedent[]
+  rendezVous       RendezVous[]
+  admissions       Admission[]
+  consultations    Consultation[]
+  prescriptions    Prescription[]
+  demandesLabo     DemandeLaboratoire[]
+  demandesImagerie DemandeImagerie[]
+  hospitalisations Hospitalisation[]
+  factures         Facture[]
+  paiements        Paiement[]
+  documents        DocumentPatient[]
+  assurances       PatientAssurance[]
+  constantes       Constante[]
+  sorties          Sortie[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([nom, postNom, prenom])
+  @@index([telephone])
+}
+
+model Allergie {
+  id Int @id @default(autoincrement())
+
+  patientId Int
+  patient   Patient @relation(fields: [patientId], references: [id], onDelete: Cascade)
+
+  allergene   String
+  reaction    String?
+  gravite     String?
+  description String?
+  actif       Boolean @default(true)
+
+  createdAt DateTime @default(now())
+}
+
+model Antecedent {
+  id Int @id @default(autoincrement())
+
+  patientId Int
+  patient   Patient @relation(fields: [patientId], references: [id], onDelete: Cascade)
+
+  type        String
+  libelle     String
+  description String?
+  dateDebut   DateTime?
+  dateFin     DateTime?
+
+  createdAt DateTime @default(now())
+}
+
+/*
+==========================================================
+RENDEZ-VOUS
+==========================================================
+*/
+
+model RendezVous {
+  id     Int    @id @default(autoincrement())
+  numero String @unique
+
+  patientId Int
+  patient   Patient @relation(fields: [patientId], references: [id])
+
+  medecinId Int?
+  medecin   Medecin? @relation(fields: [medecinId], references: [id])
+
+  specialiteId Int?
+  specialite   Specialite? @relation(fields: [specialiteId], references: [id])
+
+  serviceId Int?
+  service   Service? @relation(fields: [serviceId], references: [id])
+
+  dateHeure DateTime
+  motif     String?
+  statut    String @default("PLANIFIE")
+  observation String?
+
+  createdById Int?
+  createdBy   User? @relation("RendezVousCreateur", fields: [createdById], references: [id])
+
+  admission Admission?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([patientId])
+  @@index([medecinId])
+  @@index([dateHeure])
+}
+
+/*
+==========================================================
+ADMISSION
+==========================================================
+*/
+
+model Admission {
+  id     Int    @id @default(autoincrement())
+  numero String @unique
+
+  patientId Int
+  patient   Patient @relation(fields: [patientId], references: [id])
+
+  rendezVousId Int? @unique
+  rendezVous   RendezVous? @relation(fields: [rendezVousId], references: [id])
+
+  serviceId Int?
+  service   Service? @relation(fields: [serviceId], references: [id])
+
+  type    String
+  motif   String?
+  statut  String @default("EN_ATTENTE")
+
+  dateAdmission DateTime @default(now())
+  dateSortie    DateTime?
+
+  createdById Int?
+  createdBy   User? @relation("AdmissionCreateur", fields: [createdById], references: [id])
+
+  triage Triage?
+
+  consultation Consultation? @relation("AdmissionConsultation")
+
+  constantes Constante[]
+
+  hospitalisation Hospitalisation?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([patientId])
+  @@index([dateAdmission])
+}
+
+/*
+==========================================================
+TRIAGE
+==========================================================
+*/
+
+model Triage {
+  id Int @id @default(autoincrement())
+
+  admissionId Int @unique
+  admission   Admission @relation(fields: [admissionId], references: [id], onDelete: Cascade)
+
+  niveauUrgence String?
+  motif         String?
+  observation   String?
+
+  dateTriage DateTime @default(now())
+}
+
+/*
+==========================================================
+CONSTANTES
+==========================================================
+*/
+
+model Constante {
+  id Int @id @default(autoincrement())
+
+  patientId Int
+  patient   Patient @relation(fields: [patientId], references: [id])
+
+  admissionId Int?
+  admission   Admission? @relation(fields: [admissionId], references: [id])
+
+  consultationId Int?
+  consultation   Consultation? @relation(fields: [consultationId], references: [idConsultation])
+
+  temperature          Float?
+  tensionSystolique    Float?
+  tensionDiastolique   Float?
+  pouls                Int?
+  saturation           Float?
+  poids                Float?
+  taille               Float?
+  frequenceRespiratoire Int?
+  glycemie             Float?
+
+  dateMesure DateTime @default(now())
+
+  @@index([patientId])
+  @@index([admissionId])
+  @@index([consultationId])
+}
+
+/*
+==========================================================
+CONSULTATION
+==========================================================
+*/
+
+model Consultation {
+  idConsultation Int @id @default(autoincrement())
+
+  dateConsultation DateTime @default(now())
+
+  motif       String?
+  diagnostic  String?
+  observation String?
+  conclusion  String?
+
+  patientId Int
+  patient   Patient @relation(fields: [patientId], references: [id])
+
+  medecinId Int
+  medecin   Medecin @relation(fields: [medecinId], references: [id])
+
+  userMedecinId Int?
+  userMedecin   User? @relation("ConsultationMedecin", fields: [userMedecinId], references: [id])
+
+  serviceId Int?
+  service   Service? @relation(fields: [serviceId], references: [id])
+
+  specialiteId Int?
+  specialite   Specialite? @relation(fields: [specialiteId], references: [id])
+
+  admissionId Int? @unique
+  admission   Admission? @relation("AdmissionConsultation", fields: [admissionId], references: [id])
+
+  constantes Constante[]
+
+  prescriptions Prescription[]
+
+  demandesLabo DemandeLaboratoire[]
+
+  demandesImagerie DemandeImagerie[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([patientId])
+  @@index([medecinId])
+  @@index([dateConsultation])
+}
+
+/*
+==========================================================
+PRESCRIPTIONS
+==========================================================
+*/
+
+model Prescription {
+  id     Int    @id @default(autoincrement())
+  numero String @unique
+
+  patientId Int
+  patient   Patient @relation(fields: [patientId], references: [id])
+
+  consultationId Int?
+  consultation   Consultation? @relation(fields: [consultationId], references: [idConsultation])
+
+  medecinId Int
+  medecin   Medecin @relation(fields: [medecinId], references: [id])
+
+  datePrescription DateTime @default(now())
+  statut           String   @default("ACTIVE")
+
+  lignes PrescriptionLigne[]
+
+  auteurId Int?
+  auteur   User? @relation("PrescriptionAuteur", fields: [auteurId], references: [id])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model PrescriptionLigne {
+  id Int @id @default(autoincrement())
+
+  prescriptionId Int
+  prescription   Prescription @relation(fields: [prescriptionId], references: [id], onDelete: Cascade)
+
+  medicamentId Int
+  medicament   Medicament @relation(fields: [medicamentId], references: [id])
+
+  posologie String?
+  dose       String?
+  frequence  String?
+  duree      String?
+  voie       String?
+  quantite   Float?
+
+  observation String?
+}
+
+/*
+==========================================================
+LABORATOIRE
+==========================================================
+*/
+
+model ExamenLaboratoire {
+  id          Int     @id @default(autoincrement())
+  code        String  @unique
+  nom         String
+  description String?
+  unite       String?
+  valeurNormale String?
+
+  prix   Float  @default(0)
+  devise String @default("USD")
+  actif  Boolean @default(true)
+
+  lignes DemandeLaboratoireLigne[]
+
+  createdAt DateTime @default(now())
+}
+
+model DemandeLaboratoire {
+  id     Int    @id @default(autoincrement())
+  numero String @unique
+
+  patientId Int
+  patient   Patient @relation(fields: [patientId], references: [id])
+
+  consultationId Int?
+  consultation   Consultation? @relation(fields: [consultationId], references: [idConsultation])
+
+  serviceId Int?
+  service   Service? @relation(fields: [serviceId], references: [id])
+
+  dateDemande DateTime @default(now())
+  statut      String   @default("DEMANDE")
+  urgence     Boolean  @default(false)
+  observation String?
+
+  lignes    DemandeLaboratoireLigne[]
+  resultats ResultatLaboratoire[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model DemandeLaboratoireLigne {
+  id Int @id @default(autoincrement())
+
+  demandeId Int
+  demande   DemandeLaboratoire @relation(fields: [demandeId], references: [id], onDelete: Cascade)
+
+  examenId Int
+  examen   ExamenLaboratoire @relation(fields: [examenId], references: [id])
+
+  prix Float
+}
+
+model ResultatLaboratoire {
+  id Int @id @default(autoincrement())
+
+  demandeId Int
+  demande   DemandeLaboratoire @relation(fields: [demandeId], references: [id])
+
+  examenId Int
+
+  valeur         String?
+  unite          String?
+  commentaire    String?
+  interpretation String?
+
+  valide      Boolean  @default(false)
+  dateResultat DateTime @default(now())
+}
+
+/*
+==========================================================
+IMAGERIE
+==========================================================
+*/
+
+model ExamenImagerie {
+  id          Int     @id @default(autoincrement())
+  code        String  @unique
+  nom         String
+  type        String
+  description String?
+
+  prix   Float  @default(0)
+  devise String @default("USD")
+  actif  Boolean @default(true)
+
+  demandes DemandeImagerie[]
+
+  createdAt DateTime @default(now())
+}
+
+model DemandeImagerie {
+  id     Int    @id @default(autoincrement())
+  numero String @unique
+
+  patientId Int
+  patient   Patient @relation(fields: [patientId], references: [id])
+
+  consultationId Int?
+  consultation   Consultation? @relation(fields: [consultationId], references: [idConsultation])
+
+  serviceId Int?
+  service   Service? @relation(fields: [serviceId], references: [id])
+
+  examenId Int
+  examen   ExamenImagerie @relation(fields: [examenId], references: [id])
+
+  motif     String?
+  urgence   Boolean @default(false)
+  statut    String  @default("DEMANDE")
+
+  dateDemande DateTime @default(now())
+  dateExamen  DateTime?
+
+  compteRendu String?
+  conclusion  String?
+  fichier     String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+/*
+==========================================================
+PHARMACIE
+==========================================================
+*/
+
+model Medicament {
+  id           Int     @id @default(autoincrement())
+  code         String  @unique
+  nom          String
+  denomination String?
+  forme        String?
+  dosage       String?
+  laboratoire  String?
+  categorie    String?
+
+  prixVente Float @default(0)
+  prixAchat Float @default(0)
+  devise    String @default("USD")
+
+  seuilAlerte Float @default(0)
+  actif       Boolean @default(true)
+
+  prescriptions PrescriptionLigne[]
+  stocks        StockMedicament[]
+  mouvements    MouvementStock[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model StockMedicament {
+  id Int @id @default(autoincrement())
+
+  medicamentId Int
+  medicament   Medicament @relation(fields: [medicamentId], references: [id])
+
+  lot            String?
+  dateExpiration DateTime?
+  quantite       Float @default(0)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([medicamentId])
+}
+
+model MouvementStock {
+  id Int @id @default(autoincrement())
+
+  medicamentId Int
+  medicament   Medicament @relation(fields: [medicamentId], references: [id])
+
+  type      String
+  quantite  Float
+  motif     String?
+  reference String?
+
+  dateMouvement DateTime @default(now())
+}
+
+/*
+==========================================================
+HOSPITALISATION
+==========================================================
+*/
+
+model Chambre {
+  id     Int    @id @default(autoincrement())
+  numero String @unique
+
+  type          String?
+  etage         String?
+  prixJournalier Float  @default(0)
+  devise        String @default("USD")
+
+  serviceId Int?
+  service   Service? @relation(fields: [serviceId], references: [id])
+
+  lits Lit[]
+
+  actif Boolean @default(true)
+
+  createdAt DateTime @default(now())
+}
+
+model Lit {
+  id Int @id @default(autoincrement())
+
+  numero String
+
+  chambreId Int
+  chambre   Chambre @relation(fields: [chambreId], references: [id])
+
+  statut String @default("LIBRE")
+
+  hospitalisations Hospitalisation[]
+
+  @@unique([chambreId, numero])
+}
+
+model Hospitalisation {
+  id     Int    @id @default(autoincrement())
+  numero String @unique
+
+  patientId Int
+  patient   Patient @relation(fields: [patientId], references: [id])
+
+  admissionId Int @unique
+  admission   Admission @relation(fields: [admissionId], references: [id])
+
+  serviceId Int?
+  service   Service? @relation(fields: [serviceId], references: [id])
+
+  medecinId Int?
+  medecin   Medecin? @relation(fields: [medecinId], references: [id])
+
+  litId Int?
+  lit   Lit? @relation(fields: [litId], references: [id])
+
+  motif      String?
+  diagnostic String?
+
+  dateEntree DateTime @default(now())
+  dateSortie DateTime?
+
+  statut String @default("EN_COURS")
+
+  transferts Transfert[]
+  soins      Soin[]
+  sorties    Sortie[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Transfert {
+  id Int @id @default(autoincrement())
+
+  hospitalisationId Int
+  hospitalisation   Hospitalisation @relation(fields: [hospitalisationId], references: [id], onDelete: Cascade)
+
+  ancienServiceId  Int?
+  nouveauServiceId Int?
+
+  ancienLitId  Int?
+  nouveauLitId Int?
+
+  motif         String?
+  dateTransfert DateTime @default(now())
+}
+
+model Soin {
+  id Int @id @default(autoincrement())
+
+  hospitalisationId Int
+  hospitalisation   Hospitalisation @relation(fields: [hospitalisationId], references: [id], onDelete: Cascade)
+
+  type        String
+  description String?
+  observation String?
+
+  dateSoin DateTime @default(now())
+}
+
+model Sortie {
+  id Int @id @default(autoincrement())
+
+  patientId Int
+  patient   Patient @relation(fields: [patientId], references: [id])
+
+  hospitalisationId Int?
+  hospitalisation   Hospitalisation? @relation(fields: [hospitalisationId], references: [id])
+
+  motif           String?
+  diagnosticFinal String?
+  recommandation  String?
+  traitement      String?
+
+  dateSortie DateTime @default(now())
+  type       String
+}
+
+/*
+==========================================================
+TARIFICATION
+==========================================================
+*/
+
+model ActeMedical {
+  id       Int    @id @default(autoincrement())
+  code     String @unique
+  libelle  String
+  categorie String?
+
+  montant Float
+  devise  String @default("USD")
+  actif   Boolean @default(true)
+
+  lignesFacture LigneFacture[]
+
+  createdAt DateTime @default(now())
+}
+
+/*
+==========================================================
+FACTURATION
+==========================================================
+*/
+
+model Facture {
+  id     Int    @id @default(autoincrement())
+  numero String @unique
+
+  patientId Int
+  patient   Patient @relation(fields: [patientId], references: [id])
+
+  dateFacture  DateTime @default(now())
+  dateEcheance DateTime?
+
+  montantTotal Float @default(0)
+  montantPaye  Float @default(0)
+  reste        Float @default(0)
+
+  devise String @default("USD")
+  statut String @default("IMPAYEE")
+
+  lignes    LigneFacture[]
+  paiements Paiement[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model LigneFacture {
+  id Int @id @default(autoincrement())
+
+  factureId Int
+  facture   Facture @relation(fields: [factureId], references: [id], onDelete: Cascade)
+
+  acteId Int?
+  acte   ActeMedical? @relation(fields: [acteId], references: [id])
+
+  designation String
+  quantite    Float @default(1)
+
+  prixUnitaire Float
+  montant      Float
+
+  reference String?
+}
+
+/*
+==========================================================
+PAIEMENTS
+==========================================================
+*/
+
+model Paiement {
+  id        Int    @id @default(autoincrement())
+  reference String @unique
+
+  patientId Int
+  patient   Patient @relation(fields: [patientId], references: [id])
+
+  factureId Int?
+  facture   Facture? @relation(fields: [factureId], references: [id])
+
+  montant Float
+  devise  String @default("USD")
+
+  modePaiement String
+  type         String
+  statut       String @default("PAYE")
+
+  datePaiement DateTime @default(now())
+
+  description String?
+
+  caissierId Int?
+  caissier   User? @relation("PaiementCaissier", fields: [caissierId], references: [id])
+
+  createdAt DateTime @default(now())
+
+  @@index([patientId])
+  @@index([factureId])
+  @@index([datePaiement])
+}
+
+/*
+==========================================================
+ASSURANCE
+==========================================================
+*/
+
+model Assurance {
+  id   Int    @id @default(autoincrement())
+  code String @unique
+  nom  String
+
+  telephone String?
+  email     String?
+  adresse   String?
+
+  tauxCouverture Float @default(0)
+  actif          Boolean @default(true)
+
+  patients PatientAssurance[]
+
+  createdAt DateTime @default(now())
+}
+
+model PatientAssurance {
+  id Int @id @default(autoincrement())
+
+  patientId Int
+  patient   Patient @relation(fields: [patientId], references: [id], onDelete: Cascade)
+
+  assuranceId Int
+  assurance   Assurance @relation(fields: [assuranceId], references: [id])
+
+  numeroCarte String?
+  numeroPolice String?
+
+  dateDebut DateTime?
+  dateFin   DateTime?
+
+  principal Boolean @default(false)
+
+  @@unique([patientId, assuranceId])
+}
+
+/*
+==========================================================
+DOCUMENTS PATIENT
+==========================================================
+*/
+
+model DocumentPatient {
+  id Int @id @default(autoincrement())
+
+  patientId Int
+  patient   Patient @relation(fields: [patientId], references: [id], onDelete: Cascade)
+
+  type        String
+  nom         String
+  fichier     String
+  description String?
+
+  dateDocument DateTime @default(now())
+  createdAt    DateTime @default(now())
+}
+
+/*
+==========================================================
+AUDIT
+==========================================================
+*/
+
+model AuditLog {
+  id Int @id @default(autoincrement())
+
+  userId Int?
+  user   User? @relation(fields: [userId], references: [id])
+
+  action   String
+  module   String
+  tableName String?
+  recordId  String?
+
+  ancienneValeur String?
+  nouvelleValeur String?
+
+  ipAddress String?
+  userAgent String?
+
+  createdAt DateTime @default(now())
+
+  @@index([userId])
+  @@index([module])
+  @@index([createdAt])
+}
