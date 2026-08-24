@@ -406,6 +406,7 @@ export const ModelName = {
   Service: 'Service',
   Specialite: 'Specialite',
   Medecin: 'Medecin',
+  Infirmier: 'Infirmier',
   Patient: 'Patient',
   Allergie: 'Allergie',
   Antecedent: 'Antecedent',
@@ -454,7 +455,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "role" | "permission" | "rolePermission" | "employe" | "departement" | "service" | "specialite" | "medecin" | "patient" | "allergie" | "antecedent" | "rendezVous" | "admission" | "triage" | "constante" | "consultation" | "prescription" | "prescriptionLigne" | "examenLaboratoire" | "demandeLaboratoire" | "demandeLaboratoireLigne" | "resultatLaboratoire" | "examenImagerie" | "demandeImagerie" | "medicament" | "stockMedicament" | "mouvementStock" | "chambre" | "lit" | "hospitalisation" | "transfert" | "soin" | "sortie" | "acteMedical" | "facture" | "ligneFacture" | "paiement" | "assurance" | "patientAssurance" | "documentPatient" | "auditLog"
+    modelProps: "user" | "role" | "permission" | "rolePermission" | "employe" | "departement" | "service" | "specialite" | "medecin" | "infirmier" | "patient" | "allergie" | "antecedent" | "rendezVous" | "admission" | "triage" | "constante" | "consultation" | "prescription" | "prescriptionLigne" | "examenLaboratoire" | "demandeLaboratoire" | "demandeLaboratoireLigne" | "resultatLaboratoire" | "examenImagerie" | "demandeImagerie" | "medicament" | "stockMedicament" | "mouvementStock" | "chambre" | "lit" | "hospitalisation" | "transfert" | "soin" | "sortie" | "acteMedical" | "facture" | "ligneFacture" | "paiement" | "assurance" | "patientAssurance" | "documentPatient" | "auditLog"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -1121,6 +1122,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         count: {
           args: Prisma.MedecinCountArgs<ExtArgs>
           result: runtime.Types.Utils.Optional<Prisma.MedecinCountAggregateOutputType> | number
+        }
+      }
+    }
+    Infirmier: {
+      payload: Prisma.$InfirmierPayload<ExtArgs>
+      fields: Prisma.InfirmierFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.InfirmierFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InfirmierPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.InfirmierFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InfirmierPayload>
+        }
+        findFirst: {
+          args: Prisma.InfirmierFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InfirmierPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.InfirmierFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InfirmierPayload>
+        }
+        findMany: {
+          args: Prisma.InfirmierFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InfirmierPayload>[]
+        }
+        create: {
+          args: Prisma.InfirmierCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InfirmierPayload>
+        }
+        createMany: {
+          args: Prisma.InfirmierCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.InfirmierCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InfirmierPayload>[]
+        }
+        delete: {
+          args: Prisma.InfirmierDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InfirmierPayload>
+        }
+        update: {
+          args: Prisma.InfirmierUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InfirmierPayload>
+        }
+        deleteMany: {
+          args: Prisma.InfirmierDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.InfirmierUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.InfirmierUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InfirmierPayload>[]
+        }
+        upsert: {
+          args: Prisma.InfirmierUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InfirmierPayload>
+        }
+        aggregate: {
+          args: Prisma.InfirmierAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateInfirmier>
+        }
+        groupBy: {
+          args: Prisma.InfirmierGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.InfirmierGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.InfirmierCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.InfirmierCountAggregateOutputType> | number
         }
       }
     }
@@ -3724,11 +3799,30 @@ export const MedecinScalarFieldEnum = {
   actif: 'actif',
   serviceId: 'serviceId',
   specialiteId: 'specialiteId',
+  userId: 'userId',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
 
 export type MedecinScalarFieldEnum = (typeof MedecinScalarFieldEnum)[keyof typeof MedecinScalarFieldEnum]
+
+
+export const InfirmierScalarFieldEnum = {
+  id: 'id',
+  matricule: 'matricule',
+  numeroOrdre: 'numeroOrdre',
+  grade: 'grade',
+  niveau: 'niveau',
+  fonction: 'fonction',
+  serviceId: 'serviceId',
+  employeId: 'employeId',
+  userId: 'userId',
+  actif: 'actif',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type InfirmierScalarFieldEnum = (typeof InfirmierScalarFieldEnum)[keyof typeof InfirmierScalarFieldEnum]
 
 
 export const PatientScalarFieldEnum = {
@@ -4479,6 +4573,7 @@ export type GlobalOmitConfig = {
   service?: Prisma.ServiceOmit
   specialite?: Prisma.SpecialiteOmit
   medecin?: Prisma.MedecinOmit
+  infirmier?: Prisma.InfirmierOmit
   patient?: Prisma.PatientOmit
   allergie?: Prisma.AllergieOmit
   antecedent?: Prisma.AntecedentOmit

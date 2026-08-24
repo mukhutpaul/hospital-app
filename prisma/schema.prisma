@@ -7,28 +7,31 @@ datasource db {
   provider = "sqlite"
 }
 
-/*
-==========================================================
-UTILISATEURS / AUTHENTIFICATION
-==========================================================
-*/
+/**
+ * ==========================================================
+ * UTILISATEURS / AUTHENTIFICATION
+ * ==========================================================
+ */
 
 model User {
-  id          Int     @id @default(autoincrement())
-  name        String?
-  email       String? @unique
-  password    String?
-  telephone   String?
-  actif       Boolean @default(true)
+  id        Int     @id @default(autoincrement())
+  name      String?
+  email     String? @unique
+  password  String?
+  telephone String?
+  actif     Boolean @default(true)
 
-  roleId      Int?
-  role        Role? @relation(fields: [roleId], references: [id])
+  roleId Int?
+  role   Role? @relation(fields: [roleId], references: [id])
 
-  employe     Employe?
+  employe Employe?
 
-  rendezVousCrees RendezVous[] @relation("RendezVousCreateur")
-  admissions      Admission[] @relation("AdmissionCreateur")
-  paiements       Paiement[] @relation("PaiementCaissier")
+  medecin   Medecin?
+  infirmier Infirmier?
+
+  rendezVousCrees RendezVous[]   @relation("RendezVousCreateur")
+  admissions      Admission[]    @relation("AdmissionCreateur")
+  paiements       Paiement[]     @relation("PaiementCaissier")
   prescriptions   Prescription[] @relation("PrescriptionAuteur")
 
   consultationsMedecin Consultation[] @relation("ConsultationMedecin")
@@ -63,7 +66,7 @@ model Permission {
 }
 
 model RolePermission {
-  id           Int @id @default(autoincrement())
+  id Int @id @default(autoincrement())
 
   roleId       Int
   permissionId Int
@@ -78,8 +81,8 @@ model Employe {
   id            Int       @id @default(autoincrement())
   matricule     String    @unique
   nom           String
-  postNom      String?
-  prenom       String?
+  postNom       String?
+  prenom        String?
   sexe          String?
   dateNaissance DateTime?
   telephone     String?
@@ -89,21 +92,23 @@ model Employe {
   dateEmbauche  DateTime?
   actif         Boolean   @default(true)
 
-  userId Int?   @unique
-  user   User?  @relation(fields: [userId], references: [id])
+  userId Int?  @unique
+  user   User? @relation(fields: [userId], references: [id])
 
   serviceId Int?
   service   Service? @relation(fields: [serviceId], references: [id])
+
+  infirmiers Infirmier[] // ← AJOUTER
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
 
-/*
-==========================================================
-STRUCTURE DE L'HÔPITAL
-==========================================================
-*/
+/**
+ * ==========================================================
+ * STRUCTURE DE L'HÔPITAL
+ * ==========================================================
+ */
 
 model Departement {
   id          Int     @id @default(autoincrement())
@@ -128,16 +133,17 @@ model Service {
   departementId Int?
   departement   Departement? @relation(fields: [departementId], references: [id])
 
-  employes          Employe[]
-  specialites       Specialite[]
-  medecins          Medecin[]
-  rendezVous        RendezVous[]
-  admissions        Admission[]
-  consultations     Consultation[]
+  employes         Employe[]
+  specialites      Specialite[]
+  medecins         Medecin[]
+  rendezVous       RendezVous[]
+  admissions       Admission[]
+  infirmiers       Infirmier[] // ← AJOUTER
+  consultations    Consultation[]
   hospitalisations Hospitalisation[]
-  chambres          Chambre[]
-  demandesLabo      DemandeLaboratoire[]
-  demandesImagerie  DemandeImagerie[]
+  chambres         Chambre[]
+  demandesLabo     DemandeLaboratoire[]
+  demandesImagerie DemandeImagerie[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -178,6 +184,9 @@ model Medecin {
   specialiteId Int?
   specialite   Specialite? @relation(fields: [specialiteId], references: [id])
 
+  userId Int?  @unique
+  user   User? @relation(fields: [userId], references: [id])
+
   rendezVous       RendezVous[]
   consultations    Consultation[]
   prescriptions    Prescription[]
@@ -187,20 +196,45 @@ model Medecin {
   updatedAt DateTime @updatedAt
 }
 
-/*
-==========================================================
-PATIENTS
-==========================================================
-*/
+model Infirmier {
+  id Int @id @default(autoincrement())
+
+  matricule   String  @unique
+  numeroOrdre String?
+
+  grade    String?
+  niveau   String?
+  fonction String?
+
+  serviceId Int?
+  service   Service? @relation(fields: [serviceId], references: [id])
+
+  employeId Int     @unique
+  employe   Employe @relation(fields: [employeId], references: [id])
+
+  userId Int?  @unique
+  user   User? @relation(fields: [userId], references: [id])
+
+  actif Boolean @default(true)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+/**
+ * ==========================================================
+ * PATIENTS
+ * ==========================================================
+ */
 
 model Patient {
-  id            Int       @id @default(autoincrement())
-  numeroDossier String    @unique
+  id            Int    @id @default(autoincrement())
+  numeroDossier String @unique
 
-  nom        String
-  postNom    String?
-  prenom     String?
-  sexe       String
+  nom           String
+  postNom       String?
+  prenom        String?
+  sexe          String
   dateNaissance DateTime?
   lieuNaissance String?
 
@@ -218,8 +252,8 @@ model Patient {
   contactTelephone String?
   contactLien      String?
 
-  photo  String?
-  actif  Boolean @default(true)
+  photo String?
+  actif Boolean @default(true)
 
   allergies        Allergie[]
   antecedents      Antecedent[]
@@ -274,11 +308,11 @@ model Antecedent {
   createdAt DateTime @default(now())
 }
 
-/*
-==========================================================
-RENDEZ-VOUS
-==========================================================
-*/
+/**
+ * ==========================================================
+ * RENDEZ-VOUS
+ * ==========================================================
+ */
 
 model RendezVous {
   id     Int    @id @default(autoincrement())
@@ -296,9 +330,9 @@ model RendezVous {
   serviceId Int?
   service   Service? @relation(fields: [serviceId], references: [id])
 
-  dateHeure DateTime
-  motif     String?
-  statut    String @default("PLANIFIE")
+  dateHeure   DateTime
+  motif       String?
+  statut      String   @default("PLANIFIE")
   observation String?
 
   createdById Int?
@@ -314,11 +348,11 @@ model RendezVous {
   @@index([dateHeure])
 }
 
-/*
-==========================================================
-ADMISSION
-==========================================================
-*/
+/**
+ * ==========================================================
+ * ADMISSION
+ * ==========================================================
+ */
 
 model Admission {
   id     Int    @id @default(autoincrement())
@@ -327,17 +361,17 @@ model Admission {
   patientId Int
   patient   Patient @relation(fields: [patientId], references: [id])
 
-  rendezVousId Int? @unique
+  rendezVousId Int?        @unique
   rendezVous   RendezVous? @relation(fields: [rendezVousId], references: [id])
 
   serviceId Int?
   service   Service? @relation(fields: [serviceId], references: [id])
 
-  type    String
-  motif   String?
-  statut  String @default("EN_ATTENTE")
+  type   String
+  motif  String?
+  statut String  @default("EN_ATTENTE")
 
-  dateAdmission DateTime @default(now())
+  dateAdmission DateTime  @default(now())
   dateSortie    DateTime?
 
   createdById Int?
@@ -358,16 +392,16 @@ model Admission {
   @@index([dateAdmission])
 }
 
-/*
-==========================================================
-TRIAGE
-==========================================================
-*/
+/**
+ * ==========================================================
+ * TRIAGE
+ * ==========================================================
+ */
 
 model Triage {
   id Int @id @default(autoincrement())
 
-  admissionId Int @unique
+  admissionId Int       @unique
   admission   Admission @relation(fields: [admissionId], references: [id], onDelete: Cascade)
 
   niveauUrgence String?
@@ -377,11 +411,11 @@ model Triage {
   dateTriage DateTime @default(now())
 }
 
-/*
-==========================================================
-CONSTANTES
-==========================================================
-*/
+/**
+ * ==========================================================
+ * CONSTANTES
+ * ==========================================================
+ */
 
 model Constante {
   id Int @id @default(autoincrement())
@@ -395,15 +429,15 @@ model Constante {
   consultationId Int?
   consultation   Consultation? @relation(fields: [consultationId], references: [idConsultation])
 
-  temperature          Float?
-  tensionSystolique    Float?
-  tensionDiastolique   Float?
-  pouls                Int?
-  saturation           Float?
-  poids                Float?
-  taille               Float?
+  temperature           Float?
+  tensionSystolique     Float?
+  tensionDiastolique    Float?
+  pouls                 Int?
+  saturation            Float?
+  poids                 Float?
+  taille                Float?
   frequenceRespiratoire Int?
-  glycemie             Float?
+  glycemie              Float?
 
   dateMesure DateTime @default(now())
 
@@ -412,11 +446,11 @@ model Constante {
   @@index([consultationId])
 }
 
-/*
-==========================================================
-CONSULTATION
-==========================================================
-*/
+/**
+ * ==========================================================
+ * CONSULTATION
+ * ==========================================================
+ */
 
 model Consultation {
   idConsultation Int @id @default(autoincrement())
@@ -443,7 +477,7 @@ model Consultation {
   specialiteId Int?
   specialite   Specialite? @relation(fields: [specialiteId], references: [id])
 
-  admissionId Int? @unique
+  admissionId Int?       @unique
   admission   Admission? @relation("AdmissionConsultation", fields: [admissionId], references: [id])
 
   constantes Constante[]
@@ -462,11 +496,11 @@ model Consultation {
   @@index([dateConsultation])
 }
 
-/*
-==========================================================
-PRESCRIPTIONS
-==========================================================
-*/
+/**
+ * ==========================================================
+ * PRESCRIPTIONS
+ * ==========================================================
+ */
 
 model Prescription {
   id     Int    @id @default(autoincrement())
@@ -503,34 +537,35 @@ model PrescriptionLigne {
   medicament   Medicament @relation(fields: [medicamentId], references: [id])
 
   posologie String?
-  dose       String?
-  frequence  String?
-  duree      String?
-  voie       String?
-  quantite   Float?
+  dose      String?
+  frequence String?
+  duree     String?
+  voie      String?
+  quantite  Float?
 
   observation String?
 }
 
-/*
-==========================================================
-LABORATOIRE
-==========================================================
-*/
+/**
+ * ==========================================================
+ * LABORATOIRE
+ * ==========================================================
+ */
 
 model ExamenLaboratoire {
-  id          Int     @id @default(autoincrement())
-  code        String  @unique
-  nom         String
-  description String?
-  unite       String?
+  id            Int     @id @default(autoincrement())
+  code          String  @unique
+  nom           String
+  description   String?
+  unite         String?
   valeurNormale String?
 
-  prix   Float  @default(0)
-  devise String @default("USD")
+  prix   Float   @default(0)
+  devise String  @default("USD")
   actif  Boolean @default(true)
 
-  lignes DemandeLaboratoireLigne[]
+  lignes    DemandeLaboratoireLigne[]
+  resultats ResultatLaboratoire[]
 
   createdAt DateTime @default(now())
 }
@@ -579,21 +614,22 @@ model ResultatLaboratoire {
   demande   DemandeLaboratoire @relation(fields: [demandeId], references: [id])
 
   examenId Int
+  examen   ExamenLaboratoire @relation(fields: [examenId], references: [id])
 
   valeur         String?
   unite          String?
   commentaire    String?
   interpretation String?
 
-  valide      Boolean  @default(false)
+  valide       Boolean  @default(false)
   dateResultat DateTime @default(now())
 }
 
-/*
-==========================================================
-IMAGERIE
-==========================================================
-*/
+/**
+ * ==========================================================
+ * IMAGERIE
+ * ==========================================================
+ */
 
 model ExamenImagerie {
   id          Int     @id @default(autoincrement())
@@ -602,8 +638,8 @@ model ExamenImagerie {
   type        String
   description String?
 
-  prix   Float  @default(0)
-  devise String @default("USD")
+  prix   Float   @default(0)
+  devise String  @default("USD")
   actif  Boolean @default(true)
 
   demandes DemandeImagerie[]
@@ -627,11 +663,11 @@ model DemandeImagerie {
   examenId Int
   examen   ExamenImagerie @relation(fields: [examenId], references: [id])
 
-  motif     String?
-  urgence   Boolean @default(false)
-  statut    String  @default("DEMANDE")
+  motif   String?
+  urgence Boolean @default(false)
+  statut  String  @default("DEMANDE")
 
-  dateDemande DateTime @default(now())
+  dateDemande DateTime  @default(now())
   dateExamen  DateTime?
 
   compteRendu String?
@@ -642,11 +678,11 @@ model DemandeImagerie {
   updatedAt DateTime @updatedAt
 }
 
-/*
-==========================================================
-PHARMACIE
-==========================================================
-*/
+/**
+ * ==========================================================
+ * PHARMACIE
+ * ==========================================================
+ */
 
 model Medicament {
   id           Int     @id @default(autoincrement())
@@ -658,11 +694,11 @@ model Medicament {
   laboratoire  String?
   categorie    String?
 
-  prixVente Float @default(0)
-  prixAchat Float @default(0)
+  prixVente Float  @default(0)
+  prixAchat Float  @default(0)
   devise    String @default("USD")
 
-  seuilAlerte Float @default(0)
+  seuilAlerte Float   @default(0)
   actif       Boolean @default(true)
 
   prescriptions PrescriptionLigne[]
@@ -681,7 +717,7 @@ model StockMedicament {
 
   lot            String?
   dateExpiration DateTime?
-  quantite       Float @default(0)
+  quantite       Float     @default(0)
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -703,20 +739,20 @@ model MouvementStock {
   dateMouvement DateTime @default(now())
 }
 
-/*
-==========================================================
-HOSPITALISATION
-==========================================================
-*/
+/**
+ * ==========================================================
+ * HOSPITALISATION
+ * ==========================================================
+ */
 
 model Chambre {
   id     Int    @id @default(autoincrement())
   numero String @unique
 
-  type          String?
-  etage         String?
-  prixJournalier Float  @default(0)
-  devise        String @default("USD")
+  type           String?
+  etage          String?
+  prixJournalier Float   @default(0)
+  devise         String  @default("USD")
 
   serviceId Int?
   service   Service? @relation(fields: [serviceId], references: [id])
@@ -750,7 +786,7 @@ model Hospitalisation {
   patientId Int
   patient   Patient @relation(fields: [patientId], references: [id])
 
-  admissionId Int @unique
+  admissionId Int       @unique
   admission   Admission @relation(fields: [admissionId], references: [id])
 
   serviceId Int?
@@ -765,7 +801,7 @@ model Hospitalisation {
   motif      String?
   diagnostic String?
 
-  dateEntree DateTime @default(now())
+  dateEntree DateTime  @default(now())
   dateSortie DateTime?
 
   statut String @default("EN_COURS")
@@ -825,20 +861,20 @@ model Sortie {
   type       String
 }
 
-/*
-==========================================================
-TARIFICATION
-==========================================================
-*/
+/**
+ * ==========================================================
+ * TARIFICATION
+ * ==========================================================
+ */
 
 model ActeMedical {
-  id       Int    @id @default(autoincrement())
-  code     String @unique
-  libelle  String
+  id        Int     @id @default(autoincrement())
+  code      String  @unique
+  libelle   String
   categorie String?
 
   montant Float
-  devise  String @default("USD")
+  devise  String  @default("USD")
   actif   Boolean @default(true)
 
   lignesFacture LigneFacture[]
@@ -846,11 +882,11 @@ model ActeMedical {
   createdAt DateTime @default(now())
 }
 
-/*
-==========================================================
-FACTURATION
-==========================================================
-*/
+/**
+ * ==========================================================
+ * FACTURATION
+ * ==========================================================
+ */
 
 model Facture {
   id     Int    @id @default(autoincrement())
@@ -859,7 +895,7 @@ model Facture {
   patientId Int
   patient   Patient @relation(fields: [patientId], references: [id])
 
-  dateFacture  DateTime @default(now())
+  dateFacture  DateTime  @default(now())
   dateEcheance DateTime?
 
   montantTotal Float @default(0)
@@ -886,7 +922,7 @@ model LigneFacture {
   acte   ActeMedical? @relation(fields: [acteId], references: [id])
 
   designation String
-  quantite    Float @default(1)
+  quantite    Float  @default(1)
 
   prixUnitaire Float
   montant      Float
@@ -894,11 +930,11 @@ model LigneFacture {
   reference String?
 }
 
-/*
-==========================================================
-PAIEMENTS
-==========================================================
-*/
+/**
+ * ==========================================================
+ * PAIEMENTS
+ * ==========================================================
+ */
 
 model Paiement {
   id        Int    @id @default(autoincrement())
@@ -931,11 +967,11 @@ model Paiement {
   @@index([datePaiement])
 }
 
-/*
-==========================================================
-ASSURANCE
-==========================================================
-*/
+/**
+ * ==========================================================
+ * ASSURANCE
+ * ==========================================================
+ */
 
 model Assurance {
   id   Int    @id @default(autoincrement())
@@ -946,7 +982,7 @@ model Assurance {
   email     String?
   adresse   String?
 
-  tauxCouverture Float @default(0)
+  tauxCouverture Float   @default(0)
   actif          Boolean @default(true)
 
   patients PatientAssurance[]
@@ -963,7 +999,7 @@ model PatientAssurance {
   assuranceId Int
   assurance   Assurance @relation(fields: [assuranceId], references: [id])
 
-  numeroCarte String?
+  numeroCarte  String?
   numeroPolice String?
 
   dateDebut DateTime?
@@ -974,11 +1010,11 @@ model PatientAssurance {
   @@unique([patientId, assuranceId])
 }
 
-/*
-==========================================================
-DOCUMENTS PATIENT
-==========================================================
-*/
+/**
+ * ==========================================================
+ * DOCUMENTS PATIENT
+ * ==========================================================
+ */
 
 model DocumentPatient {
   id Int @id @default(autoincrement())
@@ -995,11 +1031,11 @@ model DocumentPatient {
   createdAt    DateTime @default(now())
 }
 
-/*
-==========================================================
-AUDIT
-==========================================================
-*/
+/**
+ * ==========================================================
+ * AUDIT
+ * ==========================================================
+ */
 
 model AuditLog {
   id Int @id @default(autoincrement())
@@ -1007,8 +1043,8 @@ model AuditLog {
   userId Int?
   user   User? @relation(fields: [userId], references: [id])
 
-  action   String
-  module   String
+  action    String
+  module    String
   tableName String?
   recordId  String?
 

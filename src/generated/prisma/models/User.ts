@@ -254,6 +254,8 @@ export type UserWhereInput = {
   updatedAt?: Prisma.DateTimeFilter<"User"> | Date | string
   role?: Prisma.XOR<Prisma.RoleNullableScalarRelationFilter, Prisma.RoleWhereInput> | null
   employe?: Prisma.XOR<Prisma.EmployeNullableScalarRelationFilter, Prisma.EmployeWhereInput> | null
+  medecin?: Prisma.XOR<Prisma.MedecinNullableScalarRelationFilter, Prisma.MedecinWhereInput> | null
+  infirmier?: Prisma.XOR<Prisma.InfirmierNullableScalarRelationFilter, Prisma.InfirmierWhereInput> | null
   rendezVousCrees?: Prisma.RendezVousListRelationFilter
   admissions?: Prisma.AdmissionListRelationFilter
   paiements?: Prisma.PaiementListRelationFilter
@@ -274,6 +276,8 @@ export type UserOrderByWithRelationInput = {
   updatedAt?: Prisma.SortOrder
   role?: Prisma.RoleOrderByWithRelationInput
   employe?: Prisma.EmployeOrderByWithRelationInput
+  medecin?: Prisma.MedecinOrderByWithRelationInput
+  infirmier?: Prisma.InfirmierOrderByWithRelationInput
   rendezVousCrees?: Prisma.RendezVousOrderByRelationAggregateInput
   admissions?: Prisma.AdmissionOrderByRelationAggregateInput
   paiements?: Prisma.PaiementOrderByRelationAggregateInput
@@ -297,6 +301,8 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   updatedAt?: Prisma.DateTimeFilter<"User"> | Date | string
   role?: Prisma.XOR<Prisma.RoleNullableScalarRelationFilter, Prisma.RoleWhereInput> | null
   employe?: Prisma.XOR<Prisma.EmployeNullableScalarRelationFilter, Prisma.EmployeWhereInput> | null
+  medecin?: Prisma.XOR<Prisma.MedecinNullableScalarRelationFilter, Prisma.MedecinWhereInput> | null
+  infirmier?: Prisma.XOR<Prisma.InfirmierNullableScalarRelationFilter, Prisma.InfirmierWhereInput> | null
   rendezVousCrees?: Prisma.RendezVousListRelationFilter
   admissions?: Prisma.AdmissionListRelationFilter
   paiements?: Prisma.PaiementListRelationFilter
@@ -347,6 +353,8 @@ export type UserCreateInput = {
   updatedAt?: Date | string
   role?: Prisma.RoleCreateNestedOneWithoutUsersInput
   employe?: Prisma.EmployeCreateNestedOneWithoutUserInput
+  medecin?: Prisma.MedecinCreateNestedOneWithoutUserInput
+  infirmier?: Prisma.InfirmierCreateNestedOneWithoutUserInput
   rendezVousCrees?: Prisma.RendezVousCreateNestedManyWithoutCreatedByInput
   admissions?: Prisma.AdmissionCreateNestedManyWithoutCreatedByInput
   paiements?: Prisma.PaiementCreateNestedManyWithoutCaissierInput
@@ -366,6 +374,8 @@ export type UserUncheckedCreateInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   employe?: Prisma.EmployeUncheckedCreateNestedOneWithoutUserInput
+  medecin?: Prisma.MedecinUncheckedCreateNestedOneWithoutUserInput
+  infirmier?: Prisma.InfirmierUncheckedCreateNestedOneWithoutUserInput
   rendezVousCrees?: Prisma.RendezVousUncheckedCreateNestedManyWithoutCreatedByInput
   admissions?: Prisma.AdmissionUncheckedCreateNestedManyWithoutCreatedByInput
   paiements?: Prisma.PaiementUncheckedCreateNestedManyWithoutCaissierInput
@@ -384,6 +394,8 @@ export type UserUpdateInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   role?: Prisma.RoleUpdateOneWithoutUsersNestedInput
   employe?: Prisma.EmployeUpdateOneWithoutUserNestedInput
+  medecin?: Prisma.MedecinUpdateOneWithoutUserNestedInput
+  infirmier?: Prisma.InfirmierUpdateOneWithoutUserNestedInput
   rendezVousCrees?: Prisma.RendezVousUpdateManyWithoutCreatedByNestedInput
   admissions?: Prisma.AdmissionUpdateManyWithoutCreatedByNestedInput
   paiements?: Prisma.PaiementUpdateManyWithoutCaissierNestedInput
@@ -403,6 +415,8 @@ export type UserUncheckedUpdateInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   employe?: Prisma.EmployeUncheckedUpdateOneWithoutUserNestedInput
+  medecin?: Prisma.MedecinUncheckedUpdateOneWithoutUserNestedInput
+  infirmier?: Prisma.InfirmierUncheckedUpdateOneWithoutUserNestedInput
   rendezVousCrees?: Prisma.RendezVousUncheckedUpdateManyWithoutCreatedByNestedInput
   admissions?: Prisma.AdmissionUncheckedUpdateManyWithoutCreatedByNestedInput
   paiements?: Prisma.PaiementUncheckedUpdateManyWithoutCaissierNestedInput
@@ -592,6 +606,38 @@ export type UserUpdateOneWithoutEmployeNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutEmployeInput, Prisma.UserUpdateWithoutEmployeInput>, Prisma.UserUncheckedUpdateWithoutEmployeInput>
 }
 
+export type UserCreateNestedOneWithoutMedecinInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutMedecinInput, Prisma.UserUncheckedCreateWithoutMedecinInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutMedecinInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneWithoutMedecinNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutMedecinInput, Prisma.UserUncheckedCreateWithoutMedecinInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutMedecinInput
+  upsert?: Prisma.UserUpsertWithoutMedecinInput
+  disconnect?: Prisma.UserWhereInput | boolean
+  delete?: Prisma.UserWhereInput | boolean
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutMedecinInput, Prisma.UserUpdateWithoutMedecinInput>, Prisma.UserUncheckedUpdateWithoutMedecinInput>
+}
+
+export type UserCreateNestedOneWithoutInfirmierInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutInfirmierInput, Prisma.UserUncheckedCreateWithoutInfirmierInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutInfirmierInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneWithoutInfirmierNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutInfirmierInput, Prisma.UserUncheckedCreateWithoutInfirmierInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutInfirmierInput
+  upsert?: Prisma.UserUpsertWithoutInfirmierInput
+  disconnect?: Prisma.UserWhereInput | boolean
+  delete?: Prisma.UserWhereInput | boolean
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutInfirmierInput, Prisma.UserUpdateWithoutInfirmierInput>, Prisma.UserUncheckedUpdateWithoutInfirmierInput>
+}
+
 export type UserCreateNestedOneWithoutRendezVousCreesInput = {
   create?: Prisma.XOR<Prisma.UserCreateWithoutRendezVousCreesInput, Prisma.UserUncheckedCreateWithoutRendezVousCreesInput>
   connectOrCreate?: Prisma.UserCreateOrConnectWithoutRendezVousCreesInput
@@ -697,6 +743,8 @@ export type UserCreateWithoutRoleInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   employe?: Prisma.EmployeCreateNestedOneWithoutUserInput
+  medecin?: Prisma.MedecinCreateNestedOneWithoutUserInput
+  infirmier?: Prisma.InfirmierCreateNestedOneWithoutUserInput
   rendezVousCrees?: Prisma.RendezVousCreateNestedManyWithoutCreatedByInput
   admissions?: Prisma.AdmissionCreateNestedManyWithoutCreatedByInput
   paiements?: Prisma.PaiementCreateNestedManyWithoutCaissierInput
@@ -715,6 +763,8 @@ export type UserUncheckedCreateWithoutRoleInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   employe?: Prisma.EmployeUncheckedCreateNestedOneWithoutUserInput
+  medecin?: Prisma.MedecinUncheckedCreateNestedOneWithoutUserInput
+  infirmier?: Prisma.InfirmierUncheckedCreateNestedOneWithoutUserInput
   rendezVousCrees?: Prisma.RendezVousUncheckedCreateNestedManyWithoutCreatedByInput
   admissions?: Prisma.AdmissionUncheckedCreateNestedManyWithoutCreatedByInput
   paiements?: Prisma.PaiementUncheckedCreateNestedManyWithoutCaissierInput
@@ -772,6 +822,8 @@ export type UserCreateWithoutEmployeInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   role?: Prisma.RoleCreateNestedOneWithoutUsersInput
+  medecin?: Prisma.MedecinCreateNestedOneWithoutUserInput
+  infirmier?: Prisma.InfirmierCreateNestedOneWithoutUserInput
   rendezVousCrees?: Prisma.RendezVousCreateNestedManyWithoutCreatedByInput
   admissions?: Prisma.AdmissionCreateNestedManyWithoutCreatedByInput
   paiements?: Prisma.PaiementCreateNestedManyWithoutCaissierInput
@@ -790,6 +842,8 @@ export type UserUncheckedCreateWithoutEmployeInput = {
   roleId?: number | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  medecin?: Prisma.MedecinUncheckedCreateNestedOneWithoutUserInput
+  infirmier?: Prisma.InfirmierUncheckedCreateNestedOneWithoutUserInput
   rendezVousCrees?: Prisma.RendezVousUncheckedCreateNestedManyWithoutCreatedByInput
   admissions?: Prisma.AdmissionUncheckedCreateNestedManyWithoutCreatedByInput
   paiements?: Prisma.PaiementUncheckedCreateNestedManyWithoutCaissierInput
@@ -823,6 +877,8 @@ export type UserUpdateWithoutEmployeInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   role?: Prisma.RoleUpdateOneWithoutUsersNestedInput
+  medecin?: Prisma.MedecinUpdateOneWithoutUserNestedInput
+  infirmier?: Prisma.InfirmierUpdateOneWithoutUserNestedInput
   rendezVousCrees?: Prisma.RendezVousUpdateManyWithoutCreatedByNestedInput
   admissions?: Prisma.AdmissionUpdateManyWithoutCreatedByNestedInput
   paiements?: Prisma.PaiementUpdateManyWithoutCaissierNestedInput
@@ -841,6 +897,196 @@ export type UserUncheckedUpdateWithoutEmployeInput = {
   roleId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  medecin?: Prisma.MedecinUncheckedUpdateOneWithoutUserNestedInput
+  infirmier?: Prisma.InfirmierUncheckedUpdateOneWithoutUserNestedInput
+  rendezVousCrees?: Prisma.RendezVousUncheckedUpdateManyWithoutCreatedByNestedInput
+  admissions?: Prisma.AdmissionUncheckedUpdateManyWithoutCreatedByNestedInput
+  paiements?: Prisma.PaiementUncheckedUpdateManyWithoutCaissierNestedInput
+  prescriptions?: Prisma.PrescriptionUncheckedUpdateManyWithoutAuteurNestedInput
+  consultationsMedecin?: Prisma.ConsultationUncheckedUpdateManyWithoutUserMedecinNestedInput
+  auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutUserNestedInput
+}
+
+export type UserCreateWithoutMedecinInput = {
+  name?: string | null
+  email?: string | null
+  password?: string | null
+  telephone?: string | null
+  actif?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  role?: Prisma.RoleCreateNestedOneWithoutUsersInput
+  employe?: Prisma.EmployeCreateNestedOneWithoutUserInput
+  infirmier?: Prisma.InfirmierCreateNestedOneWithoutUserInput
+  rendezVousCrees?: Prisma.RendezVousCreateNestedManyWithoutCreatedByInput
+  admissions?: Prisma.AdmissionCreateNestedManyWithoutCreatedByInput
+  paiements?: Prisma.PaiementCreateNestedManyWithoutCaissierInput
+  prescriptions?: Prisma.PrescriptionCreateNestedManyWithoutAuteurInput
+  consultationsMedecin?: Prisma.ConsultationCreateNestedManyWithoutUserMedecinInput
+  auditLogs?: Prisma.AuditLogCreateNestedManyWithoutUserInput
+}
+
+export type UserUncheckedCreateWithoutMedecinInput = {
+  id?: number
+  name?: string | null
+  email?: string | null
+  password?: string | null
+  telephone?: string | null
+  actif?: boolean
+  roleId?: number | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  employe?: Prisma.EmployeUncheckedCreateNestedOneWithoutUserInput
+  infirmier?: Prisma.InfirmierUncheckedCreateNestedOneWithoutUserInput
+  rendezVousCrees?: Prisma.RendezVousUncheckedCreateNestedManyWithoutCreatedByInput
+  admissions?: Prisma.AdmissionUncheckedCreateNestedManyWithoutCreatedByInput
+  paiements?: Prisma.PaiementUncheckedCreateNestedManyWithoutCaissierInput
+  prescriptions?: Prisma.PrescriptionUncheckedCreateNestedManyWithoutAuteurInput
+  consultationsMedecin?: Prisma.ConsultationUncheckedCreateNestedManyWithoutUserMedecinInput
+  auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutUserInput
+}
+
+export type UserCreateOrConnectWithoutMedecinInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutMedecinInput, Prisma.UserUncheckedCreateWithoutMedecinInput>
+}
+
+export type UserUpsertWithoutMedecinInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutMedecinInput, Prisma.UserUncheckedUpdateWithoutMedecinInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutMedecinInput, Prisma.UserUncheckedCreateWithoutMedecinInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutMedecinInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutMedecinInput, Prisma.UserUncheckedUpdateWithoutMedecinInput>
+}
+
+export type UserUpdateWithoutMedecinInput = {
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  telephone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  actif?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  role?: Prisma.RoleUpdateOneWithoutUsersNestedInput
+  employe?: Prisma.EmployeUpdateOneWithoutUserNestedInput
+  infirmier?: Prisma.InfirmierUpdateOneWithoutUserNestedInput
+  rendezVousCrees?: Prisma.RendezVousUpdateManyWithoutCreatedByNestedInput
+  admissions?: Prisma.AdmissionUpdateManyWithoutCreatedByNestedInput
+  paiements?: Prisma.PaiementUpdateManyWithoutCaissierNestedInput
+  prescriptions?: Prisma.PrescriptionUpdateManyWithoutAuteurNestedInput
+  consultationsMedecin?: Prisma.ConsultationUpdateManyWithoutUserMedecinNestedInput
+  auditLogs?: Prisma.AuditLogUpdateManyWithoutUserNestedInput
+}
+
+export type UserUncheckedUpdateWithoutMedecinInput = {
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  telephone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  actif?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  roleId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  employe?: Prisma.EmployeUncheckedUpdateOneWithoutUserNestedInput
+  infirmier?: Prisma.InfirmierUncheckedUpdateOneWithoutUserNestedInput
+  rendezVousCrees?: Prisma.RendezVousUncheckedUpdateManyWithoutCreatedByNestedInput
+  admissions?: Prisma.AdmissionUncheckedUpdateManyWithoutCreatedByNestedInput
+  paiements?: Prisma.PaiementUncheckedUpdateManyWithoutCaissierNestedInput
+  prescriptions?: Prisma.PrescriptionUncheckedUpdateManyWithoutAuteurNestedInput
+  consultationsMedecin?: Prisma.ConsultationUncheckedUpdateManyWithoutUserMedecinNestedInput
+  auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutUserNestedInput
+}
+
+export type UserCreateWithoutInfirmierInput = {
+  name?: string | null
+  email?: string | null
+  password?: string | null
+  telephone?: string | null
+  actif?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  role?: Prisma.RoleCreateNestedOneWithoutUsersInput
+  employe?: Prisma.EmployeCreateNestedOneWithoutUserInput
+  medecin?: Prisma.MedecinCreateNestedOneWithoutUserInput
+  rendezVousCrees?: Prisma.RendezVousCreateNestedManyWithoutCreatedByInput
+  admissions?: Prisma.AdmissionCreateNestedManyWithoutCreatedByInput
+  paiements?: Prisma.PaiementCreateNestedManyWithoutCaissierInput
+  prescriptions?: Prisma.PrescriptionCreateNestedManyWithoutAuteurInput
+  consultationsMedecin?: Prisma.ConsultationCreateNestedManyWithoutUserMedecinInput
+  auditLogs?: Prisma.AuditLogCreateNestedManyWithoutUserInput
+}
+
+export type UserUncheckedCreateWithoutInfirmierInput = {
+  id?: number
+  name?: string | null
+  email?: string | null
+  password?: string | null
+  telephone?: string | null
+  actif?: boolean
+  roleId?: number | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  employe?: Prisma.EmployeUncheckedCreateNestedOneWithoutUserInput
+  medecin?: Prisma.MedecinUncheckedCreateNestedOneWithoutUserInput
+  rendezVousCrees?: Prisma.RendezVousUncheckedCreateNestedManyWithoutCreatedByInput
+  admissions?: Prisma.AdmissionUncheckedCreateNestedManyWithoutCreatedByInput
+  paiements?: Prisma.PaiementUncheckedCreateNestedManyWithoutCaissierInput
+  prescriptions?: Prisma.PrescriptionUncheckedCreateNestedManyWithoutAuteurInput
+  consultationsMedecin?: Prisma.ConsultationUncheckedCreateNestedManyWithoutUserMedecinInput
+  auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutUserInput
+}
+
+export type UserCreateOrConnectWithoutInfirmierInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutInfirmierInput, Prisma.UserUncheckedCreateWithoutInfirmierInput>
+}
+
+export type UserUpsertWithoutInfirmierInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutInfirmierInput, Prisma.UserUncheckedUpdateWithoutInfirmierInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutInfirmierInput, Prisma.UserUncheckedCreateWithoutInfirmierInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutInfirmierInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutInfirmierInput, Prisma.UserUncheckedUpdateWithoutInfirmierInput>
+}
+
+export type UserUpdateWithoutInfirmierInput = {
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  telephone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  actif?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  role?: Prisma.RoleUpdateOneWithoutUsersNestedInput
+  employe?: Prisma.EmployeUpdateOneWithoutUserNestedInput
+  medecin?: Prisma.MedecinUpdateOneWithoutUserNestedInput
+  rendezVousCrees?: Prisma.RendezVousUpdateManyWithoutCreatedByNestedInput
+  admissions?: Prisma.AdmissionUpdateManyWithoutCreatedByNestedInput
+  paiements?: Prisma.PaiementUpdateManyWithoutCaissierNestedInput
+  prescriptions?: Prisma.PrescriptionUpdateManyWithoutAuteurNestedInput
+  consultationsMedecin?: Prisma.ConsultationUpdateManyWithoutUserMedecinNestedInput
+  auditLogs?: Prisma.AuditLogUpdateManyWithoutUserNestedInput
+}
+
+export type UserUncheckedUpdateWithoutInfirmierInput = {
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  telephone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  actif?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  roleId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  employe?: Prisma.EmployeUncheckedUpdateOneWithoutUserNestedInput
+  medecin?: Prisma.MedecinUncheckedUpdateOneWithoutUserNestedInput
   rendezVousCrees?: Prisma.RendezVousUncheckedUpdateManyWithoutCreatedByNestedInput
   admissions?: Prisma.AdmissionUncheckedUpdateManyWithoutCreatedByNestedInput
   paiements?: Prisma.PaiementUncheckedUpdateManyWithoutCaissierNestedInput
@@ -859,6 +1105,8 @@ export type UserCreateWithoutRendezVousCreesInput = {
   updatedAt?: Date | string
   role?: Prisma.RoleCreateNestedOneWithoutUsersInput
   employe?: Prisma.EmployeCreateNestedOneWithoutUserInput
+  medecin?: Prisma.MedecinCreateNestedOneWithoutUserInput
+  infirmier?: Prisma.InfirmierCreateNestedOneWithoutUserInput
   admissions?: Prisma.AdmissionCreateNestedManyWithoutCreatedByInput
   paiements?: Prisma.PaiementCreateNestedManyWithoutCaissierInput
   prescriptions?: Prisma.PrescriptionCreateNestedManyWithoutAuteurInput
@@ -877,6 +1125,8 @@ export type UserUncheckedCreateWithoutRendezVousCreesInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   employe?: Prisma.EmployeUncheckedCreateNestedOneWithoutUserInput
+  medecin?: Prisma.MedecinUncheckedCreateNestedOneWithoutUserInput
+  infirmier?: Prisma.InfirmierUncheckedCreateNestedOneWithoutUserInput
   admissions?: Prisma.AdmissionUncheckedCreateNestedManyWithoutCreatedByInput
   paiements?: Prisma.PaiementUncheckedCreateNestedManyWithoutCaissierInput
   prescriptions?: Prisma.PrescriptionUncheckedCreateNestedManyWithoutAuteurInput
@@ -910,6 +1160,8 @@ export type UserUpdateWithoutRendezVousCreesInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   role?: Prisma.RoleUpdateOneWithoutUsersNestedInput
   employe?: Prisma.EmployeUpdateOneWithoutUserNestedInput
+  medecin?: Prisma.MedecinUpdateOneWithoutUserNestedInput
+  infirmier?: Prisma.InfirmierUpdateOneWithoutUserNestedInput
   admissions?: Prisma.AdmissionUpdateManyWithoutCreatedByNestedInput
   paiements?: Prisma.PaiementUpdateManyWithoutCaissierNestedInput
   prescriptions?: Prisma.PrescriptionUpdateManyWithoutAuteurNestedInput
@@ -928,6 +1180,8 @@ export type UserUncheckedUpdateWithoutRendezVousCreesInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   employe?: Prisma.EmployeUncheckedUpdateOneWithoutUserNestedInput
+  medecin?: Prisma.MedecinUncheckedUpdateOneWithoutUserNestedInput
+  infirmier?: Prisma.InfirmierUncheckedUpdateOneWithoutUserNestedInput
   admissions?: Prisma.AdmissionUncheckedUpdateManyWithoutCreatedByNestedInput
   paiements?: Prisma.PaiementUncheckedUpdateManyWithoutCaissierNestedInput
   prescriptions?: Prisma.PrescriptionUncheckedUpdateManyWithoutAuteurNestedInput
@@ -945,6 +1199,8 @@ export type UserCreateWithoutAdmissionsInput = {
   updatedAt?: Date | string
   role?: Prisma.RoleCreateNestedOneWithoutUsersInput
   employe?: Prisma.EmployeCreateNestedOneWithoutUserInput
+  medecin?: Prisma.MedecinCreateNestedOneWithoutUserInput
+  infirmier?: Prisma.InfirmierCreateNestedOneWithoutUserInput
   rendezVousCrees?: Prisma.RendezVousCreateNestedManyWithoutCreatedByInput
   paiements?: Prisma.PaiementCreateNestedManyWithoutCaissierInput
   prescriptions?: Prisma.PrescriptionCreateNestedManyWithoutAuteurInput
@@ -963,6 +1219,8 @@ export type UserUncheckedCreateWithoutAdmissionsInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   employe?: Prisma.EmployeUncheckedCreateNestedOneWithoutUserInput
+  medecin?: Prisma.MedecinUncheckedCreateNestedOneWithoutUserInput
+  infirmier?: Prisma.InfirmierUncheckedCreateNestedOneWithoutUserInput
   rendezVousCrees?: Prisma.RendezVousUncheckedCreateNestedManyWithoutCreatedByInput
   paiements?: Prisma.PaiementUncheckedCreateNestedManyWithoutCaissierInput
   prescriptions?: Prisma.PrescriptionUncheckedCreateNestedManyWithoutAuteurInput
@@ -996,6 +1254,8 @@ export type UserUpdateWithoutAdmissionsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   role?: Prisma.RoleUpdateOneWithoutUsersNestedInput
   employe?: Prisma.EmployeUpdateOneWithoutUserNestedInput
+  medecin?: Prisma.MedecinUpdateOneWithoutUserNestedInput
+  infirmier?: Prisma.InfirmierUpdateOneWithoutUserNestedInput
   rendezVousCrees?: Prisma.RendezVousUpdateManyWithoutCreatedByNestedInput
   paiements?: Prisma.PaiementUpdateManyWithoutCaissierNestedInput
   prescriptions?: Prisma.PrescriptionUpdateManyWithoutAuteurNestedInput
@@ -1014,6 +1274,8 @@ export type UserUncheckedUpdateWithoutAdmissionsInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   employe?: Prisma.EmployeUncheckedUpdateOneWithoutUserNestedInput
+  medecin?: Prisma.MedecinUncheckedUpdateOneWithoutUserNestedInput
+  infirmier?: Prisma.InfirmierUncheckedUpdateOneWithoutUserNestedInput
   rendezVousCrees?: Prisma.RendezVousUncheckedUpdateManyWithoutCreatedByNestedInput
   paiements?: Prisma.PaiementUncheckedUpdateManyWithoutCaissierNestedInput
   prescriptions?: Prisma.PrescriptionUncheckedUpdateManyWithoutAuteurNestedInput
@@ -1031,6 +1293,8 @@ export type UserCreateWithoutConsultationsMedecinInput = {
   updatedAt?: Date | string
   role?: Prisma.RoleCreateNestedOneWithoutUsersInput
   employe?: Prisma.EmployeCreateNestedOneWithoutUserInput
+  medecin?: Prisma.MedecinCreateNestedOneWithoutUserInput
+  infirmier?: Prisma.InfirmierCreateNestedOneWithoutUserInput
   rendezVousCrees?: Prisma.RendezVousCreateNestedManyWithoutCreatedByInput
   admissions?: Prisma.AdmissionCreateNestedManyWithoutCreatedByInput
   paiements?: Prisma.PaiementCreateNestedManyWithoutCaissierInput
@@ -1049,6 +1313,8 @@ export type UserUncheckedCreateWithoutConsultationsMedecinInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   employe?: Prisma.EmployeUncheckedCreateNestedOneWithoutUserInput
+  medecin?: Prisma.MedecinUncheckedCreateNestedOneWithoutUserInput
+  infirmier?: Prisma.InfirmierUncheckedCreateNestedOneWithoutUserInput
   rendezVousCrees?: Prisma.RendezVousUncheckedCreateNestedManyWithoutCreatedByInput
   admissions?: Prisma.AdmissionUncheckedCreateNestedManyWithoutCreatedByInput
   paiements?: Prisma.PaiementUncheckedCreateNestedManyWithoutCaissierInput
@@ -1082,6 +1348,8 @@ export type UserUpdateWithoutConsultationsMedecinInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   role?: Prisma.RoleUpdateOneWithoutUsersNestedInput
   employe?: Prisma.EmployeUpdateOneWithoutUserNestedInput
+  medecin?: Prisma.MedecinUpdateOneWithoutUserNestedInput
+  infirmier?: Prisma.InfirmierUpdateOneWithoutUserNestedInput
   rendezVousCrees?: Prisma.RendezVousUpdateManyWithoutCreatedByNestedInput
   admissions?: Prisma.AdmissionUpdateManyWithoutCreatedByNestedInput
   paiements?: Prisma.PaiementUpdateManyWithoutCaissierNestedInput
@@ -1100,6 +1368,8 @@ export type UserUncheckedUpdateWithoutConsultationsMedecinInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   employe?: Prisma.EmployeUncheckedUpdateOneWithoutUserNestedInput
+  medecin?: Prisma.MedecinUncheckedUpdateOneWithoutUserNestedInput
+  infirmier?: Prisma.InfirmierUncheckedUpdateOneWithoutUserNestedInput
   rendezVousCrees?: Prisma.RendezVousUncheckedUpdateManyWithoutCreatedByNestedInput
   admissions?: Prisma.AdmissionUncheckedUpdateManyWithoutCreatedByNestedInput
   paiements?: Prisma.PaiementUncheckedUpdateManyWithoutCaissierNestedInput
@@ -1117,6 +1387,8 @@ export type UserCreateWithoutPrescriptionsInput = {
   updatedAt?: Date | string
   role?: Prisma.RoleCreateNestedOneWithoutUsersInput
   employe?: Prisma.EmployeCreateNestedOneWithoutUserInput
+  medecin?: Prisma.MedecinCreateNestedOneWithoutUserInput
+  infirmier?: Prisma.InfirmierCreateNestedOneWithoutUserInput
   rendezVousCrees?: Prisma.RendezVousCreateNestedManyWithoutCreatedByInput
   admissions?: Prisma.AdmissionCreateNestedManyWithoutCreatedByInput
   paiements?: Prisma.PaiementCreateNestedManyWithoutCaissierInput
@@ -1135,6 +1407,8 @@ export type UserUncheckedCreateWithoutPrescriptionsInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   employe?: Prisma.EmployeUncheckedCreateNestedOneWithoutUserInput
+  medecin?: Prisma.MedecinUncheckedCreateNestedOneWithoutUserInput
+  infirmier?: Prisma.InfirmierUncheckedCreateNestedOneWithoutUserInput
   rendezVousCrees?: Prisma.RendezVousUncheckedCreateNestedManyWithoutCreatedByInput
   admissions?: Prisma.AdmissionUncheckedCreateNestedManyWithoutCreatedByInput
   paiements?: Prisma.PaiementUncheckedCreateNestedManyWithoutCaissierInput
@@ -1168,6 +1442,8 @@ export type UserUpdateWithoutPrescriptionsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   role?: Prisma.RoleUpdateOneWithoutUsersNestedInput
   employe?: Prisma.EmployeUpdateOneWithoutUserNestedInput
+  medecin?: Prisma.MedecinUpdateOneWithoutUserNestedInput
+  infirmier?: Prisma.InfirmierUpdateOneWithoutUserNestedInput
   rendezVousCrees?: Prisma.RendezVousUpdateManyWithoutCreatedByNestedInput
   admissions?: Prisma.AdmissionUpdateManyWithoutCreatedByNestedInput
   paiements?: Prisma.PaiementUpdateManyWithoutCaissierNestedInput
@@ -1186,6 +1462,8 @@ export type UserUncheckedUpdateWithoutPrescriptionsInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   employe?: Prisma.EmployeUncheckedUpdateOneWithoutUserNestedInput
+  medecin?: Prisma.MedecinUncheckedUpdateOneWithoutUserNestedInput
+  infirmier?: Prisma.InfirmierUncheckedUpdateOneWithoutUserNestedInput
   rendezVousCrees?: Prisma.RendezVousUncheckedUpdateManyWithoutCreatedByNestedInput
   admissions?: Prisma.AdmissionUncheckedUpdateManyWithoutCreatedByNestedInput
   paiements?: Prisma.PaiementUncheckedUpdateManyWithoutCaissierNestedInput
@@ -1203,6 +1481,8 @@ export type UserCreateWithoutPaiementsInput = {
   updatedAt?: Date | string
   role?: Prisma.RoleCreateNestedOneWithoutUsersInput
   employe?: Prisma.EmployeCreateNestedOneWithoutUserInput
+  medecin?: Prisma.MedecinCreateNestedOneWithoutUserInput
+  infirmier?: Prisma.InfirmierCreateNestedOneWithoutUserInput
   rendezVousCrees?: Prisma.RendezVousCreateNestedManyWithoutCreatedByInput
   admissions?: Prisma.AdmissionCreateNestedManyWithoutCreatedByInput
   prescriptions?: Prisma.PrescriptionCreateNestedManyWithoutAuteurInput
@@ -1221,6 +1501,8 @@ export type UserUncheckedCreateWithoutPaiementsInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   employe?: Prisma.EmployeUncheckedCreateNestedOneWithoutUserInput
+  medecin?: Prisma.MedecinUncheckedCreateNestedOneWithoutUserInput
+  infirmier?: Prisma.InfirmierUncheckedCreateNestedOneWithoutUserInput
   rendezVousCrees?: Prisma.RendezVousUncheckedCreateNestedManyWithoutCreatedByInput
   admissions?: Prisma.AdmissionUncheckedCreateNestedManyWithoutCreatedByInput
   prescriptions?: Prisma.PrescriptionUncheckedCreateNestedManyWithoutAuteurInput
@@ -1254,6 +1536,8 @@ export type UserUpdateWithoutPaiementsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   role?: Prisma.RoleUpdateOneWithoutUsersNestedInput
   employe?: Prisma.EmployeUpdateOneWithoutUserNestedInput
+  medecin?: Prisma.MedecinUpdateOneWithoutUserNestedInput
+  infirmier?: Prisma.InfirmierUpdateOneWithoutUserNestedInput
   rendezVousCrees?: Prisma.RendezVousUpdateManyWithoutCreatedByNestedInput
   admissions?: Prisma.AdmissionUpdateManyWithoutCreatedByNestedInput
   prescriptions?: Prisma.PrescriptionUpdateManyWithoutAuteurNestedInput
@@ -1272,6 +1556,8 @@ export type UserUncheckedUpdateWithoutPaiementsInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   employe?: Prisma.EmployeUncheckedUpdateOneWithoutUserNestedInput
+  medecin?: Prisma.MedecinUncheckedUpdateOneWithoutUserNestedInput
+  infirmier?: Prisma.InfirmierUncheckedUpdateOneWithoutUserNestedInput
   rendezVousCrees?: Prisma.RendezVousUncheckedUpdateManyWithoutCreatedByNestedInput
   admissions?: Prisma.AdmissionUncheckedUpdateManyWithoutCreatedByNestedInput
   prescriptions?: Prisma.PrescriptionUncheckedUpdateManyWithoutAuteurNestedInput
@@ -1289,6 +1575,8 @@ export type UserCreateWithoutAuditLogsInput = {
   updatedAt?: Date | string
   role?: Prisma.RoleCreateNestedOneWithoutUsersInput
   employe?: Prisma.EmployeCreateNestedOneWithoutUserInput
+  medecin?: Prisma.MedecinCreateNestedOneWithoutUserInput
+  infirmier?: Prisma.InfirmierCreateNestedOneWithoutUserInput
   rendezVousCrees?: Prisma.RendezVousCreateNestedManyWithoutCreatedByInput
   admissions?: Prisma.AdmissionCreateNestedManyWithoutCreatedByInput
   paiements?: Prisma.PaiementCreateNestedManyWithoutCaissierInput
@@ -1307,6 +1595,8 @@ export type UserUncheckedCreateWithoutAuditLogsInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   employe?: Prisma.EmployeUncheckedCreateNestedOneWithoutUserInput
+  medecin?: Prisma.MedecinUncheckedCreateNestedOneWithoutUserInput
+  infirmier?: Prisma.InfirmierUncheckedCreateNestedOneWithoutUserInput
   rendezVousCrees?: Prisma.RendezVousUncheckedCreateNestedManyWithoutCreatedByInput
   admissions?: Prisma.AdmissionUncheckedCreateNestedManyWithoutCreatedByInput
   paiements?: Prisma.PaiementUncheckedCreateNestedManyWithoutCaissierInput
@@ -1340,6 +1630,8 @@ export type UserUpdateWithoutAuditLogsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   role?: Prisma.RoleUpdateOneWithoutUsersNestedInput
   employe?: Prisma.EmployeUpdateOneWithoutUserNestedInput
+  medecin?: Prisma.MedecinUpdateOneWithoutUserNestedInput
+  infirmier?: Prisma.InfirmierUpdateOneWithoutUserNestedInput
   rendezVousCrees?: Prisma.RendezVousUpdateManyWithoutCreatedByNestedInput
   admissions?: Prisma.AdmissionUpdateManyWithoutCreatedByNestedInput
   paiements?: Prisma.PaiementUpdateManyWithoutCaissierNestedInput
@@ -1358,6 +1650,8 @@ export type UserUncheckedUpdateWithoutAuditLogsInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   employe?: Prisma.EmployeUncheckedUpdateOneWithoutUserNestedInput
+  medecin?: Prisma.MedecinUncheckedUpdateOneWithoutUserNestedInput
+  infirmier?: Prisma.InfirmierUncheckedUpdateOneWithoutUserNestedInput
   rendezVousCrees?: Prisma.RendezVousUncheckedUpdateManyWithoutCreatedByNestedInput
   admissions?: Prisma.AdmissionUncheckedUpdateManyWithoutCreatedByNestedInput
   paiements?: Prisma.PaiementUncheckedUpdateManyWithoutCaissierNestedInput
@@ -1385,6 +1679,8 @@ export type UserUpdateWithoutRoleInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   employe?: Prisma.EmployeUpdateOneWithoutUserNestedInput
+  medecin?: Prisma.MedecinUpdateOneWithoutUserNestedInput
+  infirmier?: Prisma.InfirmierUpdateOneWithoutUserNestedInput
   rendezVousCrees?: Prisma.RendezVousUpdateManyWithoutCreatedByNestedInput
   admissions?: Prisma.AdmissionUpdateManyWithoutCreatedByNestedInput
   paiements?: Prisma.PaiementUpdateManyWithoutCaissierNestedInput
@@ -1403,6 +1699,8 @@ export type UserUncheckedUpdateWithoutRoleInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   employe?: Prisma.EmployeUncheckedUpdateOneWithoutUserNestedInput
+  medecin?: Prisma.MedecinUncheckedUpdateOneWithoutUserNestedInput
+  infirmier?: Prisma.InfirmierUncheckedUpdateOneWithoutUserNestedInput
   rendezVousCrees?: Prisma.RendezVousUncheckedUpdateManyWithoutCreatedByNestedInput
   admissions?: Prisma.AdmissionUncheckedUpdateManyWithoutCreatedByNestedInput
   paiements?: Prisma.PaiementUncheckedUpdateManyWithoutCaissierNestedInput
@@ -1510,6 +1808,8 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   updatedAt?: boolean
   role?: boolean | Prisma.User$roleArgs<ExtArgs>
   employe?: boolean | Prisma.User$employeArgs<ExtArgs>
+  medecin?: boolean | Prisma.User$medecinArgs<ExtArgs>
+  infirmier?: boolean | Prisma.User$infirmierArgs<ExtArgs>
   rendezVousCrees?: boolean | Prisma.User$rendezVousCreesArgs<ExtArgs>
   admissions?: boolean | Prisma.User$admissionsArgs<ExtArgs>
   paiements?: boolean | Prisma.User$paiementsArgs<ExtArgs>
@@ -1561,6 +1861,8 @@ export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = run
 export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   role?: boolean | Prisma.User$roleArgs<ExtArgs>
   employe?: boolean | Prisma.User$employeArgs<ExtArgs>
+  medecin?: boolean | Prisma.User$medecinArgs<ExtArgs>
+  infirmier?: boolean | Prisma.User$infirmierArgs<ExtArgs>
   rendezVousCrees?: boolean | Prisma.User$rendezVousCreesArgs<ExtArgs>
   admissions?: boolean | Prisma.User$admissionsArgs<ExtArgs>
   paiements?: boolean | Prisma.User$paiementsArgs<ExtArgs>
@@ -1581,6 +1883,8 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
   objects: {
     role: Prisma.$RolePayload<ExtArgs> | null
     employe: Prisma.$EmployePayload<ExtArgs> | null
+    medecin: Prisma.$MedecinPayload<ExtArgs> | null
+    infirmier: Prisma.$InfirmierPayload<ExtArgs> | null
     rendezVousCrees: Prisma.$RendezVousPayload<ExtArgs>[]
     admissions: Prisma.$AdmissionPayload<ExtArgs>[]
     paiements: Prisma.$PaiementPayload<ExtArgs>[]
@@ -1994,6 +2298,8 @@ export interface Prisma__UserClient<T, Null = never, ExtArgs extends runtime.Typ
   readonly [Symbol.toStringTag]: "PrismaPromise"
   role<T extends Prisma.User$roleArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$roleArgs<ExtArgs>>): Prisma.Prisma__RoleClient<runtime.Types.Result.GetResult<Prisma.$RolePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   employe<T extends Prisma.User$employeArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$employeArgs<ExtArgs>>): Prisma.Prisma__EmployeClient<runtime.Types.Result.GetResult<Prisma.$EmployePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+  medecin<T extends Prisma.User$medecinArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$medecinArgs<ExtArgs>>): Prisma.Prisma__MedecinClient<runtime.Types.Result.GetResult<Prisma.$MedecinPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+  infirmier<T extends Prisma.User$infirmierArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$infirmierArgs<ExtArgs>>): Prisma.Prisma__InfirmierClient<runtime.Types.Result.GetResult<Prisma.$InfirmierPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   rendezVousCrees<T extends Prisma.User$rendezVousCreesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$rendezVousCreesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$RendezVousPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   admissions<T extends Prisma.User$admissionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$admissionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AdmissionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   paiements<T extends Prisma.User$paiementsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$paiementsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$PaiementPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
@@ -2472,6 +2778,44 @@ export type User$employeArgs<ExtArgs extends runtime.Types.Extensions.InternalAr
    */
   include?: Prisma.EmployeInclude<ExtArgs> | null
   where?: Prisma.EmployeWhereInput
+}
+
+/**
+ * User.medecin
+ */
+export type User$medecinArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Medecin
+   */
+  select?: Prisma.MedecinSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Medecin
+   */
+  omit?: Prisma.MedecinOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.MedecinInclude<ExtArgs> | null
+  where?: Prisma.MedecinWhereInput
+}
+
+/**
+ * User.infirmier
+ */
+export type User$infirmierArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Infirmier
+   */
+  select?: Prisma.InfirmierSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Infirmier
+   */
+  omit?: Prisma.InfirmierOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.InfirmierInclude<ExtArgs> | null
+  where?: Prisma.InfirmierWhereInput
 }
 
 /**

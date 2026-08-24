@@ -60,6 +60,7 @@ export const ModelName = {
   Service: 'Service',
   Specialite: 'Specialite',
   Medecin: 'Medecin',
+  Infirmier: 'Infirmier',
   Patient: 'Patient',
   Allergie: 'Allergie',
   Antecedent: 'Antecedent',
@@ -230,11 +231,30 @@ export const MedecinScalarFieldEnum = {
   actif: 'actif',
   serviceId: 'serviceId',
   specialiteId: 'specialiteId',
+  userId: 'userId',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
 
 export type MedecinScalarFieldEnum = (typeof MedecinScalarFieldEnum)[keyof typeof MedecinScalarFieldEnum]
+
+
+export const InfirmierScalarFieldEnum = {
+  id: 'id',
+  matricule: 'matricule',
+  numeroOrdre: 'numeroOrdre',
+  grade: 'grade',
+  niveau: 'niveau',
+  fonction: 'fonction',
+  serviceId: 'serviceId',
+  employeId: 'employeId',
+  userId: 'userId',
+  actif: 'actif',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type InfirmierScalarFieldEnum = (typeof InfirmierScalarFieldEnum)[keyof typeof InfirmierScalarFieldEnum]
 
 
 export const PatientScalarFieldEnum = {

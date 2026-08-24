@@ -63,6 +63,11 @@ export type Specialite = Prisma.SpecialiteModel
  */
 export type Medecin = Prisma.MedecinModel
 /**
+ * Model Infirmier
+ * 
+ */
+export type Infirmier = Prisma.InfirmierModel
+/**
  * Model Patient
  * 
  */

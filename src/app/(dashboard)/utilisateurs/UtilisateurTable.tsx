@@ -105,6 +105,8 @@ export default function UtilisateurTable({
   function handleVoir(
     utilisateur: Utilisateur
   ) {
+    if (loadingId !== null) return;
+
     router.push(
       `/utilisateurs/${utilisateur.id}`
     );
@@ -117,9 +119,205 @@ export default function UtilisateurTable({
   function handleModifier(
     utilisateur: Utilisateur
   ) {
+    if (loadingId !== null) return;
+
     router.push(
       `/utilisateurs/${utilisateur.id}/modifier`
     );
+  }
+
+  /* =======================================================
+     RÉINITIALISER LE MOT DE PASSE
+  ======================================================= */
+
+  async function handleResetPassword(
+    utilisateur: Utilisateur
+  ) {
+    if (loadingId !== null) {
+      return;
+    }
+
+    const nomUtilisateur =
+      utilisateur.name?.trim() ||
+      utilisateur.email ||
+      "cet utilisateur";
+
+    /* -----------------------------------------------------
+       CONFIRMATION
+    ----------------------------------------------------- */
+
+    const result = await Swal.fire({
+      title: "Réinitialiser le mot de passe ?",
+
+      html: `
+        <div style="text-align:left">
+          <p>
+            Le mot de passe de
+            <strong>${escapeHtml(nomUtilisateur)}</strong>
+            sera remplacé par un nouveau mot de passe temporaire.
+          </p>
+
+          <p style="
+            margin-top:10px;
+            color:#6b7280;
+            font-size:13px;
+          ">
+            Assurez-vous de communiquer le nouveau mot de passe
+            à l'utilisateur de manière sécurisée.
+          </p>
+        </div>
+      `,
+
+      icon: "warning",
+
+      showCancelButton: true,
+
+      confirmButtonText:
+        "Oui, réinitialiser",
+
+      cancelButtonText:
+        "Annuler",
+
+      reverseButtons: true,
+
+      confirmButtonColor:
+        "#f59e0b",
+
+      cancelButtonColor:
+        "#6b7280",
+
+      focusCancel: true,
+    });
+
+    if (!result.isConfirmed) {
+      return;
+    }
+
+    /* -----------------------------------------------------
+       TRAITEMENT
+    ----------------------------------------------------- */
+
+    try {
+      setLoadingId(utilisateur.id);
+
+      /*
+       * Génération du nouveau mot de passe.
+       */
+      const newPassword =
+        generateTemporaryPassword();
+
+      /*
+       * Appel de l'action serveur.
+       *
+       * resetUtilisateurPassword(
+       *   utilisateur.id,
+       *   newPassword
+       * )
+       */
+
+      const response =
+        await resetUtilisateurPassword(
+          utilisateur.id,
+          newPassword
+        );
+
+      /*
+       * Gestion d'une réponse d'échec.
+       */
+
+      if (
+        response &&
+        typeof response === "object" &&
+        "success" in response &&
+        response.success === false
+      ) {
+        toast.error(
+          "message" in response
+            ? String(response.message)
+            : "Impossible de réinitialiser le mot de passe."
+        );
+
+        return;
+      }
+
+      /* ---------------------------------------------------
+         AFFICHAGE DU NOUVEAU MOT DE PASSE
+      --------------------------------------------------- */
+
+      await Swal.fire({
+        title:
+          "Mot de passe réinitialisé",
+
+        html: `
+          <div style="text-align:left">
+
+            <p style="
+              margin-bottom:12px;
+              font-size:14px;
+            ">
+              Le nouveau mot de passe temporaire de
+              <strong>
+                ${escapeHtml(nomUtilisateur)}
+              </strong>
+              est :
+            </p>
+
+            <div style="
+              padding:14px;
+              border-radius:10px;
+              background:#f3f4f6;
+              border:1px solid #e5e7eb;
+              font-size:20px;
+              font-weight:bold;
+              text-align:center;
+              letter-spacing:2px;
+              user-select:text;
+            ">
+              ${escapeHtml(newPassword)}
+            </div>
+
+            <p style="
+              margin-top:14px;
+              font-size:13px;
+              color:#6b7280;
+            ">
+              Communiquez ce mot de passe à l'utilisateur
+              de manière sécurisée.
+            </p>
+
+          </div>
+        `,
+
+        icon: "success",
+
+        confirmButtonText:
+          "Fermer",
+
+        confirmButtonColor:
+          "#22c55e",
+
+        allowOutsideClick: false,
+      });
+
+      toast.success(
+        "Mot de passe réinitialisé avec succès."
+      );
+
+      router.refresh();
+    } catch (error) {
+      console.error(
+        "Erreur réinitialisation mot de passe :",
+        error
+      );
+
+      toast.error(
+        error instanceof Error
+          ? error.message
+          : "Impossible de réinitialiser le mot de passe."
+      );
+    } finally {
+      setLoadingId(null);
+    }
   }
 
   /* =======================================================
@@ -133,34 +331,46 @@ export default function UtilisateurTable({
       return;
     }
 
-    const action = utilisateur.actif
-      ? "désactiver"
-      : "activer";
+    const action =
+      utilisateur.actif
+        ? "désactiver"
+        : "activer";
+
+    const nomUtilisateur =
+      utilisateur.name?.trim() ||
+      utilisateur.email ||
+      "cet utilisateur";
 
     const result = await Swal.fire({
       title: utilisateur.actif
         ? "Désactiver l'utilisateur ?"
         : "Activer l'utilisateur ?",
 
-      text: `Voulez-vous vraiment ${action} "${utilisateur.name ?? "cet utilisateur"}" ?`,
+      text: `Voulez-vous vraiment ${action} "${nomUtilisateur}" ?`,
 
       icon: "warning",
 
       showCancelButton: true,
 
-      confirmButtonText: utilisateur.actif
-        ? "Oui, désactiver"
-        : "Oui, activer",
+      confirmButtonText:
+        utilisateur.actif
+          ? "Oui, désactiver"
+          : "Oui, activer",
 
-      cancelButtonText: "Annuler",
+      cancelButtonText:
+        "Annuler",
 
       reverseButtons: true,
 
-      confirmButtonColor: utilisateur.actif
-        ? "#f59e0b"
-        : "#22c55e",
+      confirmButtonColor:
+        utilisateur.actif
+          ? "#f59e0b"
+          : "#22c55e",
 
-      cancelButtonColor: "#6b7280",
+      cancelButtonColor:
+        "#6b7280",
+
+      focusCancel: true,
     });
 
     if (!result.isConfirmed) {
@@ -170,9 +380,10 @@ export default function UtilisateurTable({
     try {
       setLoadingId(utilisateur.id);
 
-      const response = await toggleUtilisateur(
-        utilisateur.id
-      );
+      const response =
+        await toggleUtilisateur(
+          utilisateur.id
+        );
 
       if (
         response &&
@@ -213,140 +424,6 @@ export default function UtilisateurTable({
   }
 
   /* =======================================================
-     RÉINITIALISER LE MOT DE PASSE
-  ======================================================= */
-
-  async function handleResetPassword(
-    utilisateur: Utilisateur
-  ) {
-    if (loadingId !== null) {
-      return;
-    }
-
-    const result = await Swal.fire({
-      title: "Réinitialiser le mot de passe ?",
-
-      text: `Le mot de passe de "${utilisateur.name ?? "cet utilisateur"}" sera réinitialisé.`,
-
-      icon: "warning",
-
-      showCancelButton: true,
-
-      confirmButtonText:
-        "Oui, réinitialiser",
-
-      cancelButtonText: "Annuler",
-
-      reverseButtons: true,
-
-      confirmButtonColor: "#f59e0b",
-
-      cancelButtonColor: "#6b7280",
-    });
-
-    if (!result.isConfirmed) {
-      return;
-    }
-
-    try {
-      setLoadingId(utilisateur.id);
-
-      /*
-       * IMPORTANT :
-       * resetUtilisateurPassword attend maintenant
-       * 2 arguments :
-       *
-       * resetUtilisateurPassword(id, newPassword)
-       *
-       * Ici on génère un nouveau mot de passe temporaire.
-       */
-
-      const newPassword =
-        generateTemporaryPassword();
-
-      const response =
-        await resetUtilisateurPassword(
-          utilisateur.id,
-          newPassword
-        );
-
-      if (
-        response &&
-        typeof response === "object" &&
-        "success" in response &&
-        response.success === false
-      ) {
-        toast.error(
-          "message" in response
-            ? String(response.message)
-            : "Impossible de réinitialiser le mot de passe."
-        );
-
-        return;
-      }
-
-      /*
-       * On affiche le nouveau mot de passe
-       * dans une boîte SweetAlert.
-       */
-
-      await Swal.fire({
-        title: "Mot de passe réinitialisé",
-
-        html: `
-          <div style="text-align:left">
-            <p style="margin-bottom:10px">
-              Le nouveau mot de passe temporaire est :
-            </p>
-
-            <div
-              style="
-                padding:12px;
-                border-radius:8px;
-                background:#f3f4f6;
-                font-size:18px;
-                font-weight:bold;
-                text-align:center;
-                letter-spacing:1px;
-              "
-            >
-              ${escapeHtml(newPassword)}
-            </div>
-
-            <p style="margin-top:12px;font-size:13px;color:#6b7280">
-              Communiquez ce mot de passe à l'utilisateur
-              de manière sécurisée.
-            </p>
-          </div>
-        `,
-
-        icon: "success",
-
-        confirmButtonText: "Fermer",
-      });
-
-      toast.success(
-        "Mot de passe réinitialisé avec succès."
-      );
-
-      router.refresh();
-    } catch (error) {
-      console.error(
-        "Erreur réinitialisation mot de passe :",
-        error
-      );
-
-      toast.error(
-        error instanceof Error
-          ? error.message
-          : "Impossible de réinitialiser le mot de passe."
-      );
-    } finally {
-      setLoadingId(null);
-    }
-  }
-
-  /* =======================================================
      SUPPRIMER
   ======================================================= */
 
@@ -357,22 +434,29 @@ export default function UtilisateurTable({
       return;
     }
 
+    const nomUtilisateur =
+      utilisateur.name?.trim() ||
+      utilisateur.email ||
+      "cet utilisateur";
+
     const result = await Swal.fire({
-      title: "Supprimer l'utilisateur ?",
+      title:
+        "Supprimer l'utilisateur ?",
 
       html: `
         <p>
           Voulez-vous vraiment supprimer
           <strong>
-            ${escapeHtml(
-              utilisateur.name ??
-                "cet utilisateur"
-            )}
+            ${escapeHtml(nomUtilisateur)}
           </strong>
           ?
         </p>
 
-        <p style="margin-top:10px;color:#dc2626;font-size:14px">
+        <p style="
+          margin-top:10px;
+          color:#dc2626;
+          font-size:14px;
+        ">
           Cette opération peut être irréversible.
         </p>
       `,
@@ -384,13 +468,18 @@ export default function UtilisateurTable({
       confirmButtonText:
         "Oui, supprimer",
 
-      cancelButtonText: "Annuler",
+      cancelButtonText:
+        "Annuler",
 
       reverseButtons: true,
 
-      confirmButtonColor: "#dc2626",
+      confirmButtonColor:
+        "#dc2626",
 
-      cancelButtonColor: "#6b7280",
+      cancelButtonColor:
+        "#6b7280",
+
+      focusCancel: true,
     });
 
     if (!result.isConfirmed) {
@@ -448,6 +537,7 @@ export default function UtilisateurTable({
   const columns =
     useMemo<ColumnDef<Utilisateur>[]>(
       () => [
+
         /* ===================================================
            UTILISATEUR
         =================================================== */
@@ -473,8 +563,6 @@ export default function UtilisateurTable({
             return (
               <div className="flex items-center gap-3">
 
-                {/* AVATAR */}
-
                 <div className="avatar placeholder shrink-0">
                   <div
                     className="
@@ -494,8 +582,6 @@ export default function UtilisateurTable({
                   </div>
                 </div>
 
-                {/* INFORMATIONS */}
-
                 <div className="min-w-0">
                   <p className="font-semibold truncate max-w-48">
                     {utilisateur.name ||
@@ -512,6 +598,7 @@ export default function UtilisateurTable({
                     </p>
                   )}
                 </div>
+
               </div>
             );
           },
@@ -528,7 +615,8 @@ export default function UtilisateurTable({
 
           cell: ({ row }) => (
             <span className="text-sm">
-              {row.original.email || "-"}
+              {row.original.email ||
+                "-"}
             </span>
           ),
         },
@@ -663,7 +751,7 @@ export default function UtilisateurTable({
             return (
               <div className="dropdown dropdown-end">
 
-                {/* BOUTON */}
+                {/* BOUTON ACTIONS */}
 
                 <button
                   type="button"
@@ -705,7 +793,7 @@ export default function UtilisateurTable({
                     "
                   >
 
-                    {/* VOIR */}
+                    {/* VOIR PROFIL */}
 
                     <li>
                       <button
@@ -739,7 +827,7 @@ export default function UtilisateurTable({
                       </button>
                     </li>
 
-                    {/* RESET PASSWORD */}
+                    {/* RÉINITIALISER MOT DE PASSE */}
 
                     <li>
                       <button
@@ -801,8 +889,10 @@ export default function UtilisateurTable({
                         Supprimer
                       </button>
                     </li>
+
                   </ul>
                 )}
+
               </div>
             );
           },
@@ -816,40 +906,41 @@ export default function UtilisateurTable({
      TANSTACK TABLE
   ======================================================= */
 
-  const table = useReactTable({
-    data,
+  const table =
+    useReactTable({
+      data,
 
-    columns,
+      columns,
 
-    state: {
-      sorting,
-      globalFilter,
-    },
-
-    onSortingChange:
-      setSorting,
-
-    onGlobalFilterChange:
-      setGlobalFilter,
-
-    getCoreRowModel:
-      getCoreRowModel(),
-
-    getSortedRowModel:
-      getSortedRowModel(),
-
-    getFilteredRowModel:
-      getFilteredRowModel(),
-
-    getPaginationRowModel:
-      getPaginationRowModel(),
-
-    initialState: {
-      pagination: {
-        pageSize: 10,
+      state: {
+        sorting,
+        globalFilter,
       },
-    },
-  });
+
+      onSortingChange:
+        setSorting,
+
+      onGlobalFilterChange:
+        setGlobalFilter,
+
+      getCoreRowModel:
+        getCoreRowModel(),
+
+      getSortedRowModel:
+        getSortedRowModel(),
+
+      getFilteredRowModel:
+        getFilteredRowModel(),
+
+      getPaginationRowModel:
+        getPaginationRowModel(),
+
+      initialState: {
+        pagination: {
+          pageSize: 10,
+        },
+      },
+    });
 
   /* =======================================================
      RENDER
@@ -862,9 +953,24 @@ export default function UtilisateurTable({
           RECHERCHE
       =================================================== */}
 
-      <div className="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
+      <div className="
+        flex
+        flex-col
+        gap-3
+        lg:flex-row
+        lg:items-center
+        lg:justify-between
+      ">
 
-        <label className="input input-bordered flex items-center gap-2 w-full lg:w-96">
+        <label className="
+          input
+          input-bordered
+          flex
+          items-center
+          gap-2
+          w-full
+          lg:w-96
+        ">
 
           <Search
             size={18}
@@ -900,7 +1006,12 @@ export default function UtilisateurTable({
           TABLE
       =================================================== */}
 
-      <div className="overflow-x-auto rounded-box border border-base-300">
+      <div className="
+        overflow-x-auto
+        rounded-box
+        border
+        border-base-300
+      ">
 
         <table className="table table-zebra">
 
@@ -967,31 +1078,26 @@ export default function UtilisateurTable({
                                     {sorted ===
                                       "asc" && (
                                       <ChevronUp
-                                        size={
-                                          15
-                                        }
+                                        size={15}
                                       />
                                     )}
 
                                     {sorted ===
                                       "desc" && (
                                       <ChevronDown
-                                        size={
-                                          15
-                                        }
+                                        size={15}
                                       />
                                     )}
 
                                     {!sorted && (
                                       <ChevronsUpDown
-                                        size={
-                                          15
-                                        }
+                                        size={15}
                                         className="opacity-40"
                                       />
                                     )}
                                   </>
                                 )}
+
                               </button>
                             )}
 
@@ -1020,7 +1126,12 @@ export default function UtilisateurTable({
                   className="text-center py-12"
                 >
 
-                  <div className="flex flex-col items-center gap-2">
+                  <div className="
+                    flex
+                    flex-col
+                    items-center
+                    gap-2
+                  ">
 
                     <div className="text-4xl opacity-30">
                       👤
@@ -1089,7 +1200,14 @@ export default function UtilisateurTable({
           PAGINATION
       =================================================== */}
 
-      <div className="flex flex-col sm:flex-row items-center justify-between gap-3">
+      <div className="
+        flex
+        flex-col
+        sm:flex-row
+        items-center
+        justify-between
+        gap-3
+      ">
 
         {/* INFORMATION */}
 

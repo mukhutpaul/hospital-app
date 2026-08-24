@@ -20,6 +20,9 @@ import {
   Building2,
   UserCog,
   ClipboardList,
+  Building,
+  BriefcaseBusiness,
+  HeartPulse,
 } from "lucide-react";
 
 const menus = [
@@ -87,6 +90,27 @@ const menus = [
   },
 
   {
+  title: "PERSONNEL",
+  items: [
+    {
+      label: "Médecins",
+      href: "/personnel/medecins",
+      icon: Stethoscope,
+    },
+    {
+      label: "Infirmiers",
+      href: "/personnel/infirmiers",
+      icon: HeartPulse,
+    },
+    {
+      label: "Employés",
+      href: "/personnel/employes",
+      icon: BriefcaseBusiness,
+    },
+  ],
+},
+
+  {
     title: "GESTION",
     items: [
       {
@@ -102,31 +126,36 @@ const menus = [
     ],
   },
 
-  {
-    title: "ADMINISTRATION",
-    items: [
-      {
-        label: "Utilisateurs",
-        href: "/utilisateurs",
-        icon: UserCog,
-      },
-      {
-        label: "Rôles & permissions",
-        href: "/administration/roles",
-        icon: ShieldCheck,
-      },
-      {
-        label: "Services",
-        href: "/administration/services",
-        icon: Building2,
-      },
-      {
-        label: "Paramètres",
-        href: "/administration/parametres",
-        icon: Settings,
-      },
-    ],
-  },
+{
+  title: "ADMINISTRATION",
+  items: [
+    {
+      label: "Utilisateurs",
+      href: "/utilisateurs",
+      icon: UserCog,
+    },
+    {
+      label: "Rôles & permissions",
+      href: "/roles",
+      icon: ShieldCheck,
+    },
+    {
+      label: "Départements",
+      href: "/departements",
+      icon: Building,
+    },
+    {
+      label: "Services",
+      href: "/services",
+      icon: Building2,
+    },
+    {
+      label: "Paramètres",
+      href: "/administration/parametres",
+      icon: Settings,
+    },
+  ],
+},
 ];
 
 export default function Sidebar() {
