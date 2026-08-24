@@ -163,9 +163,7 @@ function formatTime(date: string | Date | null | undefined) {
   });
 }
 
-function formatDateTime(
-  date: string | Date | null | undefined,
-) {
+function formatDateTime(date: string | Date | null | undefined) {
   if (!date) return "-";
 
   const parsed = new Date(date);
@@ -186,27 +184,17 @@ function formatDateTime(
 function nomPatient(patient?: Demande["patient"] | null) {
   if (!patient) return "Patient inconnu";
 
-  return [
-    patient.nom,
-    patient.postNom,
-    patient.prenom,
-  ]
+  return [patient.nom, patient.postNom, patient.prenom]
     .filter(Boolean)
     .join(" ");
 }
 
 function nomMedecin(
-  medecin?: NonNullable<
-    NonNullable<Demande["consultation"]>["medecin"]
-  > | null,
+  medecin?: NonNullable<NonNullable<Demande["consultation"]>["medecin"]> | null,
 ) {
   if (!medecin) return "Médecin inconnu";
 
-  return [
-    medecin.nom,
-    medecin.postNom,
-    medecin.prenom,
-  ]
+  return [medecin.nom, medecin.postNom, medecin.prenom]
     .filter(Boolean)
     .join(" ");
 }
@@ -262,9 +250,7 @@ export default function DemandeLaboratoireTable({
   ============================================================
   */
 
-  const demandes = Array.isArray(demandesProp)
-    ? demandesProp
-    : [];
+  const demandes = Array.isArray(demandesProp) ? demandesProp : [];
 
   /* ========================================================
      FILTRES
@@ -280,10 +266,8 @@ export default function DemandeLaboratoireTable({
      MODAL
   ======================================================== */
 
-  const [
-    demandeSelectionnee,
-    setDemandeSelectionnee,
-  ] = useState<Demande | null>(null);
+  const [demandeSelectionnee, setDemandeSelectionnee] =
+    useState<Demande | null>(null);
 
   /* ========================================================
      FILTRAGE
@@ -303,13 +287,11 @@ export default function DemandeLaboratoireTable({
         const patient = demande.patient;
         const medecin = demande.consultation?.medecin;
 
-        const examens = (demande.lignes ?? []).flatMap(
-          (ligne) => [
-            ligne.examen?.nom,
-            ligne.examen?.code,
-            ligne.examen?.description,
-          ],
-        );
+        const examens = (demande.lignes ?? []).flatMap((ligne) => [
+          ligne.examen?.nom,
+          ligne.examen?.code,
+          ligne.examen?.description,
+        ]);
 
         const texte = [
           demande.numero,
@@ -347,10 +329,7 @@ export default function DemandeLaboratoireTable({
       ======================================================
       */
 
-      if (
-        statut !== "TOUS" &&
-        demande.statut !== statut
-      ) {
+      if (statut !== "TOUS" && demande.statut !== statut) {
         return false;
       }
 
@@ -361,9 +340,7 @@ export default function DemandeLaboratoireTable({
       */
 
       if (urgence !== "TOUS") {
-        const valeurUrgence = demande.urgence
-          ? "true"
-          : "false";
+        const valeurUrgence = demande.urgence ? "true" : "false";
 
         if (valeurUrgence !== urgence) {
           return false;
@@ -377,13 +354,9 @@ export default function DemandeLaboratoireTable({
       */
 
       if (dateDebut) {
-        const date = new Date(
-          demande.dateDemande,
-        );
+        const date = new Date(demande.dateDemande);
 
-        const debut = new Date(
-          `${dateDebut}T00:00:00`,
-        );
+        const debut = new Date(`${dateDebut}T00:00:00`);
 
         if (date < debut) {
           return false;
@@ -397,13 +370,9 @@ export default function DemandeLaboratoireTable({
       */
 
       if (dateFin) {
-        const date = new Date(
-          demande.dateDemande,
-        );
+        const date = new Date(demande.dateDemande);
 
-        const fin = new Date(
-          `${dateFin}T23:59:59.999`,
-        );
+        const fin = new Date(`${dateFin}T23:59:59.999`);
 
         if (date > fin) {
           return false;
@@ -412,14 +381,7 @@ export default function DemandeLaboratoireTable({
 
       return true;
     });
-  }, [
-    demandes,
-    recherche,
-    dateDebut,
-    dateFin,
-    statut,
-    urgence,
-  ]);
+  }, [demandes, recherche, dateDebut, dateFin, statut, urgence]);
 
   /* ========================================================
      RESET
@@ -437,13 +399,9 @@ export default function DemandeLaboratoireTable({
      TROUVER RESULTAT
   ======================================================== */
 
-  function getResultat(
-    demande: Demande,
-    examenId: number,
-  ) {
+  function getResultat(demande: Demande, examenId: number) {
     return (demande.resultats ?? []).find(
-      (resultat) =>
-        resultat.examenId === examenId,
+      (resultat) => resultat.examenId === examenId,
     );
   }
 
@@ -459,20 +417,11 @@ export default function DemandeLaboratoireTable({
     try {
       const formData = new FormData(form);
 
-      formData.set(
-        "demandeId",
-        String(demandeId),
-      );
+      formData.set("demandeId", String(demandeId));
 
-      formData.set(
-        "examenId",
-        String(examenId),
-      );
+      formData.set("examenId", String(examenId));
 
-      const result =
-        await createResultatLaboratoire(
-          formData,
-        );
+      const result = await createResultatLaboratoire(formData);
 
       if (!result.success) {
         toast.error(result.message);
@@ -491,8 +440,7 @@ export default function DemandeLaboratoireTable({
         return;
       }
 
-      const nouveauResultat =
-        result.data as Resultat;
+      const nouveauResultat = result.data as Resultat;
 
       /*
       ======================================================
@@ -505,12 +453,10 @@ export default function DemandeLaboratoireTable({
           return null;
         }
 
-        const anciens =
-          ancienne.resultats ?? [];
+        const anciens = ancienne.resultats ?? [];
 
         const index = anciens.findIndex(
-          (item) =>
-            item.id === nouveauResultat.id,
+          (item) => item.id === nouveauResultat.id,
         );
 
         if (index >= 0) {
@@ -529,21 +475,13 @@ export default function DemandeLaboratoireTable({
 
         return {
           ...ancienne,
-          resultats: [
-            ...anciens,
-            nouveauResultat,
-          ],
+          resultats: [...anciens, nouveauResultat],
         };
       });
     } catch (error) {
-      console.error(
-        "handleResultat:",
-        error,
-      );
+      console.error("handleResultat:", error);
 
-      toast.error(
-        "Une erreur est survenue lors de l'enregistrement.",
-      );
+      toast.error("Une erreur est survenue lors de l'enregistrement.");
     }
   }
 
@@ -551,30 +489,23 @@ export default function DemandeLaboratoireTable({
      VALIDER RESULTAT
   ======================================================== */
 
-  async function handleValidation(
-    resultatId: number,
-  ) {
-    const confirmation =
-      await Swal.fire({
-        title: "Valider le résultat ?",
-        text:
-          "Après validation, le résultat sera considéré comme définitif.",
-        icon: "warning",
-        showCancelButton: true,
-        confirmButtonText: "Oui, valider",
-        cancelButtonText: "Annuler",
-        reverseButtons: true,
-      });
+  async function handleValidation(resultatId: number) {
+    const confirmation = await Swal.fire({
+      title: "Valider le résultat ?",
+      text: "Après validation, le résultat sera considéré comme définitif.",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonText: "Oui, valider",
+      cancelButtonText: "Annuler",
+      reverseButtons: true,
+    });
 
     if (!confirmation.isConfirmed) {
       return;
     }
 
     try {
-      const result =
-        await validerResultatLaboratoire(
-          resultatId,
-        );
+      const result = await validerResultatLaboratoire(resultatId);
 
       if (!result.success) {
         toast.error(result.message);
@@ -591,9 +522,7 @@ export default function DemandeLaboratoireTable({
         return {
           ...ancienne,
 
-          resultats: (
-            ancienne.resultats ?? []
-          ).map((item) =>
+          resultats: (ancienne.resultats ?? []).map((item) =>
             item.id === resultatId
               ? {
                   ...item,
@@ -604,14 +533,9 @@ export default function DemandeLaboratoireTable({
         };
       });
     } catch (error) {
-      console.error(
-        "handleValidation:",
-        error,
-      );
+      console.error("handleValidation:", error);
 
-      toast.error(
-        "Une erreur est survenue lors de la validation.",
-      );
+      toast.error("Une erreur est survenue lors de la validation.");
     }
   }
 
@@ -619,9 +543,7 @@ export default function DemandeLaboratoireTable({
      OUVRIR DEMANDE
   ======================================================== */
 
-  function ouvrirDemande(
-    demande: Demande,
-  ) {
+  function ouvrirDemande(demande: Demande) {
     setDemandeSelectionnee(demande);
   }
 
@@ -637,14 +559,11 @@ export default function DemandeLaboratoireTable({
 
       <div className="mb-6 rounded-xl border border-base-200 bg-base-100 p-4">
         <div className="grid grid-cols-1 gap-3 md:grid-cols-2 lg:grid-cols-5">
-
           {/* RECHERCHE */}
 
           <label className="form-control lg:col-span-2">
             <div className="label">
-              <span className="label-text font-medium">
-                Recherche
-              </span>
+              <span className="label-text font-medium">Recherche</span>
             </div>
 
             <div className="relative">
@@ -656,11 +575,7 @@ export default function DemandeLaboratoireTable({
               <input
                 type="text"
                 value={recherche}
-                onChange={(e) =>
-                  setRecherche(
-                    e.target.value,
-                  )
-                }
+                onChange={(e) => setRecherche(e.target.value)}
                 placeholder="N° demande, dossier, patient, médecin, examen..."
                 className="input input-bordered w-full pl-10"
               />
@@ -671,9 +586,7 @@ export default function DemandeLaboratoireTable({
 
           <label className="form-control">
             <div className="label">
-              <span className="label-text font-medium">
-                Date début
-              </span>
+              <span className="label-text font-medium">Date début</span>
             </div>
 
             <div className="relative">
@@ -685,11 +598,7 @@ export default function DemandeLaboratoireTable({
               <input
                 type="date"
                 value={dateDebut}
-                onChange={(e) =>
-                  setDateDebut(
-                    e.target.value,
-                  )
-                }
+                onChange={(e) => setDateDebut(e.target.value)}
                 className="input input-bordered w-full pl-10"
               />
             </div>
@@ -699,9 +608,7 @@ export default function DemandeLaboratoireTable({
 
           <label className="form-control">
             <div className="label">
-              <span className="label-text font-medium">
-                Date fin
-              </span>
+              <span className="label-text font-medium">Date fin</span>
             </div>
 
             <div className="relative">
@@ -713,11 +620,7 @@ export default function DemandeLaboratoireTable({
               <input
                 type="date"
                 value={dateFin}
-                onChange={(e) =>
-                  setDateFin(
-                    e.target.value,
-                  )
-                }
+                onChange={(e) => setDateFin(e.target.value)}
                 className="input input-bordered w-full pl-10"
               />
             </div>
@@ -727,39 +630,23 @@ export default function DemandeLaboratoireTable({
 
           <label className="form-control">
             <div className="label">
-              <span className="label-text font-medium">
-                Statut
-              </span>
+              <span className="label-text font-medium">Statut</span>
             </div>
 
             <select
               value={statut}
-              onChange={(e) =>
-                setStatut(
-                  e.target.value,
-                )
-              }
+              onChange={(e) => setStatut(e.target.value)}
               className="select select-bordered w-full"
             >
-              <option value="TOUS">
-                Tous les statuts
-              </option>
+              <option value="TOUS">Tous les statuts</option>
 
-              <option value="DEMANDE">
-                Demandée
-              </option>
+              <option value="DEMANDE">Demandée</option>
 
-              <option value="EN_COURS">
-                En cours
-              </option>
+              <option value="EN_COURS">En cours</option>
 
-              <option value="TERMINE">
-                Terminée
-              </option>
+              <option value="TERMINE">Terminée</option>
 
-              <option value="ANNULEE">
-                Annulée
-              </option>
+              <option value="ANNULEE">Annulée</option>
             </select>
           </label>
         </div>
@@ -767,34 +654,21 @@ export default function DemandeLaboratoireTable({
         {/* DEUXIÈME LIGNE */}
 
         <div className="mt-3 flex flex-col gap-3 md:flex-row md:items-end">
-
           <label className="form-control w-full md:w-64">
             <div className="label">
-              <span className="label-text font-medium">
-                Urgence
-              </span>
+              <span className="label-text font-medium">Urgence</span>
             </div>
 
             <select
               value={urgence}
-              onChange={(e) =>
-                setUrgence(
-                  e.target.value,
-                )
-              }
+              onChange={(e) => setUrgence(e.target.value)}
               className="select select-bordered"
             >
-              <option value="TOUS">
-                Toutes
-              </option>
+              <option value="TOUS">Toutes</option>
 
-              <option value="true">
-                Urgentes uniquement
-              </option>
+              <option value="true">Urgentes uniquement</option>
 
-              <option value="false">
-                Non urgentes
-              </option>
+              <option value="false">Non urgentes</option>
             </select>
           </label>
 
@@ -830,29 +704,21 @@ export default function DemandeLaboratoireTable({
               <th>Date</th>
               <th>Statut</th>
               <th>Urgence</th>
-              <th className="text-right">
-                Actions
-              </th>
+              <th className="text-right">Actions</th>
             </tr>
           </thead>
 
           <tbody>
             {demandesFiltrees.length === 0 ? (
               <tr>
-                <td
-                  colSpan={8}
-                  className="py-12 text-center"
-                >
+                <td colSpan={8} className="py-12 text-center">
                   <div className="flex flex-col items-center gap-3 text-base-content/50">
                     <FlaskConical size={42} />
 
-                    <p className="font-medium">
-                      Aucune demande trouvée
-                    </p>
+                    <p className="font-medium">Aucune demande trouvée</p>
 
                     <p className="text-sm">
-                      Aucune demande ne correspond
-                      aux critères actuels.
+                      Aucune demande ne correspond aux critères actuels.
                     </p>
 
                     {demandes.length > 0 && (
@@ -868,193 +734,129 @@ export default function DemandeLaboratoireTable({
                 </td>
               </tr>
             ) : (
-              demandesFiltrees.map(
-                (demande) => (
-                  <tr key={demande.id}>
+              demandesFiltrees.map((demande) => (
+                <tr key={demande.id}>
+                  {/* DEMANDE */}
 
-                    {/* DEMANDE */}
+                  <td>
+                    <div className="font-semibold">{demande.numero}</div>
 
-                    <td>
-                      <div className="font-semibold">
-                        {demande.numero}
-                      </div>
+                    <div className="text-xs text-base-content/50">
+                      ID : {demande.id}
+                    </div>
 
+                    {demande.consultation && (
                       <div className="text-xs text-base-content/50">
-                        ID : {demande.id}
+                        Consultation #{demande.consultation.idConsultation}
                       </div>
+                    )}
+                  </td>
 
-                      {demande.consultation && (
-                        <div className="text-xs text-base-content/50">
-                          Consultation #
-                          {
-                            demande
-                              .consultation
-                              .idConsultation
-                          }
+                  {/* PATIENT */}
+
+                  <td>
+                    <div className="font-medium">
+                      {nomPatient(demande.patient)}
+                    </div>
+
+                    <div className="text-xs text-base-content/50">
+                      {demande.patient?.numeroDossier}
+                    </div>
+                  </td>
+
+                  {/* MÉDECIN */}
+
+                  <td>
+                    {demande.consultation?.medecin ? (
+                      <>
+                        <div className="font-medium">
+                          Dr {nomMedecin(demande.consultation.medecin)}
                         </div>
-                      )}
-                    </td>
 
-                    {/* PATIENT */}
-
-                    <td>
-                      <div className="font-medium">
-                        {nomPatient(
-                          demande.patient,
-                        )}
-                      </div>
-
-                      <div className="text-xs text-base-content/50">
-                        {
-                          demande.patient
-                            ?.numeroDossier
-                        }
-                      </div>
-                    </td>
-
-                    {/* MÉDECIN */}
-
-                    <td>
-                      {demande.consultation?.medecin ? (
-                        <>
-                          <div className="font-medium">
-                            Dr{" "}
-                            {nomMedecin(
-                              demande
-                                .consultation
-                                .medecin,
-                            )}
-                          </div>
-
-                          <div className="text-xs text-base-content/50">
-                            {
-                              demande
-                                .consultation
-                                .medecin
-                                .specialite
-                                ?.nom
-                            }
-                          </div>
-                        </>
-                      ) : (
-                        <span className="text-base-content/40">
-                          Non renseigné
-                        </span>
-                      )}
-                    </td>
-
-                    {/* EXAMENS */}
-
-                    <td>
-                      <div className="flex flex-col gap-1">
-                        {(
-                          demande.lignes ??
-                          []
-                        )
-                          .slice(0, 2)
-                          .map((ligne) => (
-                            <span
-                              key={ligne.id}
-                              className="badge badge-ghost"
-                            >
-                              {
-                                ligne.examen
-                                  ?.nom
-                              }
-                            </span>
-                          ))}
-
-                        {(
-                          demande.lignes ??
-                          []
-                        ).length > 2 && (
-                          <span className="text-xs text-base-content/50">
-                            +
-                            {demande.lignes.length -
-                              2}{" "}
-                            autre(s)
-                          </span>
-                        )}
-
-                        {(
-                          demande.lignes ??
-                          []
-                        ).length === 0 && (
-                          <span className="text-xs text-base-content/40">
-                            Aucun examen
-                          </span>
-                        )}
-                      </div>
-                    </td>
-
-                    {/* DATE */}
-
-                    <td>
-                      <div className="whitespace-nowrap">
-                        {formatDate(
-                          demande.dateDemande,
-                        )}
-                      </div>
-
-                      <div className="text-xs text-base-content/50">
-                        {formatTime(
-                          demande.dateDemande,
-                        )}
-                      </div>
-                    </td>
-
-                    {/* STATUT */}
-
-                    <td>
-                      <span
-                        className={`badge ${getStatutClass(
-                          demande.statut,
-                        )}`}
-                      >
-                        {getStatutLabel(
-                          demande.statut,
-                        )}
+                        <div className="text-xs text-base-content/50">
+                          {demande.consultation.medecin.specialite?.nom}
+                        </div>
+                      </>
+                    ) : (
+                      <span className="text-base-content/40">
+                        Non renseigné
                       </span>
-                    </td>
+                    )}
+                  </td>
 
-                    {/* URGENCE */}
+                  {/* EXAMENS */}
 
-                    <td>
-                      {demande.urgence ? (
-                        <span className="badge badge-error gap-1 text-white">
-                          <AlertTriangle
-                            size={13}
-                          />
-                          Urgent
+                  <td>
+                    <div className="flex flex-col gap-1">
+                      {(demande.lignes ?? []).slice(0, 2).map((ligne) => (
+                        <span key={ligne.id} className="badge badge-ghost">
+                          {ligne.examen?.nom}
                         </span>
-                      ) : (
-                        <span className="badge badge-ghost">
-                          Normal
+                      ))}
+
+                      {(demande.lignes ?? []).length > 2 && (
+                        <span className="text-xs text-base-content/50">
+                          +{demande.lignes.length - 2} autre(s)
                         </span>
                       )}
-                    </td>
 
-                    {/* ACTION */}
+                      {(demande.lignes ?? []).length === 0 && (
+                        <span className="text-xs text-base-content/40">
+                          Aucun examen
+                        </span>
+                      )}
+                    </div>
+                  </td>
 
-                    <td>
-                      <div className="flex justify-end">
-                        <button
-                          type="button"
-                          onClick={() =>
-                            ouvrirDemande(
-                              demande,
-                            )
-                          }
-                          className="btn btn-sm btn-primary"
-                        >
-                          <Eye size={16} />
-                          Détails
-                        </button>
-                      </div>
-                    </td>
-                  </tr>
-                ),
-              )
+                  {/* DATE */}
+
+                  <td>
+                    <div className="whitespace-nowrap">
+                      {formatDate(demande.dateDemande)}
+                    </div>
+
+                    <div className="text-xs text-base-content/50">
+                      {formatTime(demande.dateDemande)}
+                    </div>
+                  </td>
+
+                  {/* STATUT */}
+
+                  <td>
+                    <span className={`badge ${getStatutClass(demande.statut)}`}>
+                      {getStatutLabel(demande.statut)}
+                    </span>
+                  </td>
+
+                  {/* URGENCE */}
+
+                  <td>
+                    {demande.urgence ? (
+                      <span className="badge badge-error gap-1 text-white">
+                        <AlertTriangle size={13} />
+                        Urgent
+                      </span>
+                    ) : (
+                      <span className="badge badge-ghost">Normal</span>
+                    )}
+                  </td>
+
+                  {/* ACTION */}
+
+                  <td>
+                    <div className="flex justify-end">
+                      <button
+                        type="button"
+                        onClick={() => ouvrirDemande(demande)}
+                        className="btn btn-sm btn-primary"
+                      >
+                        <Eye size={16} />
+                        Détails
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              ))
             )}
           </tbody>
         </table>
@@ -1063,456 +865,496 @@ export default function DemandeLaboratoireTable({
       {/* ==================================================
           MODAL
       ================================================== */}
-
       {demandeSelectionnee && (
         <div className="modal modal-open">
-          <div className="modal-box max-w-6xl">
+          <div className="modal-box max-w-7xl overflow-hidden p-0">
+            {/* ==================================================
+          HEADER
+      ================================================== */}
+            <div className="sticky top-0 z-20 border-b border-base-200 bg-base-100 px-6 py-5">
+              <div className="flex items-start justify-between gap-4">
+                <div className="flex min-w-0 items-center gap-4">
+                  <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-primary/10 text-primary">
+                    <FlaskConical size={25} />
+                  </div>
 
-            {/* HEADER */}
+                  <div className="min-w-0">
+                    <div className="flex flex-wrap items-center gap-2">
+                      <h3 className="text-xl font-bold">
+                        Demande {demandeSelectionnee.numero}
+                      </h3>
 
-            <div className="flex items-start justify-between gap-4">
-              <div>
-                <div className="flex items-center gap-2">
-                  <FlaskConical
-                    className="text-primary"
-                    size={24}
-                  />
+                      <span
+                        className={`badge ${getStatutClass(
+                          demandeSelectionnee.statut,
+                        )}`}
+                      >
+                        {getStatutLabel(demandeSelectionnee.statut)}
+                      </span>
 
-                  <h3 className="text-xl font-bold">
-                    Demande{" "}
-                    {
-                      demandeSelectionnee.numero
-                    }
-                  </h3>
-                </div>
-
-                <p className="mt-1 text-sm text-base-content/60">
-                  Demandée le{" "}
-                  {formatDateTime(
-                    demandeSelectionnee.dateDemande,
-                  )}
-                </p>
-              </div>
-
-              <button
-                type="button"
-                onClick={() =>
-                  setDemandeSelectionnee(
-                    null,
-                  )
-                }
-                className="btn btn-sm btn-circle btn-ghost"
-              >
-                <X size={20} />
-              </button>
-            </div>
-
-            <div className="divider" />
-
-            {/* PATIENT / MÉDECIN */}
-
-            <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-
-              {/* PATIENT */}
-
-              <div className="rounded-xl border border-base-200 p-4">
-                <h4 className="mb-3 font-semibold">
-                  Patient
-                </h4>
-
-                <p className="font-medium">
-                  {nomPatient(
-                    demandeSelectionnee.patient,
-                  )}
-                </p>
-
-                <p className="text-sm text-base-content/60">
-                  Dossier :{" "}
-                  {
-                    demandeSelectionnee
-                      .patient
-                      .numeroDossier
-                  }
-                </p>
-
-                {demandeSelectionnee
-                  .patient
-                  .telephone && (
-                  <p className="text-sm text-base-content/60">
-                    Tél. :{" "}
-                    {
-                      demandeSelectionnee
-                        .patient
-                        .telephone
-                    }
-                  </p>
-                )}
-
-                {demandeSelectionnee
-                  .patient
-                  .sexe && (
-                  <p className="text-sm text-base-content/60">
-                    Sexe :{" "}
-                    {
-                      demandeSelectionnee
-                        .patient.sexe
-                    }
-                  </p>
-                )}
-
-                {demandeSelectionnee
-                  .patient
-                  .dateNaissance && (
-                  <p className="text-sm text-base-content/60">
-                    Naissance :{" "}
-                    {formatDate(
-                      demandeSelectionnee
-                        .patient
-                        .dateNaissance,
-                    )}
-                  </p>
-                )}
-              </div>
-
-              {/* MÉDECIN */}
-
-              <div className="rounded-xl border border-base-200 p-4">
-                <h4 className="mb-3 font-semibold">
-                  Médecin prescripteur
-                </h4>
-
-                {demandeSelectionnee
-                  .consultation
-                  ?.medecin ? (
-                  <>
-                    <p className="font-medium">
-                      Dr{" "}
-                      {nomMedecin(
-                        demandeSelectionnee
-                          .consultation
-                          .medecin,
-                      )}
-                    </p>
-
-                    <p className="text-sm text-base-content/60">
-                      {
-                        demandeSelectionnee
-                          .consultation
-                          .medecin
-                          .specialite
-                          ?.nom
-                      }
-                    </p>
-
-                    <p className="text-sm text-base-content/60">
-                      {
-                        demandeSelectionnee
-                          .consultation
-                          .medecin
-                          .service?.nom
-                      }
-                    </p>
-                  </>
-                ) : (
-                  <p className="text-base-content/50">
-                    Médecin non renseigné
-                  </p>
-                )}
-              </div>
-            </div>
-
-            {/* OBSERVATION */}
-
-            {demandeSelectionnee.observation && (
-              <div className="mt-4 rounded-xl bg-base-200/50 p-4">
-                <h4 className="mb-1 font-semibold">
-                  Observation
-                </h4>
-
-                <p className="text-sm">
-                  {
-                    demandeSelectionnee.observation
-                  }
-                </p>
-              </div>
-            )}
-
-            <div className="divider">
-              Examens demandés et résultats
-            </div>
-
-            {/* EXAMENS */}
-
-            <div className="space-y-4">
-              {(
-                demandeSelectionnee.lignes ??
-                []
-              ).map((ligne) => {
-                const resultat =
-                  getResultat(
-                    demandeSelectionnee,
-                    ligne.examen.id,
-                  );
-
-                return (
-                  <div
-                    key={ligne.id}
-                    className="rounded-xl border border-base-200 p-4"
-                  >
-
-                    {/* HEADER EXAMEN */}
-
-                    <div className="flex flex-col gap-3 md:flex-row md:items-start md:justify-between">
-                      <div>
-                        <div className="flex items-center gap-2">
-                          <FlaskConical
-                            size={18}
-                            className="text-primary"
-                          />
-
-                          <h4 className="font-semibold">
-                            {
-                              ligne.examen
-                                .nom
-                            }
-                          </h4>
-                        </div>
-
-                        <p className="mt-1 text-xs text-base-content/50">
-                          Code :{" "}
-                          {
-                            ligne.examen
-                              .code
-                          }
-                        </p>
-
-                        {ligne.examen
-                          .valeurNormale && (
-                          <p className="mt-1 text-xs text-base-content/60">
-                            Valeur normale :{" "}
-                            {
-                              ligne.examen
-                                .valeurNormale
-                            }
-                          </p>
-                        )}
-                      </div>
-
-                      {resultat ? (
-                        resultat.valide ? (
-                          <span className="badge badge-success gap-1">
-                            <CheckCircle2
-                              size={14}
-                            />
-                            Validé
-                          </span>
-                        ) : (
-                          <span className="badge badge-warning">
-                            Résultat saisi
-                          </span>
-                        )
-                      ) : (
-                        <span className="badge badge-ghost">
-                          En attente
+                      {demandeSelectionnee.urgence && (
+                        <span className="badge badge-error gap-1 text-white">
+                          <AlertTriangle size={13} />
+                          Urgente
                         </span>
                       )}
                     </div>
 
-                    {/* FORMULAIRE */}
-
-                    <form
-                      onSubmit={async (
-                        e,
-                      ) => {
-                        e.preventDefault();
-
-                        await handleResultat(
-                          demandeSelectionnee.id,
-                          ligne.examen.id,
-                          e.currentTarget,
-                        );
-                      }}
-                      className="mt-4"
-                    >
-                      <div className="grid grid-cols-1 gap-3 md:grid-cols-2">
-
-                        {/* VALEUR */}
-
-                        <label className="form-control">
-                          <div className="label">
-                            <span className="label-text">
-                              Résultat
-                            </span>
-                          </div>
-
-                          <input
-                            name="valeur"
-                            defaultValue={
-                              resultat?.valeur ??
-                              ""
-                            }
-                            disabled={
-                              resultat?.valide ===
-                              true
-                            }
-                            placeholder="Ex. 1.20"
-                            className="input input-bordered"
-                          />
-                        </label>
-
-                        {/* UNITÉ */}
-
-                        <label className="form-control">
-                          <div className="label">
-                            <span className="label-text">
-                              Unité
-                            </span>
-                          </div>
-
-                          <input
-                            name="unite"
-                            defaultValue={
-                              resultat?.unite ??
-                              ligne.examen
-                                .unite ??
-                              ""
-                            }
-                            disabled={
-                              resultat?.valide ===
-                              true
-                            }
-                            className="input input-bordered"
-                          />
-                        </label>
-
-                        {/* COMMENTAIRE */}
-
-                        <label className="form-control">
-                          <div className="label">
-                            <span className="label-text">
-                              Commentaire
-                            </span>
-                          </div>
-
-                          <textarea
-                            name="commentaire"
-                            defaultValue={
-                              resultat?.commentaire ??
-                              ""
-                            }
-                            disabled={
-                              resultat?.valide ===
-                              true
-                            }
-                            className="textarea textarea-bordered"
-                            placeholder="Commentaire du laboratoire..."
-                          />
-                        </label>
-
-                        {/* INTERPRÉTATION */}
-
-                        <label className="form-control">
-                          <div className="label">
-                            <span className="label-text">
-                              Interprétation
-                            </span>
-                          </div>
-
-                          <textarea
-                            name="interpretation"
-                            defaultValue={
-                              resultat?.interpretation ??
-                              ""
-                            }
-                            disabled={
-                              resultat?.valide ===
-                              true
-                            }
-                            className="textarea textarea-bordered"
-                            placeholder="Interprétation du résultat..."
-                          />
-                        </label>
-                      </div>
-
-                      {/* ACTIONS */}
-
-                      <div className="mt-4 flex flex-wrap justify-end gap-2">
-
-                        {!resultat?.valide && (
-                          <button
-                            type="submit"
-                            className="btn btn-sm btn-primary"
-                          >
-                            <Save size={16} />
-
-                            {resultat
-                              ? "Modifier le résultat"
-                              : "Enregistrer le résultat"}
-                          </button>
-                        )}
-
-                        {resultat &&
-                          !resultat.valide && (
-                            <button
-                              type="button"
-                              onClick={() =>
-                                handleValidation(
-                                  resultat.id,
-                                )
-                              }
-                              className="btn btn-sm btn-success"
-                            >
-                              <CheckCircle2
-                                size={16}
-                              />
-                              Valider
-                            </button>
-                          )}
-                      </div>
-                    </form>
+                    <p className="mt-1 text-sm text-base-content/50">
+                      Demandée le{" "}
+                      {formatDateTime(demandeSelectionnee.dateDemande)}
+                    </p>
                   </div>
-                );
-              })}
-
-              {(
-                demandeSelectionnee.lignes ??
-                []
-              ).length === 0 && (
-                <div className="rounded-xl border border-warning/30 bg-warning/10 p-6 text-center">
-                  <p className="font-medium">
-                    Aucun examen associé à cette
-                    demande.
-                  </p>
                 </div>
-              )}
+
+                <button
+                  type="button"
+                  onClick={() => setDemandeSelectionnee(null)}
+                  className="btn btn-sm btn-circle btn-ghost"
+                >
+                  <X size={20} />
+                </button>
+              </div>
             </div>
 
-            {/* FOOTER */}
+            {/* ==================================================
+          CONTENU
+      ================================================== */}
+            <div className="max-h-[75vh] overflow-y-auto px-6 py-6">
+              {/* ==================================================
+            INFORMATIONS PATIENT / PRESCRIPTEUR
+        ================================================== */}
+              <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
+                {/* PATIENT */}
+                <div className="overflow-hidden rounded-2xl border border-base-200 bg-base-100 shadow-sm">
+                  <div className="flex items-center gap-3 border-b border-base-200 bg-base-200/30 px-5 py-4">
+                    <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-info/10 text-info">
+                      <span className="text-sm font-bold">P</span>
+                    </div>
 
-            <div className="modal-action">
+                    <div>
+                      <h4 className="font-semibold">Informations du patient</h4>
+
+                      <p className="text-xs text-base-content/50">
+                        Identité et coordonnées
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-1 gap-x-6 gap-y-3 p-5 sm:grid-cols-2">
+                    <div className="sm:col-span-2">
+                      <p className="text-xs font-medium uppercase tracking-wide text-base-content/40">
+                        Patient
+                      </p>
+
+                      <p className="mt-1 text-lg font-semibold">
+                        {nomPatient(demandeSelectionnee.patient)}
+                      </p>
+                    </div>
+
+                    <div>
+                      <p className="text-xs text-base-content/40">N° dossier</p>
+
+                      <p className="font-medium">
+                        {demandeSelectionnee.patient.numeroDossier}
+                      </p>
+                    </div>
+
+                    <div>
+                      <p className="text-xs text-base-content/40">Sexe</p>
+
+                      <p className="font-medium">
+                        {demandeSelectionnee.patient.sexe || "-"}
+                      </p>
+                    </div>
+
+                    <div>
+                      <p className="text-xs text-base-content/40">
+                        Date de naissance
+                      </p>
+
+                      <p className="font-medium">
+                        {formatDate(demandeSelectionnee.patient.dateNaissance)}
+                      </p>
+                    </div>
+
+                    <div>
+                      <p className="text-xs text-base-content/40">Téléphone</p>
+
+                      <p className="font-medium">
+                        {demandeSelectionnee.patient.telephone || "-"}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
+                {/* MÉDECIN */}
+                <div className="overflow-hidden rounded-2xl border border-base-200 bg-base-100 shadow-sm">
+                  <div className="flex items-center gap-3 border-b border-base-200 bg-base-200/30 px-5 py-4">
+                    <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-primary/10 text-primary">
+                      <span className="text-sm font-bold">Dr</span>
+                    </div>
+
+                    <div>
+                      <h4 className="font-semibold">Médecin prescripteur</h4>
+
+                      <p className="text-xs text-base-content/50">
+                        Informations de prescription
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="p-5">
+                    {demandeSelectionnee.consultation?.medecin ? (
+                      <div className="space-y-4">
+                        <div>
+                          <p className="text-lg font-semibold">
+                            Dr{" "}
+                            {nomMedecin(
+                              demandeSelectionnee.consultation.medecin,
+                            )}
+                          </p>
+
+                          <p className="text-sm text-base-content/50">
+                            {demandeSelectionnee.consultation.medecin.specialite
+                              ?.nom || "Spécialité non renseignée"}
+                          </p>
+                        </div>
+
+                        <div className="grid grid-cols-2 gap-4">
+                          <div className="rounded-lg bg-base-200/50 p-3">
+                            <p className="text-xs text-base-content/40">
+                              Service
+                            </p>
+
+                            <p className="mt-1 text-sm font-medium">
+                              {demandeSelectionnee.consultation.medecin.service
+                                ?.nom || "-"}
+                            </p>
+                          </div>
+
+                          <div className="rounded-lg bg-base-200/50 p-3">
+                            <p className="text-xs text-base-content/40">
+                              Consultation
+                            </p>
+
+                            <p className="mt-1 text-sm font-medium">
+                              #{demandeSelectionnee.consultation.idConsultation}
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+                    ) : (
+                      <div className="flex min-h-24 items-center justify-center rounded-xl bg-base-200/40">
+                        <p className="text-sm text-base-content/50">
+                          Médecin non renseigné
+                        </p>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              </div>
+
+              {/* ==================================================
+            OBSERVATION
+        ================================================== */}
+              {demandeSelectionnee.observation && (
+                <div className="mt-5 rounded-2xl border border-warning/20 bg-warning/5 p-5">
+                  <div className="flex gap-3">
+                    <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-warning/10 text-warning">
+                      <AlertTriangle size={18} />
+                    </div>
+
+                    <div>
+                      <h4 className="font-semibold">Observation médicale</h4>
+
+                      <p className="mt-1 text-sm leading-6 text-base-content/70">
+                        {demandeSelectionnee.observation}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* ==================================================
+            TITRE EXAMENS
+        ================================================== */}
+              <div className="my-7 flex items-center justify-between">
+                <div>
+                  <h3 className="text-lg font-bold">Examens et résultats</h3>
+
+                  <p className="mt-1 text-sm text-base-content/50">
+                    Saisissez les résultats des examens prescrits.
+                  </p>
+                </div>
+
+                <div className="badge badge-primary badge-lg">
+                  {demandeSelectionnee.lignes?.length || 0} examen(s)
+                </div>
+              </div>
+
+              {/* ==================================================
+            EXAMENS
+        ================================================== */}
+              <div className="space-y-5">
+                {(demandeSelectionnee.lignes ?? []).map((ligne) => {
+                  const resultat = getResultat(
+                    demandeSelectionnee,
+                    ligne.examen.id,
+                  );
+
+                  return (
+                    <div
+                      key={ligne.id}
+                      className="overflow-hidden rounded-2xl border border-base-200 bg-base-100 shadow-sm"
+                    >
+                      {/* ==========================================
+                    HEADER EXAMEN
+                ========================================== */}
+                      <div className="flex flex-col gap-4 border-b border-base-200 bg-base-200/20 px-5 py-4 md:flex-row md:items-center md:justify-between">
+                        <div className="flex items-start gap-3">
+                          <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-primary/10 text-primary">
+                            <FlaskConical size={19} />
+                          </div>
+
+                          <div>
+                            <h4 className="font-semibold">
+                              {ligne.examen.nom}
+                            </h4>
+
+                            <div className="mt-1 flex flex-wrap items-center gap-2">
+                              <span className="badge badge-sm badge-ghost">
+                                {ligne.examen.code}
+                              </span>
+
+                              {ligne.examen.unite && (
+                                <span className="text-xs text-base-content/50">
+                                  Unité : {ligne.examen.unite}
+                                </span>
+                              )}
+                            </div>
+                          </div>
+                        </div>
+
+                        {/* STATUT */}
+                        {resultat ? (
+                          resultat.valide ? (
+                            <span className="badge badge-success gap-1 px-3 py-3">
+                              <CheckCircle2 size={14} />
+                              Résultat validé
+                            </span>
+                          ) : (
+                            <span className="badge badge-warning px-3 py-3">
+                              Résultat saisi
+                            </span>
+                          )
+                        ) : (
+                          <span className="badge badge-ghost px-3 py-3">
+                            En attente
+                          </span>
+                        )}
+                      </div>
+
+                      {/* ==========================================
+                    INFORMATIONS NORMALES
+                ========================================== */}
+                      {ligne.examen.valeurNormale && (
+                        <div className="border-b border-base-200 bg-info/5 px-5 py-3">
+                          <div className="flex flex-wrap items-center gap-2 text-sm">
+                            <span className="font-medium text-info">
+                              Valeur de référence :
+                            </span>
+
+                            <span>{ligne.examen.valeurNormale}</span>
+                          </div>
+                        </div>
+                      )}
+
+                      {/* ==========================================
+                    FORMULAIRE
+                ========================================== */}
+                      <form
+                        onSubmit={async (e) => {
+                          e.preventDefault();
+
+                          await handleResultat(
+                            demandeSelectionnee.id,
+                            ligne.examen.id,
+                            e.currentTarget,
+                          );
+                        }}
+                        className="p-5"
+                      >
+                        <div className="grid grid-cols-1 gap-5 lg:grid-cols-2">
+                          {/* VALEUR */}
+                          <label className="form-control">
+                            <div className="mb-2">
+                              <span className="text-sm font-semibold">
+                                Résultat
+                              </span>
+
+                              <span className="ml-1 text-error">*</span>
+                            </div>
+
+                            <input
+                              name="valeur"
+                              defaultValue={resultat?.valeur ?? ""}
+                              disabled={resultat?.valide === true}
+                              placeholder="Ex. 1.20"
+                              className="input input-bordered input-md w-full focus:border-primary focus:outline-none"
+                            />
+                          </label>
+
+                          {/* UNITÉ */}
+                          <label className="form-control">
+                            <div className="mb-2">
+                              <span className="text-sm font-semibold">
+                                Unité
+                              </span>
+                            </div>
+
+                            <input
+                              name="unite"
+                              defaultValue={
+                                resultat?.unite ?? ligne.examen.unite ?? ""
+                              }
+                              disabled={resultat?.valide === true}
+                              placeholder="Ex. g/L, mg/dL..."
+                              className="input input-bordered input-md w-full focus:border-primary focus:outline-none"
+                            />
+                          </label>
+
+                          {/* COMMENTAIRE */}
+                          <label className="form-control">
+                            <div className="mb-2">
+                              <span className="text-sm font-semibold">
+                                Commentaire
+                              </span>
+                            </div>
+
+                            <textarea
+                              name="commentaire"
+                              defaultValue={resultat?.commentaire ?? ""}
+                              disabled={resultat?.valide === true}
+                              rows={3}
+                              className="textarea textarea-bordered w-full resize-none focus:border-primary focus:outline-none"
+                              placeholder="Ajouter un commentaire..."
+                            />
+                          </label>
+
+                          {/* INTERPRÉTATION */}
+                          <label className="form-control">
+                            <div className="mb-2">
+                              <span className="text-sm font-semibold">
+                                Interprétation
+                              </span>
+                            </div>
+
+                            <textarea
+                              name="interpretation"
+                              defaultValue={resultat?.interpretation ?? ""}
+                              disabled={resultat?.valide === true}
+                              rows={3}
+                              className="textarea textarea-bordered w-full resize-none focus:border-primary focus:outline-none"
+                              placeholder="Interprétation du résultat..."
+                            />
+                          </label>
+                        </div>
+
+                        {/* ========================================
+                      ACTIONS
+                  ======================================== */}
+                        <div className="mt-6 flex flex-col gap-3 border-t border-base-200 pt-4 sm:flex-row sm:items-center sm:justify-between">
+                          {resultat?.valide ? (
+                            <div className="flex items-center gap-2 text-sm text-success">
+                              <CheckCircle2 size={17} />
+
+                              <span className="font-medium">
+                                Résultat définitif et validé
+                              </span>
+                            </div>
+                          ) : (
+                            <p className="text-xs text-base-content/40">
+                              Vérifiez les informations avant validation.
+                            </p>
+                          )}
+
+                          <div className="flex flex-wrap justify-end gap-2">
+                            {!resultat?.valide && (
+                              <button
+                                type="submit"
+                                className="btn btn-sm btn-primary px-5"
+                              >
+                                <Save size={16} />
+
+                                {resultat
+                                  ? "Modifier le résultat"
+                                  : "Enregistrer le résultat"}
+                              </button>
+                            )}
+
+                            {resultat && !resultat.valide && (
+                              <button
+                                type="button"
+                                onClick={() => handleValidation(resultat.id)}
+                                className="btn btn-sm btn-success px-5"
+                              >
+                                <CheckCircle2 size={16} />
+                                Valider
+                              </button>
+                            )}
+                          </div>
+                        </div>
+                      </form>
+                    </div>
+                  );
+                })}
+
+                {/* AUCUN EXAMEN */}
+                {(demandeSelectionnee.lignes ?? []).length === 0 && (
+                  <div className="rounded-2xl border border-warning/30 bg-warning/5 p-10 text-center">
+                    <FlaskConical
+                      size={40}
+                      className="mx-auto mb-3 text-warning"
+                    />
+
+                    <p className="font-semibold">
+                      Aucun examen associé à cette demande.
+                    </p>
+
+                    <p className="mt-1 text-sm text-base-content/50">
+                      Cette demande ne contient actuellement aucun examen de
+                      laboratoire.
+                    </p>
+                  </div>
+                )}
+              </div>
+            </div>
+
+            {/* ==================================================
+          FOOTER
+      ================================================== */}
+            <div className="sticky bottom-0 z-20 flex items-center justify-between border-t border-base-200 bg-base-100 px-6 py-4">
+              <div className="text-xs text-base-content/40">
+                Demande #{demandeSelectionnee.id}
+              </div>
+
               <button
                 type="button"
-                onClick={() =>
-                  setDemandeSelectionnee(
-                    null,
-                  )
-                }
-                className="btn"
+                onClick={() => setDemandeSelectionnee(null)}
+                className="btn btn-sm"
               >
                 Fermer
               </button>
             </div>
           </div>
 
-          {/* BACKDROP */}
-
+          {/* ==================================================
+        BACKDROP
+    ================================================== */}
           <div
             className="modal-backdrop"
-            onClick={() =>
-              setDemandeSelectionnee(
-                null,
-              )
-            }
+            onClick={() => setDemandeSelectionnee(null)}
           />
         </div>
       )}

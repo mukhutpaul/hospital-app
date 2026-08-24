@@ -60,99 +60,73 @@ export default function ConsultationDetails({
   examensLaboratoire,
   examensImagerie,
 }: Props) {
-  const [activeTab, setActiveTab] =
-    useState<ActiveTab>("general");
+  const [activeTab, setActiveTab] = useState<ActiveTab>("general");
 
-  const [modal, setModal] =
-    useState<ModalType>(null);
+  const [modal, setModal] = useState<ModalType>(null);
 
-  const [loading, setLoading] =
-    useState(false);
+  const [loading, setLoading] = useState(false);
 
   /* =========================================================
      CONSTANTES
   ========================================================= */
 
-  const [temperature, setTemperature] =
-    useState("");
+  const [temperature, setTemperature] = useState("");
 
-  const [tensionSystolique, setTensionSystolique] =
-    useState("");
+  const [tensionSystolique, setTensionSystolique] = useState("");
 
-  const [tensionDiastolique, setTensionDiastolique] =
-    useState("");
+  const [tensionDiastolique, setTensionDiastolique] = useState("");
 
-  const [pouls, setPouls] =
-    useState("");
+  const [pouls, setPouls] = useState("");
 
-  const [saturation, setSaturation] =
-    useState("");
+  const [saturation, setSaturation] = useState("");
 
-  const [poids, setPoids] =
-    useState("");
+  const [poids, setPoids] = useState("");
 
-  const [taille, setTaille] =
-    useState("");
+  const [taille, setTaille] = useState("");
 
-  const [frequenceRespiratoire, setFrequenceRespiratoire] =
-    useState("");
+  const [frequenceRespiratoire, setFrequenceRespiratoire] = useState("");
 
-  const [glycemie, setGlycemie] =
-    useState("");
+  const [glycemie, setGlycemie] = useState("");
 
   /* =========================================================
      PRESCRIPTION
   ========================================================= */
 
-  const [medicamentId, setMedicamentId] =
-    useState("");
+  const [medicamentId, setMedicamentId] = useState("");
 
-  const [dose, setDose] =
-    useState("");
+  const [dose, setDose] = useState("");
 
-  const [posologie, setPosologie] =
-    useState("");
+  const [posologie, setPosologie] = useState("");
 
-  const [frequence, setFrequence] =
-    useState("");
+  const [frequence, setFrequence] = useState("");
 
-  const [duree, setDuree] =
-    useState("");
+  const [duree, setDuree] = useState("");
 
-  const [voie, setVoie] =
-    useState("");
+  const [voie, setVoie] = useState("");
 
-  const [quantite, setQuantite] =
-    useState("");
+  const [quantite, setQuantite] = useState("");
 
-  const [observationPrescription, setObservationPrescription] =
-    useState("");
+  const [observationPrescription, setObservationPrescription] = useState("");
 
   /* =========================================================
      LABORATOIRE
   ========================================================= */
 
-  const [examensSelectionnes, setExamensSelectionnes] =
-    useState<number[]>([]);
+  const [examensSelectionnes, setExamensSelectionnes] = useState<number[]>([]);
 
-  const [urgenceLabo, setUrgenceLabo] =
-    useState(false);
+  const [urgenceLabo, setUrgenceLabo] = useState(false);
 
-  const [observationLabo, setObservationLabo] =
-    useState("");
+  const [observationLabo, setObservationLabo] = useState("");
 
   /* =========================================================
      IMAGERIE
   ========================================================= */
 
-  const [examenImagerieId, setExamenImagerieId] =
-    useState("");
+  const [examenImagerieId, setExamenImagerieId] = useState("");
 
-  const [urgenceImagerie, setUrgenceImagerie] =
-    useState(false);
+  const [urgenceImagerie, setUrgenceImagerie] = useState(false);
 
-  const [motifImagerie, setMotifImagerie] =
-    useState("");
+  const [motifImagerie, setMotifImagerie] = useState("");
 
   /* =========================================================
      RESET
@@ -203,53 +177,32 @@ export default function ConsultationDetails({
     setLoading(true);
 
     try {
-      const result =
-        await createConstanteConsultation({
-          patientId: consultation.patientId,
-          consultationId:
-            consultation.idConsultation,
+      const result = await createConstanteConsultation({
+        patientId: consultation.patientId,
+        consultationId: consultation.idConsultation,
 
-          temperature: temperature
-            ? Number(temperature)
-            : null,
+        temperature: temperature ? Number(temperature) : null,
 
-          tensionSystolique:
-            tensionSystolique
-              ? Number(tensionSystolique)
-              : null,
+        tensionSystolique: tensionSystolique ? Number(tensionSystolique) : null,
 
-          tensionDiastolique:
-            tensionDiastolique
-              ? Number(tensionDiastolique)
-              : null,
+        tensionDiastolique: tensionDiastolique
+          ? Number(tensionDiastolique)
+          : null,
 
-          pouls: pouls
-            ? Number(pouls)
-            : null,
+        pouls: pouls ? Number(pouls) : null,
 
-          saturation: saturation
-            ? Number(saturation)
-            : null,
+        saturation: saturation ? Number(saturation) : null,
 
-          poids: poids
-            ? Number(poids)
-            : null,
+        poids: poids ? Number(poids) : null,
 
-          taille: taille
-            ? Number(taille)
-            : null,
+        taille: taille ? Number(taille) : null,
 
-          frequenceRespiratoire:
-            frequenceRespiratoire
-              ? Number(
-                  frequenceRespiratoire,
-                )
-              : null,
+        frequenceRespiratoire: frequenceRespiratoire
+          ? Number(frequenceRespiratoire)
+          : null,
 
-          glycemie: glycemie
-            ? Number(glycemie)
-            : null,
-        });
+        glycemie: glycemie ? Number(glycemie) : null,
+      });
 
       if (!result.success) {
         toast.error(result.message);
@@ -262,14 +215,9 @@ export default function ConsultationDetails({
 
       window.location.reload();
     } catch (error) {
-      console.error(
-        "handleCreateConstante:",
-        error,
-      );
+      console.error("handleCreateConstante:", error);
 
-      toast.error(
-        "Impossible d'enregistrer les constantes.",
-      );
+      toast.error("Impossible d'enregistrer les constantes.");
     } finally {
       setLoading(false);
     }
@@ -285,57 +233,40 @@ export default function ConsultationDetails({
     event.preventDefault();
 
     if (!medicamentId) {
-      toast.error(
-        "Veuillez sélectionner un médicament.",
-      );
+      toast.error("Veuillez sélectionner un médicament.");
       return;
     }
 
     setLoading(true);
 
     try {
-      const result =
-        await createPrescription({
-          patientId:
-            consultation.patientId,
+      const result = await createPrescription({
+        patientId: consultation.patientId,
 
-          consultationId:
-            consultation.idConsultation,
+        consultationId: consultation.idConsultation,
 
-          medecinId:
-            consultation.medecinId,
+        medecinId: consultation.medecinId,
 
-          lignes: [
-            {
-              medicamentId:
-                Number(medicamentId),
+        lignes: [
+          {
+            medicamentId: Number(medicamentId),
 
-              dose:
-                dose || null,
+            dose: dose || null,
 
-              posologie:
-                posologie || null,
+            posologie: posologie || null,
 
-              frequence:
-                frequence || null,
+            frequence: frequence || null,
 
-              duree:
-                duree || null,
+            duree: duree || null,
 
-              voie:
-                voie || null,
+            voie: voie || null,
 
-              quantite:
-                quantite
-                  ? Number(quantite)
-                  : null,
+            quantite: quantite ? Number(quantite) : null,
 
-              observation:
-                observationPrescription ||
-                null,
-            },
-          ],
-        });
+            observation: observationPrescription || null,
+          },
+        ],
+      });
 
       if (!result.success) {
         toast.error(result.message);
@@ -348,14 +279,9 @@ export default function ConsultationDetails({
 
       window.location.reload();
     } catch (error) {
-      console.error(
-        "handleCreatePrescription:",
-        error,
-      );
+      console.error("handleCreatePrescription:", error);
 
-      toast.error(
-        "Impossible de créer la prescription.",
-      );
+      toast.error("Impossible de créer la prescription.");
     } finally {
       setLoading(false);
     }
@@ -365,14 +291,10 @@ export default function ConsultationDetails({
      DEMANDE LABORATOIRE
   ========================================================= */
 
-  function toggleExamenLaboratoire(
-    examenId: number,
-  ) {
+  function toggleExamenLaboratoire(examenId: number) {
     setExamensSelectionnes((current) =>
       current.includes(examenId)
-        ? current.filter(
-            (id) => id !== examenId,
-          )
+        ? current.filter((id) => id !== examenId)
         : [...current, examenId],
     );
   }
@@ -382,12 +304,8 @@ export default function ConsultationDetails({
   ) {
     event.preventDefault();
 
-    if (
-      examensSelectionnes.length === 0
-    ) {
-      toast.error(
-        "Sélectionnez au moins un examen de laboratoire.",
-      );
+    if (examensSelectionnes.length === 0) {
+      toast.error("Sélectionnez au moins un examen de laboratoire.");
 
       return;
     }
@@ -395,27 +313,19 @@ export default function ConsultationDetails({
     setLoading(true);
 
     try {
-      const result =
-        await createDemandeLaboratoire({
-          patientId:
-            consultation.patientId,
+      const result = await createDemandeLaboratoire({
+        patientId: consultation.patientId,
 
-          consultationId:
-            consultation.idConsultation,
+        consultationId: consultation.idConsultation,
 
-          serviceId:
-            consultation.serviceId ??
-            null,
+        serviceId: consultation.serviceId ?? null,
 
-          urgence:
-            urgenceLabo,
+        urgence: urgenceLabo,
 
-          observation:
-            observationLabo || null,
+        observation: observationLabo || null,
 
-          examens:
-            examensSelectionnes,
-        });
+        examens: examensSelectionnes,
+      });
 
       if (!result.success) {
         toast.error(result.message);
@@ -428,14 +338,9 @@ export default function ConsultationDetails({
 
       window.location.reload();
     } catch (error) {
-      console.error(
-        "handleCreateDemandeLaboratoire:",
-        error,
-      );
+      console.error("handleCreateDemandeLaboratoire:", error);
 
-      toast.error(
-        "Impossible de créer la demande de laboratoire.",
-      );
+      toast.error("Impossible de créer la demande de laboratoire.");
     } finally {
       setLoading(false);
     }
@@ -451,9 +356,7 @@ export default function ConsultationDetails({
     event.preventDefault();
 
     if (!examenImagerieId) {
-      toast.error(
-        "Veuillez sélectionner un examen d'imagerie.",
-      );
+      toast.error("Veuillez sélectionner un examen d'imagerie.");
 
       return;
     }
@@ -461,27 +364,19 @@ export default function ConsultationDetails({
     setLoading(true);
 
     try {
-      const result =
-        await createDemandeImagerie({
-          patientId:
-            consultation.patientId,
+      const result = await createDemandeImagerie({
+        patientId: consultation.patientId,
 
-          consultationId:
-            consultation.idConsultation,
+        consultationId: consultation.idConsultation,
 
-          serviceId:
-            consultation.serviceId ??
-            null,
+        serviceId: consultation.serviceId ?? null,
 
-          examenId:
-            Number(examenImagerieId),
+        examenId: Number(examenImagerieId),
 
-          motif:
-            motifImagerie || null,
+        motif: motifImagerie || null,
 
-          urgence:
-            urgenceImagerie,
-        });
+        urgence: urgenceImagerie,
+      });
 
       if (!result.success) {
         toast.error(result.message);
@@ -494,14 +389,9 @@ export default function ConsultationDetails({
 
       window.location.reload();
     } catch (error) {
-      console.error(
-        "handleCreateDemandeImagerie:",
-        error,
-      );
+      console.error("handleCreateDemandeImagerie:", error);
 
-      toast.error(
-        "Impossible de créer la demande d'imagerie.",
-      );
+      toast.error("Impossible de créer la demande d'imagerie.");
     } finally {
       setLoading(false);
     }
@@ -511,45 +401,35 @@ export default function ConsultationDetails({
     return null;
   }
 
-  const patient =
-    consultation.patient;
+  const patient = consultation.patient;
 
-  const medecin =
-    consultation.medecin;
+  const medecin = consultation.medecin;
 
   return (
     <>
       <div className="space-y-6">
-
         {/* =====================================================
             EN-TÊTE
         ===================================================== */}
 
         <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
-
           <div className="flex items-center gap-3">
-
             <div className="p-3 rounded-xl bg-primary/10 text-primary">
               <Stethoscope size={24} />
             </div>
 
             <div>
               <h1 className="text-2xl font-bold">
-                Consultation #
-                {consultation.idConsultation}
+                Consultation #{consultation.idConsultation}
               </h1>
 
               <p className="text-sm text-base-content/60">
                 Fiche complète de la consultation
               </p>
             </div>
-
           </div>
 
-          <div className="badge badge-primary badge-lg">
-            Consultation
-          </div>
-
+          <div className="badge badge-primary badge-lg">Consultation</div>
         </div>
 
         {/* =====================================================
@@ -557,106 +437,71 @@ export default function ConsultationDetails({
         ===================================================== */}
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-
           {/* PATIENT */}
 
           <div className="card bg-base-100 border border-base-200 shadow-sm">
-
             <div className="card-body">
-
               <div className="flex items-center gap-3 mb-4">
-
                 <div className="p-2 rounded-lg bg-primary/10 text-primary">
                   <UserRound size={20} />
                 </div>
 
-                <h2 className="font-semibold">
-                  Patient
-                </h2>
-
+                <h2 className="font-semibold">Patient</h2>
               </div>
 
               <div className="text-lg font-semibold">
-                {patient?.nom}{" "}
-                {patient?.postNom ?? ""}{" "}
-                {patient?.prenom ?? ""}
+                {patient?.nom} {patient?.postNom ?? ""} {patient?.prenom ?? ""}
               </div>
 
               <div className="text-sm text-base-content/60">
-                Dossier :{" "}
-                {patient?.numeroDossier ?? "—"}
+                Dossier : {patient?.numeroDossier ?? "—"}
               </div>
 
               <div className="mt-3 grid grid-cols-2 gap-3 text-sm">
-
                 <div>
-                  <span className="text-base-content/50">
-                    Sexe
-                  </span>
+                  <span className="text-base-content/50">Sexe</span>
 
-                  <p className="font-medium">
-                    {patient?.sexe ?? "—"}
-                  </p>
+                  <p className="font-medium">{patient?.sexe ?? "—"}</p>
                 </div>
 
                 <div>
-                  <span className="text-base-content/50">
-                    Téléphone
-                  </span>
+                  <span className="text-base-content/50">Téléphone</span>
 
-                  <p className="font-medium">
-                    {patient?.telephone ?? "—"}
-                  </p>
+                  <p className="font-medium">{patient?.telephone ?? "—"}</p>
                 </div>
-
               </div>
-
             </div>
-
           </div>
 
           {/* MÉDECIN */}
 
           <div className="card bg-base-100 border border-base-200 shadow-sm">
-
             <div className="card-body">
-
               <div className="flex items-center gap-3 mb-4">
-
                 <div className="p-2 rounded-lg bg-secondary/10 text-secondary">
                   <Stethoscope size={20} />
                 </div>
 
-                <h2 className="font-semibold">
-                  Médecin
-                </h2>
-
+                <h2 className="font-semibold">Médecin</h2>
               </div>
 
               <div className="text-lg font-semibold">
-                Dr{" "}
-                {medecin?.nom}{" "}
-                {medecin?.postNom ?? ""}{" "}
+                Dr {medecin?.nom} {medecin?.postNom ?? ""}{" "}
                 {medecin?.prenom ?? ""}
               </div>
 
               <div className="text-sm text-base-content/60">
-                {medecin?.specialite?.nom ??
-                  "Médecin"}
+                {medecin?.specialite?.nom ?? "Médecin"}
               </div>
 
               <div className="mt-3 text-sm">
                 Service :{" "}
                 <span className="font-medium">
-                  {medecin?.service?.nom ??
-                    "—"}
+                  {medecin?.service?.nom ?? "—"}
                 </span>
               </div>
-
             </div>
-
           </div>
-
         </div>
 
         {/* =====================================================
@@ -664,62 +509,40 @@ export default function ConsultationDetails({
         ===================================================== */}
 
         <div className="tabs tabs-boxed bg-base-200 p-1 flex-wrap">
-
           <TabButton
             active={activeTab === "general"}
-            onClick={() =>
-              setActiveTab("general")
-            }
+            onClick={() => setActiveTab("general")}
             icon={<ClipboardList size={16} />}
             label="Consultation"
           />
 
           <TabButton
-            active={
-              activeTab === "constantes"
-            }
-            onClick={() =>
-              setActiveTab("constantes")
-            }
+            active={activeTab === "constantes"}
+            onClick={() => setActiveTab("constantes")}
             icon={<Activity size={16} />}
             label="Constantes"
           />
 
           <TabButton
-            active={
-              activeTab === "prescription"
-            }
-            onClick={() =>
-              setActiveTab("prescription")
-            }
+            active={activeTab === "prescription"}
+            onClick={() => setActiveTab("prescription")}
             icon={<Pill size={16} />}
             label="Prescription"
           />
 
           <TabButton
-            active={
-              activeTab === "laboratoire"
-            }
-            onClick={() =>
-              setActiveTab("laboratoire")
-            }
-            icon={
-              <FlaskConical size={16} />
-            }
+            active={activeTab === "laboratoire"}
+            onClick={() => setActiveTab("laboratoire")}
+            icon={<FlaskConical size={16} />}
             label="Laboratoire"
           />
 
           <TabButton
-            active={
-              activeTab === "imagerie"
-            }
-            onClick={() =>
-              setActiveTab("imagerie")
-            }
+            active={activeTab === "imagerie"}
+            onClick={() => setActiveTab("imagerie")}
             icon={<ScanLine size={16} />}
             label="Imagerie"
           />
-
         </div>
 
         {/* =====================================================
@@ -728,11 +551,8 @@ export default function ConsultationDetails({
 
         {activeTab === "general" && (
           <div className="card bg-base-100 border border-base-200 shadow-sm">
-
             <div className="card-body">
-
               <div className="flex items-center justify-between gap-4">
-
                 <div>
                   <h2 className="card-title">
                     Informations de la consultation
@@ -743,20 +563,14 @@ export default function ConsultationDetails({
                   </p>
                 </div>
 
-                <ClipboardList
-                  size={24}
-                  className="text-primary"
-                />
-
+                <ClipboardList size={24} className="text-primary" />
               </div>
 
               <div className="flex items-center gap-2 text-sm text-base-content/60 mt-3">
                 <CalendarDays size={16} />
 
                 {consultation.dateConsultation
-                  ? new Date(
-                      consultation.dateConsultation,
-                    ).toLocaleString(
+                  ? new Date(consultation.dateConsultation).toLocaleString(
                       "fr-FR",
                     )
                   : "—"}
@@ -764,33 +578,13 @@ export default function ConsultationDetails({
 
               <div className="divider" />
 
-              <InfoBlock
-                title="Motif"
-                value={consultation.motif}
-              />
+              <InfoBlock title="Motif" value={consultation.motif} />
 
-              <InfoBlock
-                title="Diagnostic"
-                value={
-                  consultation.diagnostic
-                }
-              />
+              <InfoBlock title="Diagnostic" value={consultation.diagnostic} />
 
-              <InfoBlock
-                title="Observation"
-                value={
-                  consultation.observation
-                }
-              />
+              <InfoBlock title="Observation" value={consultation.observation} />
 
-              <InfoBlock
-                title="Conclusion"
-                value={
-                  consultation.conclusion
-                }
-
-              />
-
+              <InfoBlock title="Conclusion" value={consultation.conclusion} />
             </div>
           </div>
         )}
@@ -801,26 +595,18 @@ export default function ConsultationDetails({
 
         {activeTab === "constantes" && (
           <div className="card bg-base-100 border border-base-200 shadow-sm">
-
             <div className="card-body">
-
               <HeaderAction
-                icon={
-                  <Activity size={21} />
-                }
+                icon={<Activity size={21} />}
                 title="Constantes"
                 description="Mesures physiologiques du patient."
                 button="Ajouter les constantes"
-                onClick={() =>
-                  setModal("constante")
-                }
+                onClick={() => setModal("constante")}
               />
 
               {consultation.constantes?.length ? (
                 <div className="overflow-x-auto mt-5">
-
                   <table className="table">
-
                     <thead>
                       <tr>
                         <th>Date</th>
@@ -834,88 +620,46 @@ export default function ConsultationDetails({
                     </thead>
 
                     <tbody>
+                      {consultation.constantes.map((constante: any) => (
+                        <tr key={constante.id}>
+                          <td>
+                            {new Date(constante.dateMesure).toLocaleString(
+                              "fr-FR",
+                            )}
+                          </td>
 
-                      {consultation.constantes.map(
-                        (constante: any) => (
-                          <tr
-                            key={
-                              constante.id
-                            }
-                          >
+                          <td>
+                            {constante.temperature ?? "—"}
+                            {constante.temperature != null && " °C"}
+                          </td>
 
-                            <td>
-                              {new Date(
-                                constante.dateMesure,
-                              ).toLocaleString(
-                                "fr-FR",
-                              )}
-                            </td>
+                          <td>
+                            {constante.tensionSystolique ?? "—"}/
+                            {constante.tensionDiastolique ?? "—"} mmHg
+                          </td>
 
-                            <td>
-                              {constante.temperature ??
-                                "—"}
-                              {constante.temperature !=
-                                null && " °C"}
-                            </td>
+                          <td>{constante.pouls ?? "—"} bpm</td>
 
-                            <td>
-                              {constante.tensionSystolique ??
-                                "—"}
-                              /
-                              {constante.tensionDiastolique ??
-                                "—"}{" "}
-                              mmHg
-                            </td>
+                          <td>{constante.saturation ?? "—"}%</td>
 
-                            <td>
-                              {constante.pouls ??
-                                "—"}{" "}
-                              bpm
-                            </td>
+                          <td>{constante.poids ?? "—"} kg</td>
 
-                            <td>
-                              {constante.saturation ??
-                                "—"}
-                              %
-                            </td>
-
-                            <td>
-                              {constante.poids ??
-                                "—"}{" "}
-                              kg
-                            </td>
-
-                            <td>
-                              {constante.taille ??
-                                "—"}{" "}
-                              cm
-                            </td>
-
-                          </tr>
-                        ),
-                      )}
-
+                          <td>{constante.taille ?? "—"} cm</td>
+                        </tr>
+                      ))}
                     </tbody>
-
                   </table>
-
                 </div>
               ) : (
                 <EmptyState
-                  icon={
-                    <Activity size={30} />
-                  }
+                  icon={<Activity size={30} />}
                   title="Aucune constante"
                   description="Aucune constante n'a encore été enregistrée pour cette consultation."
                   button="Ajouter les constantes"
-                  onClick={() =>
-                    setModal("constante")
-                  }
+                  onClick={() => setModal("constante")}
                 />
               )}
-
             </div>
-
           </div>
         )}
 
@@ -925,95 +669,69 @@ export default function ConsultationDetails({
 
         {activeTab === "prescription" && (
           <div className="card bg-base-100 border border-base-200 shadow-sm">
-
             <div className="card-body">
-
               <HeaderAction
                 icon={<Pill size={21} />}
                 title="Prescriptions"
                 description="Prescriptions médicales de cette consultation."
                 button="Nouvelle prescription"
-                onClick={() =>
-                  setModal("prescription")
-                }
+                onClick={() => setModal("prescription")}
               />
 
               {consultation.prescriptions?.length ? (
                 <div className="space-y-4 mt-5">
-
-                  {consultation.prescriptions.map(
-                    (prescription: any) => (
-                      <div
-                        key={prescription.id}
-                        className="border border-base-200 rounded-xl p-4"
-                      >
-
-                        <div className="flex justify-between items-start gap-3">
-
-                          <div>
-                            <div className="font-semibold">
-                              {prescription.numero}
-                            </div>
-
-                            <div className="text-sm text-base-content/50">
-                              {prescription.datePrescription
-                                ? new Date(
-                                    prescription.datePrescription,
-                                  ).toLocaleString(
-                                    "fr-FR",
-                                  )
-                                : ""}
-                            </div>
+                  {consultation.prescriptions.map((prescription: any) => (
+                    <div
+                      key={prescription.id}
+                      className="border border-base-200 rounded-xl p-4"
+                    >
+                      <div className="flex justify-between items-start gap-3">
+                        <div>
+                          <div className="font-semibold">
+                            {prescription.numero}
                           </div>
 
-                          <span className="badge badge-outline">
-                            {prescription.statut ??
-                              "ACTIVE"}
-                          </span>
-
+                          <div className="text-sm text-base-content/50">
+                            {prescription.datePrescription
+                              ? new Date(
+                                  prescription.datePrescription,
+                                ).toLocaleString("fr-FR")
+                              : ""}
+                          </div>
                         </div>
 
-                        <div className="mt-4 space-y-2">
-
-                          {prescription.lignes?.map(
-                            (ligne: any) => (
-                              <div
-                                key={ligne.id}
-                                className="rounded-lg bg-base-200/50 p-3"
-                              >
-
-                                <div className="font-medium">
-                                  {ligne.medicament?.nom ??
-                                    "Médicament"}
-                                </div>
-
-                                <div className="text-sm text-base-content/60 mt-1">
-                                  {ligne.dose &&
-                                    `Dose : ${ligne.dose}`}
-                                  {ligne.frequence &&
-                                    ` • ${ligne.frequence}`}
-                                  {ligne.duree &&
-                                    ` • ${ligne.duree}`}
-                                  {ligne.voie &&
-                                    ` • ${ligne.voie}`}
-                                </div>
-
-                                {ligne.posologie && (
-                                  <div className="text-sm mt-1">
-                                    {ligne.posologie}
-                                  </div>
-                                )}
-
-                              </div>
-                            ),
-                          )}
-
-                        </div>
-
+                        <span className="badge badge-outline">
+                          {prescription.statut ?? "ACTIVE"}
+                        </span>
                       </div>
-                    ),
-                  )}
 
+                      <div className="mt-4 space-y-2">
+                        {prescription.lignes?.map((ligne: any) => (
+                          <div
+                            key={ligne.id}
+                            className="rounded-lg bg-base-200/50 p-3"
+                          >
+                            <div className="font-medium">
+                              {ligne.medicament?.nom ?? "Médicament"}
+                            </div>
+
+                            <div className="text-sm text-base-content/60 mt-1">
+                              {ligne.dose && `Dose : ${ligne.dose}`}
+                              {ligne.frequence && ` • ${ligne.frequence}`}
+                              {ligne.duree && ` • ${ligne.duree}`}
+                              {ligne.voie && ` • ${ligne.voie}`}
+                            </div>
+
+                            {ligne.posologie && (
+                              <div className="text-sm mt-1">
+                                {ligne.posologie}
+                              </div>
+                            )}
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  ))}
                 </div>
               ) : (
                 <EmptyState
@@ -1021,14 +739,10 @@ export default function ConsultationDetails({
                   title="Aucune prescription"
                   description="Aucune prescription n'a encore été créée pour cette consultation."
                   button="Créer une prescription"
-                  onClick={() =>
-                    setModal("prescription")
-                  }
+                  onClick={() => setModal("prescription")}
                 />
               )}
-
             </div>
-
           </div>
         )}
 
@@ -1038,127 +752,217 @@ export default function ConsultationDetails({
 
         {activeTab === "laboratoire" && (
           <div className="card bg-base-100 border border-base-200 shadow-sm">
-
             <div className="card-body">
-
               <HeaderAction
-                icon={
-                  <FlaskConical
-                    size={21}
-                  />
-                }
+                icon={<FlaskConical size={21} />}
                 title="Laboratoire"
                 description="Demandes d'examens et résultats de laboratoire."
                 button="Demander des examens"
-                onClick={() =>
-                  setModal("laboratoire")
-                }
+                onClick={() => setModal("laboratoire")}
               />
 
               {consultation.demandesLabo?.length ? (
                 <div className="space-y-4 mt-5">
+                  {consultation.demandesLabo.map((demande: any) => (
+                    <div
+                      key={demande.id}
+                      className="border border-base-200 rounded-xl p-4"
+                    >
+                      <div className="flex justify-between gap-3">
+                        <div>
+                          <div className="font-semibold">{demande.numero}</div>
 
-                  {consultation.demandesLabo.map(
-                    (demande: any) => (
-                      <div
-                        key={demande.id}
-                        className="border border-base-200 rounded-xl p-4"
-                      >
-
-                        <div className="flex justify-between gap-3">
-
-                          <div>
-                            <div className="font-semibold">
-                              {demande.numero}
-                            </div>
-
-                            <div className="text-sm text-base-content/50">
-                              {demande.service?.nom ??
-                                "Laboratoire"}
-                            </div>
+                          <div className="text-sm text-base-content/50">
+                            {demande.service?.nom ?? "Laboratoire"}
                           </div>
-
-                          <span className="badge">
-                            {demande.statut}
-                          </span>
-
                         </div>
 
-                        <div className="mt-4 space-y-2">
-
-                          {demande.lignes?.map(
-                            (ligne: any) => (
-                              <div
-                                key={ligne.id}
-                                className="flex justify-between border-b border-base-200 pb-2"
-                              >
-
-                                <span>
-                                  {ligne.examen?.nom ??
-                                    "Examen"}
-                                </span>
-
-                                <span className="text-sm text-base-content/60">
-                                  {ligne.prix ??
-                                    "—"}
-                                </span>
-
-                              </div>
-                            ),
-                          )}
-
-                        </div>
-
-                        {demande.resultats?.length >
-                          0 && (
-                          <div className="mt-4 alert alert-success">
-
-                            <CheckCircle2
-                              size={20}
-                            />
-
-                            <div>
-                              <strong>
-                                Résultats disponibles
-                              </strong>
-
-                              <p className="text-sm">
-                                {
-                                  demande
-                                    .resultats
-                                    .length
-                                }{" "}
-                                résultat(s)
-                                disponible(s).
-                              </p>
-                            </div>
-
-                          </div>
-                        )}
-
+                        <span className="badge">{demande.statut}</span>
                       </div>
-                    ),
-                  )}
 
+                      <div className="mt-4 space-y-2">
+                        {demande.lignes?.map((ligne: any) => (
+                          <div
+                            key={ligne.id}
+                            className="flex justify-between border-b border-base-200 pb-2"
+                          >
+                            <span>{ligne.examen?.nom ?? "Examen"}</span>
+
+                            <span className="text-sm text-base-content/60">
+                              {ligne.prix ?? "—"}
+                            </span>
+                          </div>
+                        ))}
+                      </div>
+
+                      {/* =====================================================
+    RÉSULTATS DU LABORATOIRE
+===================================================== */}
+
+                      {demande.resultats?.length > 0 && (
+                        <div className="mt-5 rounded-xl border border-success/30 bg-success/5 overflow-hidden">
+                          {/* HEADER */}
+
+                          <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between border-b border-success/20 p-4">
+                            <div className="flex items-center gap-3">
+                              <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-success/10 text-success">
+                                <CheckCircle2 size={21} />
+                              </div>
+
+                              <div>
+                                <h4 className="font-semibold">
+                                  Résultats de laboratoire
+                                </h4>
+
+                                <p className="text-xs text-base-content/60">
+                                  Résultats transmis par le laboratoire
+                                </p>
+                              </div>
+                            </div>
+
+                            <span className="badge badge-success gap-1">
+                              <CheckCircle2 size={14} />
+                              {demande.resultats.length} résultat(s)
+                            </span>
+                          </div>
+
+                          {/* LISTE DES RÉSULTATS */}
+
+                          <div className="divide-y divide-base-200">
+                            {demande.resultats.map((resultat: any) => {
+                              const examen =
+                                resultat.examen ??
+                                resultat.ligne?.examen ??
+                                null;
+
+                              return (
+                                <div key={resultat.id} className="p-4">
+                                  {/* EXAMEN */}
+
+                                  <div className="flex flex-col gap-3 md:flex-row md:items-start md:justify-between">
+                                    <div>
+                                      <div className="flex items-center gap-2">
+                                        <FlaskConical
+                                          size={18}
+                                          className="text-primary"
+                                        />
+
+                                        <h5 className="font-semibold">
+                                          {examen?.nom ??
+                                            "Examen de laboratoire"}
+                                        </h5>
+                                      </div>
+
+                                      {examen?.code && (
+                                        <p className="mt-1 text-xs text-base-content/50">
+                                          Code : {examen.code}
+                                        </p>
+                                      )}
+                                    </div>
+
+                                    <span
+                                      className={`badge ${
+                                        resultat.valide
+                                          ? "badge-success"
+                                          : "badge-warning"
+                                      }`}
+                                    >
+                                      {resultat.valide
+                                        ? "Validé"
+                                        : "Non validé"}
+                                    </span>
+                                  </div>
+
+                                  {/* VALEUR */}
+
+                                  <div className="mt-4 grid grid-cols-1 gap-3 md:grid-cols-2">
+                                    <div className="rounded-lg bg-base-200/50 p-3">
+                                      <p className="text-xs font-semibold uppercase tracking-wide text-base-content/50">
+                                        Résultat
+                                      </p>
+
+                                      <p className="mt-1 text-lg font-bold">
+                                        {resultat.valeur ?? "—"}
+
+                                        {resultat.unite && (
+                                          <span className="ml-2 text-sm font-normal text-base-content/60">
+                                            {resultat.unite}
+                                          </span>
+                                        )}
+                                      </p>
+                                    </div>
+
+                                    {/* VALEUR NORMALE */}
+
+                                    <div className="rounded-lg bg-base-200/50 p-3">
+                                      <p className="text-xs font-semibold uppercase tracking-wide text-base-content/50">
+                                        Valeur normale
+                                      </p>
+
+                                      <p className="mt-1 font-medium">
+                                        {examen?.valeurNormale ??
+                                          "Non renseignée"}
+                                      </p>
+                                    </div>
+                                  </div>
+
+                                  {/* COMMENTAIRE */}
+
+                                  {resultat.commentaire && (
+                                    <div className="mt-3 rounded-lg border border-base-200 p-3">
+                                      <p className="text-xs font-semibold uppercase tracking-wide text-base-content/50">
+                                        Commentaire du laboratoire
+                                      </p>
+
+                                      <p className="mt-1 text-sm whitespace-pre-wrap">
+                                        {resultat.commentaire}
+                                      </p>
+                                    </div>
+                                  )}
+
+                                  {/* INTERPRÉTATION */}
+
+                                  {resultat.interpretation && (
+                                    <div className="mt-3 rounded-lg border border-primary/20 bg-primary/5 p-3">
+                                      <p className="text-xs font-semibold uppercase tracking-wide text-primary">
+                                        Interprétation
+                                      </p>
+
+                                      <p className="mt-1 text-sm whitespace-pre-wrap">
+                                        {resultat.interpretation}
+                                      </p>
+                                    </div>
+                                  )}
+
+                                  {/* DATE */}
+
+                                  {resultat.dateResultat && (
+                                    <p className="mt-3 text-xs text-base-content/50">
+                                      Résultat enregistré le{" "}
+                                      {new Date(
+                                        resultat.dateResultat,
+                                      ).toLocaleString("fr-FR")}
+                                    </p>
+                                  )}
+                                </div>
+                              );
+                            })}
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  ))}
                 </div>
               ) : (
                 <EmptyState
-                  icon={
-                    <FlaskConical
-                      size={30}
-                    />
-                  }
+                  icon={<FlaskConical size={30} />}
                   title="Aucune demande de laboratoire"
                   description="Le médecin peut demander les examens nécessaires au patient."
                   button="Demander des examens"
-                  onClick={() =>
-                    setModal("laboratoire")
-                  }
+                  onClick={() => setModal("laboratoire")}
                 />
               )}
-
             </div>
-
           </div>
         )}
 
@@ -1168,83 +972,55 @@ export default function ConsultationDetails({
 
         {activeTab === "imagerie" && (
           <div className="card bg-base-100 border border-base-200 shadow-sm">
-
             <div className="card-body">
-
               <HeaderAction
-                icon={
-                  <ScanLine size={21} />
-                }
+                icon={<ScanLine size={21} />}
                 title="Imagerie médicale"
                 description="Demandes d'examens d'imagerie."
                 button="Demander une imagerie"
-                onClick={() =>
-                  setModal("imagerie")
-                }
+                onClick={() => setModal("imagerie")}
               />
 
               {consultation.demandesImagerie?.length ? (
                 <div className="space-y-4 mt-5">
-
-                  {consultation.demandesImagerie.map(
-                    (demande: any) => (
-                      <div
-                        key={demande.id}
-                        className="border border-base-200 rounded-xl p-4"
-                      >
-
-                        <div className="flex justify-between">
+                  {consultation.demandesImagerie.map((demande: any) => (
+                    <div
+                      key={demande.id}
+                      className="border border-base-200 rounded-xl p-4"
+                    >
+                      <div className="flex justify-between">
+                        <div>
+                          <div className="font-semibold">{demande.numero}</div>
 
                           <div>
-                            <div className="font-semibold">
-                              {demande.numero}
-                            </div>
-
-                            <div>
-                              {demande.examen?.nom ??
-                                "Examen d'imagerie"}
-                            </div>
+                            {demande.examen?.nom ?? "Examen d'imagerie"}
                           </div>
-
-                          <span className="badge">
-                            {demande.statut}
-                          </span>
-
                         </div>
 
-                        {demande.motif && (
-                          <p className="text-sm mt-3">
-                            <span className="font-medium">
-                              Motif :
-                            </span>{" "}
-                            {demande.motif}
-                          </p>
-                        )}
-
+                        <span className="badge">{demande.statut}</span>
                       </div>
-                    ),
-                  )}
 
+                      {demande.motif && (
+                        <p className="text-sm mt-3">
+                          <span className="font-medium">Motif :</span>{" "}
+                          {demande.motif}
+                        </p>
+                      )}
+                    </div>
+                  ))}
                 </div>
               ) : (
                 <EmptyState
-                  icon={
-                    <ScanLine size={30} />
-                  }
+                  icon={<ScanLine size={30} />}
                   title="Aucune demande d'imagerie"
                   description="Le médecin peut demander une radiographie, échographie, scanner, IRM, etc."
                   button="Demander une imagerie"
-                  onClick={() =>
-                    setModal("imagerie")
-                  }
+                  onClick={() => setModal("imagerie")}
                 />
               )}
-
             </div>
-
           </div>
         )}
-
       </div>
 
       {/* =====================================================
@@ -1258,26 +1034,14 @@ export default function ConsultationDetails({
           icon={<Activity size={22} />}
           onClose={closeModal}
         >
-
-          <form
-            onSubmit={
-              handleCreateConstante
-            }
-            className="space-y-5"
-          >
-
+          <form onSubmit={handleCreateConstante} className="space-y-5">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-
               <InputField
                 label="Température"
                 unit="°C"
-                icon={
-                  <Thermometer size={17} />
-                }
+                icon={<Thermometer size={17} />}
                 value={temperature}
-                onChange={
-                  setTemperature
-                }
+                onChange={setTemperature}
                 type="number"
                 step="0.1"
               />
@@ -1285,9 +1049,7 @@ export default function ConsultationDetails({
               <InputField
                 label="Pouls"
                 unit="bpm"
-                icon={
-                  <HeartPulse size={17} />
-                }
+                icon={<HeartPulse size={17} />}
                 value={pouls}
                 onChange={setPouls}
                 type="number"
@@ -1296,33 +1058,23 @@ export default function ConsultationDetails({
               <InputField
                 label="Tension systolique"
                 unit="mmHg"
-                value={
-                  tensionSystolique
-                }
-                onChange={
-                  setTensionSystolique
-                }
+                value={tensionSystolique}
+                onChange={setTensionSystolique}
                 type="number"
               />
 
               <InputField
                 label="Tension diastolique"
                 unit="mmHg"
-                value={
-                  tensionDiastolique
-                }
-                onChange={
-                  setTensionDiastolique
-                }
+                value={tensionDiastolique}
+                onChange={setTensionDiastolique}
                 type="number"
               />
 
               <InputField
                 label="Saturation O₂"
                 unit="%"
-                icon={
-                  <Droplets size={17} />
-                }
+                icon={<Droplets size={17} />}
                 value={saturation}
                 onChange={setSaturation}
                 type="number"
@@ -1332,24 +1084,16 @@ export default function ConsultationDetails({
               <InputField
                 label="Fréquence respiratoire"
                 unit="/min"
-                icon={
-                  <Wind size={17} />
-                }
-                value={
-                  frequenceRespiratoire
-                }
-                onChange={
-                  setFrequenceRespiratoire
-                }
+                icon={<Wind size={17} />}
+                value={frequenceRespiratoire}
+                onChange={setFrequenceRespiratoire}
                 type="number"
               />
 
               <InputField
                 label="Poids"
                 unit="kg"
-                icon={
-                  <Scale size={17} />
-                }
+                icon={<Scale size={17} />}
                 value={poids}
                 onChange={setPoids}
                 type="number"
@@ -1359,9 +1103,7 @@ export default function ConsultationDetails({
               <InputField
                 label="Taille"
                 unit="cm"
-                icon={
-                  <Ruler size={17} />
-                }
+                icon={<Ruler size={17} />}
                 value={taille}
                 onChange={setTaille}
                 type="number"
@@ -1376,7 +1118,6 @@ export default function ConsultationDetails({
                 type="number"
                 step="0.1"
               />
-
             </div>
 
             <ModalActions
@@ -1384,9 +1125,7 @@ export default function ConsultationDetails({
               submitLabel="Enregistrer les constantes"
               onCancel={closeModal}
             />
-
           </form>
-
         </Modal>
       )}
 
@@ -1401,54 +1140,29 @@ export default function ConsultationDetails({
           icon={<Pill size={22} />}
           onClose={closeModal}
         >
-
-          <form
-            onSubmit={
-              handleCreatePrescription
-            }
-            className="space-y-5"
-          >
-
+          <form onSubmit={handleCreatePrescription} className="space-y-5">
             <div className="form-control">
-
               <label className="label">
-                <span className="label-text font-semibold">
-                  Médicament *
-                </span>
+                <span className="label-text font-semibold">Médicament *</span>
               </label>
 
               <select
                 className="select select-bordered w-full"
                 value={medicamentId}
-                onChange={(event) =>
-                  setMedicamentId(
-                    event.target.value,
-                  )
-                }
+                onChange={(event) => setMedicamentId(event.target.value)}
                 required
               >
+                <option value="">Sélectionner un médicament</option>
 
-                <option value="">
-                  Sélectionner un médicament
-                </option>
-
-                {medicaments.map(
-                  (medicament) => (
-                    <option
-                      key={medicament.id}
-                      value={medicament.id}
-                    >
-                      {medicament.nom}
-                    </option>
-                  ),
-                )}
-
+                {medicaments.map((medicament) => (
+                  <option key={medicament.id} value={medicament.id}>
+                    {medicament.nom}
+                  </option>
+                ))}
               </select>
-
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-
               <InputField
                 label="Dose"
                 value={dose}
@@ -1483,51 +1197,34 @@ export default function ConsultationDetails({
                 onChange={setQuantite}
                 type="number"
               />
-
             </div>
 
             <div className="form-control">
-
               <label className="label">
-                <span className="label-text font-semibold">
-                  Posologie
-                </span>
+                <span className="label-text font-semibold">Posologie</span>
               </label>
 
               <textarea
                 className="textarea textarea-bordered min-h-24"
                 placeholder="Instructions de prise du médicament..."
                 value={posologie}
-                onChange={(event) =>
-                  setPosologie(
-                    event.target.value,
-                  )
-                }
+                onChange={(event) => setPosologie(event.target.value)}
               />
-
             </div>
 
             <div className="form-control">
-
               <label className="label">
-                <span className="label-text font-semibold">
-                  Observation
-                </span>
+                <span className="label-text font-semibold">Observation</span>
               </label>
 
               <textarea
                 className="textarea textarea-bordered min-h-20"
                 placeholder="Informations complémentaires..."
-                value={
-                  observationPrescription
-                }
+                value={observationPrescription}
                 onChange={(event) =>
-                  setObservationPrescription(
-                    event.target.value,
-                  )
+                  setObservationPrescription(event.target.value)
                 }
               />
-
             </div>
 
             <ModalActions
@@ -1535,9 +1232,7 @@ export default function ConsultationDetails({
               submitLabel="Enregistrer la prescription"
               onCancel={closeModal}
             />
-
           </form>
-
         </Modal>
       )}
 
@@ -1549,124 +1244,76 @@ export default function ConsultationDetails({
         <Modal
           title="Demander des examens"
           description="Sélectionnez les examens nécessaires au patient."
-          icon={
-            <FlaskConical size={22} />
-          }
+          icon={<FlaskConical size={22} />}
           onClose={closeModal}
         >
-
-          <form
-            onSubmit={
-              handleCreateDemandeLaboratoire
-            }
-            className="space-y-5"
-          >
-
+          <form onSubmit={handleCreateDemandeLaboratoire} className="space-y-5">
             <div>
-
               <label className="label">
-                <span className="label-text font-semibold">
-                  Examens *
-                </span>
+                <span className="label-text font-semibold">Examens *</span>
               </label>
 
               <div className="border border-base-200 rounded-xl max-h-64 overflow-y-auto">
-
-                {examensLaboratoire.length ===
-                0 ? (
+                {examensLaboratoire.length === 0 ? (
                   <div className="p-5 text-sm text-base-content/50">
-                    Aucun examen de laboratoire
-                    disponible.
+                    Aucun examen de laboratoire disponible.
                   </div>
                 ) : (
-                  examensLaboratoire.map(
-                    (examen) => {
-                      const checked =
-                        examensSelectionnes.includes(
-                          examen.id,
-                        );
+                  examensLaboratoire.map((examen) => {
+                    const checked = examensSelectionnes.includes(examen.id);
 
-                      return (
-                        <label
-                          key={examen.id}
-                          className={`flex items-center gap-3 p-3 border-b last:border-b-0 cursor-pointer hover:bg-base-200/50 ${
-                            checked
-                              ? "bg-primary/5"
-                              : ""
-                          }`}
-                        >
+                    return (
+                      <label
+                        key={examen.id}
+                        className={`flex items-center gap-3 p-3 border-b last:border-b-0 cursor-pointer hover:bg-base-200/50 ${
+                          checked ? "bg-primary/5" : ""
+                        }`}
+                      >
+                        <input
+                          type="checkbox"
+                          className="checkbox checkbox-primary"
+                          checked={checked}
+                          onChange={() => toggleExamenLaboratoire(examen.id)}
+                        />
 
-                          <input
-                            type="checkbox"
-                            className="checkbox checkbox-primary"
-                            checked={
-                              checked
-                            }
-                            onChange={() =>
-                              toggleExamenLaboratoire(
-                                examen.id,
-                              )
-                            }
-                          />
+                        <div className="flex-1">
+                          <p className="font-medium">{examen.nom}</p>
 
-                          <div className="flex-1">
-
-                            <p className="font-medium">
-                              {examen.nom}
+                          {examen.code && (
+                            <p className="text-xs text-base-content/50">
+                              {examen.code}
                             </p>
-
-                            {examen.code && (
-                              <p className="text-xs text-base-content/50">
-                                {examen.code}
-                              </p>
-                            )}
-
-                          </div>
-
-                        </label>
-                      );
-                    },
-                  )
+                          )}
+                        </div>
+                      </label>
+                    );
+                  })
                 )}
-
               </div>
 
               <p className="text-xs text-base-content/50 mt-2">
-                {
-                  examensSelectionnes.length
-                }{" "}
-                examen(s) sélectionné(s)
+                {examensSelectionnes.length} examen(s) sélectionné(s)
               </p>
-
             </div>
 
             <label className="flex items-center gap-3 cursor-pointer">
-
               <input
                 type="checkbox"
                 className="checkbox checkbox-warning"
                 checked={urgenceLabo}
-                onChange={(event) =>
-                  setUrgenceLabo(
-                    event.target.checked,
-                  )
-                }
+                onChange={(event) => setUrgenceLabo(event.target.checked)}
               />
 
               <div>
-                <p className="font-medium">
-                  Demande urgente
-                </p>
+                <p className="font-medium">Demande urgente</p>
 
                 <p className="text-xs text-base-content/50">
                   Traitement prioritaire par le laboratoire.
                 </p>
               </div>
-
             </label>
 
             <div className="form-control">
-
               <label className="label">
                 <span className="label-text font-semibold">
                   Indication / observation
@@ -1677,13 +1324,8 @@ export default function ConsultationDetails({
                 className="textarea textarea-bordered min-h-24"
                 placeholder="Indication médicale pour les examens..."
                 value={observationLabo}
-                onChange={(event) =>
-                  setObservationLabo(
-                    event.target.value,
-                  )
-                }
+                onChange={(event) => setObservationLabo(event.target.value)}
               />
-
             </div>
 
             <ModalActions
@@ -1691,9 +1333,7 @@ export default function ConsultationDetails({
               submitLabel="Envoyer la demande"
               onCancel={closeModal}
             />
-
           </form>
-
         </Modal>
       )}
 
@@ -1705,89 +1345,50 @@ export default function ConsultationDetails({
         <Modal
           title="Demander une imagerie"
           description="Sélectionnez l'examen d'imagerie nécessaire."
-          icon={
-            <ScanLine size={22} />
-          }
+          icon={<ScanLine size={22} />}
           onClose={closeModal}
         >
-
-          <form
-            onSubmit={
-              handleCreateDemandeImagerie
-            }
-            className="space-y-5"
-          >
-
+          <form onSubmit={handleCreateDemandeImagerie} className="space-y-5">
             <div className="form-control">
-
               <label className="label">
-                <span className="label-text font-semibold">
-                  Examen *
-                </span>
+                <span className="label-text font-semibold">Examen *</span>
               </label>
 
               <select
                 className="select select-bordered w-full"
                 value={examenImagerieId}
-                onChange={(event) =>
-                  setExamenImagerieId(
-                    event.target.value,
-                  )
-                }
+                onChange={(event) => setExamenImagerieId(event.target.value)}
                 required
               >
+                <option value="">Sélectionner un examen</option>
 
-                <option value="">
-                  Sélectionner un examen
-                </option>
-
-                {examensImagerie.map(
-                  (examen) => (
-                    <option
-                      key={examen.id}
-                      value={examen.id}
-                    >
-                      {examen.code
-                        ? `${examen.code} — `
-                        : ""}
-                      {examen.nom}
-                    </option>
-                  ),
-                )}
-
+                {examensImagerie.map((examen) => (
+                  <option key={examen.id} value={examen.id}>
+                    {examen.code ? `${examen.code} — ` : ""}
+                    {examen.nom}
+                  </option>
+                ))}
               </select>
-
             </div>
 
             <label className="flex items-center gap-3 cursor-pointer">
-
               <input
                 type="checkbox"
                 className="checkbox checkbox-warning"
-                checked={
-                  urgenceImagerie
-                }
-                onChange={(event) =>
-                  setUrgenceImagerie(
-                    event.target.checked,
-                  )
-                }
+                checked={urgenceImagerie}
+                onChange={(event) => setUrgenceImagerie(event.target.checked)}
               />
 
               <div>
-                <p className="font-medium">
-                  Examen urgent
-                </p>
+                <p className="font-medium">Examen urgent</p>
 
                 <p className="text-xs text-base-content/50">
                   Priorité élevée pour le service d'imagerie.
                 </p>
               </div>
-
             </label>
 
             <div className="form-control">
-
               <label className="label">
                 <span className="label-text font-semibold">
                   Indication médicale
@@ -1798,13 +1399,8 @@ export default function ConsultationDetails({
                 className="textarea textarea-bordered min-h-28"
                 placeholder="Décrivez l'indication de l'examen..."
                 value={motifImagerie}
-                onChange={(event) =>
-                  setMotifImagerie(
-                    event.target.value,
-                  )
-                }
+                onChange={(event) => setMotifImagerie(event.target.value)}
               />
-
             </div>
 
             <ModalActions
@@ -1812,12 +1408,9 @@ export default function ConsultationDetails({
               submitLabel="Envoyer la demande"
               onCancel={closeModal}
             />
-
           </form>
-
         </Modal>
       )}
-
     </>
   );
 }
@@ -1840,14 +1433,10 @@ function TabButton({
   return (
     <button
       type="button"
-      className={`tab ${
-        active ? "tab-active" : ""
-      }`}
+      className={`tab ${active ? "tab-active" : ""}`}
       onClick={onClick}
     >
-      <span className="mr-2">
-        {icon}
-      </span>
+      <span className="mr-2">{icon}</span>
 
       {label}
     </button>
@@ -1873,23 +1462,14 @@ function HeaderAction({
 }) {
   return (
     <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
-
       <div className="flex items-center gap-3">
-
-        <div className="p-2 rounded-lg bg-primary/10 text-primary">
-          {icon}
-        </div>
+        <div className="p-2 rounded-lg bg-primary/10 text-primary">{icon}</div>
 
         <div>
-          <h2 className="card-title">
-            {title}
-          </h2>
+          <h2 className="card-title">{title}</h2>
 
-          <p className="text-sm text-base-content/60">
-            {description}
-          </p>
+          <p className="text-sm text-base-content/60">{description}</p>
         </div>
-
       </div>
 
       <button
@@ -1900,7 +1480,6 @@ function HeaderAction({
         <Plus size={17} />
         {button}
       </button>
-
     </div>
   );
 }
@@ -1924,14 +1503,11 @@ function EmptyState({
 }) {
   return (
     <div className="mt-6 rounded-xl border border-dashed border-base-300 p-8 text-center">
-
       <div className="mx-auto mb-3 w-12 h-12 rounded-full bg-base-200 flex items-center justify-center text-base-content/50">
         {icon}
       </div>
 
-      <h3 className="font-semibold">
-        {title}
-      </h3>
+      <h3 className="font-semibold">{title}</h3>
 
       <p className="text-sm text-base-content/50 mt-1 max-w-md mx-auto">
         {description}
@@ -1945,7 +1521,6 @@ function EmptyState({
         <Plus size={16} />
         {button}
       </button>
-
     </div>
   );
 }
@@ -1954,24 +1529,14 @@ function EmptyState({
    INFO BLOCK
 ========================================================== */
 
-function InfoBlock({
-  title,
-  value,
-}: {
-  title: string;
-  value?: string | null;
-}) {
+function InfoBlock({ title, value }: { title: string; value?: string | null }) {
   return (
     <div className="rounded-xl bg-base-200/40 border border-base-200 p-4">
-
       <p className="text-xs uppercase tracking-wide text-base-content/50 font-semibold mb-2">
         {title}
       </p>
 
-      <p className="whitespace-pre-wrap">
-        {value || "—"}
-      </p>
-
+      <p className="whitespace-pre-wrap">{value || "—"}</p>
     </div>
   );
 }
@@ -2001,15 +1566,11 @@ function InputField({
 }) {
   return (
     <div className="form-control">
-
       <label className="label">
-        <span className="label-text font-semibold">
-          {label}
-        </span>
+        <span className="label-text font-semibold">{label}</span>
       </label>
 
       <div className="relative">
-
         {icon && (
           <div className="absolute left-3 top-1/2 -translate-y-1/2 text-base-content/40">
             {icon}
@@ -2023,11 +1584,7 @@ function InputField({
             icon ? "pl-10" : ""
           } ${unit ? "pr-16" : ""}`}
           value={value}
-          onChange={(event) =>
-            onChange(
-              event.target.value,
-            )
-          }
+          onChange={(event) => onChange(event.target.value)}
           placeholder={placeholder}
         />
 
@@ -2036,9 +1593,7 @@ function InputField({
             {unit}
           </span>
         )}
-
       </div>
-
     </div>
   );
 }
@@ -2062,27 +1617,18 @@ function Modal({
 }) {
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4">
-
       <div className="w-full max-w-3xl max-h-[90vh] overflow-y-auto rounded-2xl bg-base-100 shadow-2xl">
-
         <div className="sticky top-0 z-10 flex items-start justify-between gap-4 border-b border-base-200 bg-base-100 p-5">
-
           <div className="flex items-center gap-3">
-
             <div className="w-11 h-11 rounded-xl bg-primary/10 text-primary flex items-center justify-center">
               {icon}
             </div>
 
             <div>
-              <h2 className="text-lg font-bold">
-                {title}
-              </h2>
+              <h2 className="text-lg font-bold">{title}</h2>
 
-              <p className="text-sm text-base-content/60">
-                {description}
-              </p>
+              <p className="text-sm text-base-content/60">{description}</p>
             </div>
-
           </div>
 
           <button
@@ -2092,15 +1638,10 @@ function Modal({
           >
             <X size={18} />
           </button>
-
         </div>
 
-        <div className="p-5">
-          {children}
-        </div>
-
+        <div className="p-5">{children}</div>
       </div>
-
     </div>
   );
 }
@@ -2120,7 +1661,6 @@ function ModalActions({
 }) {
   return (
     <div className="flex justify-end gap-3 pt-4 border-t border-base-200">
-
       <button
         type="button"
         className="btn btn-ghost"
@@ -2130,19 +1670,10 @@ function ModalActions({
         Annuler
       </button>
 
-      <button
-        type="submit"
-        className="btn btn-primary"
-        disabled={loading}
-      >
-
+      <button type="submit" className="btn btn-primary" disabled={loading}>
         {loading ? (
           <>
-            <Loader2
-              size={18}
-              className="animate-spin"
-            />
-
+            <Loader2 size={18} className="animate-spin" />
             Enregistrement...
           </>
         ) : (
@@ -2152,9 +1683,7 @@ function ModalActions({
             {submitLabel}
           </>
         )}
-
       </button>
-
     </div>
   );
 }
