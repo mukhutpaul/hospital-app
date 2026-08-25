@@ -66,6 +66,38 @@ type ModalType =
   | "imagerie";
 
 /* ==========================================================
+   TYPE — LIGNE DE PRESCRIPTION
+========================================================== */
+
+type PrescriptionLine = {
+  medicamentId: string;
+  dose: string;
+  posologie: string;
+  frequence: string;
+  duree: string;
+  voie: string;
+  quantite: string;
+  observation: string;
+};
+
+/* ==========================================================
+   UTILITAIRE — LIGNE VIDE
+========================================================== */
+
+function createEmptyPrescriptionLine(): PrescriptionLine {
+  return {
+    medicamentId: "",
+    dose: "",
+    posologie: "",
+    frequence: "",
+    duree: "",
+    voie: "",
+    quantite: "",
+    observation: "",
+  };
+}
+
+/* ==========================================================
    UTILITAIRES FICHIERS
 ========================================================== */
 
@@ -79,7 +111,9 @@ function isImageFile(file: unknown): boolean {
 
   if (!value) return false;
 
-  const cleanValue = value.split("?")[0].split("#")[0];
+  const cleanValue = value
+    .split("?")[0]
+    .split("#")[0];
 
   const imageExtensions = [
     ".jpg",
@@ -138,13 +172,13 @@ function getFileUrl(file: unknown): string {
       .indexOf("/uploads/");
 
     if (uploadsIndex !== -1) {
-      normalized = normalized.substring(uploadsIndex);
+      normalized = normalized.substring(
+        uploadsIndex,
+      );
     } else {
-      /*
-       * Si le chemin ne contient pas uploads,
-       * on récupère le nom du fichier.
-       */
-      normalized = `/${normalized.split("/").pop() ?? ""}`;
+      normalized = `/${
+        normalized.split("/").pop() ?? ""
+      }`;
     }
   }
 
@@ -223,31 +257,13 @@ export default function ConsultationDetails({
 
   /* ========================================================
      PRESCRIPTION
+     UNE PRESCRIPTION = PLUSIEURS MÉDICAMENTS
   ======================================================== */
 
-  const [medicamentId, setMedicamentId] =
-    useState("");
-
-  const [dose, setDose] =
-    useState("");
-
-  const [posologie, setPosologie] =
-    useState("");
-
-  const [frequence, setFrequence] =
-    useState("");
-
-  const [duree, setDuree] =
-    useState("");
-
-  const [voie, setVoie] =
-    useState("");
-
-  const [quantite, setQuantite] =
-    useState("");
-
-  const [observationPrescription, setObservationPrescription] =
-    useState("");
+  const [prescriptionLines, setPrescriptionLines] =
+    useState<PrescriptionLine[]>([
+      createEmptyPrescriptionLine(),
+    ]);
 
   /* ========================================================
      LABORATOIRE
@@ -298,14 +314,9 @@ export default function ConsultationDetails({
 
     /* PRESCRIPTION */
 
-    setMedicamentId("");
-    setDose("");
-    setPosologie("");
-    setFrequence("");
-    setDuree("");
-    setVoie("");
-    setQuantite("");
-    setObservationPrescription("");
+    setPrescriptionLines([
+      createEmptyPrescriptionLine(),
+    ]);
 
     /* LABORATOIRE */
 
@@ -390,7 +401,8 @@ export default function ConsultationDetails({
     try {
       const result =
         await createConstanteConsultation({
-          patientId: consultation.patientId,
+          patientId:
+            consultation.patientId,
 
           consultationId:
             consultation.idConsultation,
@@ -468,6 +480,54 @@ export default function ConsultationDetails({
 
   /* ========================================================
      PRESCRIPTION
+     GESTION DES LIGNES
+  ======================================================== */
+
+  function updatePrescriptionLine(
+    index: number,
+    field: keyof PrescriptionLine,
+    value: string,
+  ) {
+    setPrescriptionLines((current) =>
+      current.map((line, lineIndex) =>
+        lineIndex === index
+          ? {
+              ...line,
+              [field]: value,
+            }
+          : line,
+      ),
+    );
+  }
+
+  function addPrescriptionLine() {
+    setPrescriptionLines((current) => [
+      ...current,
+      createEmptyPrescriptionLine(),
+    ]);
+  }
+
+  function removePrescriptionLine(
+    index: number,
+  ) {
+    setPrescriptionLines((current) => {
+      if (current.length === 1) {
+        return [
+          createEmptyPrescriptionLine(),
+        ];
+      }
+
+      return current.filter(
+        (_, lineIndex) =>
+          lineIndex !== index,
+      );
+    });
+  }
+
+  /* ========================================================
+     PRESCRIPTION
+     CRÉATION D'UNE SEULE PRESCRIPTION
+     AVEC PLUSIEURS MÉDICAMENTS
   ======================================================== */
 
   async function handleCreatePrescription(
@@ -494,9 +554,42 @@ export default function ConsultationDetails({
       return;
     }
 
-    if (!medicamentId) {
+    /*
+     * On ne conserve que les lignes pour lesquelles
+     * un médicament a été sélectionné.
+     */
+    const validLines =
+      prescriptionLines.filter(
+        (line) =>
+          line.medicamentId.trim() !== "",
+      );
+
+    if (validLines.length === 0) {
       toast.error(
-        "Veuillez sélectionner un médicament.",
+        "Veuillez sélectionner au moins un médicament.",
+      );
+
+      return;
+    }
+
+    /*
+     * Vérifier qu'un même médicament n'est pas
+     * ajouté plusieurs fois dans la même prescription.
+     */
+    const medicamentIds =
+      validLines.map(
+        (line) => line.medicamentId,
+      );
+
+    const uniqueMedicamentIds =
+      new Set(medicamentIds);
+
+    if (
+      uniqueMedicamentIds.size !==
+      medicamentIds.length
+    ) {
+      toast.error(
+        "Un même médicament ne peut pas être ajouté deux fois dans la même prescription.",
       );
 
       return;
@@ -505,9 +598,17 @@ export default function ConsultationDetails({
     setLoading(true);
 
     try {
+      /*
+       * IMPORTANT :
+       *
+       * createPrescription est appelé UNE SEULE FOIS.
+       *
+       * Toutes les lignes sont envoyées dans "lignes".
+       */
       const result =
         await createPrescription({
-          patientId: consultation.patientId,
+          patientId:
+            consultation.patientId,
 
           consultationId:
             consultation.idConsultation,
@@ -515,36 +616,45 @@ export default function ConsultationDetails({
           medecinId:
             consultation.medecinId,
 
-          lignes: [
-            {
+          lignes: validLines.map(
+            (line) => ({
               medicamentId:
-                Number(medicamentId),
+                Number(
+                  line.medicamentId,
+                ),
 
               dose:
-                dose.trim() || null,
+                line.dose.trim() ||
+                null,
 
               posologie:
-                posologie.trim() || null,
+                line.posologie.trim() ||
+                null,
 
               frequence:
-                frequence.trim() || null,
+                line.frequence.trim() ||
+                null,
 
               duree:
-                duree.trim() || null,
+                line.duree.trim() ||
+                null,
 
               voie:
-                voie.trim() || null,
+                line.voie.trim() ||
+                null,
 
               quantite:
-                quantite
-                  ? Number(quantite)
+                line.quantite
+                  ? Number(
+                      line.quantite,
+                    )
                   : null,
 
               observation:
-                observationPrescription.trim() ||
+                line.observation.trim() ||
                 null,
-            },
-          ],
+            }),
+          ),
         });
 
       if (!result?.success) {
@@ -637,13 +747,15 @@ export default function ConsultationDetails({
             consultation.idConsultation,
 
           serviceId:
-            consultation.serviceId ?? null,
+            consultation.serviceId ??
+            null,
 
           urgence:
             urgenceLabo,
 
           observation:
-            observationLabo.trim() || null,
+            observationLabo.trim() ||
+            null,
 
           examens:
             examensSelectionnes,
@@ -720,13 +832,15 @@ export default function ConsultationDetails({
             consultation.idConsultation,
 
           serviceId:
-            consultation.serviceId ?? null,
+            consultation.serviceId ??
+            null,
 
           examenId:
             Number(examenImagerieId),
 
           motif:
-            motifImagerie.trim() || null,
+            motifImagerie.trim() ||
+            null,
 
           urgence:
             urgenceImagerie,
@@ -784,6 +898,56 @@ export default function ConsultationDetails({
     consultation.medecin;
 
   /* ========================================================
+     OPTIONS MÉDICAMENTS
+  ======================================================== */
+
+  const medicamentOptions =
+    medicaments.map((m: any) => ({
+      value: String(m.id),
+
+      label:
+        `${m.code ? `${m.code} — ` : ""}` +
+        `${m.nom}` +
+        `${m.forme ? ` — ${m.forme}` : ""}` +
+        `${m.dosage ? ` — ${m.dosage}` : ""}`,
+    }));
+
+  /* ========================================================
+     OPTIONS LABORATOIRE
+  ======================================================== */
+
+  const laboratoireOptions =
+    examensLaboratoire.map(
+      (e: any) => ({
+        value: Number(e.id),
+
+        label:
+          `${e.code ? `${e.code} — ` : ""}` +
+          `${e.nom}` +
+          `${
+            e.prix != null
+              ? ` — ${e.prix}`
+              : ""
+          }`,
+      }),
+    );
+
+  /* ========================================================
+     OPTIONS IMAGERIE
+  ======================================================== */
+
+  const imagerieOptions =
+    examensImagerie.map(
+      (e: any) => ({
+        value: String(e.id),
+
+        label:
+          `${e.code ? `${e.code} — ` : ""}` +
+          `${e.nom}`,
+      }),
+    );
+
+  /* ========================================================
      RENDER
   ======================================================== */
 
@@ -796,26 +960,34 @@ export default function ConsultationDetails({
         ================================================== */}
 
         <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+
           <div className="flex items-center gap-3">
+
             <div className="rounded-xl bg-primary/10 p-3 text-primary">
               <Stethoscope size={24} />
             </div>
 
             <div>
+
               <h1 className="text-2xl font-bold">
                 Consultation #
-                {consultation.idConsultation}
+                {
+                  consultation.idConsultation
+                }
               </h1>
 
               <p className="text-sm text-base-content/60">
                 Fiche complète de la consultation
               </p>
+
             </div>
+
           </div>
 
           <div className="badge badge-primary badge-lg">
             Consultation
           </div>
+
         </div>
 
         {/* ==================================================
@@ -827,8 +999,11 @@ export default function ConsultationDetails({
           {/* PATIENT */}
 
           <div className="card border border-base-200 bg-base-100 shadow-sm">
+
             <div className="card-body">
+
               <div className="mb-4 flex items-center gap-3">
+
                 <div className="rounded-lg bg-primary/10 p-2 text-primary">
                   <UserRound size={20} />
                 </div>
@@ -836,6 +1011,7 @@ export default function ConsultationDetails({
                 <h2 className="font-semibold">
                   Patient
                 </h2>
+
               </div>
 
               <div className="text-lg font-semibold">
@@ -846,11 +1022,16 @@ export default function ConsultationDetails({
 
               <div className="text-sm text-base-content/60">
                 Dossier :{" "}
-                {patient?.numeroDossier ?? "—"}
+                {
+                  patient?.numeroDossier ??
+                  "—"
+                }
               </div>
 
               <div className="mt-3 grid grid-cols-2 gap-3 text-sm">
+
                 <div>
+
                   <span className="text-base-content/50">
                     Sexe
                   </span>
@@ -858,26 +1039,38 @@ export default function ConsultationDetails({
                   <p className="font-medium">
                     {patient?.sexe ?? "—"}
                   </p>
+
                 </div>
 
                 <div>
+
                   <span className="text-base-content/50">
                     Téléphone
                   </span>
 
                   <p className="font-medium">
-                    {patient?.telephone ?? "—"}
+                    {
+                      patient?.telephone ??
+                      "—"
+                    }
                   </p>
+
                 </div>
+
               </div>
+
             </div>
+
           </div>
 
           {/* MÉDECIN */}
 
           <div className="card border border-base-200 bg-base-100 shadow-sm">
+
             <div className="card-body">
+
               <div className="mb-4 flex items-center gap-3">
+
                 <div className="rounded-lg bg-secondary/10 p-2 text-secondary">
                   <Stethoscope size={20} />
                 </div>
@@ -885,6 +1078,7 @@ export default function ConsultationDetails({
                 <h2 className="font-semibold">
                   Médecin
                 </h2>
+
               </div>
 
               <div className="text-lg font-semibold">
@@ -894,18 +1088,29 @@ export default function ConsultationDetails({
               </div>
 
               <div className="text-sm text-base-content/60">
-                {medecin?.specialite?.nom ??
-                  "Médecin"}
+                {
+                  medecin?.specialite
+                    ?.nom ?? "Médecin"
+                }
               </div>
 
               <div className="mt-3 text-sm">
+
                 Service :{" "}
+
                 <span className="font-medium">
-                  {medecin?.service?.nom ?? "—"}
+                  {
+                    medecin?.service
+                      ?.nom ?? "—"
+                  }
                 </span>
+
               </div>
+
             </div>
+
           </div>
+
         </div>
 
         {/* ==================================================
@@ -978,6 +1183,7 @@ export default function ConsultationDetails({
             }
             label="Imagerie"
           />
+
         </div>
 
         {/* ==================================================
@@ -986,10 +1192,13 @@ export default function ConsultationDetails({
 
         {activeTab === "general" && (
           <div className="card border border-base-200 bg-base-100 shadow-sm">
+
             <div className="card-body">
 
               <div className="flex items-center justify-between gap-4">
+
                 <div>
+
                   <h2 className="card-title">
                     Informations de la consultation
                   </h2>
@@ -997,22 +1206,28 @@ export default function ConsultationDetails({
                   <p className="text-sm text-base-content/60">
                     Informations médicales saisies pendant la consultation.
                   </p>
+
                 </div>
 
                 <ClipboardList
                   size={24}
                   className="text-primary"
                 />
+
               </div>
 
               <div className="mt-3 flex items-center gap-2 text-sm text-base-content/60">
+
                 <CalendarDays size={16} />
 
                 {consultation.dateConsultation
                   ? new Date(
                       consultation.dateConsultation,
-                    ).toLocaleString("fr-FR")
+                    ).toLocaleString(
+                      "fr-FR",
+                    )
                   : "—"}
+
               </div>
 
               <div className="divider" />
@@ -1048,7 +1263,9 @@ export default function ConsultationDetails({
                 />
 
               </div>
+
             </div>
+
           </div>
         )}
 
@@ -1058,6 +1275,7 @@ export default function ConsultationDetails({
 
         {activeTab === "constantes" && (
           <div className="card border border-base-200 bg-base-100 shadow-sm">
+
             <div className="card-body">
 
               <HeaderAction
@@ -1072,12 +1290,14 @@ export default function ConsultationDetails({
                 }
               />
 
-              {consultation.constantes?.length > 0 ? (
+              {consultation.constantes?.length >
+              0 ? (
                 <div className="mt-5 overflow-x-auto">
 
                   <table className="table">
 
                     <thead>
+
                       <tr>
                         <th>Date</th>
                         <th>Température</th>
@@ -1089,9 +1309,11 @@ export default function ConsultationDetails({
                         <th>FR</th>
                         <th>Glycémie</th>
                       </tr>
+
                     </thead>
 
                     <tbody>
+
                       {consultation.constantes.map(
                         (constante: any) => (
                           <tr
@@ -1099,19 +1321,24 @@ export default function ConsultationDetails({
                               constante.id
                             }
                           >
+
                             <td>
-                              {constante.dateMesure
-                                ? new Date(
-                                    constante.dateMesure,
-                                  ).toLocaleString(
-                                    "fr-FR",
-                                  )
-                                : "—"}
+                              {
+                                constante.dateMesure
+                                  ? new Date(
+                                      constante.dateMesure,
+                                    ).toLocaleString(
+                                      "fr-FR",
+                                    )
+                                  : "—"
+                              }
                             </td>
 
                             <td>
-                              {constante.temperature ??
-                                "—"}
+                              {
+                                constante.temperature ??
+                                "—"
+                              }
 
                               {constante.temperature !=
                                 null &&
@@ -1119,55 +1346,74 @@ export default function ConsultationDetails({
                             </td>
 
                             <td>
-                              {constante.tensionSystolique ??
-                                "—"}
+                              {
+                                constante.tensionSystolique ??
+                                "—"
+                              }
                               /
-                              {constante.tensionDiastolique ??
-                                "—"}{" "}
+                              {
+                                constante.tensionDiastolique ??
+                                "—"
+                              }{" "}
                               mmHg
                             </td>
 
                             <td>
-                              {constante.pouls ??
-                                "—"}{" "}
+                              {
+                                constante.pouls ??
+                                "—"
+                              }{" "}
                               bpm
                             </td>
 
                             <td>
-                              {constante.saturation ??
-                                "—"}
+                              {
+                                constante.saturation ??
+                                "—"
+                              }
                               %
                             </td>
 
                             <td>
-                              {constante.poids ??
-                                "—"}{" "}
+                              {
+                                constante.poids ??
+                                "—"
+                              }{" "}
                               kg
                             </td>
 
                             <td>
-                              {constante.taille ??
-                                "—"}{" "}
+                              {
+                                constante.taille ??
+                                "—"
+                              }{" "}
                               cm
                             </td>
 
                             <td>
-                              {constante.frequenceRespiratoire ??
-                                "—"}{" "}
+                              {
+                                constante.frequenceRespiratoire ??
+                                "—"
+                              }{" "}
                               /min
                             </td>
 
                             <td>
-                              {constante.glycemie ??
-                                "—"}{" "}
+                              {
+                                constante.glycemie ??
+                                "—"
+                              }{" "}
                               mg/dL
                             </td>
+
                           </tr>
                         ),
                       )}
+
                     </tbody>
 
                   </table>
+
                 </div>
               ) : (
                 <EmptyState
@@ -1182,7 +1428,9 @@ export default function ConsultationDetails({
                   }
                 />
               )}
+
             </div>
+
           </div>
         )}
 
@@ -1192,6 +1440,7 @@ export default function ConsultationDetails({
 
         {activeTab === "prescription" && (
           <div className="card border border-base-200 bg-base-100 shadow-sm">
+
             <div className="card-body">
 
               <HeaderAction
@@ -1206,7 +1455,8 @@ export default function ConsultationDetails({
                 }
               />
 
-              {consultation.prescriptions?.length > 0 ? (
+              {consultation.prescriptions?.length >
+              0 ? (
                 <div className="mt-5 space-y-4">
 
                   {consultation.prescriptions.map(
@@ -1221,95 +1471,177 @@ export default function ConsultationDetails({
                         <div className="flex items-start justify-between gap-3">
 
                           <div>
+
                             <div className="font-semibold">
-                              {prescription.numero ??
-                                "Prescription"}
+                              {
+                                prescription.numero ??
+                                "Prescription"
+                              }
                             </div>
 
                             <div className="text-sm text-base-content/50">
-                              {prescription.datePrescription
-                                ? new Date(
-                                    prescription.datePrescription,
-                                  ).toLocaleString(
-                                    "fr-FR",
-                                  )
-                                : "—"}
+                              {
+                                prescription.datePrescription
+                                  ? new Date(
+                                      prescription.datePrescription,
+                                    ).toLocaleString(
+                                      "fr-FR",
+                                    )
+                                  : "—"
+                              }
                             </div>
+
                           </div>
 
                           <span className="badge badge-outline">
-                            {prescription.statut ??
-                              "ACTIVE"}
+                            {
+                              prescription.statut ??
+                              "ACTIVE"
+                            }
                           </span>
 
                         </div>
 
-                        <div className="mt-4 space-y-2">
+                        <div className="mt-4 space-y-3">
 
                           {prescription.lignes?.map(
-                            (ligne: any) => (
+                            (
+                              ligne: any,
+                              ligneIndex: number,
+                            ) => (
                               <div
                                 key={
                                   ligne.id
                                 }
-                                className="rounded-lg bg-base-200/50 p-3"
+                                className="rounded-lg border border-base-200 bg-base-200/40 p-4"
                               >
 
-                                <div className="font-medium">
-                                  {ligne.medicament?.nom ??
-                                    "Médicament"}
+                                <div className="flex items-start gap-3">
+
+                                  <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-primary/10 text-primary">
+                                    <Pill
+                                      size={18}
+                                    />
+                                  </div>
+
+                                  <div className="min-w-0 flex-1">
+
+                                    <div className="flex flex-wrap items-center gap-2">
+
+                                      <span className="font-semibold">
+                                        {
+                                          ligne
+                                            .medicament
+                                            ?.nom ??
+                                          "Médicament"
+                                        }
+                                      </span>
+
+                                      {ligne
+                                        .medicament
+                                        ?.code && (
+                                        <span className="badge badge-sm badge-outline">
+                                          {
+                                            ligne
+                                              .medicament
+                                              .code
+                                          }
+                                        </span>
+                                      )}
+
+                                    </div>
+
+                                    <div className="mt-2 flex flex-wrap gap-x-4 gap-y-1 text-sm text-base-content/60">
+
+                                      {ligne.dose && (
+                                        <span>
+                                          <strong>
+                                            Dose :
+                                          </strong>{" "}
+                                          {
+                                            ligne.dose
+                                          }
+                                        </span>
+                                      )}
+
+                                      {ligne.frequence && (
+                                        <span>
+                                          {
+                                            ligne.frequence
+                                          }
+                                        </span>
+                                      )}
+
+                                      {ligne.duree && (
+                                        <span>
+                                          {
+                                            ligne.duree
+                                          }
+                                        </span>
+                                      )}
+
+                                      {ligne.voie && (
+                                        <span>
+                                          {
+                                            ligne.voie
+                                          }
+                                        </span>
+                                      )}
+
+                                    </div>
+
+                                    {ligne.posologie && (
+                                      <div className="mt-3 rounded-lg bg-base-100 p-3">
+
+                                        <p className="text-xs font-semibold uppercase tracking-wide text-base-content/50">
+                                          Posologie
+                                        </p>
+
+                                        <p className="mt-1 whitespace-pre-wrap text-sm">
+                                          {
+                                            ligne.posologie
+                                          }
+                                        </p>
+
+                                      </div>
+                                    )}
+
+                                    {ligne.quantite !=
+                                      null && (
+                                      <div className="mt-2 text-xs text-base-content/50">
+                                        Quantité :{" "}
+                                        {
+                                          ligne.quantite
+                                        }
+                                      </div>
+                                    )}
+
+                                    {ligne.observation && (
+                                      <div className="mt-3 rounded-lg border border-base-200 bg-base-100 p-3">
+
+                                        <p className="text-xs font-semibold uppercase tracking-wide text-base-content/50">
+                                          Observation
+                                        </p>
+
+                                        <p className="mt-1 whitespace-pre-wrap text-sm">
+                                          {
+                                            ligne.observation
+                                          }
+                                        </p>
+
+                                      </div>
+                                    )}
+
+                                  </div>
+
                                 </div>
-
-                                <div className="mt-1 text-sm text-base-content/60">
-
-                                  {[
-                                    ligne.dose &&
-                                      `Dose : ${ligne.dose}`,
-
-                                    ligne.frequence &&
-                                      ligne.frequence,
-
-                                    ligne.duree &&
-                                      ligne.duree,
-
-                                    ligne.voie &&
-                                      ligne.voie,
-                                  ]
-                                    .filter(Boolean)
-                                    .join(" • ")}
-
-                                </div>
-
-                                {ligne.posologie && (
-                                  <div className="mt-1 text-sm">
-                                    {ligne.posologie}
-                                  </div>
-                                )}
-
-                                {ligne.quantite !=
-                                  null && (
-                                  <div className="mt-1 text-xs text-base-content/50">
-                                    Quantité :{" "}
-                                    {
-                                      ligne.quantite
-                                    }
-                                  </div>
-                                )}
-
-                                {ligne.observation && (
-                                  <div className="mt-2 text-xs text-base-content/60">
-                                    Observation :{" "}
-                                    {
-                                      ligne.observation
-                                    }
-                                  </div>
-                                )}
 
                               </div>
                             ),
                           )}
 
                         </div>
+
                       </div>
                     ),
                   )}
@@ -1332,6 +1664,7 @@ export default function ConsultationDetails({
               )}
 
             </div>
+
           </div>
         )}
 
@@ -1341,6 +1674,7 @@ export default function ConsultationDetails({
 
         {activeTab === "laboratoire" && (
           <div className="card border border-base-200 bg-base-100 shadow-sm">
+
             <div className="card-body">
 
               <HeaderAction
@@ -1355,7 +1689,8 @@ export default function ConsultationDetails({
                 }
               />
 
-              {consultation.demandesLabo?.length > 0 ? (
+              {consultation.demandesLabo?.length >
+              0 ? (
                 <div className="mt-5 space-y-4">
 
                   {consultation.demandesLabo.map(
@@ -1368,20 +1703,29 @@ export default function ConsultationDetails({
                         <div className="flex justify-between gap-3">
 
                           <div>
+
                             <div className="font-semibold">
-                              {demande.numero ??
-                                "Demande laboratoire"}
+                              {
+                                demande.numero ??
+                                "Demande laboratoire"
+                              }
                             </div>
 
                             <div className="text-sm text-base-content/50">
-                              {demande.service?.nom ??
-                                "Laboratoire"}
+                              {
+                                demande.service
+                                  ?.nom ??
+                                "Laboratoire"
+                              }
                             </div>
+
                           </div>
 
                           <span className="badge">
-                            {demande.statut ??
-                              "EN_ATTENTE"}
+                            {
+                              demande.statut ??
+                              "EN_ATTENTE"
+                            }
                           </span>
 
                         </div>
@@ -1398,12 +1742,18 @@ export default function ConsultationDetails({
                               >
 
                                 <div>
+
                                   <span className="font-medium">
-                                    {ligne.examen?.nom ??
-                                      "Examen"}
+                                    {
+                                      ligne
+                                        .examen
+                                        ?.nom ??
+                                      "Examen"
+                                    }
                                   </span>
 
-                                  {ligne.examen?.code && (
+                                  {ligne.examen
+                                    ?.code && (
                                     <div className="text-xs text-base-content/50">
                                       {
                                         ligne
@@ -1412,11 +1762,14 @@ export default function ConsultationDetails({
                                       }
                                     </div>
                                   )}
+
                                 </div>
 
                                 <span className="text-sm text-base-content/60">
-                                  {ligne.prix ??
-                                    "—"}
+                                  {
+                                    ligne.prix ??
+                                    "—"
+                                  }
                                 </span>
 
                               </div>
@@ -1440,6 +1793,7 @@ export default function ConsultationDetails({
                                 </div>
 
                                 <div>
+
                                   <h4 className="font-semibold">
                                     Résultats de laboratoire
                                   </h4>
@@ -1447,11 +1801,13 @@ export default function ConsultationDetails({
                                   <p className="text-xs text-base-content/60">
                                     Résultats transmis par le laboratoire
                                   </p>
+
                                 </div>
 
                               </div>
 
                               <span className="badge badge-success gap-1">
+
                                 <CheckCircle2
                                   size={14}
                                 />
@@ -1462,6 +1818,7 @@ export default function ConsultationDetails({
                                     .length
                                 }{" "}
                                 résultat(s)
+
                               </span>
 
                             </div>
@@ -1473,7 +1830,8 @@ export default function ConsultationDetails({
 
                                   const examen =
                                     resultat.examen ??
-                                    resultat.ligne?.examen ??
+                                    resultat.ligne
+                                      ?.examen ??
                                     null;
 
                                   return (
@@ -1496,8 +1854,10 @@ export default function ConsultationDetails({
                                             />
 
                                             <h5 className="font-semibold">
-                                              {examen?.nom ??
-                                                "Examen de laboratoire"}
+                                              {
+                                                examen?.nom ??
+                                                "Examen de laboratoire"
+                                              }
                                             </h5>
 
                                           </div>
@@ -1530,13 +1890,17 @@ export default function ConsultationDetails({
                                       <div className="mt-4 grid grid-cols-1 gap-3 md:grid-cols-2">
 
                                         <div className="rounded-lg bg-base-200/50 p-3">
+
                                           <p className="text-xs font-semibold uppercase tracking-wide text-base-content/50">
                                             Résultat
                                           </p>
 
                                           <p className="mt-1 text-lg font-bold">
-                                            {resultat.valeur ??
-                                              "—"}
+
+                                            {
+                                              resultat.valeur ??
+                                              "—"
+                                            }
 
                                             {resultat.unite && (
                                               <span className="ml-2 text-sm font-normal text-base-content/60">
@@ -1545,24 +1909,31 @@ export default function ConsultationDetails({
                                                 }
                                               </span>
                                             )}
+
                                           </p>
+
                                         </div>
 
                                         <div className="rounded-lg bg-base-200/50 p-3">
+
                                           <p className="text-xs font-semibold uppercase tracking-wide text-base-content/50">
                                             Valeur normale
                                           </p>
 
                                           <p className="mt-1 font-medium">
-                                            {examen?.valeurNormale ??
-                                              "Non renseignée"}
+                                            {
+                                              examen?.valeurNormale ??
+                                              "Non renseignée"
+                                            }
                                           </p>
+
                                         </div>
 
                                       </div>
 
                                       {resultat.commentaire && (
                                         <div className="mt-3 rounded-lg border border-base-200 p-3">
+
                                           <p className="text-xs font-semibold uppercase tracking-wide text-base-content/50">
                                             Commentaire du laboratoire
                                           </p>
@@ -1572,11 +1943,13 @@ export default function ConsultationDetails({
                                               resultat.commentaire
                                             }
                                           </p>
+
                                         </div>
                                       )}
 
                                       {resultat.interpretation && (
                                         <div className="mt-3 rounded-lg border border-primary/20 bg-primary/5 p-3">
+
                                           <p className="text-xs font-semibold uppercase tracking-wide text-primary">
                                             Interprétation
                                           </p>
@@ -1586,6 +1959,7 @@ export default function ConsultationDetails({
                                               resultat.interpretation
                                             }
                                           </p>
+
                                         </div>
                                       )}
 
@@ -1606,6 +1980,7 @@ export default function ConsultationDetails({
                               )}
 
                             </div>
+
                           </div>
                         )}
 
@@ -1631,6 +2006,7 @@ export default function ConsultationDetails({
               )}
 
             </div>
+
           </div>
         )}
 
@@ -1704,11 +2080,16 @@ export default function ConsultationDetails({
                                   <div>
 
                                     <h3 className="text-lg font-bold">
-                                      {demande.examen?.nom ??
-                                        "Examen d'imagerie"}
+                                      {
+                                        demande
+                                          .examen
+                                          ?.nom ??
+                                        "Examen d'imagerie"
+                                      }
                                     </h3>
 
-                                    {demande.examen?.code && (
+                                    {demande.examen
+                                      ?.code && (
                                       <p className="text-xs text-base-content/50">
                                         Code :{" "}
                                         {
@@ -1727,8 +2108,10 @@ export default function ConsultationDetails({
 
                                   <span>
                                     Demande :{" "}
-                                    {demande.numero ??
-                                      "—"}
+                                    {
+                                      demande.numero ??
+                                      "—"
+                                    }
                                   </span>
 
                                   {demande.dateDemande && (
@@ -1803,8 +2186,6 @@ export default function ConsultationDetails({
                               demande.dateExamen) && (
                               <div className="overflow-hidden rounded-xl border border-success/30 bg-success/5">
 
-                                {/* HEADER */}
-
                                 <div className="flex flex-col gap-3 border-b border-success/20 p-4 md:flex-row md:items-center md:justify-between">
 
                                   <div className="flex items-center gap-3">
@@ -1816,6 +2197,7 @@ export default function ConsultationDetails({
                                     </div>
 
                                     <div>
+
                                       <h4 className="font-semibold">
                                         Résultat de l'imagerie
                                       </h4>
@@ -1823,6 +2205,7 @@ export default function ConsultationDetails({
                                       <p className="text-xs text-base-content/60">
                                         Résultat transmis par le service d'imagerie
                                       </p>
+
                                     </div>
 
                                   </div>
@@ -1935,6 +2318,7 @@ export default function ConsultationDetails({
                                                 rel="noopener noreferrer"
                                                 className="btn btn-outline btn-sm"
                                               >
+
                                                 <ScanLine
                                                   size={
                                                     16
@@ -1942,6 +2326,7 @@ export default function ConsultationDetails({
                                                 />
 
                                                 Ouvrir l'image
+
                                               </a>
 
                                             </div>
@@ -2037,6 +2422,7 @@ export default function ConsultationDetails({
               )}
 
             </div>
+
           </div>
         )}
 
@@ -2153,7 +2539,8 @@ export default function ConsultationDetails({
                 label="Poids"
                 unit="kg"
                 icon={
-                  <Scale size={17} />
+                  <Scale size={17}
+                  />
                 }
                 value={poids}
                 onChange={setPoids}
@@ -2199,12 +2586,13 @@ export default function ConsultationDetails({
 
       {/* ====================================================
           MODALE PRESCRIPTION
+          UNE PRESCRIPTION = PLUSIEURS MÉDICAMENTS
       ==================================================== */}
 
       {modal === "prescription" && (
         <Modal
           title="Nouvelle prescription"
-          description="Créer une prescription pour ce patient."
+          description="Ajoutez un ou plusieurs médicaments dans la même prescription."
           icon={
             <Pill size={22} />
           }
@@ -2215,120 +2603,380 @@ export default function ConsultationDetails({
             onSubmit={
               handleCreatePrescription
             }
-            className="space-y-5"
+            className="space-y-6"
           >
 
-            <div className="form-control">
+            {/* ==================================================
+                INFORMATION
+            ================================================== */}
 
-              <label className="label">
-                <span className="label-text font-semibold">
-                  Médicament *
+            <div className="rounded-xl border border-primary/20 bg-primary/5 p-4">
+
+              <div className="flex items-start gap-3">
+
+                <div className="mt-0.5 text-primary">
+                  <ClipboardList size={20} />
+                </div>
+
+                <div>
+
+                  <p className="font-semibold">
+                    Prescription médicale
+                  </p>
+
+                  <p className="mt-1 text-sm text-base-content/60">
+                    Une seule prescription peut contenir plusieurs médicaments.
+                    Ajoutez autant de médicaments que nécessaire.
+                  </p>
+
+                </div>
+
+              </div>
+
+            </div>
+
+            {/* ==================================================
+                MÉDICAMENTS
+            ================================================== */}
+
+            <div className="space-y-5">
+
+              {prescriptionLines.map(
+                (line, index) => {
+
+                  const selectedMedicament =
+                    medicamentOptions.find(
+                      (option) =>
+                        option.value ===
+                        line.medicamentId,
+                    ) ?? null;
+
+                  return (
+                    <div
+                      key={index}
+                      className="rounded-xl border border-base-200 bg-base-100 p-4 shadow-sm"
+                    >
+
+                      {/* EN-TÊTE */}
+
+                      <div className="mb-4 flex items-center justify-between gap-3">
+
+                        <div className="flex items-center gap-2">
+
+                          <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary/10 text-primary">
+                            <Pill size={17} />
+                          </div>
+
+                          <h3 className="font-semibold">
+                            Médicament{" "}
+                            {index + 1}
+                          </h3>
+
+                        </div>
+
+                        {prescriptionLines.length >
+                          1 && (
+                          <button
+                            type="button"
+                            className="btn btn-ghost btn-sm text-error"
+                            onClick={() =>
+                              removePrescriptionLine(
+                                index,
+                              )
+                            }
+                            disabled={loading}
+                          >
+
+                            <X size={16} />
+
+                            Retirer
+
+                          </button>
+                        )}
+
+                      </div>
+
+                      {/* MÉDICAMENT */}
+
+                      <div className="form-control">
+
+                        <label className="label">
+
+                          <span className="label-text font-semibold">
+                            Médicament *
+                          </span>
+
+                        </label>
+
+                        <Select
+                          options={
+                            medicamentOptions
+                          }
+
+                          value={
+                            selectedMedicament
+                          }
+
+                          onChange={(
+                            option: any,
+                          ) =>
+                            updatePrescriptionLine(
+                              index,
+                              "medicamentId",
+                              option?.value ??
+                                "",
+                            )
+                          }
+
+                          placeholder="Rechercher un médicament..."
+
+                          isSearchable
+
+                          isClearable
+
+                          isDisabled={
+                            loading
+                          }
+
+                          noOptionsMessage={() =>
+                            "Aucun médicament trouvé"
+                          }
+
+                          classNamePrefix="react-select"
+
+                          menuPortalTarget={
+                            typeof document !==
+                            "undefined"
+                              ? document.body
+                              : undefined
+                          }
+
+                          styles={{
+                            menuPortal: (
+                              base,
+                            ) => ({
+                              ...base,
+                              zIndex: 9999,
+                            }),
+                          }}
+                        />
+
+                      </div>
+
+                      {/* INFORMATIONS */}
+
+                      <div className="mt-4 grid grid-cols-1 gap-4 md:grid-cols-2">
+
+                        <InputField
+                          label="Dose"
+                          value={
+                            line.dose
+                          }
+                          onChange={(
+                            value,
+                          ) =>
+                            updatePrescriptionLine(
+                              index,
+                              "dose",
+                              value,
+                            )
+                          }
+                          placeholder="Ex. 500 mg"
+                        />
+
+                        <InputField
+                          label="Fréquence"
+                          value={
+                            line.frequence
+                          }
+                          onChange={(
+                            value,
+                          ) =>
+                            updatePrescriptionLine(
+                              index,
+                              "frequence",
+                              value,
+                            )
+                          }
+                          placeholder="Ex. 3 fois/jour"
+                        />
+
+                        <InputField
+                          label="Durée"
+                          value={
+                            line.duree
+                          }
+                          onChange={(
+                            value,
+                          ) =>
+                            updatePrescriptionLine(
+                              index,
+                              "duree",
+                              value,
+                            )
+                          }
+                          placeholder="Ex. 5 jours"
+                        />
+
+                        <InputField
+                          label="Voie d'administration"
+                          value={
+                            line.voie
+                          }
+                          onChange={(
+                            value,
+                          ) =>
+                            updatePrescriptionLine(
+                              index,
+                              "voie",
+                              value,
+                            )
+                          }
+                          placeholder="Ex. Orale"
+                        />
+
+                        <InputField
+                          label="Quantité"
+                          value={
+                            line.quantite
+                          }
+                          onChange={(
+                            value,
+                          ) =>
+                            updatePrescriptionLine(
+                              index,
+                              "quantite",
+                              value,
+                            )
+                          }
+                          type="number"
+                          placeholder="Ex. 15"
+                        />
+
+                      </div>
+
+                      {/* POSOLOGIE */}
+
+                      <div className="mt-4 form-control">
+
+                        <label className="label">
+
+                          <span className="label-text font-semibold">
+                            Posologie
+                          </span>
+
+                        </label>
+
+                        <textarea
+                          className="textarea textarea-bordered min-h-24"
+                          placeholder="Instructions de prise du médicament..."
+                          value={
+                            line.posologie
+                          }
+                          onChange={(
+                            event,
+                          ) =>
+                            updatePrescriptionLine(
+                              index,
+                              "posologie",
+                              event.target
+                                .value,
+                            )
+                          }
+                          disabled={loading}
+                        />
+
+                      </div>
+
+                      {/* OBSERVATION */}
+
+                      <div className="mt-4 form-control">
+
+                        <label className="label">
+
+                          <span className="label-text font-semibold">
+                            Observation
+                          </span>
+
+                        </label>
+
+                        <textarea
+                          className="textarea textarea-bordered min-h-20"
+                          placeholder="Informations complémentaires..."
+                          value={
+                            line.observation
+                          }
+                          onChange={(
+                            event,
+                          ) =>
+                            updatePrescriptionLine(
+                              index,
+                              "observation",
+                              event.target
+                                .value,
+                            )
+                          }
+                          disabled={loading}
+                        />
+
+                      </div>
+
+                    </div>
+                  );
+                },
+              )}
+
+            </div>
+
+            {/* ==================================================
+                AJOUTER UN MÉDICAMENT
+            ================================================== */}
+
+            <button
+              type="button"
+              className="btn btn-outline btn-primary w-full"
+              onClick={
+                addPrescriptionLine
+              }
+              disabled={loading}
+            >
+
+              <Plus size={18} />
+
+              Ajouter un autre médicament
+
+            </button>
+
+            {/* ==================================================
+                RÉSUMÉ
+            ================================================== */}
+
+            <div className="rounded-xl bg-base-200/60 p-4">
+
+              <div className="flex items-center justify-between">
+
+                <span className="text-sm text-base-content/60">
+                  Nombre de médicaments
                 </span>
-              </label>
 
-              <Select
-                options={medicaments.map((m: any) => ({ value: String(m.id), label: `${m.code ? `${m.code} — ` : ""}${m.nom}${m.forme ? ` — ${m.forme}` : ""}${m.dosage ? ` — ${m.dosage}` : ""}` }))}
-                value={medicamentId ? medicaments.map((m: any) => ({ value: String(m.id), label: `${m.code ? `${m.code} — ` : ""}${m.nom}${m.forme ? ` — ${m.forme}` : ""}${m.dosage ? ` — ${m.dosage}` : ""}` })).find((o: any) => o.value === medicamentId) ?? null : null}
-                onChange={(option: any) => setMedicamentId(option?.value ?? "")}
-                placeholder="Rechercher un médicament..."
-                isSearchable
-                isClearable
-                isDisabled={loading}
-                noOptionsMessage={() => "Aucun médicament trouvé"}
-                classNamePrefix="react-select"
-                menuPortalTarget={typeof document !== "undefined" ? document.body : undefined}
-                styles={{ menuPortal: (base) => ({ ...base, zIndex: 9999 }) }}
-              />
+                <span className="badge badge-primary">
 
-            </div>
+                  {
+                    prescriptionLines.filter(
+                      (line) =>
+                        line.medicamentId,
+                    ).length
+                  }
 
-            <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-
-              <InputField
-                label="Dose"
-                value={dose}
-                onChange={setDose}
-                placeholder="Ex. 500 mg"
-              />
-
-              <InputField
-                label="Fréquence"
-                value={frequence}
-                onChange={
-                  setFrequence
-                }
-                placeholder="Ex. 3 fois/jour"
-              />
-
-              <InputField
-                label="Durée"
-                value={duree}
-                onChange={setDuree}
-                placeholder="Ex. 5 jours"
-              />
-
-              <InputField
-                label="Voie d'administration"
-                value={voie}
-                onChange={setVoie}
-                placeholder="Ex. Orale"
-              />
-
-              <InputField
-                label="Quantité"
-                value={quantite}
-                onChange={
-                  setQuantite
-                }
-                type="number"
-                placeholder="Ex. 15"
-              />
-
-            </div>
-
-            <div className="form-control">
-
-              <label className="label">
-                <span className="label-text font-semibold">
-                  Posologie
                 </span>
-              </label>
 
-              <textarea
-                className="textarea textarea-bordered min-h-24"
-                placeholder="Instructions de prise du médicament..."
-                value={posologie}
-                onChange={(event) =>
-                  setPosologie(
-                    event.target.value,
-                  )
-                }
-              />
+              </div>
 
             </div>
 
-            <div className="form-control">
-
-              <label className="label">
-                <span className="label-text font-semibold">
-                  Observation
-                </span>
-              </label>
-
-              <textarea
-                className="textarea textarea-bordered min-h-20"
-                placeholder="Informations complémentaires..."
-                value={
-                  observationPrescription
-                }
-                onChange={(event) =>
-                  setObservationPrescription(
-                    event.target.value,
-                  )
-                }
-              />
-
-            </div>
+            {/* ==================================================
+                ACTIONS
+            ================================================== */}
 
             <ModalActions
               loading={loading}
@@ -2350,9 +2998,7 @@ export default function ConsultationDetails({
           title="Demander des examens"
           description="Sélectionnez les examens nécessaires au patient."
           icon={
-            <FlaskConical
-              size={22}
-            />
+            <FlaskConical size={22} />
           }
           onClose={closeModal}
         >
@@ -2367,31 +3013,73 @@ export default function ConsultationDetails({
             <div>
 
               <label className="label">
+
                 <span className="label-text font-semibold">
                   Examens *
                 </span>
+
               </label>
 
               <Select
                 isMulti
-                options={examensLaboratoire.map((e: any) => ({ value: Number(e.id), label: `${e.code ? `${e.code} — ` : ""}${e.nom}${e.prix != null ? ` — ${e.prix}` : ""}` }))}
-                value={examensLaboratoire.filter((e: any) => examensSelectionnes.includes(Number(e.id))).map((e: any) => ({ value: Number(e.id), label: `${e.code ? `${e.code} — ` : ""}${e.nom}${e.prix != null ? ` — ${e.prix}` : ""}` }))}
-                onChange={(options: any[]) => setExamensSelectionnes((options ?? []).map((o: any) => Number(o.value)))}
+                options={
+                  laboratoireOptions
+                }
+                value={laboratoireOptions.filter(
+                  (option) =>
+                    examensSelectionnes.includes(
+                      Number(
+                        option.value,
+                      ),
+                    ),
+                )}
+                onChange={(
+                  options: any[],
+                ) =>
+                  setExamensSelectionnes(
+                    (options ?? []).map(
+                      (option: any) =>
+                        Number(
+                          option.value,
+                        ),
+                    ),
+                  )
+                }
                 placeholder="Rechercher et sélectionner les examens..."
                 isSearchable
                 closeMenuOnSelect={false}
-                isDisabled={loading || examensLaboratoire.length === 0}
-                noOptionsMessage={() => "Aucun examen trouvé"}
+                isDisabled={
+                  loading ||
+                  examensLaboratoire.length ===
+                    0
+                }
+                noOptionsMessage={() =>
+                  "Aucun examen trouvé"
+                }
                 classNamePrefix="react-select"
-                menuPortalTarget={typeof document !== "undefined" ? document.body : undefined}
-                styles={{ menuPortal: (base) => ({ ...base, zIndex: 9999 }) }}
+                menuPortalTarget={
+                  typeof document !==
+                  "undefined"
+                    ? document.body
+                    : undefined
+                }
+                styles={{
+                  menuPortal: (
+                    base,
+                  ) => ({
+                    ...base,
+                    zIndex: 9999,
+                  }),
+                }}
               />
 
               <p className="mt-2 text-xs text-base-content/50">
+
                 {
                   examensSelectionnes.length
                 }{" "}
                 examen(s) sélectionné(s)
+
               </p>
 
             </div>
@@ -2401,15 +3089,21 @@ export default function ConsultationDetails({
               <input
                 type="checkbox"
                 className="checkbox checkbox-warning"
-                checked={urgenceLabo}
-                onChange={(event) =>
+                checked={
+                  urgenceLabo
+                }
+                onChange={(
+                  event,
+                ) =>
                   setUrgenceLabo(
                     event.target.checked,
                   )
                 }
+                disabled={loading}
               />
 
               <div>
+
                 <p className="font-medium">
                   Demande urgente
                 </p>
@@ -2417,6 +3111,7 @@ export default function ConsultationDetails({
                 <p className="text-xs text-base-content/50">
                   Traitement prioritaire par le laboratoire.
                 </p>
+
               </div>
 
             </label>
@@ -2424,9 +3119,11 @@ export default function ConsultationDetails({
             <div className="form-control">
 
               <label className="label">
+
                 <span className="label-text font-semibold">
                   Indication / observation
                 </span>
+
               </label>
 
               <textarea
@@ -2440,6 +3137,7 @@ export default function ConsultationDetails({
                     event.target.value,
                   )
                 }
+                disabled={loading}
               />
 
             </div>
@@ -2479,23 +3177,64 @@ export default function ConsultationDetails({
             <div className="form-control">
 
               <label className="label">
+
                 <span className="label-text font-semibold">
                   Examen *
                 </span>
+
               </label>
 
               <Select
-                options={examensImagerie.map((e: any) => ({ value: String(e.id), label: `${e.code ? `${e.code} — ` : ""}${e.nom}` }))}
-                value={examenImagerieId ? examensImagerie.map((e: any) => ({ value: String(e.id), label: `${e.code ? `${e.code} — ` : ""}${e.nom}` })).find((o: any) => o.value === examenImagerieId) ?? null : null}
-                onChange={(option: any) => setExamenImagerieId(option?.value ?? "")}
+                options={
+                  imagerieOptions
+                }
+
+                value={
+                  imagerieOptions.find(
+                    (option) =>
+                      option.value ===
+                      examenImagerieId,
+                  ) ?? null
+                }
+
+                onChange={(
+                  option: any,
+                ) =>
+                  setExamenImagerieId(
+                    option?.value ??
+                      "",
+                  )
+                }
+
                 placeholder="Rechercher un examen d'imagerie..."
+
                 isSearchable
+
                 isClearable
+
                 isDisabled={loading}
-                noOptionsMessage={() => "Aucun examen trouvé"}
+
+                noOptionsMessage={() =>
+                  "Aucun examen trouvé"
+                }
+
                 classNamePrefix="react-select"
-                menuPortalTarget={typeof document !== "undefined" ? document.body : undefined}
-                styles={{ menuPortal: (base) => ({ ...base, zIndex: 9999 }) }}
+
+                menuPortalTarget={
+                  typeof document !==
+                  "undefined"
+                    ? document.body
+                    : undefined
+                }
+
+                styles={{
+                  menuPortal: (
+                    base,
+                  ) => ({
+                    ...base,
+                    zIndex: 9999,
+                  }),
+                }}
               />
 
             </div>
@@ -2508,11 +3247,14 @@ export default function ConsultationDetails({
                 checked={
                   urgenceImagerie
                 }
-                onChange={(event) =>
+                onChange={(
+                  event,
+                ) =>
                   setUrgenceImagerie(
                     event.target.checked,
                   )
                 }
+                disabled={loading}
               />
 
               <div>
@@ -2532,9 +3274,11 @@ export default function ConsultationDetails({
             <div className="form-control">
 
               <label className="label">
+
                 <span className="label-text font-semibold">
                   Indication médicale
                 </span>
+
               </label>
 
               <textarea
@@ -2548,6 +3292,7 @@ export default function ConsultationDetails({
                     event.target.value,
                   )
                 }
+                disabled={loading}
               />
 
             </div>
@@ -2592,11 +3337,13 @@ function TabButton({
       }`}
       onClick={onClick}
     >
+
       <span className="mr-2">
         {icon}
       </span>
 
       {label}
+
     </button>
   );
 }
@@ -2646,9 +3393,11 @@ function HeaderAction({
         className="btn btn-primary btn-sm"
         onClick={onClick}
       >
+
         <Plus size={17} />
 
         {button}
+
       </button>
 
     </div>
@@ -2692,9 +3441,11 @@ function EmptyState({
         className="btn btn-primary btn-sm mt-4"
         onClick={onClick}
       >
+
         <Plus size={16} />
 
         {button}
+
       </button>
 
     </div>
@@ -2845,7 +3596,7 @@ function Modal({
       aria-label={title}
     >
 
-      <div className="max-h-[90vh] w-full max-w-3xl overflow-y-auto rounded-2xl bg-base-100 shadow-2xl">
+      <div className="max-h-[90vh] w-full max-w-4xl overflow-y-auto rounded-2xl bg-base-100 shadow-2xl">
 
         <div className="sticky top-0 z-10 flex items-start justify-between gap-4 border-b border-base-200 bg-base-100 p-5">
 

@@ -2,74 +2,91 @@
 
 import { Eye, FileText } from "lucide-react";
 
-type Medicament = {
-  id: number;
-  code: string;
-  nom: string;
-  forme?: string | null;
-  dosage?: string | null;
-};
+/* ==========================================================
+   TYPES
+========================================================== */
 
-type LigneOrdonnance = {
-  id: number;
-  quantite: number;
-  posologie?: string | null;
-  dose?: string | null;
-  frequence?: string | null;
-  duree?: string | null;
-  voie?: string | null;
-  medicament?: Medicament | null;
-};
-
-type Patient = {
-  id: number;
-  nom: string;
-  postNom?: string | null;
-  prenom?: string | null;
-  numeroDossier?: string | null;
-};
-
-type Medecin = {
-  id: number;
-  nom: string;
-  postNom?: string | null;
-  prenom?: string | null;
-};
-
-type Ordonnance = {
+export type Ordonnance = {
   id: number;
   numero: string;
   datePrescription: Date | string;
   statut: string;
 
-  patient?: Patient | null;
+  patient?: {
+    id: number;
+    nom: string;
+    postNom?: string | null;
+    prenom?: string | null;
+    numeroDossier?: string | null;
+  } | null;
 
-  medecin?: Medecin | null;
+  medecin?: {
+    id: number;
+    nom: string;
+    postNom?: string | null;
+    prenom?: string | null;
+  } | null;
 
-  lignes?: LigneOrdonnance[];
+  lignes?: {
+    id: number;
+    quantite: number;
+    posologie?: string | null;
+    dose?: string | null;
+    frequence?: string | null;
+    duree?: string | null;
+    voie?: string | null;
+
+    medicament?: {
+      id: number;
+      code: string;
+      nom: string;
+      forme?: string | null;
+      dosage?: string | null;
+    } | null;
+  }[];
 };
+
+/* ==========================================================
+   PROPS
+========================================================== */
 
 type Props = {
   ordonnances: Ordonnance[];
 };
 
+/* ==========================================================
+   COMPOSANT
+========================================================== */
+
 export default function OrdonnanceTable({
   ordonnances,
 }: Props) {
-  /* ==========================================================
+  /* ========================================================
      FORMAT DATE
-  ========================================================== */
+  ======================================================== */
 
   const formatDate = (date: Date | string) => {
-    return new Date(date).toLocaleDateString("fr-FR");
+    if (!date) return "-";
+
+    const parsedDate = new Date(date);
+
+    if (Number.isNaN(parsedDate.getTime())) {
+      return "-";
+    }
+
+    return parsedDate.toLocaleDateString("fr-FR", {
+      day: "2-digit",
+      month: "2-digit",
+      year: "numeric",
+    });
   };
 
-  /* ==========================================================
+  /* ========================================================
      NOM PATIENT
-  ========================================================== */
+  ======================================================== */
 
   const nomPatient = (
-    patient?: Patient | null
+    patient?: Ordonnance["patient"]
   ) => {
     if (!patient) {
       return "Patient inconnu";
@@ -84,12 +101,12 @@ export default function OrdonnanceTable({
       .join(" ");
   };
 
-  /* ==========================================================
-     NOM MÉDECIN
-  ========================================================== */
+  /* ========================================================
+     NOM MEDECIN
+  ======================================================== */
 
   const nomMedecin = (
-    medecin?: Medecin | null
+    medecin?: Ordonnance["medecin"]
   ) => {
     if (!medecin) {
       return "Médecin inconnu";
@@ -104,13 +121,11 @@ export default function OrdonnanceTable({
       .join(" ");
   };
 
-  /* ==========================================================
+  /* ========================================================
      STATUT
-  ========================================================== */
+  ======================================================== */
 
-  const getStatutClass = (
-    statut: string
-  ) => {
+  const getStatutClass = (statut: string) => {
     switch (statut) {
       case "ACTIVE":
         return "badge-success";
@@ -130,19 +145,24 @@ export default function OrdonnanceTable({
     }
   };
 
-  /* ==========================================================
-     AUCUNE ORDONNANCE
-  ========================================================== */
+  /* ========================================================
+     NAVIGATION
+  ======================================================== */
 
-  if (
-    !ordonnances ||
-    ordonnances.length === 0
-  ) {
+  const voirOrdonnance = (id: number) => {
+    window.location.href =
+      `/pharmacie/ordonnances/${id}`;
+  };
+
+  /* ========================================================
+     AUCUNE DONNEE
+  ======================================================== */
+
+  if (!ordonnances || ordonnances.length === 0) {
     return (
       <div className="rounded-xl border border-base-300 bg-base-100 p-8 text-center">
         <FileText
-          className="mx-auto mb-3 opacity-40"
-          size={40}
+          className="mx-auto mb-3 h-10 w-10 opacity-40"
         />
 
         <h3 className="font-semibold">
@@ -156,13 +176,17 @@ export default function OrdonnanceTable({
     );
   }
 
-  /* ==========================================================
+  /* ========================================================
      TABLEAU
-  ========================================================== */
+  ======================================================== */
 
   return (
     <div className="overflow-x-auto rounded-xl border border-base-300 bg-base-100">
       <table className="table">
+        {/* ==================================================
+            HEADER
+        ================================================== */}
+
         <thead>
           <tr>
             <th>N° Ordonnance</th>
@@ -177,118 +201,118 @@ export default function OrdonnanceTable({
           </tr>
         </thead>
 
+        {/* ==================================================
+            BODY
+        ================================================== */}
+
         <tbody>
-          {ordonnances.map(
-            (ordonnance: Ordonnance) => (
-              <tr key={ordonnance.id}>
-                {/* NUMÉRO */}
+          {ordonnances.map((ordonnance) => (
+            <tr key={ordonnance.id}>
+              {/* ============================================
+                  NUMERO
+              ============================================ */}
 
-                <td>
-                  <span className="font-semibold">
-                    {ordonnance.numero}
-                  </span>
-                </td>
+              <td>
+                <span className="font-semibold">
+                  {ordonnance.numero}
+                </span>
+              </td>
 
-                {/* DATE */}
+              {/* ============================================
+                  DATE
+              ============================================ */}
 
-                <td>
-                  {formatDate(
-                    ordonnance.datePrescription
+              <td>
+                {formatDate(
+                  ordonnance.datePrescription
+                )}
+              </td>
+
+              {/* ============================================
+                  PATIENT
+              ============================================ */}
+
+              <td>
+                <div className="font-medium">
+                  {nomPatient(
+                    ordonnance.patient
                   )}
-                </td>
+                </div>
 
-                {/* PATIENT */}
-
-                <td>
-                  <div className="font-medium">
-                    {nomPatient(
+                {ordonnance.patient
+                  ?.numeroDossier && (
+                  <div className="text-xs opacity-60">
+                    Dossier :{" "}
+                    {
                       ordonnance.patient
-                    )}
+                        .numeroDossier
+                    }
                   </div>
+                )}
+              </td>
 
-                  {ordonnance.patient
-                    ?.numeroDossier && (
-                    <div className="text-xs opacity-60">
-                      {
-                        ordonnance.patient
-                          .numeroDossier
-                      }
-                    </div>
-                  )}
-                </td>
+              {/* ============================================
+                  MEDECIN
+              ============================================ */}
 
-                {/* MÉDECIN */}
+              <td>
+                {nomMedecin(
+                  ordonnance.medecin
+                )}
+              </td>
 
-                <td>
-                  {nomMedecin(
-                    ordonnance.medecin
-                  )}
-                </td>
+              {/* ============================================
+                  MEDICAMENTS
+              ============================================ */}
 
-                {/* MÉDICAMENTS */}
+              <td>
+                <span className="badge badge-outline">
+                  {ordonnance.lignes
+                    ?.length ?? 0}{" "}
+                  médicament
+                  {(ordonnance.lignes
+                    ?.length ?? 0) > 1
+                    ? "s"
+                    : ""}
+                </span>
+              </td>
 
-                <td>
-                  <div className="flex flex-wrap gap-1">
-                    {ordonnance.lignes &&
-                    ordonnance.lignes.length > 0 ? (
-                      ordonnance.lignes.map(
-                        (
-                          ligne: LigneOrdonnance
-                        ) => (
-                          <span
-                            key={ligne.id}
-                            className="badge badge-outline"
-                          >
-                            {ligne.medicament
-                              ?.nom ??
-                              "Médicament inconnu"}
+              {/* ============================================
+                  STATUT
+              ============================================ */}
 
-                            {" × "}
+              <td>
+                <span
+                  className={`badge ${getStatutClass(
+                    ordonnance.statut
+                  )}`}
+                >
+                  {ordonnance.statut}
+                </span>
+              </td>
 
-                            {ligne.quantite}
-                          </span>
-                        )
+              {/* ============================================
+                  ACTIONS
+              ============================================ */}
+
+              <td>
+                <div className="flex justify-end gap-2">
+                  <button
+                    type="button"
+                    className="btn btn-sm btn-ghost"
+                    title="Voir l'ordonnance"
+                    onClick={() =>
+                      voirOrdonnance(
+                        ordonnance.id
                       )
-                    ) : (
-                      <span className="text-sm opacity-50">
-                        Aucun médicament
-                      </span>
-                    )}
-                  </div>
-                </td>
-
-                {/* STATUT */}
-
-                <td>
-                  <span
-                    className={`badge ${getStatutClass(
-                      ordonnance.statut
-                    )}`}
+                    }
                   >
-                    {ordonnance.statut}
-                  </span>
-                </td>
-
-                {/* ACTIONS */}
-
-                <td>
-                  <div className="flex justify-end gap-2">
-                    <button
-                      type="button"
-                      className="btn btn-sm btn-ghost"
-                      title="Voir l'ordonnance"
-                      onClick={() => {
-                        window.location.href =
-                          `/pharmacie/ordonnances/${ordonnance.id}`;
-                      }}
-                    >
-                      <Eye size={16} />
-                    </button>
-                  </div>
-                </td>
-              </tr>
-            )
-          )}
+                    <Eye size={16} />
+                  </button>
+                </div>
+              </td>
+            </tr>
+          ))}
         </tbody>
       </table>
     </div>
