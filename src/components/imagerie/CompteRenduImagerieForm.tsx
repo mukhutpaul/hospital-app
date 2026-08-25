@@ -9,11 +9,11 @@ import {
   Loader2,
   FileText,
   CalendarDays,
-  ClipboardList,
   Stethoscope,
   Upload,
-  FileImage,
   X,
+  Image as ImageIcon,
+  ExternalLink,
 } from "lucide-react";
 
 import { toast } from "react-toastify";
@@ -33,10 +33,18 @@ export default function CompteRenduImagerieForm({ demande }: Props) {
       : "",
   );
 
-  const [compteRendu, setCompteRendu] = useState(demande.compteRendu ?? "");
+  const [compteRendu, setCompteRendu] = useState(
+    demande.compteRendu ?? "",
+  );
 
-  const [conclusion, setConclusion] = useState(demande.conclusion ?? "");
+  const [conclusion, setConclusion] = useState(
+    demande.conclusion ?? "",
+  );
 
+  /**
+   * IMPORTANT :
+   * On conserve le véritable objet File.
+   */
   const [fichier, setFichier] = useState<File | null>(null);
 
   const [loading, setLoading] = useState(false);
@@ -53,22 +61,54 @@ export default function CompteRenduImagerieForm({ demande }: Props) {
     .filter(Boolean)
     .join(" ");
 
-  const examenNom = demande.examen?.nom ?? "Examen d'imagerie";
+  const examenNom =
+    demande.examen?.nom ?? "Examen d'imagerie";
+
+  /* =========================================================
+     FICHIER DÉJÀ ENREGISTRÉ
+  ========================================================= */
+
+  const fichierEnregistre = demande.fichier
+    ? String(demande.fichier)
+    : null;
+
+  /**
+   * Le fichier est normalement enregistré sous :
+   *
+   * /uploads/imagerie/nom-du-fichier.ext
+   *
+   * Si la base contient déjà le chemin complet,
+   * on le conserve.
+   */
+  const fichierUrl = fichierEnregistre
+    ? fichierEnregistre.startsWith("/")
+      ? fichierEnregistre
+      : `/uploads/imagerie/${fichierEnregistre}`
+    : null;
+
+  const fichierNom = fichierEnregistre
+    ? fichierEnregistre.split("/").pop() || "Fichier d'imagerie"
+    : "";
+
+  const fichierEstImage =
+    !!fichierUrl &&
+    /\.(jpg|jpeg|png|webp|gif)$/i.test(fichierUrl);
+
+  const fichierEstPdf =
+    !!fichierUrl && /\.pdf$/i.test(fichierUrl);
 
   /* =========================================================
      CHOIX DU FICHIER
   ========================================================= */
 
-  function handleFileChange(event: React.ChangeEvent<HTMLInputElement>) {
+  function handleFileChange(
+    event: React.ChangeEvent<HTMLInputElement>,
+  ) {
     const file = event.target.files?.[0];
 
     if (!file) {
       return;
     }
-
-    /* -------------------------------------------------------
-       TYPES AUTORISÉS
-    ------------------------------------------------------- */
 
     const typesAutorises = [
       "application/pdf",
@@ -78,34 +118,53 @@ export default function CompteRenduImagerieForm({ demande }: Props) {
     ];
 
     if (!typesAutorises.includes(file.type)) {
-      toast.error("Format non autorisé. Utilisez PDF, JPG, PNG ou WEBP.");
+      toast.error(
+        "Format non autorisé. Utilisez PDF, JPG, PNG ou WEBP.",
+      );
 
       event.target.value = "";
+      setFichier(null);
+
       return;
     }
 
     /* -------------------------------------------------------
-       TAILLE MAXIMALE : 10 MB
+       TAILLE MAXIMALE : 10 Mo
     ------------------------------------------------------- */
 
     const tailleMax = 10 * 1024 * 1024;
 
     if (file.size > tailleMax) {
-      toast.error("Le fichier ne doit pas dépasser 10 Mo.");
+      toast.error(
+        "Le fichier ne doit pas dépasser 10 Mo.",
+      );
 
       event.target.value = "";
+      setFichier(null);
+
       return;
     }
 
+    /**
+     * On conserve le véritable objet File.
+     */
     setFichier(file);
   }
 
   /* =========================================================
-     SUPPRIMER LE FICHIER SÉLECTIONNÉ
+     SUPPRIMER FICHIER SÉLECTIONNÉ
   ========================================================= */
 
   function supprimerFichier() {
     setFichier(null);
+
+    const input = document.getElementById(
+      "fichier-imagerie",
+    ) as HTMLInputElement | null;
+
+    if (input) {
+      input.value = "";
+    }
   }
 
   /* =========================================================
@@ -128,31 +187,49 @@ export default function CompteRenduImagerieForm({ demande }: Props) {
      SUBMIT
   ========================================================= */
 
-  async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
+  async function handleSubmit(
+    event: React.FormEvent<HTMLFormElement>,
+  ) {
     event.preventDefault();
+
+    if (loading) {
+      return;
+    }
 
     setLoading(true);
 
     try {
-      /*
-       * IMPORTANT :
-       * On envoie maintenant les données sous forme
-       * de FormData afin de pouvoir transmettre le fichier.
-       */
-
       const formData = new FormData();
 
       formData.append("dateExamen", dateExamen);
 
-      formData.append("compteRendu", compteRendu);
+      formData.append(
+        "compteRendu",
+        compteRendu,
+      );
 
-      formData.append("conclusion", conclusion);
+      formData.append(
+        "conclusion",
+        conclusion,
+      );
 
+      /**
+       * IMPORTANT :
+       * On envoie uniquement un nouveau fichier
+       * si l'utilisateur en a sélectionné un.
+       *
+       * Sinon le fichier déjà enregistré reste inchangé
+       * côté serveur.
+       */
       if (fichier) {
         formData.append("fichier", fichier);
       }
 
-      const result = await updateCompteRenduImagerie(demande.id, formData);
+      const result =
+        await updateCompteRenduImagerie(
+          demande.id,
+          formData,
+        );
 
       if (!result.success) {
         toast.error(result.message);
@@ -163,97 +240,57 @@ export default function CompteRenduImagerieForm({ demande }: Props) {
 
       window.location.reload();
     } catch (error) {
-      console.error(error);
+      console.error(
+        "Erreur enregistrement compte rendu :",
+        error,
+      );
 
-      toast.error("Erreur lors de l'enregistrement du compte rendu.");
+      toast.error(
+        "Erreur lors de l'enregistrement du compte rendu.",
+      );
     } finally {
       setLoading(false);
     }
   }
 
+  /* =========================================================
+     RENDER
+  ========================================================= */
+
   return (
-    <form onSubmit={handleSubmit} className="space-y-6">
+    <form
+      onSubmit={handleSubmit}
+      className="space-y-6"
+    >
       {/* =====================================================
-          INFORMATIONS DE LA DEMANDE
+          DATE EXAMEN
       ===================================================== */}
 
       <div className="card border border-base-200 bg-base-100 shadow-sm">
         <div className="card-body">
-          <div className="flex items-start gap-4">
-            <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-primary/10 text-primary">
-              <ClipboardList size={22} />
-            </div>
 
-            <div>
-              <h2 className="text-lg font-bold">Compte rendu d'imagerie</h2>
-
-              <p className="mt-1 text-sm text-base-content/60">
-                Renseignez les résultats et la conclusion de l'examen.
-              </p>
-            </div>
-          </div>
-
-          <div className="divider my-2" />
-
-          <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
-            {/* PATIENT */}
-
-            <div className="rounded-xl border border-base-200 bg-base-200/30 p-4">
-              <p className="text-xs font-medium uppercase tracking-wide text-base-content/50">
-                Patient
-              </p>
-
-              <p className="mt-1 font-semibold">
-                {patientNom || "Patient inconnu"}
-              </p>
-            </div>
-
-            {/* EXAMEN */}
-
-            <div className="rounded-xl border border-base-200 bg-base-200/30 p-4">
-              <p className="text-xs font-medium uppercase tracking-wide text-base-content/50">
-                Examen
-              </p>
-
-              <p className="mt-1 font-semibold">{examenNom}</p>
-            </div>
-
-            {/* NUMÉRO */}
-
-            <div className="rounded-xl border border-base-200 bg-base-200/30 p-4">
-              <p className="text-xs font-medium uppercase tracking-wide text-base-content/50">
-                N° demande
-              </p>
-
-              <p className="mt-1 font-semibold">{demande.numero ?? "—"}</p>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* =====================================================
-          DATE
-      ===================================================== */}
-
-      <div className="card border border-base-200 bg-base-100 shadow-sm">
-        <div className="card-body">
           <div className="flex items-center gap-3">
+
             <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-info/10 text-info">
               <CalendarDays size={20} />
             </div>
 
             <div>
-              <h3 className="font-bold">Informations de l'examen</h3>
+              <h3 className="font-bold">
+                Informations de l'examen
+              </h3>
 
               <p className="text-sm text-base-content/60">
                 Indiquez la date et l'heure de réalisation.
               </p>
             </div>
+
           </div>
 
           <div className="divider my-2" />
 
           <div className="max-w-md">
+
             <label className="label">
               <span className="label-text font-medium">
                 Date et heure de l'examen
@@ -261,16 +298,25 @@ export default function CompteRenduImagerieForm({ demande }: Props) {
             </label>
 
             <label className="input input-bordered flex items-center gap-3">
-              <CalendarDays size={18} className="text-base-content/40" />
+
+              <CalendarDays
+                size={18}
+                className="text-base-content/40"
+              />
 
               <input
                 type="datetime-local"
                 value={dateExamen}
-                onChange={(e) => setDateExamen(e.target.value)}
+                onChange={(e) =>
+                  setDateExamen(e.target.value)
+                }
                 className="grow"
               />
+
             </label>
+
           </div>
+
         </div>
       </div>
 
@@ -279,36 +325,54 @@ export default function CompteRenduImagerieForm({ demande }: Props) {
       ===================================================== */}
 
       <div className="card border border-base-200 bg-base-100 shadow-sm">
+
         <div className="card-body">
+
           <div className="flex items-center gap-3">
+
             <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary/10 text-primary">
               <FileText size={20} />
             </div>
 
             <div>
-              <h3 className="font-bold">Observations radiologiques</h3>
+              <h3 className="font-bold">
+                Observations radiologiques
+              </h3>
 
               <p className="text-sm text-base-content/60">
-                Décrivez les constatations observées pendant l'examen.
+                Décrivez les constatations observées pendant
+                l'examen.
               </p>
             </div>
+
           </div>
 
           <div className="divider my-2" />
 
           <textarea
             value={compteRendu}
-            onChange={(e) => setCompteRendu(e.target.value)}
+            onChange={(e) =>
+              setCompteRendu(e.target.value)
+            }
             placeholder="Décrire les constatations radiologiques..."
             className="textarea textarea-bordered min-h-64 w-full resize-y leading-7"
           />
 
           <div className="flex justify-between text-xs text-base-content/50">
-            <span>Décrivez les résultats de manière claire et structurée.</span>
 
-            <span>{compteRendu.length} caractères</span>
+            <span>
+              Décrivez les résultats de manière claire et
+              structurée.
+            </span>
+
+            <span>
+              {compteRendu.length} caractères
+            </span>
+
           </div>
+
         </div>
+
       </div>
 
       {/* =====================================================
@@ -316,104 +380,223 @@ export default function CompteRenduImagerieForm({ demande }: Props) {
       ===================================================== */}
 
       <div className="card border border-base-200 bg-base-100 shadow-sm">
+
         <div className="card-body">
+
           <div className="flex items-center gap-3">
+
             <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-success/10 text-success">
               <Stethoscope size={20} />
             </div>
 
             <div>
-              <h3 className="font-bold">Conclusion</h3>
+              <h3 className="font-bold">
+                Conclusion
+              </h3>
 
               <p className="text-sm text-base-content/60">
                 Résumez les principaux résultats de l'examen.
               </p>
             </div>
+
           </div>
 
           <div className="divider my-2" />
 
           <textarea
             value={conclusion}
-            onChange={(e) => setConclusion(e.target.value)}
+            onChange={(e) =>
+              setConclusion(e.target.value)
+            }
             placeholder="Indiquer la conclusion de l'examen..."
             className="textarea textarea-bordered min-h-40 w-full resize-y leading-7"
           />
 
           <div className="flex justify-between text-xs text-base-content/50">
-            <span>La conclusion doit être concise et compréhensible.</span>
 
-            <span>{conclusion.length} caractères</span>
+            <span>
+              La conclusion doit être concise et compréhensible.
+            </span>
+
+            <span>
+              {conclusion.length} caractères
+            </span>
+
           </div>
+
         </div>
+
       </div>
 
       {/* =====================================================
-          UPLOAD FICHIER
+          FICHIER DÉJÀ ENREGISTRÉ
       ===================================================== */}
 
+      {fichierUrl && (
+
+        <div className="card border border-success/30 bg-base-100 shadow-sm">
+
+          <div className="card-body">
+
+            <div className="flex items-start justify-between gap-4">
+
+              <div className="flex items-start gap-3">
+
+                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-success/10 text-success">
+
+                  {fichierEstImage ? (
+                    <ImageIcon size={20} />
+                  ) : (
+                    <FileText size={20} />
+                  )}
+
+                </div>
+
+                <div>
+
+                  <h3 className="font-bold">
+                    Fichier déjà enregistré
+                  </h3>
+
+                  <p className="text-sm text-base-content/60">
+                    {fichierNom}
+                  </p>
+
+                </div>
+
+              </div>
+
+              <a
+                href={fichierUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="btn btn-sm btn-outline"
+              >
+                <ExternalLink size={16} />
+                Ouvrir
+              </a>
+
+            </div>
+
+            <div className="divider my-2" />
+
+            {/* -------------------------------------------------
+                IMAGE
+            ------------------------------------------------- */}
+
+            {fichierEstImage && (
+
+              <div className="overflow-hidden rounded-xl border border-base-200 bg-base-200/20 p-3">
+
+                <img
+                  src={fichierUrl}
+                  alt={`Résultat d'imagerie - ${examenNom}`}
+                  className="mx-auto max-h-[600px] w-auto max-w-full rounded-lg object-contain"
+                />
+
+              </div>
+
+            )}
+
+            {/* -------------------------------------------------
+                PDF
+            ------------------------------------------------- */}
+
+            {fichierEstPdf && (
+
+              <div className="overflow-hidden rounded-xl border border-base-200 bg-base-200/20">
+
+                <iframe
+                  src={fichierUrl}
+                  title={`Document d'imagerie - ${examenNom}`}
+                  className="h-[700px] w-full"
+                />
+
+              </div>
+
+            )}
+
+            {/* -------------------------------------------------
+                AUTRE FORMAT
+            ------------------------------------------------- */}
+
+            {!fichierEstImage &&
+              !fichierEstPdf && (
+
+                <div className="rounded-xl border border-base-200 bg-base-200/30 p-6 text-center">
+
+                  <FileText
+                    size={40}
+                    className="mx-auto mb-3 text-base-content/40"
+                  />
+
+                  <p className="font-medium">
+                    {fichierNom}
+                  </p>
+
+                  <a
+                    href={fichierUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="btn btn-sm btn-primary mt-4"
+                  >
+                    Consulter le fichier
+                  </a>
+
+                </div>
+
+              )}
+
+          </div>
+
+        </div>
+
+      )}
+
       {/* =====================================================
-    FICHIER D'IMAGERIE
-===================================================== */}
+          UPLOAD / REMPLACER LE FICHIER
+      ===================================================== */}
 
       <div className="card border border-base-200 bg-base-100 shadow-sm">
+
         <div className="card-body">
+
           <div className="flex items-start gap-3">
+
             <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-secondary/10 text-secondary">
               <Upload size={20} />
             </div>
 
             <div>
-              <h3 className="font-bold">Fichier d'imagerie</h3>
+
+              <h3 className="font-bold">
+                Fichier d'imagerie
+              </h3>
 
               <p className="text-sm text-base-content/60">
-                Ajoutez le résultat ou le document associé à l'examen.
+                Ajoutez un nouveau fichier ou remplacez le
+                fichier actuellement enregistré.
               </p>
+
             </div>
+
           </div>
 
           <div className="divider my-2" />
 
-          {/* ZONE UPLOAD */}
+          {/* =================================================
+              ZONE UPLOAD
+          ================================================= */}
 
           <label
             htmlFor="fichier-imagerie"
-            className="
-        group
-        flex
-        cursor-pointer
-        flex-col
-        items-center
-        justify-center
-        rounded-2xl
-        border-2
-        border-dashed
-        border-base-300
-        bg-base-200/20
-        px-6
-        py-10
-        text-center
-        transition
-        hover:border-primary
-        hover:bg-primary/5
-      "
+            className="group flex cursor-pointer flex-col items-center justify-center rounded-2xl border-2 border-dashed border-base-300 bg-base-200/20 px-6 py-10 text-center transition hover:border-primary hover:bg-primary/5"
           >
-            <div
-              className="
-          mb-4
-          flex
-          h-14
-          w-14
-          items-center
-          justify-center
-          rounded-full
-          bg-primary/10
-          text-primary
-          transition
-          group-hover:scale-105
-        "
-            >
+
+            <div className="mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-primary/10 text-primary transition group-hover:scale-105">
+
               <Upload size={26} />
+
             </div>
 
             <p className="font-semibold">
@@ -421,69 +604,93 @@ export default function CompteRenduImagerieForm({ demande }: Props) {
             </p>
 
             <p className="mt-1 text-sm text-base-content/50">
-              ou glissez-déposez votre fichier ici
+              PDF, JPG, JPEG, PNG ou WEBP
             </p>
 
             <p className="mt-3 text-xs text-base-content/40">
-              PDF, JPG, JPEG ou PNG
+              Taille maximale : 10 Mo
             </p>
 
             <input
               id="fichier-imagerie"
               type="file"
-              accept=".pdf,.jpg,.jpeg,.png"
+              accept=".pdf,.jpg,.jpeg,.png,.webp"
               className="hidden"
-              onChange={(e) => {
-                const file = e.target.files?.[0];
-
-                if (!file) return;
-
-                setFichier(file.name);
-              }}
+              onChange={handleFileChange}
             />
+
           </label>
 
-          {/* FICHIER SÉLECTIONNÉ */}
+          {/* =================================================
+              NOUVEAU FICHIER SÉLECTIONNÉ
+          ================================================= */}
 
           {fichier && (
-            <div className="mt-4 flex items-center justify-between rounded-xl border border-base-200 bg-base-200/30 p-4">
+
+            <div className="mt-4 flex items-center justify-between rounded-xl border border-primary/30 bg-primary/5 p-4">
+
               <div className="flex min-w-0 items-center gap-3">
+
                 <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-primary/10 text-primary">
+
                   <FileText size={19} />
+
                 </div>
 
                 <div className="min-w-0">
-                  <p className="truncate font-medium">{fichier}</p>
+
+                  <p className="truncate font-medium">
+                    {fichier.name}
+                  </p>
 
                   <p className="text-xs text-base-content/50">
-                    Fichier sélectionné
+                    {formatFileSize(fichier.size)}
                   </p>
+
+                  <p className="text-xs text-primary">
+                    Nouveau fichier sélectionné
+                  </p>
+
                 </div>
+
               </div>
 
               <button
                 type="button"
                 className="btn btn-sm btn-ghost text-error"
-                onClick={() => setFichier(null)}
+                onClick={supprimerFichier}
+                disabled={loading}
               >
+                <X size={16} />
                 Supprimer
               </button>
+
             </div>
+
           )}
+
         </div>
+
       </div>
+
       {/* =====================================================
           ACTION
       ===================================================== */}
 
       <div className="sticky bottom-4 z-10">
+
         <div className="flex flex-col gap-3 rounded-xl border border-base-200 bg-base-100/95 p-4 shadow-lg backdrop-blur md:flex-row md:items-center md:justify-between">
+
           <div>
-            <p className="font-medium">Enregistrer le compte rendu</p>
+
+            <p className="font-medium">
+              Enregistrer le compte rendu
+            </p>
 
             <p className="text-sm text-base-content/50">
               Vérifiez les informations avant l'enregistrement.
             </p>
+
           </div>
 
           <button
@@ -491,9 +698,13 @@ export default function CompteRenduImagerieForm({ demande }: Props) {
             className="btn btn-primary min-w-52"
             disabled={loading}
           >
+
             {loading ? (
               <>
-                <Loader2 size={18} className="animate-spin" />
+                <Loader2
+                  size={18}
+                  className="animate-spin"
+                />
                 Enregistrement...
               </>
             ) : (
@@ -502,9 +713,13 @@ export default function CompteRenduImagerieForm({ demande }: Props) {
                 Enregistrer
               </>
             )}
+
           </button>
+
         </div>
+
       </div>
+
     </form>
   );
 }

@@ -1,37 +1,46 @@
 "use client";
 
-import { useState } from "react";
+import {
+  Activity,
+  CalendarDays,
+  CheckCircle2,
+  ClipboardList,
+  Droplets,
+  FlaskConical,
+  HeartPulse,
+  Loader2,
+  Pill,
+  Plus,
+  Ruler,
+  Save,
+  Scale,
+  ScanLine,
+  Stethoscope,
+  Thermometer,
+  UserRound,
+  Wind,
+  X,
+} from "lucide-react";
 
 import {
-  UserRound,
-  Stethoscope,
-  CalendarDays,
-  ClipboardList,
-  Pill,
-  FlaskConical,
-  ScanLine,
-  Activity,
-  Plus,
-  X,
-  Save,
-  Loader2,
-  Thermometer,
-  HeartPulse,
-  Scale,
-  Droplets,
-  Wind,
-  Ruler,
-  CheckCircle2,
-} from "lucide-react";
+  useEffect,
+  useState,
+  type FormEvent,
+  type ReactNode,
+} from "react";
 
 import { toast } from "react-toastify";
 
 import {
   createConstanteConsultation,
-  createPrescription,
-  createDemandeLaboratoire,
   createDemandeImagerie,
+  createDemandeLaboratoire,
+  createPrescription,
 } from "@/app/actions/consultations";
+
+/* ==========================================================
+   TYPES
+========================================================== */
 
 type Props = {
   consultation: any;
@@ -54,88 +63,224 @@ type ModalType =
   | "laboratoire"
   | "imagerie";
 
+/* ==========================================================
+   UTILITAIRES FICHIERS
+========================================================== */
+
+/**
+ * Vérifie si le fichier est une image.
+ */
+function isImageFile(file: unknown): boolean {
+  if (!file) return false;
+
+  const value = String(file).trim().toLowerCase();
+
+  if (!value) return false;
+
+  const cleanValue = value.split("?")[0].split("#")[0];
+
+  const imageExtensions = [
+    ".jpg",
+    ".jpeg",
+    ".png",
+    ".gif",
+    ".webp",
+    ".bmp",
+    ".svg",
+    ".avif",
+  ];
+
+  return imageExtensions.some((extension) =>
+    cleanValue.endsWith(extension),
+  );
+}
+
+/**
+ * Transforme le chemin du fichier en URL utilisable
+ * par le navigateur.
+ */
+function getFileUrl(file: unknown): string {
+  if (!file) return "";
+
+  const value = String(file).trim();
+
+  if (!value) return "";
+
+  /*
+   * URL déjà complète.
+   */
+  if (
+    value.startsWith("http://") ||
+    value.startsWith("https://") ||
+    value.startsWith("blob:") ||
+    value.startsWith("data:")
+  ) {
+    return value;
+  }
+
+  /*
+   * Normalisation des chemins Windows.
+   */
+  let normalized = value.replace(/\\/g, "/");
+
+  /*
+   * Exemple :
+   * C:/dev/hospital-app/public/uploads/imagerie/image.jpg
+   *
+   * devient :
+   * /uploads/imagerie/image.jpg
+   */
+  if (/^[a-zA-Z]:\//.test(normalized)) {
+    const uploadsIndex = normalized
+      .toLowerCase()
+      .indexOf("/uploads/");
+
+    if (uploadsIndex !== -1) {
+      normalized = normalized.substring(uploadsIndex);
+    } else {
+      /*
+       * Si le chemin ne contient pas uploads,
+       * on récupère le nom du fichier.
+       */
+      normalized = `/${normalized.split("/").pop() ?? ""}`;
+    }
+  }
+
+  /*
+   * Si le chemin commence déjà par /.
+   */
+  if (normalized.startsWith("/")) {
+    return normalized;
+  }
+
+  /*
+   * Exemple :
+   * uploads/imagerie/image.jpg
+   *
+   * devient :
+   * /uploads/imagerie/image.jpg
+   */
+  return `/${normalized}`;
+}
+
+/* ==========================================================
+   COMPONENT
+========================================================== */
+
 export default function ConsultationDetails({
   consultation,
-  medicaments,
-  examensLaboratoire,
-  examensImagerie,
+  medicaments = [],
+  examensLaboratoire = [],
+  examensImagerie = [],
 }: Props) {
-  const [activeTab, setActiveTab] = useState<ActiveTab>("general");
+  /* ========================================================
+     ÉTATS
+  ======================================================== */
 
-  const [modal, setModal] = useState<ModalType>(null);
+  const [activeTab, setActiveTab] =
+    useState<ActiveTab>("general");
 
-  const [loading, setLoading] = useState(false);
+  const [modal, setModal] =
+    useState<ModalType>(null);
 
-  /* =========================================================
+  const [loading, setLoading] =
+    useState(false);
+
+  /* ========================================================
      CONSTANTES
-  ========================================================= */
+  ======================================================== */
 
-  const [temperature, setTemperature] = useState("");
+  const [temperature, setTemperature] =
+    useState("");
 
-  const [tensionSystolique, setTensionSystolique] = useState("");
+  const [tensionSystolique, setTensionSystolique] =
+    useState("");
 
-  const [tensionDiastolique, setTensionDiastolique] = useState("");
+  const [tensionDiastolique, setTensionDiastolique] =
+    useState("");
 
-  const [pouls, setPouls] = useState("");
+  const [pouls, setPouls] =
+    useState("");
 
-  const [saturation, setSaturation] = useState("");
+  const [saturation, setSaturation] =
+    useState("");
 
-  const [poids, setPoids] = useState("");
+  const [poids, setPoids] =
+    useState("");
 
-  const [taille, setTaille] = useState("");
+  const [taille, setTaille] =
+    useState("");
 
-  const [frequenceRespiratoire, setFrequenceRespiratoire] = useState("");
+  const [frequenceRespiratoire, setFrequenceRespiratoire] =
+    useState("");
 
-  const [glycemie, setGlycemie] = useState("");
+  const [glycemie, setGlycemie] =
+    useState("");
 
-  /* =========================================================
+  /* ========================================================
      PRESCRIPTION
-  ========================================================= */
+  ======================================================== */
 
-  const [medicamentId, setMedicamentId] = useState("");
+  const [medicamentId, setMedicamentId] =
+    useState("");
 
-  const [dose, setDose] = useState("");
+  const [dose, setDose] =
+    useState("");
 
-  const [posologie, setPosologie] = useState("");
+  const [posologie, setPosologie] =
+    useState("");
 
-  const [frequence, setFrequence] = useState("");
+  const [frequence, setFrequence] =
+    useState("");
 
-  const [duree, setDuree] = useState("");
+  const [duree, setDuree] =
+    useState("");
 
-  const [voie, setVoie] = useState("");
+  const [voie, setVoie] =
+    useState("");
 
-  const [quantite, setQuantite] = useState("");
+  const [quantite, setQuantite] =
+    useState("");
 
-  const [observationPrescription, setObservationPrescription] = useState("");
+  const [observationPrescription, setObservationPrescription] =
+    useState("");
 
-  /* =========================================================
+  /* ========================================================
      LABORATOIRE
-  ========================================================= */
+  ======================================================== */
 
-  const [examensSelectionnes, setExamensSelectionnes] = useState<number[]>([]);
+  const [examensSelectionnes, setExamensSelectionnes] =
+    useState<number[]>([]);
 
-  const [urgenceLabo, setUrgenceLabo] = useState(false);
+  const [urgenceLabo, setUrgenceLabo] =
+    useState(false);
 
-  const [observationLabo, setObservationLabo] = useState("");
+  const [observationLabo, setObservationLabo] =
+    useState("");
 
-  /* =========================================================
+  /* ========================================================
      IMAGERIE
-  ========================================================= */
+  ======================================================== */
 
-  const [examenImagerieId, setExamenImagerieId] = useState("");
+  const [examenImagerieId, setExamenImagerieId] =
+    useState("");
 
-  const [urgenceImagerie, setUrgenceImagerie] = useState(false);
+  const [urgenceImagerie, setUrgenceImagerie] =
+    useState(false);
 
-  const [motifImagerie, setMotifImagerie] = useState("");
+  const [motifImagerie, setMotifImagerie] =
+    useState("");
 
-  /* =========================================================
-     RESET
-  ========================================================= */
+  /* ========================================================
+     FERMETURE MODALE
+  ======================================================== */
 
   function closeModal() {
     if (loading) return;
 
     setModal(null);
+
+    /* CONSTANTES */
 
     setTemperature("");
     setTensionSystolique("");
@@ -147,6 +292,8 @@ export default function ConsultationDetails({
     setFrequenceRespiratoire("");
     setGlycemie("");
 
+    /* PRESCRIPTION */
+
     setMedicamentId("");
     setDose("");
     setPosologie("");
@@ -156,156 +303,320 @@ export default function ConsultationDetails({
     setQuantite("");
     setObservationPrescription("");
 
+    /* LABORATOIRE */
+
     setExamensSelectionnes([]);
     setUrgenceLabo(false);
     setObservationLabo("");
+
+    /* IMAGERIE */
 
     setExamenImagerieId("");
     setUrgenceImagerie(false);
     setMotifImagerie("");
   }
 
-  /* =========================================================
-     AJOUT CONSTANTES
-  ========================================================= */
+  /* ========================================================
+     ESCAPE
+  ======================================================== */
+
+  useEffect(() => {
+    if (!modal) return;
+
+    function handleKeyDown(event: KeyboardEvent) {
+      if (event.key === "Escape" && !loading) {
+        closeModal();
+      }
+    }
+
+    document.addEventListener(
+      "keydown",
+      handleKeyDown,
+    );
+
+    return () => {
+      document.removeEventListener(
+        "keydown",
+        handleKeyDown,
+      );
+    };
+  }, [modal, loading]);
+
+  /* ========================================================
+     CONSTANTES
+  ======================================================== */
 
   async function handleCreateConstante(
-    event: React.FormEvent<HTMLFormElement>,
+    event: FormEvent<HTMLFormElement>,
   ) {
     event.preventDefault();
 
-    setLoading(true);
+    if (
+      !consultation?.patientId ||
+      !consultation?.idConsultation
+    ) {
+      toast.error(
+        "Informations de consultation invalides.",
+      );
 
-    try {
-      const result = await createConstanteConsultation({
-        patientId: consultation.patientId,
-        consultationId: consultation.idConsultation,
-
-        temperature: temperature ? Number(temperature) : null,
-
-        tensionSystolique: tensionSystolique ? Number(tensionSystolique) : null,
-
-        tensionDiastolique: tensionDiastolique
-          ? Number(tensionDiastolique)
-          : null,
-
-        pouls: pouls ? Number(pouls) : null,
-
-        saturation: saturation ? Number(saturation) : null,
-
-        poids: poids ? Number(poids) : null,
-
-        taille: taille ? Number(taille) : null,
-
-        frequenceRespiratoire: frequenceRespiratoire
-          ? Number(frequenceRespiratoire)
-          : null,
-
-        glycemie: glycemie ? Number(glycemie) : null,
-      });
-
-      if (!result.success) {
-        toast.error(result.message);
-        return;
-      }
-
-      toast.success(result.message);
-
-      closeModal();
-
-      window.location.reload();
-    } catch (error) {
-      console.error("handleCreateConstante:", error);
-
-      toast.error("Impossible d'enregistrer les constantes.");
-    } finally {
-      setLoading(false);
+      return;
     }
-  }
 
-  /* =========================================================
-     CRÉER PRESCRIPTION
-  ========================================================= */
+    const hasValue =
+      temperature ||
+      tensionSystolique ||
+      tensionDiastolique ||
+      pouls ||
+      saturation ||
+      poids ||
+      taille ||
+      frequenceRespiratoire ||
+      glycemie;
 
-  async function handleCreatePrescription(
-    event: React.FormEvent<HTMLFormElement>,
-  ) {
-    event.preventDefault();
+    if (!hasValue) {
+      toast.error(
+        "Veuillez saisir au moins une constante.",
+      );
 
-    if (!medicamentId) {
-      toast.error("Veuillez sélectionner un médicament.");
       return;
     }
 
     setLoading(true);
 
     try {
-      const result = await createPrescription({
-        patientId: consultation.patientId,
+      const result =
+        await createConstanteConsultation({
+          patientId: consultation.patientId,
 
-        consultationId: consultation.idConsultation,
+          consultationId:
+            consultation.idConsultation,
 
-        medecinId: consultation.medecinId,
+          temperature: temperature
+            ? Number(temperature)
+            : null,
 
-        lignes: [
-          {
-            medicamentId: Number(medicamentId),
+          tensionSystolique:
+            tensionSystolique
+              ? Number(tensionSystolique)
+              : null,
 
-            dose: dose || null,
+          tensionDiastolique:
+            tensionDiastolique
+              ? Number(tensionDiastolique)
+              : null,
 
-            posologie: posologie || null,
+          pouls: pouls
+            ? Number(pouls)
+            : null,
 
-            frequence: frequence || null,
+          saturation: saturation
+            ? Number(saturation)
+            : null,
 
-            duree: duree || null,
+          poids: poids
+            ? Number(poids)
+            : null,
 
-            voie: voie || null,
+          taille: taille
+            ? Number(taille)
+            : null,
 
-            quantite: quantite ? Number(quantite) : null,
+          frequenceRespiratoire:
+            frequenceRespiratoire
+              ? Number(frequenceRespiratoire)
+              : null,
 
-            observation: observationPrescription || null,
-          },
-        ],
-      });
+          glycemie: glycemie
+            ? Number(glycemie)
+            : null,
+        });
 
-      if (!result.success) {
-        toast.error(result.message);
+      if (!result?.success) {
+        toast.error(
+          result?.message ||
+            "Impossible d'enregistrer les constantes.",
+        );
+
         return;
       }
 
-      toast.success(result.message);
+      toast.success(
+        result.message ||
+          "Constantes enregistrées avec succès.",
+      );
 
       closeModal();
 
       window.location.reload();
     } catch (error) {
-      console.error("handleCreatePrescription:", error);
+      console.error(
+        "handleCreateConstante:",
+        error,
+      );
 
-      toast.error("Impossible de créer la prescription.");
+      toast.error(
+        "Impossible d'enregistrer les constantes.",
+      );
     } finally {
       setLoading(false);
     }
   }
 
-  /* =========================================================
-     DEMANDE LABORATOIRE
-  ========================================================= */
+  /* ========================================================
+     PRESCRIPTION
+  ======================================================== */
 
-  function toggleExamenLaboratoire(examenId: number) {
-    setExamensSelectionnes((current) =>
-      current.includes(examenId)
-        ? current.filter((id) => id !== examenId)
-        : [...current, examenId],
-    );
+  async function handleCreatePrescription(
+    event: FormEvent<HTMLFormElement>,
+  ) {
+    event.preventDefault();
+
+    if (
+      !consultation?.patientId ||
+      !consultation?.idConsultation
+    ) {
+      toast.error(
+        "Informations de consultation invalides.",
+      );
+
+      return;
+    }
+
+    if (!consultation?.medecinId) {
+      toast.error(
+        "Médecin de la consultation introuvable.",
+      );
+
+      return;
+    }
+
+    if (!medicamentId) {
+      toast.error(
+        "Veuillez sélectionner un médicament.",
+      );
+
+      return;
+    }
+
+    setLoading(true);
+
+    try {
+      const result =
+        await createPrescription({
+          patientId: consultation.patientId,
+
+          consultationId:
+            consultation.idConsultation,
+
+          medecinId:
+            consultation.medecinId,
+
+          lignes: [
+            {
+              medicamentId:
+                Number(medicamentId),
+
+              dose:
+                dose.trim() || null,
+
+              posologie:
+                posologie.trim() || null,
+
+              frequence:
+                frequence.trim() || null,
+
+              duree:
+                duree.trim() || null,
+
+              voie:
+                voie.trim() || null,
+
+              quantite:
+                quantite
+                  ? Number(quantite)
+                  : null,
+
+              observation:
+                observationPrescription.trim() ||
+                null,
+            },
+          ],
+        });
+
+      if (!result?.success) {
+        toast.error(
+          result?.message ||
+            "Impossible de créer la prescription.",
+        );
+
+        return;
+      }
+
+      toast.success(
+        result.message ||
+          "Prescription créée avec succès.",
+      );
+
+      closeModal();
+
+      window.location.reload();
+    } catch (error) {
+      console.error(
+        "handleCreatePrescription:",
+        error,
+      );
+
+      toast.error(
+        "Impossible de créer la prescription.",
+      );
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  /* ========================================================
+     LABORATOIRE
+  ======================================================== */
+
+  function toggleExamenLaboratoire(
+    examenId: number,
+  ) {
+    setExamensSelectionnes((current) => {
+      if (current.includes(examenId)) {
+        return current.filter(
+          (id) => id !== examenId,
+        );
+      }
+
+      return [
+        ...current,
+        examenId,
+      ];
+    });
   }
 
   async function handleCreateDemandeLaboratoire(
-    event: React.FormEvent<HTMLFormElement>,
+    event: FormEvent<HTMLFormElement>,
   ) {
     event.preventDefault();
 
-    if (examensSelectionnes.length === 0) {
-      toast.error("Sélectionnez au moins un examen de laboratoire.");
+    if (
+      !consultation?.patientId ||
+      !consultation?.idConsultation
+    ) {
+      toast.error(
+        "Informations de consultation invalides.",
+      );
+
+      return;
+    }
+
+    if (
+      examensSelectionnes.length === 0
+    ) {
+      toast.error(
+        "Sélectionnez au moins un examen de laboratoire.",
+      );
 
       return;
     }
@@ -313,50 +624,82 @@ export default function ConsultationDetails({
     setLoading(true);
 
     try {
-      const result = await createDemandeLaboratoire({
-        patientId: consultation.patientId,
+      const result =
+        await createDemandeLaboratoire({
+          patientId:
+            consultation.patientId,
 
-        consultationId: consultation.idConsultation,
+          consultationId:
+            consultation.idConsultation,
 
-        serviceId: consultation.serviceId ?? null,
+          serviceId:
+            consultation.serviceId ?? null,
 
-        urgence: urgenceLabo,
+          urgence:
+            urgenceLabo,
 
-        observation: observationLabo || null,
+          observation:
+            observationLabo.trim() || null,
 
-        examens: examensSelectionnes,
-      });
+          examens:
+            examensSelectionnes,
+        });
 
-      if (!result.success) {
-        toast.error(result.message);
+      if (!result?.success) {
+        toast.error(
+          result?.message ||
+            "Impossible de créer la demande de laboratoire.",
+        );
+
         return;
       }
 
-      toast.success(result.message);
+      toast.success(
+        result.message ||
+          "Demande de laboratoire créée avec succès.",
+      );
 
       closeModal();
 
       window.location.reload();
     } catch (error) {
-      console.error("handleCreateDemandeLaboratoire:", error);
+      console.error(
+        "handleCreateDemandeLaboratoire:",
+        error,
+      );
 
-      toast.error("Impossible de créer la demande de laboratoire.");
+      toast.error(
+        "Impossible de créer la demande de laboratoire.",
+      );
     } finally {
       setLoading(false);
     }
   }
 
-  /* =========================================================
-     DEMANDE IMAGERIE
-  ========================================================= */
+  /* ========================================================
+     IMAGERIE
+  ======================================================== */
 
   async function handleCreateDemandeImagerie(
-    event: React.FormEvent<HTMLFormElement>,
+    event: FormEvent<HTMLFormElement>,
   ) {
     event.preventDefault();
 
+    if (
+      !consultation?.patientId ||
+      !consultation?.idConsultation
+    ) {
+      toast.error(
+        "Informations de consultation invalides.",
+      );
+
+      return;
+    }
+
     if (!examenImagerieId) {
-      toast.error("Veuillez sélectionner un examen d'imagerie.");
+      toast.error(
+        "Veuillez sélectionner un examen d'imagerie.",
+      );
 
       return;
     }
@@ -364,63 +707,100 @@ export default function ConsultationDetails({
     setLoading(true);
 
     try {
-      const result = await createDemandeImagerie({
-        patientId: consultation.patientId,
+      const result =
+        await createDemandeImagerie({
+          patientId:
+            consultation.patientId,
 
-        consultationId: consultation.idConsultation,
+          consultationId:
+            consultation.idConsultation,
 
-        serviceId: consultation.serviceId ?? null,
+          serviceId:
+            consultation.serviceId ?? null,
 
-        examenId: Number(examenImagerieId),
+          examenId:
+            Number(examenImagerieId),
 
-        motif: motifImagerie || null,
+          motif:
+            motifImagerie.trim() || null,
 
-        urgence: urgenceImagerie,
-      });
+          urgence:
+            urgenceImagerie,
+        });
 
-      if (!result.success) {
-        toast.error(result.message);
+      if (!result?.success) {
+        toast.error(
+          result?.message ||
+            "Impossible de créer la demande d'imagerie.",
+        );
+
         return;
       }
 
-      toast.success(result.message);
+      toast.success(
+        result.message ||
+          "Demande d'imagerie créée avec succès.",
+      );
 
       closeModal();
 
       window.location.reload();
     } catch (error) {
-      console.error("handleCreateDemandeImagerie:", error);
+      console.error(
+        "handleCreateDemandeImagerie:",
+        error,
+      );
 
-      toast.error("Impossible de créer la demande d'imagerie.");
+      toast.error(
+        "Impossible de créer la demande d'imagerie.",
+      );
     } finally {
       setLoading(false);
     }
   }
 
+  /* ========================================================
+     PROTECTION
+  ======================================================== */
+
   if (!consultation) {
-    return null;
+    return (
+      <div className="rounded-xl border border-base-200 bg-base-100 p-8 text-center">
+        <p className="text-base-content/60">
+          Consultation introuvable.
+        </p>
+      </div>
+    );
   }
 
-  const patient = consultation.patient;
+  const patient =
+    consultation.patient;
 
-  const medecin = consultation.medecin;
+  const medecin =
+    consultation.medecin;
+
+  /* ========================================================
+     RENDER
+  ======================================================== */
 
   return (
     <>
       <div className="space-y-6">
-        {/* =====================================================
+
+        {/* ==================================================
             EN-TÊTE
-        ===================================================== */}
+        ================================================== */}
 
         <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
           <div className="flex items-center gap-3">
-            <div className="p-3 rounded-xl bg-primary/10 text-primary">
+            <div className="rounded-xl bg-primary/10 p-3 text-primary">
               <Stethoscope size={24} />
             </div>
 
             <div>
               <h1 className="text-2xl font-bold">
-                Consultation #{consultation.idConsultation}
+                Consultation #
+                {consultation.idConsultation}
               </h1>
 
               <p className="text-sm text-base-content/60">
@@ -429,45 +809,61 @@ export default function ConsultationDetails({
             </div>
           </div>
 
-          <div className="badge badge-primary badge-lg">Consultation</div>
+          <div className="badge badge-primary badge-lg">
+            Consultation
+          </div>
         </div>
 
-        {/* =====================================================
+        {/* ==================================================
             PATIENT / MÉDECIN
-        ===================================================== */}
+        ================================================== */}
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
+
           {/* PATIENT */}
 
-          <div className="card bg-base-100 border border-base-200 shadow-sm">
+          <div className="card border border-base-200 bg-base-100 shadow-sm">
             <div className="card-body">
-              <div className="flex items-center gap-3 mb-4">
-                <div className="p-2 rounded-lg bg-primary/10 text-primary">
+              <div className="mb-4 flex items-center gap-3">
+                <div className="rounded-lg bg-primary/10 p-2 text-primary">
                   <UserRound size={20} />
                 </div>
 
-                <h2 className="font-semibold">Patient</h2>
+                <h2 className="font-semibold">
+                  Patient
+                </h2>
               </div>
 
               <div className="text-lg font-semibold">
-                {patient?.nom} {patient?.postNom ?? ""} {patient?.prenom ?? ""}
+                {patient?.nom ?? "—"}{" "}
+                {patient?.postNom ?? ""}{" "}
+                {patient?.prenom ?? ""}
               </div>
 
               <div className="text-sm text-base-content/60">
-                Dossier : {patient?.numeroDossier ?? "—"}
+                Dossier :{" "}
+                {patient?.numeroDossier ?? "—"}
               </div>
 
               <div className="mt-3 grid grid-cols-2 gap-3 text-sm">
                 <div>
-                  <span className="text-base-content/50">Sexe</span>
+                  <span className="text-base-content/50">
+                    Sexe
+                  </span>
 
-                  <p className="font-medium">{patient?.sexe ?? "—"}</p>
+                  <p className="font-medium">
+                    {patient?.sexe ?? "—"}
+                  </p>
                 </div>
 
                 <div>
-                  <span className="text-base-content/50">Téléphone</span>
+                  <span className="text-base-content/50">
+                    Téléphone
+                  </span>
 
-                  <p className="font-medium">{patient?.telephone ?? "—"}</p>
+                  <p className="font-medium">
+                    {patient?.telephone ?? "—"}
+                  </p>
                 </div>
               </div>
             </div>
@@ -475,23 +871,27 @@ export default function ConsultationDetails({
 
           {/* MÉDECIN */}
 
-          <div className="card bg-base-100 border border-base-200 shadow-sm">
+          <div className="card border border-base-200 bg-base-100 shadow-sm">
             <div className="card-body">
-              <div className="flex items-center gap-3 mb-4">
-                <div className="p-2 rounded-lg bg-secondary/10 text-secondary">
+              <div className="mb-4 flex items-center gap-3">
+                <div className="rounded-lg bg-secondary/10 p-2 text-secondary">
                   <Stethoscope size={20} />
                 </div>
 
-                <h2 className="font-semibold">Médecin</h2>
+                <h2 className="font-semibold">
+                  Médecin
+                </h2>
               </div>
 
               <div className="text-lg font-semibold">
-                Dr {medecin?.nom} {medecin?.postNom ?? ""}{" "}
+                Dr {medecin?.nom ?? "—"}{" "}
+                {medecin?.postNom ?? ""}{" "}
                 {medecin?.prenom ?? ""}
               </div>
 
               <div className="text-sm text-base-content/60">
-                {medecin?.specialite?.nom ?? "Médecin"}
+                {medecin?.specialite?.nom ??
+                  "Médecin"}
               </div>
 
               <div className="mt-3 text-sm">
@@ -504,54 +904,86 @@ export default function ConsultationDetails({
           </div>
         </div>
 
-        {/* =====================================================
+        {/* ==================================================
             NAVIGATION
-        ===================================================== */}
+        ================================================== */}
 
-        <div className="tabs tabs-boxed bg-base-200 p-1 flex-wrap">
+        <div className="tabs tabs-boxed flex-wrap bg-base-200 p-1">
+
           <TabButton
-            active={activeTab === "general"}
-            onClick={() => setActiveTab("general")}
-            icon={<ClipboardList size={16} />}
+            active={
+              activeTab === "general"
+            }
+            onClick={() =>
+              setActiveTab("general")
+            }
+            icon={
+              <ClipboardList size={16} />
+            }
             label="Consultation"
           />
 
           <TabButton
-            active={activeTab === "constantes"}
-            onClick={() => setActiveTab("constantes")}
-            icon={<Activity size={16} />}
+            active={
+              activeTab === "constantes"
+            }
+            onClick={() =>
+              setActiveTab("constantes")
+            }
+            icon={
+              <Activity size={16} />
+            }
             label="Constantes"
           />
 
           <TabButton
-            active={activeTab === "prescription"}
-            onClick={() => setActiveTab("prescription")}
-            icon={<Pill size={16} />}
+            active={
+              activeTab === "prescription"
+            }
+            onClick={() =>
+              setActiveTab("prescription")
+            }
+            icon={
+              <Pill size={16} />
+            }
             label="Prescription"
           />
 
           <TabButton
-            active={activeTab === "laboratoire"}
-            onClick={() => setActiveTab("laboratoire")}
-            icon={<FlaskConical size={16} />}
+            active={
+              activeTab === "laboratoire"
+            }
+            onClick={() =>
+              setActiveTab("laboratoire")
+            }
+            icon={
+              <FlaskConical size={16} />
+            }
             label="Laboratoire"
           />
 
           <TabButton
-            active={activeTab === "imagerie"}
-            onClick={() => setActiveTab("imagerie")}
-            icon={<ScanLine size={16} />}
+            active={
+              activeTab === "imagerie"
+            }
+            onClick={() =>
+              setActiveTab("imagerie")
+            }
+            icon={
+              <ScanLine size={16} />
+            }
             label="Imagerie"
           />
         </div>
 
-        {/* =====================================================
+        {/* ==================================================
             CONSULTATION
-        ===================================================== */}
+        ================================================== */}
 
         {activeTab === "general" && (
-          <div className="card bg-base-100 border border-base-200 shadow-sm">
+          <div className="card border border-base-200 bg-base-100 shadow-sm">
             <div className="card-body">
+
               <div className="flex items-center justify-between gap-4">
                 <div>
                   <h2 className="card-title">
@@ -563,50 +995,84 @@ export default function ConsultationDetails({
                   </p>
                 </div>
 
-                <ClipboardList size={24} className="text-primary" />
+                <ClipboardList
+                  size={24}
+                  className="text-primary"
+                />
               </div>
 
-              <div className="flex items-center gap-2 text-sm text-base-content/60 mt-3">
+              <div className="mt-3 flex items-center gap-2 text-sm text-base-content/60">
                 <CalendarDays size={16} />
 
                 {consultation.dateConsultation
-                  ? new Date(consultation.dateConsultation).toLocaleString(
-                      "fr-FR",
-                    )
+                  ? new Date(
+                      consultation.dateConsultation,
+                    ).toLocaleString("fr-FR")
                   : "—"}
               </div>
 
               <div className="divider" />
 
-              <InfoBlock title="Motif" value={consultation.motif} />
+              <div className="space-y-3">
 
-              <InfoBlock title="Diagnostic" value={consultation.diagnostic} />
+                <InfoBlock
+                  title="Motif"
+                  value={
+                    consultation.motif
+                  }
+                />
 
-              <InfoBlock title="Observation" value={consultation.observation} />
+                <InfoBlock
+                  title="Diagnostic"
+                  value={
+                    consultation.diagnostic
+                  }
+                />
 
-              <InfoBlock title="Conclusion" value={consultation.conclusion} />
+                <InfoBlock
+                  title="Observation"
+                  value={
+                    consultation.observation
+                  }
+                />
+
+                <InfoBlock
+                  title="Conclusion"
+                  value={
+                    consultation.conclusion
+                  }
+                />
+
+              </div>
             </div>
           </div>
         )}
 
-        {/* =====================================================
+        {/* ==================================================
             CONSTANTES
-        ===================================================== */}
+        ================================================== */}
 
         {activeTab === "constantes" && (
-          <div className="card bg-base-100 border border-base-200 shadow-sm">
+          <div className="card border border-base-200 bg-base-100 shadow-sm">
             <div className="card-body">
+
               <HeaderAction
-                icon={<Activity size={21} />}
+                icon={
+                  <Activity size={21} />
+                }
                 title="Constantes"
                 description="Mesures physiologiques du patient."
                 button="Ajouter les constantes"
-                onClick={() => setModal("constante")}
+                onClick={() =>
+                  setModal("constante")
+                }
               />
 
-              {consultation.constantes?.length ? (
-                <div className="overflow-x-auto mt-5">
+              {consultation.constantes?.length > 0 ? (
+                <div className="mt-5 overflow-x-auto">
+
                   <table className="table">
+
                     <thead>
                       <tr>
                         <th>Date</th>
@@ -616,432 +1082,997 @@ export default function ConsultationDetails({
                         <th>SpO₂</th>
                         <th>Poids</th>
                         <th>Taille</th>
+                        <th>FR</th>
+                        <th>Glycémie</th>
                       </tr>
                     </thead>
 
                     <tbody>
-                      {consultation.constantes.map((constante: any) => (
-                        <tr key={constante.id}>
-                          <td>
-                            {new Date(constante.dateMesure).toLocaleString(
-                              "fr-FR",
-                            )}
-                          </td>
+                      {consultation.constantes.map(
+                        (constante: any) => (
+                          <tr
+                            key={
+                              constante.id
+                            }
+                          >
+                            <td>
+                              {constante.dateMesure
+                                ? new Date(
+                                    constante.dateMesure,
+                                  ).toLocaleString(
+                                    "fr-FR",
+                                  )
+                                : "—"}
+                            </td>
 
-                          <td>
-                            {constante.temperature ?? "—"}
-                            {constante.temperature != null && " °C"}
-                          </td>
+                            <td>
+                              {constante.temperature ??
+                                "—"}
 
-                          <td>
-                            {constante.tensionSystolique ?? "—"}/
-                            {constante.tensionDiastolique ?? "—"} mmHg
-                          </td>
+                              {constante.temperature !=
+                                null &&
+                                " °C"}
+                            </td>
 
-                          <td>{constante.pouls ?? "—"} bpm</td>
+                            <td>
+                              {constante.tensionSystolique ??
+                                "—"}
+                              /
+                              {constante.tensionDiastolique ??
+                                "—"}{" "}
+                              mmHg
+                            </td>
 
-                          <td>{constante.saturation ?? "—"}%</td>
+                            <td>
+                              {constante.pouls ??
+                                "—"}{" "}
+                              bpm
+                            </td>
 
-                          <td>{constante.poids ?? "—"} kg</td>
+                            <td>
+                              {constante.saturation ??
+                                "—"}
+                              %
+                            </td>
 
-                          <td>{constante.taille ?? "—"} cm</td>
-                        </tr>
-                      ))}
+                            <td>
+                              {constante.poids ??
+                                "—"}{" "}
+                              kg
+                            </td>
+
+                            <td>
+                              {constante.taille ??
+                                "—"}{" "}
+                              cm
+                            </td>
+
+                            <td>
+                              {constante.frequenceRespiratoire ??
+                                "—"}{" "}
+                              /min
+                            </td>
+
+                            <td>
+                              {constante.glycemie ??
+                                "—"}{" "}
+                              mg/dL
+                            </td>
+                          </tr>
+                        ),
+                      )}
                     </tbody>
+
                   </table>
                 </div>
               ) : (
                 <EmptyState
-                  icon={<Activity size={30} />}
+                  icon={
+                    <Activity size={30} />
+                  }
                   title="Aucune constante"
                   description="Aucune constante n'a encore été enregistrée pour cette consultation."
                   button="Ajouter les constantes"
-                  onClick={() => setModal("constante")}
+                  onClick={() =>
+                    setModal("constante")
+                  }
                 />
               )}
             </div>
           </div>
         )}
 
-        {/* =====================================================
+        {/* ==================================================
             PRESCRIPTION
-        ===================================================== */}
+        ================================================== */}
 
         {activeTab === "prescription" && (
-          <div className="card bg-base-100 border border-base-200 shadow-sm">
+          <div className="card border border-base-200 bg-base-100 shadow-sm">
             <div className="card-body">
+
               <HeaderAction
-                icon={<Pill size={21} />}
+                icon={
+                  <Pill size={21} />
+                }
                 title="Prescriptions"
                 description="Prescriptions médicales de cette consultation."
                 button="Nouvelle prescription"
-                onClick={() => setModal("prescription")}
+                onClick={() =>
+                  setModal("prescription")
+                }
               />
 
-              {consultation.prescriptions?.length ? (
-                <div className="space-y-4 mt-5">
-                  {consultation.prescriptions.map((prescription: any) => (
-                    <div
-                      key={prescription.id}
-                      className="border border-base-200 rounded-xl p-4"
-                    >
-                      <div className="flex justify-between items-start gap-3">
-                        <div>
-                          <div className="font-semibold">
-                            {prescription.numero}
+              {consultation.prescriptions?.length > 0 ? (
+                <div className="mt-5 space-y-4">
+
+                  {consultation.prescriptions.map(
+                    (prescription: any) => (
+                      <div
+                        key={
+                          prescription.id
+                        }
+                        className="rounded-xl border border-base-200 p-4"
+                      >
+
+                        <div className="flex items-start justify-between gap-3">
+
+                          <div>
+                            <div className="font-semibold">
+                              {prescription.numero ??
+                                "Prescription"}
+                            </div>
+
+                            <div className="text-sm text-base-content/50">
+                              {prescription.datePrescription
+                                ? new Date(
+                                    prescription.datePrescription,
+                                  ).toLocaleString(
+                                    "fr-FR",
+                                  )
+                                : "—"}
+                            </div>
                           </div>
 
-                          <div className="text-sm text-base-content/50">
-                            {prescription.datePrescription
-                              ? new Date(
-                                  prescription.datePrescription,
-                                ).toLocaleString("fr-FR")
-                              : ""}
-                          </div>
+                          <span className="badge badge-outline">
+                            {prescription.statut ??
+                              "ACTIVE"}
+                          </span>
+
                         </div>
 
-                        <span className="badge badge-outline">
-                          {prescription.statut ?? "ACTIVE"}
-                        </span>
-                      </div>
+                        <div className="mt-4 space-y-2">
 
-                      <div className="mt-4 space-y-2">
-                        {prescription.lignes?.map((ligne: any) => (
-                          <div
-                            key={ligne.id}
-                            className="rounded-lg bg-base-200/50 p-3"
-                          >
-                            <div className="font-medium">
-                              {ligne.medicament?.nom ?? "Médicament"}
-                            </div>
+                          {prescription.lignes?.map(
+                            (ligne: any) => (
+                              <div
+                                key={
+                                  ligne.id
+                                }
+                                className="rounded-lg bg-base-200/50 p-3"
+                              >
 
-                            <div className="text-sm text-base-content/60 mt-1">
-                              {ligne.dose && `Dose : ${ligne.dose}`}
-                              {ligne.frequence && ` • ${ligne.frequence}`}
-                              {ligne.duree && ` • ${ligne.duree}`}
-                              {ligne.voie && ` • ${ligne.voie}`}
-                            </div>
+                                <div className="font-medium">
+                                  {ligne.medicament?.nom ??
+                                    "Médicament"}
+                                </div>
 
-                            {ligne.posologie && (
-                              <div className="text-sm mt-1">
-                                {ligne.posologie}
+                                <div className="mt-1 text-sm text-base-content/60">
+
+                                  {[
+                                    ligne.dose &&
+                                      `Dose : ${ligne.dose}`,
+
+                                    ligne.frequence &&
+                                      ligne.frequence,
+
+                                    ligne.duree &&
+                                      ligne.duree,
+
+                                    ligne.voie &&
+                                      ligne.voie,
+                                  ]
+                                    .filter(Boolean)
+                                    .join(" • ")}
+
+                                </div>
+
+                                {ligne.posologie && (
+                                  <div className="mt-1 text-sm">
+                                    {ligne.posologie}
+                                  </div>
+                                )}
+
+                                {ligne.quantite !=
+                                  null && (
+                                  <div className="mt-1 text-xs text-base-content/50">
+                                    Quantité :{" "}
+                                    {
+                                      ligne.quantite
+                                    }
+                                  </div>
+                                )}
+
+                                {ligne.observation && (
+                                  <div className="mt-2 text-xs text-base-content/60">
+                                    Observation :{" "}
+                                    {
+                                      ligne.observation
+                                    }
+                                  </div>
+                                )}
+
                               </div>
-                            )}
-                          </div>
-                        ))}
+                            ),
+                          )}
+
+                        </div>
                       </div>
-                    </div>
-                  ))}
+                    ),
+                  )}
+
                 </div>
               ) : (
                 <EmptyState
-                  icon={<Pill size={30} />}
+                  icon={
+                    <Pill size={30} />
+                  }
                   title="Aucune prescription"
                   description="Aucune prescription n'a encore été créée pour cette consultation."
                   button="Créer une prescription"
-                  onClick={() => setModal("prescription")}
+                  onClick={() =>
+                    setModal(
+                      "prescription",
+                    )
+                  }
                 />
               )}
+
             </div>
           </div>
         )}
 
-        {/* =====================================================
+        {/* ==================================================
             LABORATOIRE
-        ===================================================== */}
+        ================================================== */}
 
         {activeTab === "laboratoire" && (
-          <div className="card bg-base-100 border border-base-200 shadow-sm">
+          <div className="card border border-base-200 bg-base-100 shadow-sm">
             <div className="card-body">
+
               <HeaderAction
-                icon={<FlaskConical size={21} />}
+                icon={
+                  <FlaskConical size={21} />
+                }
                 title="Laboratoire"
                 description="Demandes d'examens et résultats de laboratoire."
                 button="Demander des examens"
-                onClick={() => setModal("laboratoire")}
+                onClick={() =>
+                  setModal("laboratoire")
+                }
               />
 
-              {consultation.demandesLabo?.length ? (
-                <div className="space-y-4 mt-5">
-                  {consultation.demandesLabo.map((demande: any) => (
-                    <div
-                      key={demande.id}
-                      className="border border-base-200 rounded-xl p-4"
-                    >
-                      <div className="flex justify-between gap-3">
-                        <div>
-                          <div className="font-semibold">{demande.numero}</div>
+              {consultation.demandesLabo?.length > 0 ? (
+                <div className="mt-5 space-y-4">
 
-                          <div className="text-sm text-base-content/50">
-                            {demande.service?.nom ?? "Laboratoire"}
-                          </div>
-                        </div>
+                  {consultation.demandesLabo.map(
+                    (demande: any) => (
+                      <div
+                        key={demande.id}
+                        className="rounded-xl border border-base-200 p-4"
+                      >
 
-                        <span className="badge">{demande.statut}</span>
-                      </div>
+                        <div className="flex justify-between gap-3">
 
-                      <div className="mt-4 space-y-2">
-                        {demande.lignes?.map((ligne: any) => (
-                          <div
-                            key={ligne.id}
-                            className="flex justify-between border-b border-base-200 pb-2"
-                          >
-                            <span>{ligne.examen?.nom ?? "Examen"}</span>
-
-                            <span className="text-sm text-base-content/60">
-                              {ligne.prix ?? "—"}
-                            </span>
-                          </div>
-                        ))}
-                      </div>
-
-                      {/* =====================================================
-    RÉSULTATS DU LABORATOIRE
-===================================================== */}
-
-                      {demande.resultats?.length > 0 && (
-                        <div className="mt-5 rounded-xl border border-success/30 bg-success/5 overflow-hidden">
-                          {/* HEADER */}
-
-                          <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between border-b border-success/20 p-4">
-                            <div className="flex items-center gap-3">
-                              <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-success/10 text-success">
-                                <CheckCircle2 size={21} />
-                              </div>
-
-                              <div>
-                                <h4 className="font-semibold">
-                                  Résultats de laboratoire
-                                </h4>
-
-                                <p className="text-xs text-base-content/60">
-                                  Résultats transmis par le laboratoire
-                                </p>
-                              </div>
+                          <div>
+                            <div className="font-semibold">
+                              {demande.numero ??
+                                "Demande laboratoire"}
                             </div>
 
-                            <span className="badge badge-success gap-1">
-                              <CheckCircle2 size={14} />
-                              {demande.resultats.length} résultat(s)
-                            </span>
+                            <div className="text-sm text-base-content/50">
+                              {demande.service?.nom ??
+                                "Laboratoire"}
+                            </div>
                           </div>
 
-                          {/* LISTE DES RÉSULTATS */}
+                          <span className="badge">
+                            {demande.statut ??
+                              "EN_ATTENTE"}
+                          </span>
 
-                          <div className="divide-y divide-base-200">
-                            {demande.resultats.map((resultat: any) => {
-                              const examen =
-                                resultat.examen ??
-                                resultat.ligne?.examen ??
-                                null;
+                        </div>
 
-                              return (
-                                <div key={resultat.id} className="p-4">
-                                  {/* EXAMEN */}
+                        <div className="mt-4 space-y-2">
 
-                                  <div className="flex flex-col gap-3 md:flex-row md:items-start md:justify-between">
-                                    <div>
-                                      <div className="flex items-center gap-2">
-                                        <FlaskConical
-                                          size={18}
-                                          className="text-primary"
-                                        />
+                          {demande.lignes?.map(
+                            (ligne: any) => (
+                              <div
+                                key={
+                                  ligne.id
+                                }
+                                className="flex justify-between gap-4 border-b border-base-200 pb-2"
+                              >
 
-                                        <h5 className="font-semibold">
-                                          {examen?.nom ??
-                                            "Examen de laboratoire"}
-                                        </h5>
-                                      </div>
+                                <div>
+                                  <span className="font-medium">
+                                    {ligne.examen?.nom ??
+                                      "Examen"}
+                                  </span>
 
-                                      {examen?.code && (
-                                        <p className="mt-1 text-xs text-base-content/50">
-                                          Code : {examen.code}
-                                        </p>
-                                      )}
+                                  {ligne.examen?.code && (
+                                    <div className="text-xs text-base-content/50">
+                                      {
+                                        ligne
+                                          .examen
+                                          .code
+                                      }
                                     </div>
-
-                                    <span
-                                      className={`badge ${
-                                        resultat.valide
-                                          ? "badge-success"
-                                          : "badge-warning"
-                                      }`}
-                                    >
-                                      {resultat.valide
-                                        ? "Validé"
-                                        : "Non validé"}
-                                    </span>
-                                  </div>
-
-                                  {/* VALEUR */}
-
-                                  <div className="mt-4 grid grid-cols-1 gap-3 md:grid-cols-2">
-                                    <div className="rounded-lg bg-base-200/50 p-3">
-                                      <p className="text-xs font-semibold uppercase tracking-wide text-base-content/50">
-                                        Résultat
-                                      </p>
-
-                                      <p className="mt-1 text-lg font-bold">
-                                        {resultat.valeur ?? "—"}
-
-                                        {resultat.unite && (
-                                          <span className="ml-2 text-sm font-normal text-base-content/60">
-                                            {resultat.unite}
-                                          </span>
-                                        )}
-                                      </p>
-                                    </div>
-
-                                    {/* VALEUR NORMALE */}
-
-                                    <div className="rounded-lg bg-base-200/50 p-3">
-                                      <p className="text-xs font-semibold uppercase tracking-wide text-base-content/50">
-                                        Valeur normale
-                                      </p>
-
-                                      <p className="mt-1 font-medium">
-                                        {examen?.valeurNormale ??
-                                          "Non renseignée"}
-                                      </p>
-                                    </div>
-                                  </div>
-
-                                  {/* COMMENTAIRE */}
-
-                                  {resultat.commentaire && (
-                                    <div className="mt-3 rounded-lg border border-base-200 p-3">
-                                      <p className="text-xs font-semibold uppercase tracking-wide text-base-content/50">
-                                        Commentaire du laboratoire
-                                      </p>
-
-                                      <p className="mt-1 text-sm whitespace-pre-wrap">
-                                        {resultat.commentaire}
-                                      </p>
-                                    </div>
-                                  )}
-
-                                  {/* INTERPRÉTATION */}
-
-                                  {resultat.interpretation && (
-                                    <div className="mt-3 rounded-lg border border-primary/20 bg-primary/5 p-3">
-                                      <p className="text-xs font-semibold uppercase tracking-wide text-primary">
-                                        Interprétation
-                                      </p>
-
-                                      <p className="mt-1 text-sm whitespace-pre-wrap">
-                                        {resultat.interpretation}
-                                      </p>
-                                    </div>
-                                  )}
-
-                                  {/* DATE */}
-
-                                  {resultat.dateResultat && (
-                                    <p className="mt-3 text-xs text-base-content/50">
-                                      Résultat enregistré le{" "}
-                                      {new Date(
-                                        resultat.dateResultat,
-                                      ).toLocaleString("fr-FR")}
-                                    </p>
                                   )}
                                 </div>
-                              );
-                            })}
-                          </div>
+
+                                <span className="text-sm text-base-content/60">
+                                  {ligne.prix ??
+                                    "—"}
+                                </span>
+
+                              </div>
+                            ),
+                          )}
+
                         </div>
-                      )}
-                    </div>
-                  ))}
+
+                        {/* RÉSULTATS */}
+
+                        {demande.resultats?.length >
+                          0 && (
+                          <div className="mt-5 overflow-hidden rounded-xl border border-success/30 bg-success/5">
+
+                            <div className="flex flex-col gap-3 border-b border-success/20 p-4 md:flex-row md:items-center md:justify-between">
+
+                              <div className="flex items-center gap-3">
+
+                                <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-success/10 text-success">
+                                  <CheckCircle2 size={21} />
+                                </div>
+
+                                <div>
+                                  <h4 className="font-semibold">
+                                    Résultats de laboratoire
+                                  </h4>
+
+                                  <p className="text-xs text-base-content/60">
+                                    Résultats transmis par le laboratoire
+                                  </p>
+                                </div>
+
+                              </div>
+
+                              <span className="badge badge-success gap-1">
+                                <CheckCircle2
+                                  size={14}
+                                />
+
+                                {
+                                  demande
+                                    .resultats
+                                    .length
+                                }{" "}
+                                résultat(s)
+                              </span>
+
+                            </div>
+
+                            <div className="divide-y divide-base-200">
+
+                              {demande.resultats.map(
+                                (resultat: any) => {
+
+                                  const examen =
+                                    resultat.examen ??
+                                    resultat.ligne?.examen ??
+                                    null;
+
+                                  return (
+                                    <div
+                                      key={
+                                        resultat.id
+                                      }
+                                      className="p-4"
+                                    >
+
+                                      <div className="flex flex-col gap-3 md:flex-row md:items-start md:justify-between">
+
+                                        <div>
+
+                                          <div className="flex items-center gap-2">
+
+                                            <FlaskConical
+                                              size={18}
+                                              className="text-primary"
+                                            />
+
+                                            <h5 className="font-semibold">
+                                              {examen?.nom ??
+                                                "Examen de laboratoire"}
+                                            </h5>
+
+                                          </div>
+
+                                          {examen?.code && (
+                                            <p className="mt-1 text-xs text-base-content/50">
+                                              Code :{" "}
+                                              {
+                                                examen.code
+                                              }
+                                            </p>
+                                          )}
+
+                                        </div>
+
+                                        <span
+                                          className={`badge ${
+                                            resultat.valide
+                                              ? "badge-success"
+                                              : "badge-warning"
+                                          }`}
+                                        >
+                                          {resultat.valide
+                                            ? "Validé"
+                                            : "Non validé"}
+                                        </span>
+
+                                      </div>
+
+                                      <div className="mt-4 grid grid-cols-1 gap-3 md:grid-cols-2">
+
+                                        <div className="rounded-lg bg-base-200/50 p-3">
+                                          <p className="text-xs font-semibold uppercase tracking-wide text-base-content/50">
+                                            Résultat
+                                          </p>
+
+                                          <p className="mt-1 text-lg font-bold">
+                                            {resultat.valeur ??
+                                              "—"}
+
+                                            {resultat.unite && (
+                                              <span className="ml-2 text-sm font-normal text-base-content/60">
+                                                {
+                                                  resultat.unite
+                                                }
+                                              </span>
+                                            )}
+                                          </p>
+                                        </div>
+
+                                        <div className="rounded-lg bg-base-200/50 p-3">
+                                          <p className="text-xs font-semibold uppercase tracking-wide text-base-content/50">
+                                            Valeur normale
+                                          </p>
+
+                                          <p className="mt-1 font-medium">
+                                            {examen?.valeurNormale ??
+                                              "Non renseignée"}
+                                          </p>
+                                        </div>
+
+                                      </div>
+
+                                      {resultat.commentaire && (
+                                        <div className="mt-3 rounded-lg border border-base-200 p-3">
+                                          <p className="text-xs font-semibold uppercase tracking-wide text-base-content/50">
+                                            Commentaire du laboratoire
+                                          </p>
+
+                                          <p className="mt-1 whitespace-pre-wrap text-sm">
+                                            {
+                                              resultat.commentaire
+                                            }
+                                          </p>
+                                        </div>
+                                      )}
+
+                                      {resultat.interpretation && (
+                                        <div className="mt-3 rounded-lg border border-primary/20 bg-primary/5 p-3">
+                                          <p className="text-xs font-semibold uppercase tracking-wide text-primary">
+                                            Interprétation
+                                          </p>
+
+                                          <p className="mt-1 whitespace-pre-wrap text-sm">
+                                            {
+                                              resultat.interpretation
+                                            }
+                                          </p>
+                                        </div>
+                                      )}
+
+                                      {resultat.dateResultat && (
+                                        <p className="mt-3 text-xs text-base-content/50">
+                                          Résultat enregistré le{" "}
+                                          {new Date(
+                                            resultat.dateResultat,
+                                          ).toLocaleString(
+                                            "fr-FR",
+                                          )}
+                                        </p>
+                                      )}
+
+                                    </div>
+                                  );
+                                },
+                              )}
+
+                            </div>
+                          </div>
+                        )}
+
+                      </div>
+                    ),
+                  )}
+
                 </div>
               ) : (
                 <EmptyState
-                  icon={<FlaskConical size={30} />}
+                  icon={
+                    <FlaskConical
+                      size={30}
+                    />
+                  }
                   title="Aucune demande de laboratoire"
                   description="Le médecin peut demander les examens nécessaires au patient."
                   button="Demander des examens"
-                  onClick={() => setModal("laboratoire")}
+                  onClick={() =>
+                    setModal("laboratoire")
+                  }
                 />
               )}
+
             </div>
           </div>
         )}
 
-        {/* =====================================================
+        {/* ==================================================
             IMAGERIE
-        ===================================================== */}
+        ================================================== */}
 
         {activeTab === "imagerie" && (
-          <div className="card bg-base-100 border border-base-200 shadow-sm">
+          <div className="card border border-base-200 bg-base-100 shadow-sm">
+
             <div className="card-body">
+
               <HeaderAction
-                icon={<ScanLine size={21} />}
+                icon={
+                  <ScanLine size={21} />
+                }
                 title="Imagerie médicale"
-                description="Demandes d'examens d'imagerie."
+                description="Demandes d'examens, comptes rendus et images médicales."
                 button="Demander une imagerie"
-                onClick={() => setModal("imagerie")}
+                onClick={() =>
+                  setModal("imagerie")
+                }
               />
 
               {consultation.demandesImagerie?.length ? (
-                <div className="space-y-4 mt-5">
-                  {consultation.demandesImagerie.map((demande: any) => (
-                    <div
-                      key={demande.id}
-                      className="border border-base-200 rounded-xl p-4"
-                    >
-                      <div className="flex justify-between">
-                        <div>
-                          <div className="font-semibold">{demande.numero}</div>
+                <div className="mt-5 space-y-5">
 
-                          <div>
-                            {demande.examen?.nom ?? "Examen d'imagerie"}
+                  {consultation.demandesImagerie.map(
+                    (demande: any) => {
+
+                      const terminee =
+                        demande.statut ===
+                          "TERMINEE" ||
+                        demande.statut ===
+                          "TERMINE" ||
+                        demande.statut ===
+                          "REALISE";
+
+                      const fichier =
+                        demande.fichier;
+
+                      const fichierUrl =
+                        fichier
+                          ? getFileUrl(
+                              fichier,
+                            )
+                          : "";
+
+                      return (
+                        <div
+                          key={demande.id}
+                          className="overflow-hidden rounded-xl border border-base-200"
+                        >
+
+                          {/* EN-TÊTE */}
+
+                          <div className="bg-base-200/30 p-4">
+
+                            <div className="flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
+
+                              <div>
+
+                                <div className="flex items-center gap-2">
+
+                                  <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary/10 text-primary">
+                                    <ScanLine
+                                      size={20}
+                                    />
+                                  </div>
+
+                                  <div>
+
+                                    <h3 className="text-lg font-bold">
+                                      {demande.examen?.nom ??
+                                        "Examen d'imagerie"}
+                                    </h3>
+
+                                    {demande.examen?.code && (
+                                      <p className="text-xs text-base-content/50">
+                                        Code :{" "}
+                                        {
+                                          demande
+                                            .examen
+                                            .code
+                                        }
+                                      </p>
+                                    )}
+
+                                  </div>
+
+                                </div>
+
+                                <div className="mt-3 text-sm text-base-content/60">
+
+                                  <span>
+                                    Demande :{" "}
+                                    {demande.numero ??
+                                      "—"}
+                                  </span>
+
+                                  {demande.dateDemande && (
+                                    <>
+                                      {" • "}
+                                      {new Date(
+                                        demande.dateDemande,
+                                      ).toLocaleString(
+                                        "fr-FR",
+                                      )}
+                                    </>
+                                  )}
+
+                                </div>
+
+                              </div>
+
+                              <div>
+
+                                <span
+                                  className={`badge badge-lg ${
+                                    terminee
+                                      ? "badge-success"
+                                      : demande.statut ===
+                                          "EN_COURS"
+                                        ? "badge-warning"
+                                        : "badge-info"
+                                  }`}
+                                >
+                                  {terminee
+                                    ? "Terminée"
+                                    : demande.statut ===
+                                        "EN_COURS"
+                                      ? "En cours"
+                                      : demande.statut ??
+                                        "Demandée"}
+                                </span>
+
+                              </div>
+
+                            </div>
+
                           </div>
+
+                          {/* INFORMATIONS */}
+
+                          <div className="space-y-4 p-4">
+
+                            {/* MOTIF */}
+
+                            {demande.motif && (
+                              <div className="rounded-lg border border-base-200 p-4">
+
+                                <p className="text-xs font-semibold uppercase tracking-wide text-base-content/50">
+                                  Indication médicale
+                                </p>
+
+                                <p className="mt-1 whitespace-pre-wrap text-sm">
+                                  {
+                                    demande.motif
+                                  }
+                                </p>
+
+                              </div>
+                            )}
+
+                            {/* RÉSULTAT */}
+
+                            {(demande.compteRendu ||
+                              demande.conclusion ||
+                              demande.fichier ||
+                              demande.dateExamen) && (
+                              <div className="overflow-hidden rounded-xl border border-success/30 bg-success/5">
+
+                                {/* HEADER */}
+
+                                <div className="flex flex-col gap-3 border-b border-success/20 p-4 md:flex-row md:items-center md:justify-between">
+
+                                  <div className="flex items-center gap-3">
+
+                                    <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-success/10 text-success">
+                                      <CheckCircle2
+                                        size={21}
+                                      />
+                                    </div>
+
+                                    <div>
+                                      <h4 className="font-semibold">
+                                        Résultat de l'imagerie
+                                      </h4>
+
+                                      <p className="text-xs text-base-content/60">
+                                        Résultat transmis par le service d'imagerie
+                                      </p>
+                                    </div>
+
+                                  </div>
+
+                                  {demande.dateExamen && (
+                                    <span className="text-xs text-base-content/50">
+                                      Examen réalisé le{" "}
+                                      {new Date(
+                                        demande.dateExamen,
+                                      ).toLocaleString(
+                                        "fr-FR",
+                                      )}
+                                    </span>
+                                  )}
+
+                                </div>
+
+                                <div className="space-y-4 p-4">
+
+                                  {/* COMPTE RENDU */}
+
+                                  {demande.compteRendu && (
+                                    <div className="rounded-lg border border-base-200 bg-base-100 p-4">
+
+                                      <p className="mb-2 text-xs font-semibold uppercase tracking-wide text-base-content/50">
+                                        Compte rendu
+                                      </p>
+
+                                      <p className="whitespace-pre-wrap text-sm leading-6">
+                                        {
+                                          demande.compteRendu
+                                        }
+                                      </p>
+
+                                    </div>
+                                  )}
+
+                                  {/* CONCLUSION */}
+
+                                  {demande.conclusion && (
+                                    <div className="rounded-lg border border-primary/20 bg-primary/5 p-4">
+
+                                      <p className="mb-2 text-xs font-semibold uppercase tracking-wide text-primary">
+                                        Conclusion
+                                      </p>
+
+                                      <p className="whitespace-pre-wrap text-sm font-medium leading-6">
+                                        {
+                                          demande.conclusion
+                                        }
+                                      </p>
+
+                                    </div>
+                                  )}
+
+                                  {/* IMAGE / FICHIER */}
+
+                                  {fichier && (
+                                    <div className="overflow-hidden rounded-xl border border-base-200 bg-base-100">
+
+                                      <div className="border-b border-base-200 p-4">
+
+                                        <div className="flex items-center gap-2">
+
+                                          <ScanLine
+                                            size={18}
+                                            className="text-primary"
+                                          />
+
+                                          <h4 className="font-semibold">
+                                            Image / fichier médical
+                                          </h4>
+
+                                        </div>
+
+                                      </div>
+
+                                      <div className="p-4">
+
+                                        {isImageFile(
+                                          fichier,
+                                        ) ? (
+                                          <div className="space-y-3">
+
+                                            <div className="overflow-hidden rounded-xl border border-base-200 bg-black/5">
+
+                                              <img
+                                                src={
+                                                  fichierUrl
+                                                }
+                                                alt={
+                                                  demande
+                                                    .examen
+                                                    ?.nom ??
+                                                  "Image médicale"
+                                                }
+                                                className="max-h-[600px] w-full object-contain"
+                                                loading="lazy"
+                                              />
+
+                                            </div>
+
+                                            <div className="flex flex-wrap justify-end gap-2">
+
+                                              <a
+                                                href={
+                                                  fichierUrl
+                                                }
+                                                target="_blank"
+                                                rel="noopener noreferrer"
+                                                className="btn btn-outline btn-sm"
+                                              >
+                                                <ScanLine
+                                                  size={
+                                                    16
+                                                  }
+                                                />
+
+                                                Ouvrir l'image
+                                              </a>
+
+                                            </div>
+
+                                          </div>
+                                        ) : (
+                                          <div className="flex flex-col gap-4 rounded-lg bg-base-200/50 p-4 sm:flex-row sm:items-center sm:justify-between">
+
+                                            <div className="min-w-0">
+
+                                              <p className="font-medium">
+                                                Fichier du résultat
+                                              </p>
+
+                                              <p className="mt-1 break-all text-xs text-base-content/50">
+                                                {String(
+                                                  fichier,
+                                                )}
+                                              </p>
+
+                                            </div>
+
+                                            <a
+                                              href={
+                                                fichierUrl
+                                              }
+                                              target="_blank"
+                                              rel="noopener noreferrer"
+                                              className="btn btn-primary btn-sm shrink-0"
+                                            >
+                                              Ouvrir
+                                            </a>
+
+                                          </div>
+                                        )}
+
+                                      </div>
+
+                                    </div>
+                                  )}
+
+                                </div>
+
+                              </div>
+                            )}
+
+                            {/* PAS DE RÉSULTAT */}
+
+                            {!demande.compteRendu &&
+                              !demande.conclusion &&
+                              !demande.fichier && (
+                                <div className="rounded-xl border border-dashed border-base-300 p-6 text-center">
+
+                                  <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-base-200 text-base-content/40">
+
+                                    <ScanLine
+                                      size={25}
+                                    />
+
+                                  </div>
+
+                                  <h4 className="mt-3 font-semibold">
+                                    Résultat non disponible
+                                  </h4>
+
+                                  <p className="mt-1 text-sm text-base-content/50">
+                                    Le service d'imagerie n'a pas encore transmis le résultat de cet examen.
+                                  </p>
+
+                                </div>
+                              )}
+
+                          </div>
+
                         </div>
+                      );
+                    },
+                  )}
 
-                        <span className="badge">{demande.statut}</span>
-                      </div>
-
-                      {demande.motif && (
-                        <p className="text-sm mt-3">
-                          <span className="font-medium">Motif :</span>{" "}
-                          {demande.motif}
-                        </p>
-                      )}
-                    </div>
-                  ))}
                 </div>
               ) : (
                 <EmptyState
-                  icon={<ScanLine size={30} />}
+                  icon={
+                    <ScanLine size={30} />
+                  }
                   title="Aucune demande d'imagerie"
                   description="Le médecin peut demander une radiographie, échographie, scanner, IRM, etc."
                   button="Demander une imagerie"
-                  onClick={() => setModal("imagerie")}
+                  onClick={() =>
+                    setModal("imagerie")
+                  }
                 />
               )}
+
             </div>
           </div>
         )}
+
       </div>
 
-      {/* =====================================================
+      {/* ====================================================
           MODALE CONSTANTES
-      ===================================================== */}
+      ==================================================== */}
 
       {modal === "constante" && (
         <Modal
           title="Ajouter les constantes"
           description="Enregistrer les constantes vitales du patient."
-          icon={<Activity size={22} />}
+          icon={
+            <Activity size={22} />
+          }
           onClose={closeModal}
         >
-          <form onSubmit={handleCreateConstante} className="space-y-5">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+
+          <form
+            onSubmit={
+              handleCreateConstante
+            }
+            className="space-y-5"
+          >
+
+            <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+
               <InputField
                 label="Température"
                 unit="°C"
-                icon={<Thermometer size={17} />}
+                icon={
+                  <Thermometer
+                    size={17}
+                  />
+                }
                 value={temperature}
-                onChange={setTemperature}
+                onChange={
+                  setTemperature
+                }
                 type="number"
                 step="0.1"
               />
@@ -1049,7 +2080,11 @@ export default function ConsultationDetails({
               <InputField
                 label="Pouls"
                 unit="bpm"
-                icon={<HeartPulse size={17} />}
+                icon={
+                  <HeartPulse
+                    size={17}
+                  />
+                }
                 value={pouls}
                 onChange={setPouls}
                 type="number"
@@ -1058,25 +2093,39 @@ export default function ConsultationDetails({
               <InputField
                 label="Tension systolique"
                 unit="mmHg"
-                value={tensionSystolique}
-                onChange={setTensionSystolique}
+                value={
+                  tensionSystolique
+                }
+                onChange={
+                  setTensionSystolique
+                }
                 type="number"
               />
 
               <InputField
                 label="Tension diastolique"
                 unit="mmHg"
-                value={tensionDiastolique}
-                onChange={setTensionDiastolique}
+                value={
+                  tensionDiastolique
+                }
+                onChange={
+                  setTensionDiastolique
+                }
                 type="number"
               />
 
               <InputField
                 label="Saturation O₂"
                 unit="%"
-                icon={<Droplets size={17} />}
+                icon={
+                  <Droplets
+                    size={17}
+                  />
+                }
                 value={saturation}
-                onChange={setSaturation}
+                onChange={
+                  setSaturation
+                }
                 type="number"
                 step="0.1"
               />
@@ -1084,16 +2133,24 @@ export default function ConsultationDetails({
               <InputField
                 label="Fréquence respiratoire"
                 unit="/min"
-                icon={<Wind size={17} />}
-                value={frequenceRespiratoire}
-                onChange={setFrequenceRespiratoire}
+                icon={
+                  <Wind size={17} />
+                }
+                value={
+                  frequenceRespiratoire
+                }
+                onChange={
+                  setFrequenceRespiratoire
+                }
                 type="number"
               />
 
               <InputField
                 label="Poids"
                 unit="kg"
-                icon={<Scale size={17} />}
+                icon={
+                  <Scale size={17} />
+                }
                 value={poids}
                 onChange={setPoids}
                 type="number"
@@ -1103,7 +2160,9 @@ export default function ConsultationDetails({
               <InputField
                 label="Taille"
                 unit="cm"
-                icon={<Ruler size={17} />}
+                icon={
+                  <Ruler size={17} />
+                }
                 value={taille}
                 onChange={setTaille}
                 type="number"
@@ -1114,10 +2173,13 @@ export default function ConsultationDetails({
                 label="Glycémie"
                 unit="mg/dL"
                 value={glycemie}
-                onChange={setGlycemie}
+                onChange={
+                  setGlycemie
+                }
                 type="number"
                 step="0.1"
               />
+
             </div>
 
             <ModalActions
@@ -1125,44 +2187,83 @@ export default function ConsultationDetails({
               submitLabel="Enregistrer les constantes"
               onCancel={closeModal}
             />
+
           </form>
+
         </Modal>
       )}
 
-      {/* =====================================================
+      {/* ====================================================
           MODALE PRESCRIPTION
-      ===================================================== */}
+      ==================================================== */}
 
       {modal === "prescription" && (
         <Modal
           title="Nouvelle prescription"
           description="Créer une prescription pour ce patient."
-          icon={<Pill size={22} />}
+          icon={
+            <Pill size={22} />
+          }
           onClose={closeModal}
         >
-          <form onSubmit={handleCreatePrescription} className="space-y-5">
+
+          <form
+            onSubmit={
+              handleCreatePrescription
+            }
+            className="space-y-5"
+          >
+
             <div className="form-control">
+
               <label className="label">
-                <span className="label-text font-semibold">Médicament *</span>
+                <span className="label-text font-semibold">
+                  Médicament *
+                </span>
               </label>
 
               <select
                 className="select select-bordered w-full"
                 value={medicamentId}
-                onChange={(event) => setMedicamentId(event.target.value)}
+                onChange={(event) =>
+                  setMedicamentId(
+                    event.target.value,
+                  )
+                }
                 required
               >
-                <option value="">Sélectionner un médicament</option>
 
-                {medicaments.map((medicament) => (
-                  <option key={medicament.id} value={medicament.id}>
-                    {medicament.nom}
-                  </option>
-                ))}
+                <option value="">
+                  Sélectionner un médicament
+                </option>
+
+                {medicaments.map(
+                  (medicament) => (
+                    <option
+                      key={medicament.id}
+                      value={
+                        medicament.id
+                      }
+                    >
+                      {medicament.nom}
+
+                      {medicament.forme
+                        ? ` — ${medicament.forme}`
+                        : ""}
+
+                      {medicament.dosage
+                        ? ` — ${medicament.dosage}`
+                        : ""}
+                    </option>
+                  ),
+                )}
+
               </select>
+
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+
               <InputField
                 label="Dose"
                 value={dose}
@@ -1173,7 +2274,9 @@ export default function ConsultationDetails({
               <InputField
                 label="Fréquence"
                 value={frequence}
-                onChange={setFrequence}
+                onChange={
+                  setFrequence
+                }
                 placeholder="Ex. 3 fois/jour"
               />
 
@@ -1194,37 +2297,57 @@ export default function ConsultationDetails({
               <InputField
                 label="Quantité"
                 value={quantite}
-                onChange={setQuantite}
+                onChange={
+                  setQuantite
+                }
                 type="number"
+                placeholder="Ex. 15"
               />
+
             </div>
 
             <div className="form-control">
+
               <label className="label">
-                <span className="label-text font-semibold">Posologie</span>
+                <span className="label-text font-semibold">
+                  Posologie
+                </span>
               </label>
 
               <textarea
                 className="textarea textarea-bordered min-h-24"
                 placeholder="Instructions de prise du médicament..."
                 value={posologie}
-                onChange={(event) => setPosologie(event.target.value)}
+                onChange={(event) =>
+                  setPosologie(
+                    event.target.value,
+                  )
+                }
               />
+
             </div>
 
             <div className="form-control">
+
               <label className="label">
-                <span className="label-text font-semibold">Observation</span>
+                <span className="label-text font-semibold">
+                  Observation
+                </span>
               </label>
 
               <textarea
                 className="textarea textarea-bordered min-h-20"
                 placeholder="Informations complémentaires..."
-                value={observationPrescription}
+                value={
+                  observationPrescription
+                }
                 onChange={(event) =>
-                  setObservationPrescription(event.target.value)
+                  setObservationPrescription(
+                    event.target.value,
+                  )
                 }
               />
+
             </div>
 
             <ModalActions
@@ -1232,88 +2355,159 @@ export default function ConsultationDetails({
               submitLabel="Enregistrer la prescription"
               onCancel={closeModal}
             />
+
           </form>
+
         </Modal>
       )}
 
-      {/* =====================================================
+      {/* ====================================================
           MODALE LABORATOIRE
-      ===================================================== */}
+      ==================================================== */}
 
       {modal === "laboratoire" && (
         <Modal
           title="Demander des examens"
           description="Sélectionnez les examens nécessaires au patient."
-          icon={<FlaskConical size={22} />}
+          icon={
+            <FlaskConical
+              size={22}
+            />
+          }
           onClose={closeModal}
         >
-          <form onSubmit={handleCreateDemandeLaboratoire} className="space-y-5">
+
+          <form
+            onSubmit={
+              handleCreateDemandeLaboratoire
+            }
+            className="space-y-5"
+          >
+
             <div>
+
               <label className="label">
-                <span className="label-text font-semibold">Examens *</span>
+                <span className="label-text font-semibold">
+                  Examens *
+                </span>
               </label>
 
-              <div className="border border-base-200 rounded-xl max-h-64 overflow-y-auto">
-                {examensLaboratoire.length === 0 ? (
+              <div className="max-h-64 overflow-y-auto rounded-xl border border-base-200">
+
+                {examensLaboratoire.length ===
+                0 ? (
                   <div className="p-5 text-sm text-base-content/50">
                     Aucun examen de laboratoire disponible.
                   </div>
                 ) : (
-                  examensLaboratoire.map((examen) => {
-                    const checked = examensSelectionnes.includes(examen.id);
+                  examensLaboratoire.map(
+                    (examen) => {
 
-                    return (
-                      <label
-                        key={examen.id}
-                        className={`flex items-center gap-3 p-3 border-b last:border-b-0 cursor-pointer hover:bg-base-200/50 ${
-                          checked ? "bg-primary/5" : ""
-                        }`}
-                      >
-                        <input
-                          type="checkbox"
-                          className="checkbox checkbox-primary"
-                          checked={checked}
-                          onChange={() => toggleExamenLaboratoire(examen.id)}
-                        />
+                      const checked =
+                        examensSelectionnes.includes(
+                          Number(
+                            examen.id,
+                          ),
+                        );
 
-                        <div className="flex-1">
-                          <p className="font-medium">{examen.nom}</p>
+                      return (
+                        <label
+                          key={
+                            examen.id
+                          }
+                          className={`flex cursor-pointer items-center gap-3 border-b p-3 last:border-b-0 hover:bg-base-200/50 ${
+                            checked
+                              ? "bg-primary/5"
+                              : ""
+                          }`}
+                        >
 
-                          {examen.code && (
-                            <p className="text-xs text-base-content/50">
-                              {examen.code}
+                          <input
+                            type="checkbox"
+                            className="checkbox checkbox-primary"
+                            checked={
+                              checked
+                            }
+                            onChange={() =>
+                              toggleExamenLaboratoire(
+                                Number(
+                                  examen.id,
+                                ),
+                              )
+                            }
+                          />
+
+                          <div className="flex-1">
+
+                            <p className="font-medium">
+                              {
+                                examen.nom
+                              }
                             </p>
+
+                            {examen.code && (
+                              <p className="text-xs text-base-content/50">
+                                {
+                                  examen.code
+                                }
+                              </p>
+                            )}
+
+                          </div>
+
+                          {examen.prix !=
+                            null && (
+                            <span className="text-xs text-base-content/50">
+                              {
+                                examen.prix
+                              }
+                            </span>
                           )}
-                        </div>
-                      </label>
-                    );
-                  })
+
+                        </label>
+                      );
+                    },
+                  )
                 )}
+
               </div>
 
-              <p className="text-xs text-base-content/50 mt-2">
-                {examensSelectionnes.length} examen(s) sélectionné(s)
+              <p className="mt-2 text-xs text-base-content/50">
+                {
+                  examensSelectionnes.length
+                }{" "}
+                examen(s) sélectionné(s)
               </p>
+
             </div>
 
-            <label className="flex items-center gap-3 cursor-pointer">
+            <label className="flex cursor-pointer items-center gap-3">
+
               <input
                 type="checkbox"
                 className="checkbox checkbox-warning"
                 checked={urgenceLabo}
-                onChange={(event) => setUrgenceLabo(event.target.checked)}
+                onChange={(event) =>
+                  setUrgenceLabo(
+                    event.target.checked,
+                  )
+                }
               />
 
               <div>
-                <p className="font-medium">Demande urgente</p>
+                <p className="font-medium">
+                  Demande urgente
+                </p>
 
                 <p className="text-xs text-base-content/50">
                   Traitement prioritaire par le laboratoire.
                 </p>
               </div>
+
             </label>
 
             <div className="form-control">
+
               <label className="label">
                 <span className="label-text font-semibold">
                   Indication / observation
@@ -1323,9 +2517,16 @@ export default function ConsultationDetails({
               <textarea
                 className="textarea textarea-bordered min-h-24"
                 placeholder="Indication médicale pour les examens..."
-                value={observationLabo}
-                onChange={(event) => setObservationLabo(event.target.value)}
+                value={
+                  observationLabo
+                }
+                onChange={(event) =>
+                  setObservationLabo(
+                    event.target.value,
+                  )
+                }
               />
+
             </div>
 
             <ModalActions
@@ -1333,62 +2534,109 @@ export default function ConsultationDetails({
               submitLabel="Envoyer la demande"
               onCancel={closeModal}
             />
+
           </form>
+
         </Modal>
       )}
 
-      {/* =====================================================
+      {/* ====================================================
           MODALE IMAGERIE
-      ===================================================== */}
+      ==================================================== */}
 
       {modal === "imagerie" && (
         <Modal
           title="Demander une imagerie"
           description="Sélectionnez l'examen d'imagerie nécessaire."
-          icon={<ScanLine size={22} />}
+          icon={
+            <ScanLine size={22} />
+          }
           onClose={closeModal}
         >
-          <form onSubmit={handleCreateDemandeImagerie} className="space-y-5">
+
+          <form
+            onSubmit={
+              handleCreateDemandeImagerie
+            }
+            className="space-y-5"
+          >
+
             <div className="form-control">
+
               <label className="label">
-                <span className="label-text font-semibold">Examen *</span>
+                <span className="label-text font-semibold">
+                  Examen *
+                </span>
               </label>
 
               <select
                 className="select select-bordered w-full"
-                value={examenImagerieId}
-                onChange={(event) => setExamenImagerieId(event.target.value)}
+                value={
+                  examenImagerieId
+                }
+                onChange={(event) =>
+                  setExamenImagerieId(
+                    event.target.value,
+                  )
+                }
                 required
               >
-                <option value="">Sélectionner un examen</option>
 
-                {examensImagerie.map((examen) => (
-                  <option key={examen.id} value={examen.id}>
-                    {examen.code ? `${examen.code} — ` : ""}
-                    {examen.nom}
-                  </option>
-                ))}
+                <option value="">
+                  Sélectionner un examen
+                </option>
+
+                {examensImagerie.map(
+                  (examen) => (
+                    <option
+                      key={examen.id}
+                      value={
+                        examen.id
+                      }
+                    >
+                      {examen.code
+                        ? `${examen.code} — `
+                        : ""}
+                      {examen.nom}
+                    </option>
+                  ),
+                )}
+
               </select>
+
             </div>
 
-            <label className="flex items-center gap-3 cursor-pointer">
+            <label className="flex cursor-pointer items-center gap-3">
+
               <input
                 type="checkbox"
                 className="checkbox checkbox-warning"
-                checked={urgenceImagerie}
-                onChange={(event) => setUrgenceImagerie(event.target.checked)}
+                checked={
+                  urgenceImagerie
+                }
+                onChange={(event) =>
+                  setUrgenceImagerie(
+                    event.target.checked,
+                  )
+                }
               />
 
               <div>
-                <p className="font-medium">Examen urgent</p>
+
+                <p className="font-medium">
+                  Examen urgent
+                </p>
 
                 <p className="text-xs text-base-content/50">
                   Priorité élevée pour le service d'imagerie.
                 </p>
+
               </div>
+
             </label>
 
             <div className="form-control">
+
               <label className="label">
                 <span className="label-text font-semibold">
                   Indication médicale
@@ -1398,9 +2646,16 @@ export default function ConsultationDetails({
               <textarea
                 className="textarea textarea-bordered min-h-28"
                 placeholder="Décrivez l'indication de l'examen..."
-                value={motifImagerie}
-                onChange={(event) => setMotifImagerie(event.target.value)}
+                value={
+                  motifImagerie
+                }
+                onChange={(event) =>
+                  setMotifImagerie(
+                    event.target.value,
+                  )
+                }
               />
+
             </div>
 
             <ModalActions
@@ -1408,9 +2663,12 @@ export default function ConsultationDetails({
               submitLabel="Envoyer la demande"
               onCancel={closeModal}
             />
+
           </form>
+
         </Modal>
       )}
+
     </>
   );
 }
@@ -1427,16 +2685,22 @@ function TabButton({
 }: {
   active: boolean;
   onClick: () => void;
-  icon: React.ReactNode;
+  icon: ReactNode;
   label: string;
 }) {
   return (
     <button
       type="button"
-      className={`tab ${active ? "tab-active" : ""}`}
+      className={`tab ${
+        active
+          ? "tab-active"
+          : ""
+      }`}
       onClick={onClick}
     >
-      <span className="mr-2">{icon}</span>
+      <span className="mr-2">
+        {icon}
+      </span>
 
       {label}
     </button>
@@ -1454,22 +2718,33 @@ function HeaderAction({
   button,
   onClick,
 }: {
-  icon: React.ReactNode;
+  icon: ReactNode;
   title: string;
   description: string;
   button: string;
   onClick: () => void;
 }) {
   return (
-    <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+    <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+
       <div className="flex items-center gap-3">
-        <div className="p-2 rounded-lg bg-primary/10 text-primary">{icon}</div>
+
+        <div className="rounded-lg bg-primary/10 p-2 text-primary">
+          {icon}
+        </div>
 
         <div>
-          <h2 className="card-title">{title}</h2>
 
-          <p className="text-sm text-base-content/60">{description}</p>
+          <h2 className="card-title">
+            {title}
+          </h2>
+
+          <p className="text-sm text-base-content/60">
+            {description}
+          </p>
+
         </div>
+
       </div>
 
       <button
@@ -1478,8 +2753,10 @@ function HeaderAction({
         onClick={onClick}
       >
         <Plus size={17} />
+
         {button}
       </button>
+
     </div>
   );
 }
@@ -1495,7 +2772,7 @@ function EmptyState({
   button,
   onClick,
 }: {
-  icon: React.ReactNode;
+  icon: ReactNode;
   title: string;
   description: string;
   button: string;
@@ -1503,13 +2780,16 @@ function EmptyState({
 }) {
   return (
     <div className="mt-6 rounded-xl border border-dashed border-base-300 p-8 text-center">
-      <div className="mx-auto mb-3 w-12 h-12 rounded-full bg-base-200 flex items-center justify-center text-base-content/50">
+
+      <div className="mx-auto mb-3 flex h-12 w-12 items-center justify-center rounded-full bg-base-200 text-base-content/50">
         {icon}
       </div>
 
-      <h3 className="font-semibold">{title}</h3>
+      <h3 className="font-semibold">
+        {title}
+      </h3>
 
-      <p className="text-sm text-base-content/50 mt-1 max-w-md mx-auto">
+      <p className="mx-auto mt-1 max-w-md text-sm text-base-content/50">
         {description}
       </p>
 
@@ -1519,8 +2799,10 @@ function EmptyState({
         onClick={onClick}
       >
         <Plus size={16} />
+
         {button}
       </button>
+
     </div>
   );
 }
@@ -1529,14 +2811,24 @@ function EmptyState({
    INFO BLOCK
 ========================================================== */
 
-function InfoBlock({ title, value }: { title: string; value?: string | null }) {
+function InfoBlock({
+  title,
+  value,
+}: {
+  title: string;
+  value?: string | null;
+}) {
   return (
-    <div className="rounded-xl bg-base-200/40 border border-base-200 p-4">
-      <p className="text-xs uppercase tracking-wide text-base-content/50 font-semibold mb-2">
+    <div className="rounded-xl border border-base-200 bg-base-200/40 p-4">
+
+      <p className="mb-2 text-xs font-semibold uppercase tracking-wide text-base-content/50">
         {title}
       </p>
 
-      <p className="whitespace-pre-wrap">{value || "—"}</p>
+      <p className="whitespace-pre-wrap">
+        {value || "—"}
+      </p>
+
     </div>
   );
 }
@@ -1557,22 +2849,30 @@ function InputField({
 }: {
   label: string;
   value: string;
-  onChange: (value: string) => void;
+  onChange: (
+    value: string,
+  ) => void;
   unit?: string;
-  icon?: React.ReactNode;
+  icon?: ReactNode;
   type?: string;
   step?: string;
   placeholder?: string;
 }) {
   return (
     <div className="form-control">
+
       <label className="label">
-        <span className="label-text font-semibold">{label}</span>
+
+        <span className="label-text font-semibold">
+          {label}
+        </span>
+
       </label>
 
       <div className="relative">
+
         {icon && (
-          <div className="absolute left-3 top-1/2 -translate-y-1/2 text-base-content/40">
+          <div className="absolute left-3 top-1/2 z-10 -translate-y-1/2 text-base-content/40">
             {icon}
           </div>
         )}
@@ -1581,19 +2881,33 @@ function InputField({
           type={type}
           step={step}
           className={`input input-bordered w-full ${
-            icon ? "pl-10" : ""
-          } ${unit ? "pr-16" : ""}`}
+            icon
+              ? "pl-10"
+              : ""
+          } ${
+            unit
+              ? "pr-16"
+              : ""
+          }`}
           value={value}
-          onChange={(event) => onChange(event.target.value)}
-          placeholder={placeholder}
+          onChange={(event) =>
+            onChange(
+              event.target.value,
+            )
+          }
+          placeholder={
+            placeholder
+          }
         />
 
         {unit && (
-          <span className="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-base-content/50">
+          <span className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-xs text-base-content/50">
             {unit}
           </span>
         )}
+
       </div>
+
     </div>
   );
 }
@@ -1611,37 +2925,73 @@ function Modal({
 }: {
   title: string;
   description: string;
-  icon: React.ReactNode;
-  children: React.ReactNode;
+  icon: ReactNode;
+  children: ReactNode;
   onClose: () => void;
 }) {
+  function handleBackdropClick(
+    event: React.MouseEvent<HTMLDivElement>,
+  ) {
+    if (
+      event.target ===
+      event.currentTarget
+    ) {
+      onClose();
+    }
+  }
+
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4">
-      <div className="w-full max-w-3xl max-h-[90vh] overflow-y-auto rounded-2xl bg-base-100 shadow-2xl">
+    <div
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4 backdrop-blur-[1px]"
+      onMouseDown={
+        handleBackdropClick
+      }
+      role="dialog"
+      aria-modal="true"
+      aria-label={title}
+    >
+
+      <div className="max-h-[90vh] w-full max-w-3xl overflow-y-auto rounded-2xl bg-base-100 shadow-2xl">
+
         <div className="sticky top-0 z-10 flex items-start justify-between gap-4 border-b border-base-200 bg-base-100 p-5">
+
           <div className="flex items-center gap-3">
-            <div className="w-11 h-11 rounded-xl bg-primary/10 text-primary flex items-center justify-center">
+
+            <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-primary/10 text-primary">
               {icon}
             </div>
 
             <div>
-              <h2 className="text-lg font-bold">{title}</h2>
 
-              <p className="text-sm text-base-content/60">{description}</p>
+              <h2 className="text-lg font-bold">
+                {title}
+              </h2>
+
+              <p className="text-sm text-base-content/60">
+                {description}
+              </p>
+
             </div>
+
           </div>
 
           <button
             type="button"
-            className="btn btn-sm btn-circle btn-ghost"
+            className="btn btn-ghost btn-circle btn-sm"
             onClick={onClose}
+            aria-label="Fermer"
           >
             <X size={18} />
           </button>
+
         </div>
 
-        <div className="p-5">{children}</div>
+        <div className="p-5">
+          {children}
+        </div>
+
       </div>
+
     </div>
   );
 }
@@ -1660,7 +3010,8 @@ function ModalActions({
   onCancel: () => void;
 }) {
   return (
-    <div className="flex justify-end gap-3 pt-4 border-t border-base-200">
+    <div className="flex flex-col-reverse justify-end gap-3 border-t border-base-200 pt-4 sm:flex-row">
+
       <button
         type="button"
         className="btn btn-ghost"
@@ -1670,10 +3021,19 @@ function ModalActions({
         Annuler
       </button>
 
-      <button type="submit" className="btn btn-primary" disabled={loading}>
+      <button
+        type="submit"
+        className="btn btn-primary"
+        disabled={loading}
+      >
+
         {loading ? (
           <>
-            <Loader2 size={18} className="animate-spin" />
+            <Loader2
+              size={18}
+              className="animate-spin"
+            />
+
             Enregistrement...
           </>
         ) : (
@@ -1683,7 +3043,9 @@ function ModalActions({
             {submitLabel}
           </>
         )}
+
       </button>
+
     </div>
   );
 }

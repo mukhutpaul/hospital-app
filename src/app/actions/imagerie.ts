@@ -2,6 +2,8 @@
 
 import { prisma } from "@/lib/prisma";
 import { revalidatePath } from "next/cache";
+import { mkdir, writeFile, unlink } from "fs/promises";
+import path from "path";
 
 /* ==========================================================
    TYPE
@@ -22,10 +24,6 @@ async function generateNumeroImagerie() {
 
   return `IMG-${String(count + 1).padStart(6, "0")}`;
 }
-
-/* ==========================================================
-   EXAMENS D'IMAGERIE
-========================================================== */
 
 /* ==========================================================
    EXAMENS D'IMAGERIE
@@ -76,21 +74,12 @@ export async function createExamenImagerie(data: {
   devise?: string;
 }): Promise<ActionResult> {
   try {
-    /* ------------------------------------------------------
-       NETTOYAGE
-    ------------------------------------------------------ */
-
     const code = data.code?.trim().toUpperCase();
     const nom = data.nom?.trim();
     const type = data.type?.trim();
 
     const description = data.description?.trim() || null;
-
     const devise = data.devise?.trim().toUpperCase() || "USD";
-
-    /* ------------------------------------------------------
-       VALIDATION
-    ------------------------------------------------------ */
 
     if (!code) {
       return {
@@ -113,10 +102,6 @@ export async function createExamenImagerie(data: {
       };
     }
 
-    /* ------------------------------------------------------
-       VÉRIFIER LE CODE
-    ------------------------------------------------------ */
-
     const examenExiste = await prisma.examenImagerie.findUnique({
       where: {
         code,
@@ -130,18 +115,10 @@ export async function createExamenImagerie(data: {
       };
     }
 
-    /* ------------------------------------------------------
-       PRIX
-    ------------------------------------------------------ */
-
     const prix =
       typeof data.prix === "number" && Number.isFinite(data.prix)
         ? data.prix
         : 0;
-
-    /* ------------------------------------------------------
-       CRÉATION
-    ------------------------------------------------------ */
 
     const examen = await prisma.examenImagerie.create({
       data: {
@@ -154,10 +131,6 @@ export async function createExamenImagerie(data: {
         actif: true,
       },
     });
-
-    /* ------------------------------------------------------
-       REVALIDATION
-    ------------------------------------------------------ */
 
     revalidatePath("/imagerie");
 
@@ -193,10 +166,6 @@ export async function updateExamenImagerie(
   },
 ): Promise<ActionResult> {
   try {
-    /* ------------------------------------------------------
-       VALIDATION ID
-    ------------------------------------------------------ */
-
     if (!id || Number.isNaN(id)) {
       return {
         success: false,
@@ -204,21 +173,12 @@ export async function updateExamenImagerie(
       };
     }
 
-    /* ------------------------------------------------------
-       NETTOYAGE
-    ------------------------------------------------------ */
-
     const code = data.code?.trim().toUpperCase();
     const nom = data.nom?.trim();
     const type = data.type?.trim();
 
     const description = data.description?.trim() || null;
-
     const devise = data.devise?.trim().toUpperCase() || "USD";
-
-    /* ------------------------------------------------------
-       VALIDATION
-    ------------------------------------------------------ */
 
     if (!code) {
       return {
@@ -241,10 +201,6 @@ export async function updateExamenImagerie(
       };
     }
 
-    /* ------------------------------------------------------
-       VÉRIFIER EXISTENCE
-    ------------------------------------------------------ */
-
     const examen = await prisma.examenImagerie.findUnique({
       where: {
         id,
@@ -257,10 +213,6 @@ export async function updateExamenImagerie(
         message: "Examen d'imagerie introuvable.",
       };
     }
-
-    /* ------------------------------------------------------
-       VÉRIFIER CODE
-    ------------------------------------------------------ */
 
     const codeExiste = await prisma.examenImagerie.findFirst({
       where: {
@@ -278,18 +230,10 @@ export async function updateExamenImagerie(
       };
     }
 
-    /* ------------------------------------------------------
-       PRIX
-    ------------------------------------------------------ */
-
     const prix =
       typeof data.prix === "number" && Number.isFinite(data.prix)
         ? data.prix
         : 0;
-
-    /* ------------------------------------------------------
-       MODIFICATION
-    ------------------------------------------------------ */
 
     const examenModifie = await prisma.examenImagerie.update({
       where: {
@@ -306,10 +250,6 @@ export async function updateExamenImagerie(
         actif: data.actif ?? examen.actif,
       },
     });
-
-    /* ------------------------------------------------------
-       REVALIDATION
-    ------------------------------------------------------ */
 
     revalidatePath("/imagerie");
 
@@ -332,7 +272,9 @@ export async function updateExamenImagerie(
    DÉSACTIVER UN EXAMEN
 ========================================================== */
 
-export async function deleteExamenImagerie(id: number): Promise<ActionResult> {
+export async function deleteExamenImagerie(
+  id: number,
+): Promise<ActionResult> {
   try {
     if (!id || Number.isNaN(id)) {
       return {
@@ -340,10 +282,6 @@ export async function deleteExamenImagerie(id: number): Promise<ActionResult> {
         message: "Identifiant de l'examen invalide.",
       };
     }
-
-    /* ------------------------------------------------------
-       VÉRIFIER EXISTENCE
-    ------------------------------------------------------ */
 
     const examen = await prisma.examenImagerie.findUnique({
       where: {
@@ -357,13 +295,6 @@ export async function deleteExamenImagerie(id: number): Promise<ActionResult> {
         message: "Examen d'imagerie introuvable.",
       };
     }
-
-    /* ------------------------------------------------------
-       DÉSACTIVATION
-       
-       On ne supprime pas physiquement l'examen,
-       car il peut être utilisé dans des demandes.
-    ------------------------------------------------------ */
 
     await prisma.examenImagerie.update({
       where: {
@@ -393,12 +324,6 @@ export async function deleteExamenImagerie(id: number): Promise<ActionResult> {
 
 /* ==========================================================
    CATÉGORIES D'IMAGERIE
-   ----------------------------------------------------------
-   IMPORTANT :
-   Il n'y a PAS de modèle CategorieImagerie.
-
-   La catégorie correspond au champ "type"
-   du modèle ExamenImagerie.
 ========================================================== */
 
 export async function getCategoriesImagerie(): Promise<ActionResult> {
@@ -452,10 +377,6 @@ export async function createDemandeImagerie(data: {
   urgence?: boolean;
 }): Promise<ActionResult> {
   try {
-    /* ------------------------------------------------------
-       VALIDATION PATIENT
-    ------------------------------------------------------ */
-
     if (!data.patientId) {
       return {
         success: false,
@@ -463,20 +384,12 @@ export async function createDemandeImagerie(data: {
       };
     }
 
-    /* ------------------------------------------------------
-       VALIDATION EXAMEN
-    ------------------------------------------------------ */
-
     if (!data.examenId) {
       return {
         success: false,
         message: "L'examen d'imagerie est obligatoire.",
       };
     }
-
-    /* ------------------------------------------------------
-       VÉRIFIER EXAMEN
-    ------------------------------------------------------ */
 
     const examen = await prisma.examenImagerie.findFirst({
       where: {
@@ -492,32 +405,17 @@ export async function createDemandeImagerie(data: {
       };
     }
 
-    /* ------------------------------------------------------
-       NUMÉRO
-    ------------------------------------------------------ */
-
     const numero = await generateNumeroImagerie();
-
-    /* ------------------------------------------------------
-       CRÉATION DEMANDE
-    ------------------------------------------------------ */
 
     const demande = await prisma.demandeImagerie.create({
       data: {
         numero,
-
         patientId: data.patientId,
-
         consultationId: data.consultationId ?? null,
-
         serviceId: data.serviceId ?? null,
-
         examenId: data.examenId,
-
         motif: data.motif?.trim() || null,
-
         urgence: data.urgence ?? false,
-
         statut: "DEMANDE",
       },
 
@@ -534,14 +432,12 @@ export async function createDemandeImagerie(data: {
       },
     });
 
-    /* ------------------------------------------------------
-       REVALIDATION
-    ------------------------------------------------------ */
-
     revalidatePath("/imagerie");
 
     if (data.consultationId) {
-      revalidatePath(`/consultations/${data.consultationId}`);
+      revalidatePath(
+        `/consultations/${data.consultationId}`,
+      );
     }
 
     return {
@@ -603,7 +499,9 @@ export async function getDemandesImagerie(): Promise<ActionResult> {
    DÉTAIL D'UNE DEMANDE
 ========================================================== */
 
-export async function getDemandeImagerie(id: number): Promise<ActionResult> {
+export async function getDemandeImagerie(
+  id: number,
+): Promise<ActionResult> {
   try {
     if (!id || Number.isNaN(id)) {
       return {
@@ -654,19 +552,186 @@ export async function getDemandeImagerie(id: number): Promise<ActionResult> {
 }
 
 /* ==========================================================
+   TYPES FICHIERS AUTORISÉS
+========================================================== */
+
+const TYPES_FICHIERS_IMAGERIE = [
+  "application/pdf",
+  "image/jpeg",
+  "image/png",
+  "image/webp",
+] as const;
+
+/* ==========================================================
+   EXTENSIONS AUTORISÉES
+========================================================== */
+
+const EXTENSIONS_FICHIERS_IMAGERIE = [
+  ".pdf",
+  ".jpg",
+  ".jpeg",
+  ".png",
+  ".webp",
+] as const;
+
+/* ==========================================================
+   TAILLE MAXIMALE
+========================================================== */
+
+const TAILLE_MAX_FICHIER = 10 * 1024 * 1024;
+
+/* ==========================================================
+   NETTOYER NOM FICHIER
+========================================================== */
+
+function nettoyerNomFichier(nom: string): string {
+  return nom
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .replace(/[^a-zA-Z0-9._-]/g, "_");
+}
+
+/* ==========================================================
+   OBTENIR EXTENSION
+========================================================== */
+
+function obtenirExtension(nom: string): string {
+  const extension = path.extname(nom).toLowerCase();
+
+  if (
+    !EXTENSIONS_FICHIERS_IMAGERIE.includes(
+      extension as (typeof EXTENSIONS_FICHIERS_IMAGERIE)[number],
+    )
+  ) {
+    return "";
+  }
+
+  return extension;
+}
+
+/* ==========================================================
+   ENREGISTRER LE FICHIER
+========================================================== */
+
+async function sauvegarderFichierImagerie(
+  fichier: File,
+  numeroDemande: string,
+): Promise<string> {
+  /* --------------------------------------------------------
+     VALIDATION TYPE
+  -------------------------------------------------------- */
+
+  if (
+    !TYPES_FICHIERS_IMAGERIE.includes(
+      fichier.type as (typeof TYPES_FICHIERS_IMAGERIE)[number],
+    )
+  ) {
+    throw new Error(
+      "Format de fichier non autorisé. Utilisez PDF, JPG, PNG ou WEBP.",
+    );
+  }
+
+  /* --------------------------------------------------------
+     VALIDATION TAILLE
+  -------------------------------------------------------- */
+
+  if (fichier.size > TAILLE_MAX_FICHIER) {
+    throw new Error(
+      "Le fichier ne doit pas dépasser 10 Mo.",
+    );
+  }
+
+  if (fichier.size <= 0) {
+    throw new Error("Le fichier sélectionné est vide.");
+  }
+
+  /* --------------------------------------------------------
+     EXTENSION
+  -------------------------------------------------------- */
+
+  const extension = obtenirExtension(fichier.name);
+
+  if (!extension) {
+    throw new Error(
+      "Extension de fichier non autorisée.",
+    );
+  }
+
+  /* --------------------------------------------------------
+     DOSSIER DEMANDE
+  -------------------------------------------------------- */
+
+  const dossierUploads = path.join(
+    process.cwd(),
+    "public",
+    "uploads",
+    "imagerie",
+    numeroDemande,
+  );
+
+  await mkdir(dossierUploads, {
+    recursive: true,
+  });
+
+  /* --------------------------------------------------------
+     NOM FICHIER
+  -------------------------------------------------------- */
+
+  const nomOriginal = nettoyerNomFichier(
+    path.basename(fichier.name, extension),
+  );
+
+  const timestamp = Date.now();
+
+  const nomFichier =
+    `${nomOriginal}-${timestamp}${extension}`;
+
+  const cheminAbsolu = path.join(
+    dossierUploads,
+    nomFichier,
+  );
+
+  /* --------------------------------------------------------
+     CONVERSION
+  -------------------------------------------------------- */
+
+  const buffer = Buffer.from(
+    await fichier.arrayBuffer(),
+  );
+
+  /* --------------------------------------------------------
+     ÉCRITURE DISQUE
+  -------------------------------------------------------- */
+
+  await writeFile(
+    cheminAbsolu,
+    buffer,
+  );
+
+  /* --------------------------------------------------------
+     CHEMIN PUBLIC
+  -------------------------------------------------------- */
+
+  return `/uploads/imagerie/${encodeURIComponent(
+    numeroDemande,
+  )}/${encodeURIComponent(nomFichier)}`;
+}
+
+/* ==========================================================
    ENREGISTRER LE COMPTE RENDU
 ========================================================== */
 
 export async function updateCompteRenduImagerie(
   id: number,
-  data: {
-    dateExamen?: string;
-    compteRendu?: string;
-    conclusion?: string;
-    fichier?: string;
-  },
+  formData: FormData,
 ): Promise<ActionResult> {
+  let nouveauFichierChemin: string | null = null;
+
   try {
+    /* --------------------------------------------------------
+       VALIDATION ID
+    -------------------------------------------------------- */
+
     if (!id || Number.isNaN(id)) {
       return {
         success: false,
@@ -674,15 +739,16 @@ export async function updateCompteRenduImagerie(
       };
     }
 
-    /* ------------------------------------------------------
+    /* --------------------------------------------------------
        VÉRIFIER LA DEMANDE
-    ------------------------------------------------------ */
+    -------------------------------------------------------- */
 
-    const demandeExiste = await prisma.demandeImagerie.findUnique({
-      where: {
-        id,
-      },
-    });
+    const demandeExiste =
+      await prisma.demandeImagerie.findUnique({
+        where: {
+          id,
+        },
+      });
 
     if (!demandeExiste) {
       return {
@@ -691,14 +757,49 @@ export async function updateCompteRenduImagerie(
       };
     }
 
-    /* ------------------------------------------------------
+    /* --------------------------------------------------------
+       RÉCUPÉRER LES DONNÉES FORM DATA
+    -------------------------------------------------------- */
+
+    const dateExamenValue =
+      formData.get("dateExamen");
+
+    const compteRenduValue =
+      formData.get("compteRendu");
+
+    const conclusionValue =
+      formData.get("conclusion");
+
+    const fichierValue =
+      formData.get("fichier");
+
+    /* --------------------------------------------------------
+       VALIDATION TEXTE
+    -------------------------------------------------------- */
+
+    const dateExamenString =
+      typeof dateExamenValue === "string"
+        ? dateExamenValue.trim()
+        : "";
+
+    const compteRendu =
+      typeof compteRenduValue === "string"
+        ? compteRenduValue.trim()
+        : "";
+
+    const conclusion =
+      typeof conclusionValue === "string"
+        ? conclusionValue.trim()
+        : "";
+
+    /* --------------------------------------------------------
        DATE EXAMEN
-    ------------------------------------------------------ */
+    -------------------------------------------------------- */
 
-    let dateExamen: Date | undefined;
+    let dateExamen: Date | null = null;
 
-    if (data.dateExamen) {
-      const date = new Date(data.dateExamen);
+    if (dateExamenString) {
+      const date = new Date(dateExamenString);
 
       if (Number.isNaN(date.getTime())) {
         return {
@@ -710,45 +811,129 @@ export async function updateCompteRenduImagerie(
       dateExamen = date;
     }
 
-    /* ------------------------------------------------------
-       MISE À JOUR
-    ------------------------------------------------------ */
+    /* --------------------------------------------------------
+       FICHIER
+    -------------------------------------------------------- */
 
-    const demande = await prisma.demandeImagerie.update({
-      where: {
-        id,
-      },
+    let fichier: File | null = null;
 
-      data: {
-        dateExamen,
+    if (
+      fichierValue &&
+      typeof fichierValue !== "string" &&
+      fichierValue instanceof File &&
+      fichierValue.size > 0
+    ) {
+      fichier = fichierValue;
+    }
 
-        compteRendu: data.compteRendu?.trim() || null,
+    /* --------------------------------------------------------
+       SAUVEGARDER NOUVEAU FICHIER
+    -------------------------------------------------------- */
 
-        conclusion: data.conclusion?.trim() || null,
+    if (fichier) {
+      nouveauFichierChemin =
+        await sauvegarderFichierImagerie(
+          fichier,
+          demandeExiste.numero,
+        );
+    }
 
-        fichier: data.fichier?.trim() || null,
+    /* --------------------------------------------------------
+       CONSERVER ANCIEN FICHIER
+    -------------------------------------------------------- */
 
-        statut: "TERMINE",
-      },
+    const fichierFinal =
+      nouveauFichierChemin ??
+      demandeExiste.fichier ??
+      null;
 
-      include: {
-        patient: true,
-        examen: true,
-        consultation: true,
-      },
-    });
+    /* --------------------------------------------------------
+       MISE À JOUR PRISMA
+    -------------------------------------------------------- */
 
-    /* ------------------------------------------------------
+    const demande =
+      await prisma.demandeImagerie.update({
+        where: {
+          id,
+        },
+
+        data: {
+          dateExamen,
+
+          compteRendu:
+            compteRendu || null,
+
+          conclusion:
+            conclusion || null,
+
+          fichier:
+            fichierFinal,
+
+          statut: "TERMINE",
+        },
+
+        include: {
+          patient: true,
+          examen: true,
+          consultation: true,
+        },
+      });
+
+    /* --------------------------------------------------------
+       SUPPRIMER ANCIEN FICHIER
+       
+       Seulement après que Prisma ait correctement
+       enregistré le nouveau fichier.
+    -------------------------------------------------------- */
+
+    if (
+      nouveauFichierChemin &&
+      demandeExiste.fichier &&
+      demandeExiste.fichier !== nouveauFichierChemin
+    ) {
+      try {
+        const ancienChemin =
+          demandeExiste.fichier.startsWith("/")
+            ? demandeExiste.fichier.substring(1)
+            : demandeExiste.fichier;
+
+        const ancienFichierAbsolu =
+          path.join(
+            process.cwd(),
+            "public",
+            ancienChemin,
+          );
+
+        await unlink(ancienFichierAbsolu);
+      } catch (error) {
+        /**
+         * L'ancien fichier peut ne plus exister.
+         * Ce n'est pas bloquant pour la mise à jour.
+         */
+        console.warn(
+          "Impossible de supprimer l'ancien fichier :",
+          error,
+        );
+      }
+    }
+
+    /* --------------------------------------------------------
        REVALIDATION
-    ------------------------------------------------------ */
+    -------------------------------------------------------- */
 
     revalidatePath("/imagerie");
 
     revalidatePath(`/imagerie/${id}`);
 
     if (demande.consultationId) {
-      revalidatePath(`/consultations/${demande.consultationId}`);
+      revalidatePath(
+        `/consultations/${demande.consultationId}`,
+      );
     }
+
+    /* --------------------------------------------------------
+       RÉSULTAT
+    -------------------------------------------------------- */
 
     return {
       success: true,
@@ -756,11 +941,44 @@ export async function updateCompteRenduImagerie(
       data: demande,
     };
   } catch (error) {
-    console.error("Erreur updateCompteRenduImagerie :", error);
+    console.error(
+      "Erreur updateCompteRenduImagerie :",
+      error,
+    );
+
+    /* --------------------------------------------------------
+       NETTOYER LE NOUVEAU FICHIER SI PRISMA A ÉCHOUÉ
+    -------------------------------------------------------- */
+
+    if (nouveauFichierChemin) {
+      try {
+        const cheminRelatif =
+          nouveauFichierChemin.startsWith("/")
+            ? nouveauFichierChemin.substring(1)
+            : nouveauFichierChemin;
+
+        const cheminAbsolu =
+          path.join(
+            process.cwd(),
+            "public",
+            cheminRelatif,
+          );
+
+        await unlink(cheminAbsolu);
+      } catch (cleanupError) {
+        console.warn(
+          "Impossible de nettoyer le fichier après erreur :",
+          cleanupError,
+        );
+      }
+    }
 
     return {
       success: false,
-      message: "Impossible d'enregistrer le compte rendu.",
+      message:
+        error instanceof Error
+          ? error.message
+          : "Impossible d'enregistrer le compte rendu.",
     };
   }
 }
