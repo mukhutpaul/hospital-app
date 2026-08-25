@@ -49,6 +49,7 @@ export type MedicamentMinAggregateOutputType = {
   dosage: string | null
   laboratoire: string | null
   categorie: string | null
+  unite: string | null
   prixVente: number | null
   prixAchat: number | null
   devise: string | null
@@ -67,6 +68,7 @@ export type MedicamentMaxAggregateOutputType = {
   dosage: string | null
   laboratoire: string | null
   categorie: string | null
+  unite: string | null
   prixVente: number | null
   prixAchat: number | null
   devise: string | null
@@ -85,6 +87,7 @@ export type MedicamentCountAggregateOutputType = {
   dosage: number
   laboratoire: number
   categorie: number
+  unite: number
   prixVente: number
   prixAchat: number
   devise: number
@@ -119,6 +122,7 @@ export type MedicamentMinAggregateInputType = {
   dosage?: true
   laboratoire?: true
   categorie?: true
+  unite?: true
   prixVente?: true
   prixAchat?: true
   devise?: true
@@ -137,6 +141,7 @@ export type MedicamentMaxAggregateInputType = {
   dosage?: true
   laboratoire?: true
   categorie?: true
+  unite?: true
   prixVente?: true
   prixAchat?: true
   devise?: true
@@ -155,6 +160,7 @@ export type MedicamentCountAggregateInputType = {
   dosage?: true
   laboratoire?: true
   categorie?: true
+  unite?: true
   prixVente?: true
   prixAchat?: true
   devise?: true
@@ -260,6 +266,7 @@ export type MedicamentGroupByOutputType = {
   dosage: string | null
   laboratoire: string | null
   categorie: string | null
+  unite: string | null
   prixVente: number
   prixAchat: number
   devise: string
@@ -301,6 +308,7 @@ export type MedicamentWhereInput = {
   dosage?: Prisma.StringNullableFilter<"Medicament"> | string | null
   laboratoire?: Prisma.StringNullableFilter<"Medicament"> | string | null
   categorie?: Prisma.StringNullableFilter<"Medicament"> | string | null
+  unite?: Prisma.StringNullableFilter<"Medicament"> | string | null
   prixVente?: Prisma.FloatFilter<"Medicament"> | number
   prixAchat?: Prisma.FloatFilter<"Medicament"> | number
   devise?: Prisma.StringFilter<"Medicament"> | string
@@ -323,6 +331,7 @@ export type MedicamentOrderByWithRelationInput = {
   dosage?: Prisma.SortOrderInput | Prisma.SortOrder
   laboratoire?: Prisma.SortOrderInput | Prisma.SortOrder
   categorie?: Prisma.SortOrderInput | Prisma.SortOrder
+  unite?: Prisma.SortOrderInput | Prisma.SortOrder
   prixVente?: Prisma.SortOrder
   prixAchat?: Prisma.SortOrder
   devise?: Prisma.SortOrder
@@ -348,6 +357,7 @@ export type MedicamentWhereUniqueInput = Prisma.AtLeast<{
   dosage?: Prisma.StringNullableFilter<"Medicament"> | string | null
   laboratoire?: Prisma.StringNullableFilter<"Medicament"> | string | null
   categorie?: Prisma.StringNullableFilter<"Medicament"> | string | null
+  unite?: Prisma.StringNullableFilter<"Medicament"> | string | null
   prixVente?: Prisma.FloatFilter<"Medicament"> | number
   prixAchat?: Prisma.FloatFilter<"Medicament"> | number
   devise?: Prisma.StringFilter<"Medicament"> | string
@@ -370,6 +380,7 @@ export type MedicamentOrderByWithAggregationInput = {
   dosage?: Prisma.SortOrderInput | Prisma.SortOrder
   laboratoire?: Prisma.SortOrderInput | Prisma.SortOrder
   categorie?: Prisma.SortOrderInput | Prisma.SortOrder
+  unite?: Prisma.SortOrderInput | Prisma.SortOrder
   prixVente?: Prisma.SortOrder
   prixAchat?: Prisma.SortOrder
   devise?: Prisma.SortOrder
@@ -396,6 +407,7 @@ export type MedicamentScalarWhereWithAggregatesInput = {
   dosage?: Prisma.StringNullableWithAggregatesFilter<"Medicament"> | string | null
   laboratoire?: Prisma.StringNullableWithAggregatesFilter<"Medicament"> | string | null
   categorie?: Prisma.StringNullableWithAggregatesFilter<"Medicament"> | string | null
+  unite?: Prisma.StringNullableWithAggregatesFilter<"Medicament"> | string | null
   prixVente?: Prisma.FloatWithAggregatesFilter<"Medicament"> | number
   prixAchat?: Prisma.FloatWithAggregatesFilter<"Medicament"> | number
   devise?: Prisma.StringWithAggregatesFilter<"Medicament"> | string
@@ -413,6 +425,7 @@ export type MedicamentCreateInput = {
   dosage?: string | null
   laboratoire?: string | null
   categorie?: string | null
+  unite?: string | null
   prixVente?: number
   prixAchat?: number
   devise?: string
@@ -435,6 +448,7 @@ export type MedicamentUncheckedCreateInput = {
   dosage?: string | null
   laboratoire?: string | null
   categorie?: string | null
+  unite?: string | null
   prixVente?: number
   prixAchat?: number
   devise?: string
@@ -456,6 +470,7 @@ export type MedicamentUpdateInput = {
   dosage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   laboratoire?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   categorie?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  unite?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   prixVente?: Prisma.FloatFieldUpdateOperationsInput | number
   prixAchat?: Prisma.FloatFieldUpdateOperationsInput | number
   devise?: Prisma.StringFieldUpdateOperationsInput | string
@@ -478,6 +493,7 @@ export type MedicamentUncheckedUpdateInput = {
   dosage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   laboratoire?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   categorie?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  unite?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   prixVente?: Prisma.FloatFieldUpdateOperationsInput | number
   prixAchat?: Prisma.FloatFieldUpdateOperationsInput | number
   devise?: Prisma.StringFieldUpdateOperationsInput | string
@@ -500,6 +516,7 @@ export type MedicamentCreateManyInput = {
   dosage?: string | null
   laboratoire?: string | null
   categorie?: string | null
+  unite?: string | null
   prixVente?: number
   prixAchat?: number
   devise?: string
@@ -517,6 +534,7 @@ export type MedicamentUpdateManyMutationInput = {
   dosage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   laboratoire?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   categorie?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  unite?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   prixVente?: Prisma.FloatFieldUpdateOperationsInput | number
   prixAchat?: Prisma.FloatFieldUpdateOperationsInput | number
   devise?: Prisma.StringFieldUpdateOperationsInput | string
@@ -535,6 +553,7 @@ export type MedicamentUncheckedUpdateManyInput = {
   dosage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   laboratoire?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   categorie?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  unite?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   prixVente?: Prisma.FloatFieldUpdateOperationsInput | number
   prixAchat?: Prisma.FloatFieldUpdateOperationsInput | number
   devise?: Prisma.StringFieldUpdateOperationsInput | string
@@ -558,6 +577,7 @@ export type MedicamentCountOrderByAggregateInput = {
   dosage?: Prisma.SortOrder
   laboratoire?: Prisma.SortOrder
   categorie?: Prisma.SortOrder
+  unite?: Prisma.SortOrder
   prixVente?: Prisma.SortOrder
   prixAchat?: Prisma.SortOrder
   devise?: Prisma.SortOrder
@@ -583,6 +603,7 @@ export type MedicamentMaxOrderByAggregateInput = {
   dosage?: Prisma.SortOrder
   laboratoire?: Prisma.SortOrder
   categorie?: Prisma.SortOrder
+  unite?: Prisma.SortOrder
   prixVente?: Prisma.SortOrder
   prixAchat?: Prisma.SortOrder
   devise?: Prisma.SortOrder
@@ -601,6 +622,7 @@ export type MedicamentMinOrderByAggregateInput = {
   dosage?: Prisma.SortOrder
   laboratoire?: Prisma.SortOrder
   categorie?: Prisma.SortOrder
+  unite?: Prisma.SortOrder
   prixVente?: Prisma.SortOrder
   prixAchat?: Prisma.SortOrder
   devise?: Prisma.SortOrder
@@ -681,6 +703,7 @@ export type MedicamentCreateWithoutPrescriptionsInput = {
   dosage?: string | null
   laboratoire?: string | null
   categorie?: string | null
+  unite?: string | null
   prixVente?: number
   prixAchat?: number
   devise?: string
@@ -702,6 +725,7 @@ export type MedicamentUncheckedCreateWithoutPrescriptionsInput = {
   dosage?: string | null
   laboratoire?: string | null
   categorie?: string | null
+  unite?: string | null
   prixVente?: number
   prixAchat?: number
   devise?: string
@@ -738,6 +762,7 @@ export type MedicamentUpdateWithoutPrescriptionsInput = {
   dosage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   laboratoire?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   categorie?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  unite?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   prixVente?: Prisma.FloatFieldUpdateOperationsInput | number
   prixAchat?: Prisma.FloatFieldUpdateOperationsInput | number
   devise?: Prisma.StringFieldUpdateOperationsInput | string
@@ -759,6 +784,7 @@ export type MedicamentUncheckedUpdateWithoutPrescriptionsInput = {
   dosage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   laboratoire?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   categorie?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  unite?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   prixVente?: Prisma.FloatFieldUpdateOperationsInput | number
   prixAchat?: Prisma.FloatFieldUpdateOperationsInput | number
   devise?: Prisma.StringFieldUpdateOperationsInput | string
@@ -779,6 +805,7 @@ export type MedicamentCreateWithoutStocksInput = {
   dosage?: string | null
   laboratoire?: string | null
   categorie?: string | null
+  unite?: string | null
   prixVente?: number
   prixAchat?: number
   devise?: string
@@ -800,6 +827,7 @@ export type MedicamentUncheckedCreateWithoutStocksInput = {
   dosage?: string | null
   laboratoire?: string | null
   categorie?: string | null
+  unite?: string | null
   prixVente?: number
   prixAchat?: number
   devise?: string
@@ -836,6 +864,7 @@ export type MedicamentUpdateWithoutStocksInput = {
   dosage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   laboratoire?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   categorie?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  unite?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   prixVente?: Prisma.FloatFieldUpdateOperationsInput | number
   prixAchat?: Prisma.FloatFieldUpdateOperationsInput | number
   devise?: Prisma.StringFieldUpdateOperationsInput | string
@@ -857,6 +886,7 @@ export type MedicamentUncheckedUpdateWithoutStocksInput = {
   dosage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   laboratoire?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   categorie?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  unite?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   prixVente?: Prisma.FloatFieldUpdateOperationsInput | number
   prixAchat?: Prisma.FloatFieldUpdateOperationsInput | number
   devise?: Prisma.StringFieldUpdateOperationsInput | string
@@ -877,6 +907,7 @@ export type MedicamentCreateWithoutMouvementsInput = {
   dosage?: string | null
   laboratoire?: string | null
   categorie?: string | null
+  unite?: string | null
   prixVente?: number
   prixAchat?: number
   devise?: string
@@ -898,6 +929,7 @@ export type MedicamentUncheckedCreateWithoutMouvementsInput = {
   dosage?: string | null
   laboratoire?: string | null
   categorie?: string | null
+  unite?: string | null
   prixVente?: number
   prixAchat?: number
   devise?: string
@@ -934,6 +966,7 @@ export type MedicamentUpdateWithoutMouvementsInput = {
   dosage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   laboratoire?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   categorie?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  unite?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   prixVente?: Prisma.FloatFieldUpdateOperationsInput | number
   prixAchat?: Prisma.FloatFieldUpdateOperationsInput | number
   devise?: Prisma.StringFieldUpdateOperationsInput | string
@@ -955,6 +988,7 @@ export type MedicamentUncheckedUpdateWithoutMouvementsInput = {
   dosage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   laboratoire?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   categorie?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  unite?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   prixVente?: Prisma.FloatFieldUpdateOperationsInput | number
   prixAchat?: Prisma.FloatFieldUpdateOperationsInput | number
   devise?: Prisma.StringFieldUpdateOperationsInput | string
@@ -975,6 +1009,7 @@ export type MedicamentCreateWithoutDispensationLignesInput = {
   dosage?: string | null
   laboratoire?: string | null
   categorie?: string | null
+  unite?: string | null
   prixVente?: number
   prixAchat?: number
   devise?: string
@@ -996,6 +1031,7 @@ export type MedicamentUncheckedCreateWithoutDispensationLignesInput = {
   dosage?: string | null
   laboratoire?: string | null
   categorie?: string | null
+  unite?: string | null
   prixVente?: number
   prixAchat?: number
   devise?: string
@@ -1032,6 +1068,7 @@ export type MedicamentUpdateWithoutDispensationLignesInput = {
   dosage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   laboratoire?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   categorie?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  unite?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   prixVente?: Prisma.FloatFieldUpdateOperationsInput | number
   prixAchat?: Prisma.FloatFieldUpdateOperationsInput | number
   devise?: Prisma.StringFieldUpdateOperationsInput | string
@@ -1053,6 +1090,7 @@ export type MedicamentUncheckedUpdateWithoutDispensationLignesInput = {
   dosage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   laboratoire?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   categorie?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  unite?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   prixVente?: Prisma.FloatFieldUpdateOperationsInput | number
   prixAchat?: Prisma.FloatFieldUpdateOperationsInput | number
   devise?: Prisma.StringFieldUpdateOperationsInput | string
@@ -1132,6 +1170,7 @@ export type MedicamentSelect<ExtArgs extends runtime.Types.Extensions.InternalAr
   dosage?: boolean
   laboratoire?: boolean
   categorie?: boolean
+  unite?: boolean
   prixVente?: boolean
   prixAchat?: boolean
   devise?: boolean
@@ -1155,6 +1194,7 @@ export type MedicamentSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Ex
   dosage?: boolean
   laboratoire?: boolean
   categorie?: boolean
+  unite?: boolean
   prixVente?: boolean
   prixAchat?: boolean
   devise?: boolean
@@ -1173,6 +1213,7 @@ export type MedicamentSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Ex
   dosage?: boolean
   laboratoire?: boolean
   categorie?: boolean
+  unite?: boolean
   prixVente?: boolean
   prixAchat?: boolean
   devise?: boolean
@@ -1191,6 +1232,7 @@ export type MedicamentSelectScalar = {
   dosage?: boolean
   laboratoire?: boolean
   categorie?: boolean
+  unite?: boolean
   prixVente?: boolean
   prixAchat?: boolean
   devise?: boolean
@@ -1200,7 +1242,7 @@ export type MedicamentSelectScalar = {
   updatedAt?: boolean
 }
 
-export type MedicamentOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "code" | "nom" | "denomination" | "forme" | "dosage" | "laboratoire" | "categorie" | "prixVente" | "prixAchat" | "devise" | "seuilAlerte" | "actif" | "createdAt" | "updatedAt", ExtArgs["result"]["medicament"]>
+export type MedicamentOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "code" | "nom" | "denomination" | "forme" | "dosage" | "laboratoire" | "categorie" | "unite" | "prixVente" | "prixAchat" | "devise" | "seuilAlerte" | "actif" | "createdAt" | "updatedAt", ExtArgs["result"]["medicament"]>
 export type MedicamentInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   prescriptions?: boolean | Prisma.Medicament$prescriptionsArgs<ExtArgs>
   stocks?: boolean | Prisma.Medicament$stocksArgs<ExtArgs>
@@ -1228,6 +1270,7 @@ export type $MedicamentPayload<ExtArgs extends runtime.Types.Extensions.Internal
     dosage: string | null
     laboratoire: string | null
     categorie: string | null
+    unite: string | null
     prixVente: number
     prixAchat: number
     devise: string
@@ -1670,6 +1713,7 @@ export interface MedicamentFieldRefs {
   readonly dosage: Prisma.FieldRef<"Medicament", 'String'>
   readonly laboratoire: Prisma.FieldRef<"Medicament", 'String'>
   readonly categorie: Prisma.FieldRef<"Medicament", 'String'>
+  readonly unite: Prisma.FieldRef<"Medicament", 'String'>
   readonly prixVente: Prisma.FieldRef<"Medicament", 'Float'>
   readonly prixAchat: Prisma.FieldRef<"Medicament", 'Float'>
   readonly devise: Prisma.FieldRef<"Medicament", 'String'>

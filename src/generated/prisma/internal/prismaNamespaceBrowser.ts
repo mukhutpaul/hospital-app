@@ -543,6 +543,7 @@ export const MedicamentScalarFieldEnum = {
   dosage: 'dosage',
   laboratoire: 'laboratoire',
   categorie: 'categorie',
+  unite: 'unite',
   prixVente: 'prixVente',
   prixAchat: 'prixAchat',
   devise: 'devise',

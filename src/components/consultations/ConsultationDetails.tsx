@@ -30,6 +30,8 @@ import {
 } from "react";
 
 import { toast } from "react-toastify";
+import Select from "react-select";
+import { useRouter } from "next/navigation";
 
 import {
   createConstanteConsultation,
@@ -179,6 +181,8 @@ export default function ConsultationDetails({
 
   const [activeTab, setActiveTab] =
     useState<ActiveTab>("general");
+
+  const router = useRouter();
 
   const [modal, setModal] =
     useState<ModalType>(null);
@@ -447,7 +451,7 @@ export default function ConsultationDetails({
 
       closeModal();
 
-      window.location.reload();
+      router.refresh();
     } catch (error) {
       console.error(
         "handleCreateConstante:",
@@ -559,7 +563,7 @@ export default function ConsultationDetails({
 
       closeModal();
 
-      window.location.reload();
+      router.refresh();
     } catch (error) {
       console.error(
         "handleCreatePrescription:",
@@ -661,7 +665,7 @@ export default function ConsultationDetails({
 
       closeModal();
 
-      window.location.reload();
+      router.refresh();
     } catch (error) {
       console.error(
         "handleCreateDemandeLaboratoire:",
@@ -744,7 +748,7 @@ export default function ConsultationDetails({
 
       closeModal();
 
-      window.location.reload();
+      router.refresh();
     } catch (error) {
       console.error(
         "handleCreateDemandeImagerie:",
@@ -2222,43 +2226,19 @@ export default function ConsultationDetails({
                 </span>
               </label>
 
-              <select
-                className="select select-bordered w-full"
-                value={medicamentId}
-                onChange={(event) =>
-                  setMedicamentId(
-                    event.target.value,
-                  )
-                }
-                required
-              >
-
-                <option value="">
-                  Sélectionner un médicament
-                </option>
-
-                {medicaments.map(
-                  (medicament) => (
-                    <option
-                      key={medicament.id}
-                      value={
-                        medicament.id
-                      }
-                    >
-                      {medicament.nom}
-
-                      {medicament.forme
-                        ? ` — ${medicament.forme}`
-                        : ""}
-
-                      {medicament.dosage
-                        ? ` — ${medicament.dosage}`
-                        : ""}
-                    </option>
-                  ),
-                )}
-
-              </select>
+              <Select
+                options={medicaments.map((m: any) => ({ value: String(m.id), label: `${m.code ? `${m.code} — ` : ""}${m.nom}${m.forme ? ` — ${m.forme}` : ""}${m.dosage ? ` — ${m.dosage}` : ""}` }))}
+                value={medicamentId ? medicaments.map((m: any) => ({ value: String(m.id), label: `${m.code ? `${m.code} — ` : ""}${m.nom}${m.forme ? ` — ${m.forme}` : ""}${m.dosage ? ` — ${m.dosage}` : ""}` })).find((o: any) => o.value === medicamentId) ?? null : null}
+                onChange={(option: any) => setMedicamentId(option?.value ?? "")}
+                placeholder="Rechercher un médicament..."
+                isSearchable
+                isClearable
+                isDisabled={loading}
+                noOptionsMessage={() => "Aucun médicament trouvé"}
+                classNamePrefix="react-select"
+                menuPortalTarget={typeof document !== "undefined" ? document.body : undefined}
+                styles={{ menuPortal: (base) => ({ ...base, zIndex: 9999 }) }}
+              />
 
             </div>
 
@@ -2392,85 +2372,20 @@ export default function ConsultationDetails({
                 </span>
               </label>
 
-              <div className="max-h-64 overflow-y-auto rounded-xl border border-base-200">
-
-                {examensLaboratoire.length ===
-                0 ? (
-                  <div className="p-5 text-sm text-base-content/50">
-                    Aucun examen de laboratoire disponible.
-                  </div>
-                ) : (
-                  examensLaboratoire.map(
-                    (examen) => {
-
-                      const checked =
-                        examensSelectionnes.includes(
-                          Number(
-                            examen.id,
-                          ),
-                        );
-
-                      return (
-                        <label
-                          key={
-                            examen.id
-                          }
-                          className={`flex cursor-pointer items-center gap-3 border-b p-3 last:border-b-0 hover:bg-base-200/50 ${
-                            checked
-                              ? "bg-primary/5"
-                              : ""
-                          }`}
-                        >
-
-                          <input
-                            type="checkbox"
-                            className="checkbox checkbox-primary"
-                            checked={
-                              checked
-                            }
-                            onChange={() =>
-                              toggleExamenLaboratoire(
-                                Number(
-                                  examen.id,
-                                ),
-                              )
-                            }
-                          />
-
-                          <div className="flex-1">
-
-                            <p className="font-medium">
-                              {
-                                examen.nom
-                              }
-                            </p>
-
-                            {examen.code && (
-                              <p className="text-xs text-base-content/50">
-                                {
-                                  examen.code
-                                }
-                              </p>
-                            )}
-
-                          </div>
-
-                          {examen.prix !=
-                            null && (
-                            <span className="text-xs text-base-content/50">
-                              {
-                                examen.prix
-                              }
-                            </span>
-                          )}
-
-                        </label>
-                      );
-                    },
-                  )
-                )}
-
-              </div>
+              <Select
+                isMulti
+                options={examensLaboratoire.map((e: any) => ({ value: Number(e.id), label: `${e.code ? `${e.code} — ` : ""}${e.nom}${e.prix != null ? ` — ${e.prix}` : ""}` }))}
+                value={examensLaboratoire.filter((e: any) => examensSelectionnes.includes(Number(e.id))).map((e: any) => ({ value: Number(e.id), label: `${e.code ? `${e.code} — ` : ""}${e.nom}${e.prix != null ? ` — ${e.prix}` : ""}` }))}
+                onChange={(options: any[]) => setExamensSelectionnes((options ?? []).map((o: any) => Number(o.value)))}
+                placeholder="Rechercher et sélectionner les examens..."
+                isSearchable
+                closeMenuOnSelect={false}
+                isDisabled={loading || examensLaboratoire.length === 0}
+                noOptionsMessage={() => "Aucun examen trouvé"}
+                classNamePrefix="react-select"
+                menuPortalTarget={typeof document !== "undefined" ? document.body : undefined}
+                styles={{ menuPortal: (base) => ({ ...base, zIndex: 9999 }) }}
+              />
 
               <p className="mt-2 text-xs text-base-content/50">
                 {
@@ -2569,40 +2484,19 @@ export default function ConsultationDetails({
                 </span>
               </label>
 
-              <select
-                className="select select-bordered w-full"
-                value={
-                  examenImagerieId
-                }
-                onChange={(event) =>
-                  setExamenImagerieId(
-                    event.target.value,
-                  )
-                }
-                required
-              >
-
-                <option value="">
-                  Sélectionner un examen
-                </option>
-
-                {examensImagerie.map(
-                  (examen) => (
-                    <option
-                      key={examen.id}
-                      value={
-                        examen.id
-                      }
-                    >
-                      {examen.code
-                        ? `${examen.code} — `
-                        : ""}
-                      {examen.nom}
-                    </option>
-                  ),
-                )}
-
-              </select>
+              <Select
+                options={examensImagerie.map((e: any) => ({ value: String(e.id), label: `${e.code ? `${e.code} — ` : ""}${e.nom}` }))}
+                value={examenImagerieId ? examensImagerie.map((e: any) => ({ value: String(e.id), label: `${e.code ? `${e.code} — ` : ""}${e.nom}` })).find((o: any) => o.value === examenImagerieId) ?? null : null}
+                onChange={(option: any) => setExamenImagerieId(option?.value ?? "")}
+                placeholder="Rechercher un examen d'imagerie..."
+                isSearchable
+                isClearable
+                isDisabled={loading}
+                noOptionsMessage={() => "Aucun examen trouvé"}
+                classNamePrefix="react-select"
+                menuPortalTarget={typeof document !== "undefined" ? document.body : undefined}
+                styles={{ menuPortal: (base) => ({ ...base, zIndex: 9999 }) }}
+              />
 
             </div>
 

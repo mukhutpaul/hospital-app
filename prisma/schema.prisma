@@ -740,6 +740,7 @@ model Medicament {
   dosage       String?
   laboratoire  String?
   categorie    String?
+  unite        String?
 
   prixVente Float  @default(0)
   prixAchat Float  @default(0)
