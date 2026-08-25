@@ -257,6 +257,7 @@ export type ResultatLaboratoireWhereInput = {
   valide?: Prisma.BoolFilter<"ResultatLaboratoire"> | boolean
   dateResultat?: Prisma.DateTimeFilter<"ResultatLaboratoire"> | Date | string
   demande?: Prisma.XOR<Prisma.DemandeLaboratoireScalarRelationFilter, Prisma.DemandeLaboratoireWhereInput>
+  examen?: Prisma.XOR<Prisma.ExamenLaboratoireScalarRelationFilter, Prisma.ExamenLaboratoireWhereInput>
 }
 
 export type ResultatLaboratoireOrderByWithRelationInput = {
@@ -270,6 +271,7 @@ export type ResultatLaboratoireOrderByWithRelationInput = {
   valide?: Prisma.SortOrder
   dateResultat?: Prisma.SortOrder
   demande?: Prisma.DemandeLaboratoireOrderByWithRelationInput
+  examen?: Prisma.ExamenLaboratoireOrderByWithRelationInput
 }
 
 export type ResultatLaboratoireWhereUniqueInput = Prisma.AtLeast<{
@@ -286,6 +288,7 @@ export type ResultatLaboratoireWhereUniqueInput = Prisma.AtLeast<{
   valide?: Prisma.BoolFilter<"ResultatLaboratoire"> | boolean
   dateResultat?: Prisma.DateTimeFilter<"ResultatLaboratoire"> | Date | string
   demande?: Prisma.XOR<Prisma.DemandeLaboratoireScalarRelationFilter, Prisma.DemandeLaboratoireWhereInput>
+  examen?: Prisma.XOR<Prisma.ExamenLaboratoireScalarRelationFilter, Prisma.ExamenLaboratoireWhereInput>
 }, "id">
 
 export type ResultatLaboratoireOrderByWithAggregationInput = {
@@ -321,7 +324,6 @@ export type ResultatLaboratoireScalarWhereWithAggregatesInput = {
 }
 
 export type ResultatLaboratoireCreateInput = {
-  examenId: number
   valeur?: string | null
   unite?: string | null
   commentaire?: string | null
@@ -329,6 +331,7 @@ export type ResultatLaboratoireCreateInput = {
   valide?: boolean
   dateResultat?: Date | string
   demande: Prisma.DemandeLaboratoireCreateNestedOneWithoutResultatsInput
+  examen: Prisma.ExamenLaboratoireCreateNestedOneWithoutResultatsInput
 }
 
 export type ResultatLaboratoireUncheckedCreateInput = {
@@ -344,7 +347,6 @@ export type ResultatLaboratoireUncheckedCreateInput = {
 }
 
 export type ResultatLaboratoireUpdateInput = {
-  examenId?: Prisma.IntFieldUpdateOperationsInput | number
   valeur?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   unite?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   commentaire?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -352,6 +354,7 @@ export type ResultatLaboratoireUpdateInput = {
   valide?: Prisma.BoolFieldUpdateOperationsInput | boolean
   dateResultat?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   demande?: Prisma.DemandeLaboratoireUpdateOneRequiredWithoutResultatsNestedInput
+  examen?: Prisma.ExamenLaboratoireUpdateOneRequiredWithoutResultatsNestedInput
 }
 
 export type ResultatLaboratoireUncheckedUpdateInput = {
@@ -379,7 +382,6 @@ export type ResultatLaboratoireCreateManyInput = {
 }
 
 export type ResultatLaboratoireUpdateManyMutationInput = {
-  examenId?: Prisma.IntFieldUpdateOperationsInput | number
   valeur?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   unite?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   commentaire?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -458,6 +460,48 @@ export type ResultatLaboratoireSumOrderByAggregateInput = {
   examenId?: Prisma.SortOrder
 }
 
+export type ResultatLaboratoireCreateNestedManyWithoutExamenInput = {
+  create?: Prisma.XOR<Prisma.ResultatLaboratoireCreateWithoutExamenInput, Prisma.ResultatLaboratoireUncheckedCreateWithoutExamenInput> | Prisma.ResultatLaboratoireCreateWithoutExamenInput[] | Prisma.ResultatLaboratoireUncheckedCreateWithoutExamenInput[]
+  connectOrCreate?: Prisma.ResultatLaboratoireCreateOrConnectWithoutExamenInput | Prisma.ResultatLaboratoireCreateOrConnectWithoutExamenInput[]
+  createMany?: Prisma.ResultatLaboratoireCreateManyExamenInputEnvelope
+  connect?: Prisma.ResultatLaboratoireWhereUniqueInput | Prisma.ResultatLaboratoireWhereUniqueInput[]
+}
+
+export type ResultatLaboratoireUncheckedCreateNestedManyWithoutExamenInput = {
+  create?: Prisma.XOR<Prisma.ResultatLaboratoireCreateWithoutExamenInput, Prisma.ResultatLaboratoireUncheckedCreateWithoutExamenInput> | Prisma.ResultatLaboratoireCreateWithoutExamenInput[] | Prisma.ResultatLaboratoireUncheckedCreateWithoutExamenInput[]
+  connectOrCreate?: Prisma.ResultatLaboratoireCreateOrConnectWithoutExamenInput | Prisma.ResultatLaboratoireCreateOrConnectWithoutExamenInput[]
+  createMany?: Prisma.ResultatLaboratoireCreateManyExamenInputEnvelope
+  connect?: Prisma.ResultatLaboratoireWhereUniqueInput | Prisma.ResultatLaboratoireWhereUniqueInput[]
+}
+
+export type ResultatLaboratoireUpdateManyWithoutExamenNestedInput = {
+  create?: Prisma.XOR<Prisma.ResultatLaboratoireCreateWithoutExamenInput, Prisma.ResultatLaboratoireUncheckedCreateWithoutExamenInput> | Prisma.ResultatLaboratoireCreateWithoutExamenInput[] | Prisma.ResultatLaboratoireUncheckedCreateWithoutExamenInput[]
+  connectOrCreate?: Prisma.ResultatLaboratoireCreateOrConnectWithoutExamenInput | Prisma.ResultatLaboratoireCreateOrConnectWithoutExamenInput[]
+  upsert?: Prisma.ResultatLaboratoireUpsertWithWhereUniqueWithoutExamenInput | Prisma.ResultatLaboratoireUpsertWithWhereUniqueWithoutExamenInput[]
+  createMany?: Prisma.ResultatLaboratoireCreateManyExamenInputEnvelope
+  set?: Prisma.ResultatLaboratoireWhereUniqueInput | Prisma.ResultatLaboratoireWhereUniqueInput[]
+  disconnect?: Prisma.ResultatLaboratoireWhereUniqueInput | Prisma.ResultatLaboratoireWhereUniqueInput[]
+  delete?: Prisma.ResultatLaboratoireWhereUniqueInput | Prisma.ResultatLaboratoireWhereUniqueInput[]
+  connect?: Prisma.ResultatLaboratoireWhereUniqueInput | Prisma.ResultatLaboratoireWhereUniqueInput[]
+  update?: Prisma.ResultatLaboratoireUpdateWithWhereUniqueWithoutExamenInput | Prisma.ResultatLaboratoireUpdateWithWhereUniqueWithoutExamenInput[]
+  updateMany?: Prisma.ResultatLaboratoireUpdateManyWithWhereWithoutExamenInput | Prisma.ResultatLaboratoireUpdateManyWithWhereWithoutExamenInput[]
+  deleteMany?: Prisma.ResultatLaboratoireScalarWhereInput | Prisma.ResultatLaboratoireScalarWhereInput[]
+}
+
+export type ResultatLaboratoireUncheckedUpdateManyWithoutExamenNestedInput = {
+  create?: Prisma.XOR<Prisma.ResultatLaboratoireCreateWithoutExamenInput, Prisma.ResultatLaboratoireUncheckedCreateWithoutExamenInput> | Prisma.ResultatLaboratoireCreateWithoutExamenInput[] | Prisma.ResultatLaboratoireUncheckedCreateWithoutExamenInput[]
+  connectOrCreate?: Prisma.ResultatLaboratoireCreateOrConnectWithoutExamenInput | Prisma.ResultatLaboratoireCreateOrConnectWithoutExamenInput[]
+  upsert?: Prisma.ResultatLaboratoireUpsertWithWhereUniqueWithoutExamenInput | Prisma.ResultatLaboratoireUpsertWithWhereUniqueWithoutExamenInput[]
+  createMany?: Prisma.ResultatLaboratoireCreateManyExamenInputEnvelope
+  set?: Prisma.ResultatLaboratoireWhereUniqueInput | Prisma.ResultatLaboratoireWhereUniqueInput[]
+  disconnect?: Prisma.ResultatLaboratoireWhereUniqueInput | Prisma.ResultatLaboratoireWhereUniqueInput[]
+  delete?: Prisma.ResultatLaboratoireWhereUniqueInput | Prisma.ResultatLaboratoireWhereUniqueInput[]
+  connect?: Prisma.ResultatLaboratoireWhereUniqueInput | Prisma.ResultatLaboratoireWhereUniqueInput[]
+  update?: Prisma.ResultatLaboratoireUpdateWithWhereUniqueWithoutExamenInput | Prisma.ResultatLaboratoireUpdateWithWhereUniqueWithoutExamenInput[]
+  updateMany?: Prisma.ResultatLaboratoireUpdateManyWithWhereWithoutExamenInput | Prisma.ResultatLaboratoireUpdateManyWithWhereWithoutExamenInput[]
+  deleteMany?: Prisma.ResultatLaboratoireScalarWhereInput | Prisma.ResultatLaboratoireScalarWhereInput[]
+}
+
 export type ResultatLaboratoireCreateNestedManyWithoutDemandeInput = {
   create?: Prisma.XOR<Prisma.ResultatLaboratoireCreateWithoutDemandeInput, Prisma.ResultatLaboratoireUncheckedCreateWithoutDemandeInput> | Prisma.ResultatLaboratoireCreateWithoutDemandeInput[] | Prisma.ResultatLaboratoireUncheckedCreateWithoutDemandeInput[]
   connectOrCreate?: Prisma.ResultatLaboratoireCreateOrConnectWithoutDemandeInput | Prisma.ResultatLaboratoireCreateOrConnectWithoutDemandeInput[]
@@ -500,14 +544,75 @@ export type ResultatLaboratoireUncheckedUpdateManyWithoutDemandeNestedInput = {
   deleteMany?: Prisma.ResultatLaboratoireScalarWhereInput | Prisma.ResultatLaboratoireScalarWhereInput[]
 }
 
-export type ResultatLaboratoireCreateWithoutDemandeInput = {
-  examenId: number
+export type ResultatLaboratoireCreateWithoutExamenInput = {
   valeur?: string | null
   unite?: string | null
   commentaire?: string | null
   interpretation?: string | null
   valide?: boolean
   dateResultat?: Date | string
+  demande: Prisma.DemandeLaboratoireCreateNestedOneWithoutResultatsInput
+}
+
+export type ResultatLaboratoireUncheckedCreateWithoutExamenInput = {
+  id?: number
+  demandeId: number
+  valeur?: string | null
+  unite?: string | null
+  commentaire?: string | null
+  interpretation?: string | null
+  valide?: boolean
+  dateResultat?: Date | string
+}
+
+export type ResultatLaboratoireCreateOrConnectWithoutExamenInput = {
+  where: Prisma.ResultatLaboratoireWhereUniqueInput
+  create: Prisma.XOR<Prisma.ResultatLaboratoireCreateWithoutExamenInput, Prisma.ResultatLaboratoireUncheckedCreateWithoutExamenInput>
+}
+
+export type ResultatLaboratoireCreateManyExamenInputEnvelope = {
+  data: Prisma.ResultatLaboratoireCreateManyExamenInput | Prisma.ResultatLaboratoireCreateManyExamenInput[]
+}
+
+export type ResultatLaboratoireUpsertWithWhereUniqueWithoutExamenInput = {
+  where: Prisma.ResultatLaboratoireWhereUniqueInput
+  update: Prisma.XOR<Prisma.ResultatLaboratoireUpdateWithoutExamenInput, Prisma.ResultatLaboratoireUncheckedUpdateWithoutExamenInput>
+  create: Prisma.XOR<Prisma.ResultatLaboratoireCreateWithoutExamenInput, Prisma.ResultatLaboratoireUncheckedCreateWithoutExamenInput>
+}
+
+export type ResultatLaboratoireUpdateWithWhereUniqueWithoutExamenInput = {
+  where: Prisma.ResultatLaboratoireWhereUniqueInput
+  data: Prisma.XOR<Prisma.ResultatLaboratoireUpdateWithoutExamenInput, Prisma.ResultatLaboratoireUncheckedUpdateWithoutExamenInput>
+}
+
+export type ResultatLaboratoireUpdateManyWithWhereWithoutExamenInput = {
+  where: Prisma.ResultatLaboratoireScalarWhereInput
+  data: Prisma.XOR<Prisma.ResultatLaboratoireUpdateManyMutationInput, Prisma.ResultatLaboratoireUncheckedUpdateManyWithoutExamenInput>
+}
+
+export type ResultatLaboratoireScalarWhereInput = {
+  AND?: Prisma.ResultatLaboratoireScalarWhereInput | Prisma.ResultatLaboratoireScalarWhereInput[]
+  OR?: Prisma.ResultatLaboratoireScalarWhereInput[]
+  NOT?: Prisma.ResultatLaboratoireScalarWhereInput | Prisma.ResultatLaboratoireScalarWhereInput[]
+  id?: Prisma.IntFilter<"ResultatLaboratoire"> | number
+  demandeId?: Prisma.IntFilter<"ResultatLaboratoire"> | number
+  examenId?: Prisma.IntFilter<"ResultatLaboratoire"> | number
+  valeur?: Prisma.StringNullableFilter<"ResultatLaboratoire"> | string | null
+  unite?: Prisma.StringNullableFilter<"ResultatLaboratoire"> | string | null
+  commentaire?: Prisma.StringNullableFilter<"ResultatLaboratoire"> | string | null
+  interpretation?: Prisma.StringNullableFilter<"ResultatLaboratoire"> | string | null
+  valide?: Prisma.BoolFilter<"ResultatLaboratoire"> | boolean
+  dateResultat?: Prisma.DateTimeFilter<"ResultatLaboratoire"> | Date | string
+}
+
+export type ResultatLaboratoireCreateWithoutDemandeInput = {
+  valeur?: string | null
+  unite?: string | null
+  commentaire?: string | null
+  interpretation?: string | null
+  valide?: boolean
+  dateResultat?: Date | string
+  examen: Prisma.ExamenLaboratoireCreateNestedOneWithoutResultatsInput
 }
 
 export type ResultatLaboratoireUncheckedCreateWithoutDemandeInput = {
@@ -546,19 +651,47 @@ export type ResultatLaboratoireUpdateManyWithWhereWithoutDemandeInput = {
   data: Prisma.XOR<Prisma.ResultatLaboratoireUpdateManyMutationInput, Prisma.ResultatLaboratoireUncheckedUpdateManyWithoutDemandeInput>
 }
 
-export type ResultatLaboratoireScalarWhereInput = {
-  AND?: Prisma.ResultatLaboratoireScalarWhereInput | Prisma.ResultatLaboratoireScalarWhereInput[]
-  OR?: Prisma.ResultatLaboratoireScalarWhereInput[]
-  NOT?: Prisma.ResultatLaboratoireScalarWhereInput | Prisma.ResultatLaboratoireScalarWhereInput[]
-  id?: Prisma.IntFilter<"ResultatLaboratoire"> | number
-  demandeId?: Prisma.IntFilter<"ResultatLaboratoire"> | number
-  examenId?: Prisma.IntFilter<"ResultatLaboratoire"> | number
-  valeur?: Prisma.StringNullableFilter<"ResultatLaboratoire"> | string | null
-  unite?: Prisma.StringNullableFilter<"ResultatLaboratoire"> | string | null
-  commentaire?: Prisma.StringNullableFilter<"ResultatLaboratoire"> | string | null
-  interpretation?: Prisma.StringNullableFilter<"ResultatLaboratoire"> | string | null
-  valide?: Prisma.BoolFilter<"ResultatLaboratoire"> | boolean
-  dateResultat?: Prisma.DateTimeFilter<"ResultatLaboratoire"> | Date | string
+export type ResultatLaboratoireCreateManyExamenInput = {
+  id?: number
+  demandeId: number
+  valeur?: string | null
+  unite?: string | null
+  commentaire?: string | null
+  interpretation?: string | null
+  valide?: boolean
+  dateResultat?: Date | string
+}
+
+export type ResultatLaboratoireUpdateWithoutExamenInput = {
+  valeur?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  unite?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  commentaire?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  interpretation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  valide?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  dateResultat?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  demande?: Prisma.DemandeLaboratoireUpdateOneRequiredWithoutResultatsNestedInput
+}
+
+export type ResultatLaboratoireUncheckedUpdateWithoutExamenInput = {
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  demandeId?: Prisma.IntFieldUpdateOperationsInput | number
+  valeur?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  unite?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  commentaire?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  interpretation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  valide?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  dateResultat?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
+export type ResultatLaboratoireUncheckedUpdateManyWithoutExamenInput = {
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  demandeId?: Prisma.IntFieldUpdateOperationsInput | number
+  valeur?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  unite?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  commentaire?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  interpretation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  valide?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  dateResultat?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type ResultatLaboratoireCreateManyDemandeInput = {
@@ -573,13 +706,13 @@ export type ResultatLaboratoireCreateManyDemandeInput = {
 }
 
 export type ResultatLaboratoireUpdateWithoutDemandeInput = {
-  examenId?: Prisma.IntFieldUpdateOperationsInput | number
   valeur?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   unite?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   commentaire?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   interpretation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   valide?: Prisma.BoolFieldUpdateOperationsInput | boolean
   dateResultat?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  examen?: Prisma.ExamenLaboratoireUpdateOneRequiredWithoutResultatsNestedInput
 }
 
 export type ResultatLaboratoireUncheckedUpdateWithoutDemandeInput = {
@@ -617,6 +750,7 @@ export type ResultatLaboratoireSelect<ExtArgs extends runtime.Types.Extensions.I
   valide?: boolean
   dateResultat?: boolean
   demande?: boolean | Prisma.DemandeLaboratoireDefaultArgs<ExtArgs>
+  examen?: boolean | Prisma.ExamenLaboratoireDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["resultatLaboratoire"]>
 
 export type ResultatLaboratoireSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -630,6 +764,7 @@ export type ResultatLaboratoireSelectCreateManyAndReturn<ExtArgs extends runtime
   valide?: boolean
   dateResultat?: boolean
   demande?: boolean | Prisma.DemandeLaboratoireDefaultArgs<ExtArgs>
+  examen?: boolean | Prisma.ExamenLaboratoireDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["resultatLaboratoire"]>
 
 export type ResultatLaboratoireSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -643,6 +778,7 @@ export type ResultatLaboratoireSelectUpdateManyAndReturn<ExtArgs extends runtime
   valide?: boolean
   dateResultat?: boolean
   demande?: boolean | Prisma.DemandeLaboratoireDefaultArgs<ExtArgs>
+  examen?: boolean | Prisma.ExamenLaboratoireDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["resultatLaboratoire"]>
 
 export type ResultatLaboratoireSelectScalar = {
@@ -660,18 +796,22 @@ export type ResultatLaboratoireSelectScalar = {
 export type ResultatLaboratoireOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "demandeId" | "examenId" | "valeur" | "unite" | "commentaire" | "interpretation" | "valide" | "dateResultat", ExtArgs["result"]["resultatLaboratoire"]>
 export type ResultatLaboratoireInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   demande?: boolean | Prisma.DemandeLaboratoireDefaultArgs<ExtArgs>
+  examen?: boolean | Prisma.ExamenLaboratoireDefaultArgs<ExtArgs>
 }
 export type ResultatLaboratoireIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   demande?: boolean | Prisma.DemandeLaboratoireDefaultArgs<ExtArgs>
+  examen?: boolean | Prisma.ExamenLaboratoireDefaultArgs<ExtArgs>
 }
 export type ResultatLaboratoireIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   demande?: boolean | Prisma.DemandeLaboratoireDefaultArgs<ExtArgs>
+  examen?: boolean | Prisma.ExamenLaboratoireDefaultArgs<ExtArgs>
 }
 
 export type $ResultatLaboratoirePayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "ResultatLaboratoire"
   objects: {
     demande: Prisma.$DemandeLaboratoirePayload<ExtArgs>
+    examen: Prisma.$ExamenLaboratoirePayload<ExtArgs>
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: number
@@ -1078,6 +1218,7 @@ readonly fields: ResultatLaboratoireFieldRefs;
 export interface Prisma__ResultatLaboratoireClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
   demande<T extends Prisma.DemandeLaboratoireDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.DemandeLaboratoireDefaultArgs<ExtArgs>>): Prisma.Prisma__DemandeLaboratoireClient<runtime.Types.Result.GetResult<Prisma.$DemandeLaboratoirePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+  examen<T extends Prisma.ExamenLaboratoireDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.ExamenLaboratoireDefaultArgs<ExtArgs>>): Prisma.Prisma__ExamenLaboratoireClient<runtime.Types.Result.GetResult<Prisma.$ExamenLaboratoirePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.

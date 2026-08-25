@@ -80,6 +80,8 @@ export const ModelName = {
   Medicament: 'Medicament',
   StockMedicament: 'StockMedicament',
   MouvementStock: 'MouvementStock',
+  Dispensation: 'Dispensation',
+  DispensationLigne: 'DispensationLigne',
   Chambre: 'Chambre',
   Lit: 'Lit',
   Hospitalisation: 'Hospitalisation',
@@ -430,7 +432,8 @@ export const PrescriptionLigneScalarFieldEnum = {
   duree: 'duree',
   voie: 'voie',
   quantite: 'quantite',
-  observation: 'observation'
+  observation: 'observation',
+  createdAt: 'createdAt'
 } as const
 
 export type PrescriptionLigneScalarFieldEnum = (typeof PrescriptionLigneScalarFieldEnum)[keyof typeof PrescriptionLigneScalarFieldEnum]
@@ -568,14 +571,50 @@ export type StockMedicamentScalarFieldEnum = (typeof StockMedicamentScalarFieldE
 export const MouvementStockScalarFieldEnum = {
   id: 'id',
   medicamentId: 'medicamentId',
+  stockId: 'stockId',
   type: 'type',
   quantite: 'quantite',
   motif: 'motif',
   reference: 'reference',
+  utilisateurId: 'utilisateurId',
   dateMouvement: 'dateMouvement'
 } as const
 
 export type MouvementStockScalarFieldEnum = (typeof MouvementStockScalarFieldEnum)[keyof typeof MouvementStockScalarFieldEnum]
+
+
+export const DispensationScalarFieldEnum = {
+  id: 'id',
+  numero: 'numero',
+  patientId: 'patientId',
+  prescriptionId: 'prescriptionId',
+  pharmacienId: 'pharmacienId',
+  dateDispensation: 'dateDispensation',
+  statut: 'statut',
+  observation: 'observation',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type DispensationScalarFieldEnum = (typeof DispensationScalarFieldEnum)[keyof typeof DispensationScalarFieldEnum]
+
+
+export const DispensationLigneScalarFieldEnum = {
+  id: 'id',
+  dispensationId: 'dispensationId',
+  prescriptionLigneId: 'prescriptionLigneId',
+  medicamentId: 'medicamentId',
+  stockId: 'stockId',
+  pharmacienId: 'pharmacienId',
+  quantitePrescrite: 'quantitePrescrite',
+  quantiteDispensee: 'quantiteDispensee',
+  prixUnitaire: 'prixUnitaire',
+  montant: 'montant',
+  observation: 'observation',
+  createdAt: 'createdAt'
+} as const
+
+export type DispensationLigneScalarFieldEnum = (typeof DispensationLigneScalarFieldEnum)[keyof typeof DispensationLigneScalarFieldEnum]
 
 
 export const ChambreScalarFieldEnum = {

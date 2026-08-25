@@ -241,6 +241,8 @@ export type StockMedicamentWhereInput = {
   createdAt?: Prisma.DateTimeFilter<"StockMedicament"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"StockMedicament"> | Date | string
   medicament?: Prisma.XOR<Prisma.MedicamentScalarRelationFilter, Prisma.MedicamentWhereInput>
+  mouvements?: Prisma.MouvementStockListRelationFilter
+  dispensationLignes?: Prisma.DispensationLigneListRelationFilter
 }
 
 export type StockMedicamentOrderByWithRelationInput = {
@@ -252,6 +254,8 @@ export type StockMedicamentOrderByWithRelationInput = {
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   medicament?: Prisma.MedicamentOrderByWithRelationInput
+  mouvements?: Prisma.MouvementStockOrderByRelationAggregateInput
+  dispensationLignes?: Prisma.DispensationLigneOrderByRelationAggregateInput
 }
 
 export type StockMedicamentWhereUniqueInput = Prisma.AtLeast<{
@@ -266,6 +270,8 @@ export type StockMedicamentWhereUniqueInput = Prisma.AtLeast<{
   createdAt?: Prisma.DateTimeFilter<"StockMedicament"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"StockMedicament"> | Date | string
   medicament?: Prisma.XOR<Prisma.MedicamentScalarRelationFilter, Prisma.MedicamentWhereInput>
+  mouvements?: Prisma.MouvementStockListRelationFilter
+  dispensationLignes?: Prisma.DispensationLigneListRelationFilter
 }, "id">
 
 export type StockMedicamentOrderByWithAggregationInput = {
@@ -303,6 +309,8 @@ export type StockMedicamentCreateInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   medicament: Prisma.MedicamentCreateNestedOneWithoutStocksInput
+  mouvements?: Prisma.MouvementStockCreateNestedManyWithoutStockInput
+  dispensationLignes?: Prisma.DispensationLigneCreateNestedManyWithoutStockInput
 }
 
 export type StockMedicamentUncheckedCreateInput = {
@@ -313,6 +321,8 @@ export type StockMedicamentUncheckedCreateInput = {
   quantite?: number
   createdAt?: Date | string
   updatedAt?: Date | string
+  mouvements?: Prisma.MouvementStockUncheckedCreateNestedManyWithoutStockInput
+  dispensationLignes?: Prisma.DispensationLigneUncheckedCreateNestedManyWithoutStockInput
 }
 
 export type StockMedicamentUpdateInput = {
@@ -322,6 +332,8 @@ export type StockMedicamentUpdateInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   medicament?: Prisma.MedicamentUpdateOneRequiredWithoutStocksNestedInput
+  mouvements?: Prisma.MouvementStockUpdateManyWithoutStockNestedInput
+  dispensationLignes?: Prisma.DispensationLigneUpdateManyWithoutStockNestedInput
 }
 
 export type StockMedicamentUncheckedUpdateInput = {
@@ -332,6 +344,8 @@ export type StockMedicamentUncheckedUpdateInput = {
   quantite?: Prisma.FloatFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  mouvements?: Prisma.MouvementStockUncheckedUpdateManyWithoutStockNestedInput
+  dispensationLignes?: Prisma.DispensationLigneUncheckedUpdateManyWithoutStockNestedInput
 }
 
 export type StockMedicamentCreateManyInput = {
@@ -414,6 +428,11 @@ export type StockMedicamentSumOrderByAggregateInput = {
   quantite?: Prisma.SortOrder
 }
 
+export type StockMedicamentNullableScalarRelationFilter = {
+  is?: Prisma.StockMedicamentWhereInput | null
+  isNot?: Prisma.StockMedicamentWhereInput | null
+}
+
 export type StockMedicamentCreateNestedManyWithoutMedicamentInput = {
   create?: Prisma.XOR<Prisma.StockMedicamentCreateWithoutMedicamentInput, Prisma.StockMedicamentUncheckedCreateWithoutMedicamentInput> | Prisma.StockMedicamentCreateWithoutMedicamentInput[] | Prisma.StockMedicamentUncheckedCreateWithoutMedicamentInput[]
   connectOrCreate?: Prisma.StockMedicamentCreateOrConnectWithoutMedicamentInput | Prisma.StockMedicamentCreateOrConnectWithoutMedicamentInput[]
@@ -456,12 +475,46 @@ export type StockMedicamentUncheckedUpdateManyWithoutMedicamentNestedInput = {
   deleteMany?: Prisma.StockMedicamentScalarWhereInput | Prisma.StockMedicamentScalarWhereInput[]
 }
 
+export type StockMedicamentCreateNestedOneWithoutMouvementsInput = {
+  create?: Prisma.XOR<Prisma.StockMedicamentCreateWithoutMouvementsInput, Prisma.StockMedicamentUncheckedCreateWithoutMouvementsInput>
+  connectOrCreate?: Prisma.StockMedicamentCreateOrConnectWithoutMouvementsInput
+  connect?: Prisma.StockMedicamentWhereUniqueInput
+}
+
+export type StockMedicamentUpdateOneWithoutMouvementsNestedInput = {
+  create?: Prisma.XOR<Prisma.StockMedicamentCreateWithoutMouvementsInput, Prisma.StockMedicamentUncheckedCreateWithoutMouvementsInput>
+  connectOrCreate?: Prisma.StockMedicamentCreateOrConnectWithoutMouvementsInput
+  upsert?: Prisma.StockMedicamentUpsertWithoutMouvementsInput
+  disconnect?: Prisma.StockMedicamentWhereInput | boolean
+  delete?: Prisma.StockMedicamentWhereInput | boolean
+  connect?: Prisma.StockMedicamentWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.StockMedicamentUpdateToOneWithWhereWithoutMouvementsInput, Prisma.StockMedicamentUpdateWithoutMouvementsInput>, Prisma.StockMedicamentUncheckedUpdateWithoutMouvementsInput>
+}
+
+export type StockMedicamentCreateNestedOneWithoutDispensationLignesInput = {
+  create?: Prisma.XOR<Prisma.StockMedicamentCreateWithoutDispensationLignesInput, Prisma.StockMedicamentUncheckedCreateWithoutDispensationLignesInput>
+  connectOrCreate?: Prisma.StockMedicamentCreateOrConnectWithoutDispensationLignesInput
+  connect?: Prisma.StockMedicamentWhereUniqueInput
+}
+
+export type StockMedicamentUpdateOneWithoutDispensationLignesNestedInput = {
+  create?: Prisma.XOR<Prisma.StockMedicamentCreateWithoutDispensationLignesInput, Prisma.StockMedicamentUncheckedCreateWithoutDispensationLignesInput>
+  connectOrCreate?: Prisma.StockMedicamentCreateOrConnectWithoutDispensationLignesInput
+  upsert?: Prisma.StockMedicamentUpsertWithoutDispensationLignesInput
+  disconnect?: Prisma.StockMedicamentWhereInput | boolean
+  delete?: Prisma.StockMedicamentWhereInput | boolean
+  connect?: Prisma.StockMedicamentWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.StockMedicamentUpdateToOneWithWhereWithoutDispensationLignesInput, Prisma.StockMedicamentUpdateWithoutDispensationLignesInput>, Prisma.StockMedicamentUncheckedUpdateWithoutDispensationLignesInput>
+}
+
 export type StockMedicamentCreateWithoutMedicamentInput = {
   lot?: string | null
   dateExpiration?: Date | string | null
   quantite?: number
   createdAt?: Date | string
   updatedAt?: Date | string
+  mouvements?: Prisma.MouvementStockCreateNestedManyWithoutStockInput
+  dispensationLignes?: Prisma.DispensationLigneCreateNestedManyWithoutStockInput
 }
 
 export type StockMedicamentUncheckedCreateWithoutMedicamentInput = {
@@ -471,6 +524,8 @@ export type StockMedicamentUncheckedCreateWithoutMedicamentInput = {
   quantite?: number
   createdAt?: Date | string
   updatedAt?: Date | string
+  mouvements?: Prisma.MouvementStockUncheckedCreateNestedManyWithoutStockInput
+  dispensationLignes?: Prisma.DispensationLigneUncheckedCreateNestedManyWithoutStockInput
 }
 
 export type StockMedicamentCreateOrConnectWithoutMedicamentInput = {
@@ -511,6 +566,122 @@ export type StockMedicamentScalarWhereInput = {
   updatedAt?: Prisma.DateTimeFilter<"StockMedicament"> | Date | string
 }
 
+export type StockMedicamentCreateWithoutMouvementsInput = {
+  lot?: string | null
+  dateExpiration?: Date | string | null
+  quantite?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  medicament: Prisma.MedicamentCreateNestedOneWithoutStocksInput
+  dispensationLignes?: Prisma.DispensationLigneCreateNestedManyWithoutStockInput
+}
+
+export type StockMedicamentUncheckedCreateWithoutMouvementsInput = {
+  id?: number
+  medicamentId: number
+  lot?: string | null
+  dateExpiration?: Date | string | null
+  quantite?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  dispensationLignes?: Prisma.DispensationLigneUncheckedCreateNestedManyWithoutStockInput
+}
+
+export type StockMedicamentCreateOrConnectWithoutMouvementsInput = {
+  where: Prisma.StockMedicamentWhereUniqueInput
+  create: Prisma.XOR<Prisma.StockMedicamentCreateWithoutMouvementsInput, Prisma.StockMedicamentUncheckedCreateWithoutMouvementsInput>
+}
+
+export type StockMedicamentUpsertWithoutMouvementsInput = {
+  update: Prisma.XOR<Prisma.StockMedicamentUpdateWithoutMouvementsInput, Prisma.StockMedicamentUncheckedUpdateWithoutMouvementsInput>
+  create: Prisma.XOR<Prisma.StockMedicamentCreateWithoutMouvementsInput, Prisma.StockMedicamentUncheckedCreateWithoutMouvementsInput>
+  where?: Prisma.StockMedicamentWhereInput
+}
+
+export type StockMedicamentUpdateToOneWithWhereWithoutMouvementsInput = {
+  where?: Prisma.StockMedicamentWhereInput
+  data: Prisma.XOR<Prisma.StockMedicamentUpdateWithoutMouvementsInput, Prisma.StockMedicamentUncheckedUpdateWithoutMouvementsInput>
+}
+
+export type StockMedicamentUpdateWithoutMouvementsInput = {
+  lot?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  dateExpiration?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  quantite?: Prisma.FloatFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  medicament?: Prisma.MedicamentUpdateOneRequiredWithoutStocksNestedInput
+  dispensationLignes?: Prisma.DispensationLigneUpdateManyWithoutStockNestedInput
+}
+
+export type StockMedicamentUncheckedUpdateWithoutMouvementsInput = {
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  medicamentId?: Prisma.IntFieldUpdateOperationsInput | number
+  lot?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  dateExpiration?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  quantite?: Prisma.FloatFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  dispensationLignes?: Prisma.DispensationLigneUncheckedUpdateManyWithoutStockNestedInput
+}
+
+export type StockMedicamentCreateWithoutDispensationLignesInput = {
+  lot?: string | null
+  dateExpiration?: Date | string | null
+  quantite?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  medicament: Prisma.MedicamentCreateNestedOneWithoutStocksInput
+  mouvements?: Prisma.MouvementStockCreateNestedManyWithoutStockInput
+}
+
+export type StockMedicamentUncheckedCreateWithoutDispensationLignesInput = {
+  id?: number
+  medicamentId: number
+  lot?: string | null
+  dateExpiration?: Date | string | null
+  quantite?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  mouvements?: Prisma.MouvementStockUncheckedCreateNestedManyWithoutStockInput
+}
+
+export type StockMedicamentCreateOrConnectWithoutDispensationLignesInput = {
+  where: Prisma.StockMedicamentWhereUniqueInput
+  create: Prisma.XOR<Prisma.StockMedicamentCreateWithoutDispensationLignesInput, Prisma.StockMedicamentUncheckedCreateWithoutDispensationLignesInput>
+}
+
+export type StockMedicamentUpsertWithoutDispensationLignesInput = {
+  update: Prisma.XOR<Prisma.StockMedicamentUpdateWithoutDispensationLignesInput, Prisma.StockMedicamentUncheckedUpdateWithoutDispensationLignesInput>
+  create: Prisma.XOR<Prisma.StockMedicamentCreateWithoutDispensationLignesInput, Prisma.StockMedicamentUncheckedCreateWithoutDispensationLignesInput>
+  where?: Prisma.StockMedicamentWhereInput
+}
+
+export type StockMedicamentUpdateToOneWithWhereWithoutDispensationLignesInput = {
+  where?: Prisma.StockMedicamentWhereInput
+  data: Prisma.XOR<Prisma.StockMedicamentUpdateWithoutDispensationLignesInput, Prisma.StockMedicamentUncheckedUpdateWithoutDispensationLignesInput>
+}
+
+export type StockMedicamentUpdateWithoutDispensationLignesInput = {
+  lot?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  dateExpiration?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  quantite?: Prisma.FloatFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  medicament?: Prisma.MedicamentUpdateOneRequiredWithoutStocksNestedInput
+  mouvements?: Prisma.MouvementStockUpdateManyWithoutStockNestedInput
+}
+
+export type StockMedicamentUncheckedUpdateWithoutDispensationLignesInput = {
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  medicamentId?: Prisma.IntFieldUpdateOperationsInput | number
+  lot?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  dateExpiration?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  quantite?: Prisma.FloatFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  mouvements?: Prisma.MouvementStockUncheckedUpdateManyWithoutStockNestedInput
+}
+
 export type StockMedicamentCreateManyMedicamentInput = {
   id?: number
   lot?: string | null
@@ -526,6 +697,8 @@ export type StockMedicamentUpdateWithoutMedicamentInput = {
   quantite?: Prisma.FloatFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  mouvements?: Prisma.MouvementStockUpdateManyWithoutStockNestedInput
+  dispensationLignes?: Prisma.DispensationLigneUpdateManyWithoutStockNestedInput
 }
 
 export type StockMedicamentUncheckedUpdateWithoutMedicamentInput = {
@@ -535,6 +708,8 @@ export type StockMedicamentUncheckedUpdateWithoutMedicamentInput = {
   quantite?: Prisma.FloatFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  mouvements?: Prisma.MouvementStockUncheckedUpdateManyWithoutStockNestedInput
+  dispensationLignes?: Prisma.DispensationLigneUncheckedUpdateManyWithoutStockNestedInput
 }
 
 export type StockMedicamentUncheckedUpdateManyWithoutMedicamentInput = {
@@ -547,6 +722,44 @@ export type StockMedicamentUncheckedUpdateManyWithoutMedicamentInput = {
 }
 
 
+/**
+ * Count Type StockMedicamentCountOutputType
+ */
+
+export type StockMedicamentCountOutputType = {
+  mouvements: number
+  dispensationLignes: number
+}
+
+export type StockMedicamentCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  mouvements?: boolean | StockMedicamentCountOutputTypeCountMouvementsArgs
+  dispensationLignes?: boolean | StockMedicamentCountOutputTypeCountDispensationLignesArgs
+}
+
+/**
+ * StockMedicamentCountOutputType without action
+ */
+export type StockMedicamentCountOutputTypeDefaultArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the StockMedicamentCountOutputType
+   */
+  select?: Prisma.StockMedicamentCountOutputTypeSelect<ExtArgs> | null
+}
+
+/**
+ * StockMedicamentCountOutputType without action
+ */
+export type StockMedicamentCountOutputTypeCountMouvementsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.MouvementStockWhereInput
+}
+
+/**
+ * StockMedicamentCountOutputType without action
+ */
+export type StockMedicamentCountOutputTypeCountDispensationLignesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.DispensationLigneWhereInput
+}
+
 
 export type StockMedicamentSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -557,6 +770,9 @@ export type StockMedicamentSelect<ExtArgs extends runtime.Types.Extensions.Inter
   createdAt?: boolean
   updatedAt?: boolean
   medicament?: boolean | Prisma.MedicamentDefaultArgs<ExtArgs>
+  mouvements?: boolean | Prisma.StockMedicament$mouvementsArgs<ExtArgs>
+  dispensationLignes?: boolean | Prisma.StockMedicament$dispensationLignesArgs<ExtArgs>
+  _count?: boolean | Prisma.StockMedicamentCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["stockMedicament"]>
 
 export type StockMedicamentSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -594,6 +810,9 @@ export type StockMedicamentSelectScalar = {
 export type StockMedicamentOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "medicamentId" | "lot" | "dateExpiration" | "quantite" | "createdAt" | "updatedAt", ExtArgs["result"]["stockMedicament"]>
 export type StockMedicamentInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   medicament?: boolean | Prisma.MedicamentDefaultArgs<ExtArgs>
+  mouvements?: boolean | Prisma.StockMedicament$mouvementsArgs<ExtArgs>
+  dispensationLignes?: boolean | Prisma.StockMedicament$dispensationLignesArgs<ExtArgs>
+  _count?: boolean | Prisma.StockMedicamentCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type StockMedicamentIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   medicament?: boolean | Prisma.MedicamentDefaultArgs<ExtArgs>
@@ -606,6 +825,8 @@ export type $StockMedicamentPayload<ExtArgs extends runtime.Types.Extensions.Int
   name: "StockMedicament"
   objects: {
     medicament: Prisma.$MedicamentPayload<ExtArgs>
+    mouvements: Prisma.$MouvementStockPayload<ExtArgs>[]
+    dispensationLignes: Prisma.$DispensationLignePayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: number
@@ -1010,6 +1231,8 @@ readonly fields: StockMedicamentFieldRefs;
 export interface Prisma__StockMedicamentClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
   medicament<T extends Prisma.MedicamentDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.MedicamentDefaultArgs<ExtArgs>>): Prisma.Prisma__MedicamentClient<runtime.Types.Result.GetResult<Prisma.$MedicamentPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+  mouvements<T extends Prisma.StockMedicament$mouvementsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.StockMedicament$mouvementsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$MouvementStockPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  dispensationLignes<T extends Prisma.StockMedicament$dispensationLignesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.StockMedicament$dispensationLignesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$DispensationLignePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1442,6 +1665,54 @@ export type StockMedicamentDeleteManyArgs<ExtArgs extends runtime.Types.Extensio
    * Limit how many StockMedicaments to delete.
    */
   limit?: number
+}
+
+/**
+ * StockMedicament.mouvements
+ */
+export type StockMedicament$mouvementsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the MouvementStock
+   */
+  select?: Prisma.MouvementStockSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the MouvementStock
+   */
+  omit?: Prisma.MouvementStockOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.MouvementStockInclude<ExtArgs> | null
+  where?: Prisma.MouvementStockWhereInput
+  orderBy?: Prisma.MouvementStockOrderByWithRelationInput | Prisma.MouvementStockOrderByWithRelationInput[]
+  cursor?: Prisma.MouvementStockWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.MouvementStockScalarFieldEnum | Prisma.MouvementStockScalarFieldEnum[]
+}
+
+/**
+ * StockMedicament.dispensationLignes
+ */
+export type StockMedicament$dispensationLignesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the DispensationLigne
+   */
+  select?: Prisma.DispensationLigneSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the DispensationLigne
+   */
+  omit?: Prisma.DispensationLigneOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.DispensationLigneInclude<ExtArgs> | null
+  where?: Prisma.DispensationLigneWhereInput
+  orderBy?: Prisma.DispensationLigneOrderByWithRelationInput | Prisma.DispensationLigneOrderByWithRelationInput[]
+  cursor?: Prisma.DispensationLigneWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.DispensationLigneScalarFieldEnum | Prisma.DispensationLigneScalarFieldEnum[]
 }
 
 /**

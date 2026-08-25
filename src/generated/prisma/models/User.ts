@@ -261,6 +261,9 @@ export type UserWhereInput = {
   paiements?: Prisma.PaiementListRelationFilter
   prescriptions?: Prisma.PrescriptionListRelationFilter
   consultationsMedecin?: Prisma.ConsultationListRelationFilter
+  mouvementsStock?: Prisma.MouvementStockListRelationFilter
+  dispensations?: Prisma.DispensationListRelationFilter
+  dispensationLignes?: Prisma.DispensationLigneListRelationFilter
   auditLogs?: Prisma.AuditLogListRelationFilter
 }
 
@@ -283,6 +286,9 @@ export type UserOrderByWithRelationInput = {
   paiements?: Prisma.PaiementOrderByRelationAggregateInput
   prescriptions?: Prisma.PrescriptionOrderByRelationAggregateInput
   consultationsMedecin?: Prisma.ConsultationOrderByRelationAggregateInput
+  mouvementsStock?: Prisma.MouvementStockOrderByRelationAggregateInput
+  dispensations?: Prisma.DispensationOrderByRelationAggregateInput
+  dispensationLignes?: Prisma.DispensationLigneOrderByRelationAggregateInput
   auditLogs?: Prisma.AuditLogOrderByRelationAggregateInput
 }
 
@@ -308,6 +314,9 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   paiements?: Prisma.PaiementListRelationFilter
   prescriptions?: Prisma.PrescriptionListRelationFilter
   consultationsMedecin?: Prisma.ConsultationListRelationFilter
+  mouvementsStock?: Prisma.MouvementStockListRelationFilter
+  dispensations?: Prisma.DispensationListRelationFilter
+  dispensationLignes?: Prisma.DispensationLigneListRelationFilter
   auditLogs?: Prisma.AuditLogListRelationFilter
 }, "id" | "email">
 
@@ -360,6 +369,9 @@ export type UserCreateInput = {
   paiements?: Prisma.PaiementCreateNestedManyWithoutCaissierInput
   prescriptions?: Prisma.PrescriptionCreateNestedManyWithoutAuteurInput
   consultationsMedecin?: Prisma.ConsultationCreateNestedManyWithoutUserMedecinInput
+  mouvementsStock?: Prisma.MouvementStockCreateNestedManyWithoutUtilisateurInput
+  dispensations?: Prisma.DispensationCreateNestedManyWithoutPharmacienInput
+  dispensationLignes?: Prisma.DispensationLigneCreateNestedManyWithoutPharmacienInput
   auditLogs?: Prisma.AuditLogCreateNestedManyWithoutUserInput
 }
 
@@ -381,6 +393,9 @@ export type UserUncheckedCreateInput = {
   paiements?: Prisma.PaiementUncheckedCreateNestedManyWithoutCaissierInput
   prescriptions?: Prisma.PrescriptionUncheckedCreateNestedManyWithoutAuteurInput
   consultationsMedecin?: Prisma.ConsultationUncheckedCreateNestedManyWithoutUserMedecinInput
+  mouvementsStock?: Prisma.MouvementStockUncheckedCreateNestedManyWithoutUtilisateurInput
+  dispensations?: Prisma.DispensationUncheckedCreateNestedManyWithoutPharmacienInput
+  dispensationLignes?: Prisma.DispensationLigneUncheckedCreateNestedManyWithoutPharmacienInput
   auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutUserInput
 }
 
@@ -401,6 +416,9 @@ export type UserUpdateInput = {
   paiements?: Prisma.PaiementUpdateManyWithoutCaissierNestedInput
   prescriptions?: Prisma.PrescriptionUpdateManyWithoutAuteurNestedInput
   consultationsMedecin?: Prisma.ConsultationUpdateManyWithoutUserMedecinNestedInput
+  mouvementsStock?: Prisma.MouvementStockUpdateManyWithoutUtilisateurNestedInput
+  dispensations?: Prisma.DispensationUpdateManyWithoutPharmacienNestedInput
+  dispensationLignes?: Prisma.DispensationLigneUpdateManyWithoutPharmacienNestedInput
   auditLogs?: Prisma.AuditLogUpdateManyWithoutUserNestedInput
 }
 
@@ -422,6 +440,9 @@ export type UserUncheckedUpdateInput = {
   paiements?: Prisma.PaiementUncheckedUpdateManyWithoutCaissierNestedInput
   prescriptions?: Prisma.PrescriptionUncheckedUpdateManyWithoutAuteurNestedInput
   consultationsMedecin?: Prisma.ConsultationUncheckedUpdateManyWithoutUserMedecinNestedInput
+  mouvementsStock?: Prisma.MouvementStockUncheckedUpdateManyWithoutUtilisateurNestedInput
+  dispensations?: Prisma.DispensationUncheckedUpdateManyWithoutPharmacienNestedInput
+  dispensationLignes?: Prisma.DispensationLigneUncheckedUpdateManyWithoutPharmacienNestedInput
   auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutUserNestedInput
 }
 
@@ -702,6 +723,54 @@ export type UserUpdateOneWithoutPrescriptionsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutPrescriptionsInput, Prisma.UserUpdateWithoutPrescriptionsInput>, Prisma.UserUncheckedUpdateWithoutPrescriptionsInput>
 }
 
+export type UserCreateNestedOneWithoutMouvementsStockInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutMouvementsStockInput, Prisma.UserUncheckedCreateWithoutMouvementsStockInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutMouvementsStockInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneWithoutMouvementsStockNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutMouvementsStockInput, Prisma.UserUncheckedCreateWithoutMouvementsStockInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutMouvementsStockInput
+  upsert?: Prisma.UserUpsertWithoutMouvementsStockInput
+  disconnect?: Prisma.UserWhereInput | boolean
+  delete?: Prisma.UserWhereInput | boolean
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutMouvementsStockInput, Prisma.UserUpdateWithoutMouvementsStockInput>, Prisma.UserUncheckedUpdateWithoutMouvementsStockInput>
+}
+
+export type UserCreateNestedOneWithoutDispensationsInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutDispensationsInput, Prisma.UserUncheckedCreateWithoutDispensationsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutDispensationsInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneWithoutDispensationsNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutDispensationsInput, Prisma.UserUncheckedCreateWithoutDispensationsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutDispensationsInput
+  upsert?: Prisma.UserUpsertWithoutDispensationsInput
+  disconnect?: Prisma.UserWhereInput | boolean
+  delete?: Prisma.UserWhereInput | boolean
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutDispensationsInput, Prisma.UserUpdateWithoutDispensationsInput>, Prisma.UserUncheckedUpdateWithoutDispensationsInput>
+}
+
+export type UserCreateNestedOneWithoutDispensationLignesInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutDispensationLignesInput, Prisma.UserUncheckedCreateWithoutDispensationLignesInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutDispensationLignesInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneWithoutDispensationLignesNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutDispensationLignesInput, Prisma.UserUncheckedCreateWithoutDispensationLignesInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutDispensationLignesInput
+  upsert?: Prisma.UserUpsertWithoutDispensationLignesInput
+  disconnect?: Prisma.UserWhereInput | boolean
+  delete?: Prisma.UserWhereInput | boolean
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutDispensationLignesInput, Prisma.UserUpdateWithoutDispensationLignesInput>, Prisma.UserUncheckedUpdateWithoutDispensationLignesInput>
+}
+
 export type UserCreateNestedOneWithoutPaiementsInput = {
   create?: Prisma.XOR<Prisma.UserCreateWithoutPaiementsInput, Prisma.UserUncheckedCreateWithoutPaiementsInput>
   connectOrCreate?: Prisma.UserCreateOrConnectWithoutPaiementsInput
@@ -750,6 +819,9 @@ export type UserCreateWithoutRoleInput = {
   paiements?: Prisma.PaiementCreateNestedManyWithoutCaissierInput
   prescriptions?: Prisma.PrescriptionCreateNestedManyWithoutAuteurInput
   consultationsMedecin?: Prisma.ConsultationCreateNestedManyWithoutUserMedecinInput
+  mouvementsStock?: Prisma.MouvementStockCreateNestedManyWithoutUtilisateurInput
+  dispensations?: Prisma.DispensationCreateNestedManyWithoutPharmacienInput
+  dispensationLignes?: Prisma.DispensationLigneCreateNestedManyWithoutPharmacienInput
   auditLogs?: Prisma.AuditLogCreateNestedManyWithoutUserInput
 }
 
@@ -770,6 +842,9 @@ export type UserUncheckedCreateWithoutRoleInput = {
   paiements?: Prisma.PaiementUncheckedCreateNestedManyWithoutCaissierInput
   prescriptions?: Prisma.PrescriptionUncheckedCreateNestedManyWithoutAuteurInput
   consultationsMedecin?: Prisma.ConsultationUncheckedCreateNestedManyWithoutUserMedecinInput
+  mouvementsStock?: Prisma.MouvementStockUncheckedCreateNestedManyWithoutUtilisateurInput
+  dispensations?: Prisma.DispensationUncheckedCreateNestedManyWithoutPharmacienInput
+  dispensationLignes?: Prisma.DispensationLigneUncheckedCreateNestedManyWithoutPharmacienInput
   auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutUserInput
 }
 
@@ -829,6 +904,9 @@ export type UserCreateWithoutEmployeInput = {
   paiements?: Prisma.PaiementCreateNestedManyWithoutCaissierInput
   prescriptions?: Prisma.PrescriptionCreateNestedManyWithoutAuteurInput
   consultationsMedecin?: Prisma.ConsultationCreateNestedManyWithoutUserMedecinInput
+  mouvementsStock?: Prisma.MouvementStockCreateNestedManyWithoutUtilisateurInput
+  dispensations?: Prisma.DispensationCreateNestedManyWithoutPharmacienInput
+  dispensationLignes?: Prisma.DispensationLigneCreateNestedManyWithoutPharmacienInput
   auditLogs?: Prisma.AuditLogCreateNestedManyWithoutUserInput
 }
 
@@ -849,6 +927,9 @@ export type UserUncheckedCreateWithoutEmployeInput = {
   paiements?: Prisma.PaiementUncheckedCreateNestedManyWithoutCaissierInput
   prescriptions?: Prisma.PrescriptionUncheckedCreateNestedManyWithoutAuteurInput
   consultationsMedecin?: Prisma.ConsultationUncheckedCreateNestedManyWithoutUserMedecinInput
+  mouvementsStock?: Prisma.MouvementStockUncheckedCreateNestedManyWithoutUtilisateurInput
+  dispensations?: Prisma.DispensationUncheckedCreateNestedManyWithoutPharmacienInput
+  dispensationLignes?: Prisma.DispensationLigneUncheckedCreateNestedManyWithoutPharmacienInput
   auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutUserInput
 }
 
@@ -884,6 +965,9 @@ export type UserUpdateWithoutEmployeInput = {
   paiements?: Prisma.PaiementUpdateManyWithoutCaissierNestedInput
   prescriptions?: Prisma.PrescriptionUpdateManyWithoutAuteurNestedInput
   consultationsMedecin?: Prisma.ConsultationUpdateManyWithoutUserMedecinNestedInput
+  mouvementsStock?: Prisma.MouvementStockUpdateManyWithoutUtilisateurNestedInput
+  dispensations?: Prisma.DispensationUpdateManyWithoutPharmacienNestedInput
+  dispensationLignes?: Prisma.DispensationLigneUpdateManyWithoutPharmacienNestedInput
   auditLogs?: Prisma.AuditLogUpdateManyWithoutUserNestedInput
 }
 
@@ -904,6 +988,9 @@ export type UserUncheckedUpdateWithoutEmployeInput = {
   paiements?: Prisma.PaiementUncheckedUpdateManyWithoutCaissierNestedInput
   prescriptions?: Prisma.PrescriptionUncheckedUpdateManyWithoutAuteurNestedInput
   consultationsMedecin?: Prisma.ConsultationUncheckedUpdateManyWithoutUserMedecinNestedInput
+  mouvementsStock?: Prisma.MouvementStockUncheckedUpdateManyWithoutUtilisateurNestedInput
+  dispensations?: Prisma.DispensationUncheckedUpdateManyWithoutPharmacienNestedInput
+  dispensationLignes?: Prisma.DispensationLigneUncheckedUpdateManyWithoutPharmacienNestedInput
   auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutUserNestedInput
 }
 
@@ -923,6 +1010,9 @@ export type UserCreateWithoutMedecinInput = {
   paiements?: Prisma.PaiementCreateNestedManyWithoutCaissierInput
   prescriptions?: Prisma.PrescriptionCreateNestedManyWithoutAuteurInput
   consultationsMedecin?: Prisma.ConsultationCreateNestedManyWithoutUserMedecinInput
+  mouvementsStock?: Prisma.MouvementStockCreateNestedManyWithoutUtilisateurInput
+  dispensations?: Prisma.DispensationCreateNestedManyWithoutPharmacienInput
+  dispensationLignes?: Prisma.DispensationLigneCreateNestedManyWithoutPharmacienInput
   auditLogs?: Prisma.AuditLogCreateNestedManyWithoutUserInput
 }
 
@@ -943,6 +1033,9 @@ export type UserUncheckedCreateWithoutMedecinInput = {
   paiements?: Prisma.PaiementUncheckedCreateNestedManyWithoutCaissierInput
   prescriptions?: Prisma.PrescriptionUncheckedCreateNestedManyWithoutAuteurInput
   consultationsMedecin?: Prisma.ConsultationUncheckedCreateNestedManyWithoutUserMedecinInput
+  mouvementsStock?: Prisma.MouvementStockUncheckedCreateNestedManyWithoutUtilisateurInput
+  dispensations?: Prisma.DispensationUncheckedCreateNestedManyWithoutPharmacienInput
+  dispensationLignes?: Prisma.DispensationLigneUncheckedCreateNestedManyWithoutPharmacienInput
   auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutUserInput
 }
 
@@ -978,6 +1071,9 @@ export type UserUpdateWithoutMedecinInput = {
   paiements?: Prisma.PaiementUpdateManyWithoutCaissierNestedInput
   prescriptions?: Prisma.PrescriptionUpdateManyWithoutAuteurNestedInput
   consultationsMedecin?: Prisma.ConsultationUpdateManyWithoutUserMedecinNestedInput
+  mouvementsStock?: Prisma.MouvementStockUpdateManyWithoutUtilisateurNestedInput
+  dispensations?: Prisma.DispensationUpdateManyWithoutPharmacienNestedInput
+  dispensationLignes?: Prisma.DispensationLigneUpdateManyWithoutPharmacienNestedInput
   auditLogs?: Prisma.AuditLogUpdateManyWithoutUserNestedInput
 }
 
@@ -998,6 +1094,9 @@ export type UserUncheckedUpdateWithoutMedecinInput = {
   paiements?: Prisma.PaiementUncheckedUpdateManyWithoutCaissierNestedInput
   prescriptions?: Prisma.PrescriptionUncheckedUpdateManyWithoutAuteurNestedInput
   consultationsMedecin?: Prisma.ConsultationUncheckedUpdateManyWithoutUserMedecinNestedInput
+  mouvementsStock?: Prisma.MouvementStockUncheckedUpdateManyWithoutUtilisateurNestedInput
+  dispensations?: Prisma.DispensationUncheckedUpdateManyWithoutPharmacienNestedInput
+  dispensationLignes?: Prisma.DispensationLigneUncheckedUpdateManyWithoutPharmacienNestedInput
   auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutUserNestedInput
 }
 
@@ -1017,6 +1116,9 @@ export type UserCreateWithoutInfirmierInput = {
   paiements?: Prisma.PaiementCreateNestedManyWithoutCaissierInput
   prescriptions?: Prisma.PrescriptionCreateNestedManyWithoutAuteurInput
   consultationsMedecin?: Prisma.ConsultationCreateNestedManyWithoutUserMedecinInput
+  mouvementsStock?: Prisma.MouvementStockCreateNestedManyWithoutUtilisateurInput
+  dispensations?: Prisma.DispensationCreateNestedManyWithoutPharmacienInput
+  dispensationLignes?: Prisma.DispensationLigneCreateNestedManyWithoutPharmacienInput
   auditLogs?: Prisma.AuditLogCreateNestedManyWithoutUserInput
 }
 
@@ -1037,6 +1139,9 @@ export type UserUncheckedCreateWithoutInfirmierInput = {
   paiements?: Prisma.PaiementUncheckedCreateNestedManyWithoutCaissierInput
   prescriptions?: Prisma.PrescriptionUncheckedCreateNestedManyWithoutAuteurInput
   consultationsMedecin?: Prisma.ConsultationUncheckedCreateNestedManyWithoutUserMedecinInput
+  mouvementsStock?: Prisma.MouvementStockUncheckedCreateNestedManyWithoutUtilisateurInput
+  dispensations?: Prisma.DispensationUncheckedCreateNestedManyWithoutPharmacienInput
+  dispensationLignes?: Prisma.DispensationLigneUncheckedCreateNestedManyWithoutPharmacienInput
   auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutUserInput
 }
 
@@ -1072,6 +1177,9 @@ export type UserUpdateWithoutInfirmierInput = {
   paiements?: Prisma.PaiementUpdateManyWithoutCaissierNestedInput
   prescriptions?: Prisma.PrescriptionUpdateManyWithoutAuteurNestedInput
   consultationsMedecin?: Prisma.ConsultationUpdateManyWithoutUserMedecinNestedInput
+  mouvementsStock?: Prisma.MouvementStockUpdateManyWithoutUtilisateurNestedInput
+  dispensations?: Prisma.DispensationUpdateManyWithoutPharmacienNestedInput
+  dispensationLignes?: Prisma.DispensationLigneUpdateManyWithoutPharmacienNestedInput
   auditLogs?: Prisma.AuditLogUpdateManyWithoutUserNestedInput
 }
 
@@ -1092,6 +1200,9 @@ export type UserUncheckedUpdateWithoutInfirmierInput = {
   paiements?: Prisma.PaiementUncheckedUpdateManyWithoutCaissierNestedInput
   prescriptions?: Prisma.PrescriptionUncheckedUpdateManyWithoutAuteurNestedInput
   consultationsMedecin?: Prisma.ConsultationUncheckedUpdateManyWithoutUserMedecinNestedInput
+  mouvementsStock?: Prisma.MouvementStockUncheckedUpdateManyWithoutUtilisateurNestedInput
+  dispensations?: Prisma.DispensationUncheckedUpdateManyWithoutPharmacienNestedInput
+  dispensationLignes?: Prisma.DispensationLigneUncheckedUpdateManyWithoutPharmacienNestedInput
   auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutUserNestedInput
 }
 
@@ -1111,6 +1222,9 @@ export type UserCreateWithoutRendezVousCreesInput = {
   paiements?: Prisma.PaiementCreateNestedManyWithoutCaissierInput
   prescriptions?: Prisma.PrescriptionCreateNestedManyWithoutAuteurInput
   consultationsMedecin?: Prisma.ConsultationCreateNestedManyWithoutUserMedecinInput
+  mouvementsStock?: Prisma.MouvementStockCreateNestedManyWithoutUtilisateurInput
+  dispensations?: Prisma.DispensationCreateNestedManyWithoutPharmacienInput
+  dispensationLignes?: Prisma.DispensationLigneCreateNestedManyWithoutPharmacienInput
   auditLogs?: Prisma.AuditLogCreateNestedManyWithoutUserInput
 }
 
@@ -1131,6 +1245,9 @@ export type UserUncheckedCreateWithoutRendezVousCreesInput = {
   paiements?: Prisma.PaiementUncheckedCreateNestedManyWithoutCaissierInput
   prescriptions?: Prisma.PrescriptionUncheckedCreateNestedManyWithoutAuteurInput
   consultationsMedecin?: Prisma.ConsultationUncheckedCreateNestedManyWithoutUserMedecinInput
+  mouvementsStock?: Prisma.MouvementStockUncheckedCreateNestedManyWithoutUtilisateurInput
+  dispensations?: Prisma.DispensationUncheckedCreateNestedManyWithoutPharmacienInput
+  dispensationLignes?: Prisma.DispensationLigneUncheckedCreateNestedManyWithoutPharmacienInput
   auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutUserInput
 }
 
@@ -1166,6 +1283,9 @@ export type UserUpdateWithoutRendezVousCreesInput = {
   paiements?: Prisma.PaiementUpdateManyWithoutCaissierNestedInput
   prescriptions?: Prisma.PrescriptionUpdateManyWithoutAuteurNestedInput
   consultationsMedecin?: Prisma.ConsultationUpdateManyWithoutUserMedecinNestedInput
+  mouvementsStock?: Prisma.MouvementStockUpdateManyWithoutUtilisateurNestedInput
+  dispensations?: Prisma.DispensationUpdateManyWithoutPharmacienNestedInput
+  dispensationLignes?: Prisma.DispensationLigneUpdateManyWithoutPharmacienNestedInput
   auditLogs?: Prisma.AuditLogUpdateManyWithoutUserNestedInput
 }
 
@@ -1186,6 +1306,9 @@ export type UserUncheckedUpdateWithoutRendezVousCreesInput = {
   paiements?: Prisma.PaiementUncheckedUpdateManyWithoutCaissierNestedInput
   prescriptions?: Prisma.PrescriptionUncheckedUpdateManyWithoutAuteurNestedInput
   consultationsMedecin?: Prisma.ConsultationUncheckedUpdateManyWithoutUserMedecinNestedInput
+  mouvementsStock?: Prisma.MouvementStockUncheckedUpdateManyWithoutUtilisateurNestedInput
+  dispensations?: Prisma.DispensationUncheckedUpdateManyWithoutPharmacienNestedInput
+  dispensationLignes?: Prisma.DispensationLigneUncheckedUpdateManyWithoutPharmacienNestedInput
   auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutUserNestedInput
 }
 
@@ -1205,6 +1328,9 @@ export type UserCreateWithoutAdmissionsInput = {
   paiements?: Prisma.PaiementCreateNestedManyWithoutCaissierInput
   prescriptions?: Prisma.PrescriptionCreateNestedManyWithoutAuteurInput
   consultationsMedecin?: Prisma.ConsultationCreateNestedManyWithoutUserMedecinInput
+  mouvementsStock?: Prisma.MouvementStockCreateNestedManyWithoutUtilisateurInput
+  dispensations?: Prisma.DispensationCreateNestedManyWithoutPharmacienInput
+  dispensationLignes?: Prisma.DispensationLigneCreateNestedManyWithoutPharmacienInput
   auditLogs?: Prisma.AuditLogCreateNestedManyWithoutUserInput
 }
 
@@ -1225,6 +1351,9 @@ export type UserUncheckedCreateWithoutAdmissionsInput = {
   paiements?: Prisma.PaiementUncheckedCreateNestedManyWithoutCaissierInput
   prescriptions?: Prisma.PrescriptionUncheckedCreateNestedManyWithoutAuteurInput
   consultationsMedecin?: Prisma.ConsultationUncheckedCreateNestedManyWithoutUserMedecinInput
+  mouvementsStock?: Prisma.MouvementStockUncheckedCreateNestedManyWithoutUtilisateurInput
+  dispensations?: Prisma.DispensationUncheckedCreateNestedManyWithoutPharmacienInput
+  dispensationLignes?: Prisma.DispensationLigneUncheckedCreateNestedManyWithoutPharmacienInput
   auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutUserInput
 }
 
@@ -1260,6 +1389,9 @@ export type UserUpdateWithoutAdmissionsInput = {
   paiements?: Prisma.PaiementUpdateManyWithoutCaissierNestedInput
   prescriptions?: Prisma.PrescriptionUpdateManyWithoutAuteurNestedInput
   consultationsMedecin?: Prisma.ConsultationUpdateManyWithoutUserMedecinNestedInput
+  mouvementsStock?: Prisma.MouvementStockUpdateManyWithoutUtilisateurNestedInput
+  dispensations?: Prisma.DispensationUpdateManyWithoutPharmacienNestedInput
+  dispensationLignes?: Prisma.DispensationLigneUpdateManyWithoutPharmacienNestedInput
   auditLogs?: Prisma.AuditLogUpdateManyWithoutUserNestedInput
 }
 
@@ -1280,6 +1412,9 @@ export type UserUncheckedUpdateWithoutAdmissionsInput = {
   paiements?: Prisma.PaiementUncheckedUpdateManyWithoutCaissierNestedInput
   prescriptions?: Prisma.PrescriptionUncheckedUpdateManyWithoutAuteurNestedInput
   consultationsMedecin?: Prisma.ConsultationUncheckedUpdateManyWithoutUserMedecinNestedInput
+  mouvementsStock?: Prisma.MouvementStockUncheckedUpdateManyWithoutUtilisateurNestedInput
+  dispensations?: Prisma.DispensationUncheckedUpdateManyWithoutPharmacienNestedInput
+  dispensationLignes?: Prisma.DispensationLigneUncheckedUpdateManyWithoutPharmacienNestedInput
   auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutUserNestedInput
 }
 
@@ -1299,6 +1434,9 @@ export type UserCreateWithoutConsultationsMedecinInput = {
   admissions?: Prisma.AdmissionCreateNestedManyWithoutCreatedByInput
   paiements?: Prisma.PaiementCreateNestedManyWithoutCaissierInput
   prescriptions?: Prisma.PrescriptionCreateNestedManyWithoutAuteurInput
+  mouvementsStock?: Prisma.MouvementStockCreateNestedManyWithoutUtilisateurInput
+  dispensations?: Prisma.DispensationCreateNestedManyWithoutPharmacienInput
+  dispensationLignes?: Prisma.DispensationLigneCreateNestedManyWithoutPharmacienInput
   auditLogs?: Prisma.AuditLogCreateNestedManyWithoutUserInput
 }
 
@@ -1319,6 +1457,9 @@ export type UserUncheckedCreateWithoutConsultationsMedecinInput = {
   admissions?: Prisma.AdmissionUncheckedCreateNestedManyWithoutCreatedByInput
   paiements?: Prisma.PaiementUncheckedCreateNestedManyWithoutCaissierInput
   prescriptions?: Prisma.PrescriptionUncheckedCreateNestedManyWithoutAuteurInput
+  mouvementsStock?: Prisma.MouvementStockUncheckedCreateNestedManyWithoutUtilisateurInput
+  dispensations?: Prisma.DispensationUncheckedCreateNestedManyWithoutPharmacienInput
+  dispensationLignes?: Prisma.DispensationLigneUncheckedCreateNestedManyWithoutPharmacienInput
   auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutUserInput
 }
 
@@ -1354,6 +1495,9 @@ export type UserUpdateWithoutConsultationsMedecinInput = {
   admissions?: Prisma.AdmissionUpdateManyWithoutCreatedByNestedInput
   paiements?: Prisma.PaiementUpdateManyWithoutCaissierNestedInput
   prescriptions?: Prisma.PrescriptionUpdateManyWithoutAuteurNestedInput
+  mouvementsStock?: Prisma.MouvementStockUpdateManyWithoutUtilisateurNestedInput
+  dispensations?: Prisma.DispensationUpdateManyWithoutPharmacienNestedInput
+  dispensationLignes?: Prisma.DispensationLigneUpdateManyWithoutPharmacienNestedInput
   auditLogs?: Prisma.AuditLogUpdateManyWithoutUserNestedInput
 }
 
@@ -1374,6 +1518,9 @@ export type UserUncheckedUpdateWithoutConsultationsMedecinInput = {
   admissions?: Prisma.AdmissionUncheckedUpdateManyWithoutCreatedByNestedInput
   paiements?: Prisma.PaiementUncheckedUpdateManyWithoutCaissierNestedInput
   prescriptions?: Prisma.PrescriptionUncheckedUpdateManyWithoutAuteurNestedInput
+  mouvementsStock?: Prisma.MouvementStockUncheckedUpdateManyWithoutUtilisateurNestedInput
+  dispensations?: Prisma.DispensationUncheckedUpdateManyWithoutPharmacienNestedInput
+  dispensationLignes?: Prisma.DispensationLigneUncheckedUpdateManyWithoutPharmacienNestedInput
   auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutUserNestedInput
 }
 
@@ -1393,6 +1540,9 @@ export type UserCreateWithoutPrescriptionsInput = {
   admissions?: Prisma.AdmissionCreateNestedManyWithoutCreatedByInput
   paiements?: Prisma.PaiementCreateNestedManyWithoutCaissierInput
   consultationsMedecin?: Prisma.ConsultationCreateNestedManyWithoutUserMedecinInput
+  mouvementsStock?: Prisma.MouvementStockCreateNestedManyWithoutUtilisateurInput
+  dispensations?: Prisma.DispensationCreateNestedManyWithoutPharmacienInput
+  dispensationLignes?: Prisma.DispensationLigneCreateNestedManyWithoutPharmacienInput
   auditLogs?: Prisma.AuditLogCreateNestedManyWithoutUserInput
 }
 
@@ -1413,6 +1563,9 @@ export type UserUncheckedCreateWithoutPrescriptionsInput = {
   admissions?: Prisma.AdmissionUncheckedCreateNestedManyWithoutCreatedByInput
   paiements?: Prisma.PaiementUncheckedCreateNestedManyWithoutCaissierInput
   consultationsMedecin?: Prisma.ConsultationUncheckedCreateNestedManyWithoutUserMedecinInput
+  mouvementsStock?: Prisma.MouvementStockUncheckedCreateNestedManyWithoutUtilisateurInput
+  dispensations?: Prisma.DispensationUncheckedCreateNestedManyWithoutPharmacienInput
+  dispensationLignes?: Prisma.DispensationLigneUncheckedCreateNestedManyWithoutPharmacienInput
   auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutUserInput
 }
 
@@ -1448,6 +1601,9 @@ export type UserUpdateWithoutPrescriptionsInput = {
   admissions?: Prisma.AdmissionUpdateManyWithoutCreatedByNestedInput
   paiements?: Prisma.PaiementUpdateManyWithoutCaissierNestedInput
   consultationsMedecin?: Prisma.ConsultationUpdateManyWithoutUserMedecinNestedInput
+  mouvementsStock?: Prisma.MouvementStockUpdateManyWithoutUtilisateurNestedInput
+  dispensations?: Prisma.DispensationUpdateManyWithoutPharmacienNestedInput
+  dispensationLignes?: Prisma.DispensationLigneUpdateManyWithoutPharmacienNestedInput
   auditLogs?: Prisma.AuditLogUpdateManyWithoutUserNestedInput
 }
 
@@ -1468,6 +1624,327 @@ export type UserUncheckedUpdateWithoutPrescriptionsInput = {
   admissions?: Prisma.AdmissionUncheckedUpdateManyWithoutCreatedByNestedInput
   paiements?: Prisma.PaiementUncheckedUpdateManyWithoutCaissierNestedInput
   consultationsMedecin?: Prisma.ConsultationUncheckedUpdateManyWithoutUserMedecinNestedInput
+  mouvementsStock?: Prisma.MouvementStockUncheckedUpdateManyWithoutUtilisateurNestedInput
+  dispensations?: Prisma.DispensationUncheckedUpdateManyWithoutPharmacienNestedInput
+  dispensationLignes?: Prisma.DispensationLigneUncheckedUpdateManyWithoutPharmacienNestedInput
+  auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutUserNestedInput
+}
+
+export type UserCreateWithoutMouvementsStockInput = {
+  name?: string | null
+  email?: string | null
+  password?: string | null
+  telephone?: string | null
+  actif?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  role?: Prisma.RoleCreateNestedOneWithoutUsersInput
+  employe?: Prisma.EmployeCreateNestedOneWithoutUserInput
+  medecin?: Prisma.MedecinCreateNestedOneWithoutUserInput
+  infirmier?: Prisma.InfirmierCreateNestedOneWithoutUserInput
+  rendezVousCrees?: Prisma.RendezVousCreateNestedManyWithoutCreatedByInput
+  admissions?: Prisma.AdmissionCreateNestedManyWithoutCreatedByInput
+  paiements?: Prisma.PaiementCreateNestedManyWithoutCaissierInput
+  prescriptions?: Prisma.PrescriptionCreateNestedManyWithoutAuteurInput
+  consultationsMedecin?: Prisma.ConsultationCreateNestedManyWithoutUserMedecinInput
+  dispensations?: Prisma.DispensationCreateNestedManyWithoutPharmacienInput
+  dispensationLignes?: Prisma.DispensationLigneCreateNestedManyWithoutPharmacienInput
+  auditLogs?: Prisma.AuditLogCreateNestedManyWithoutUserInput
+}
+
+export type UserUncheckedCreateWithoutMouvementsStockInput = {
+  id?: number
+  name?: string | null
+  email?: string | null
+  password?: string | null
+  telephone?: string | null
+  actif?: boolean
+  roleId?: number | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  employe?: Prisma.EmployeUncheckedCreateNestedOneWithoutUserInput
+  medecin?: Prisma.MedecinUncheckedCreateNestedOneWithoutUserInput
+  infirmier?: Prisma.InfirmierUncheckedCreateNestedOneWithoutUserInput
+  rendezVousCrees?: Prisma.RendezVousUncheckedCreateNestedManyWithoutCreatedByInput
+  admissions?: Prisma.AdmissionUncheckedCreateNestedManyWithoutCreatedByInput
+  paiements?: Prisma.PaiementUncheckedCreateNestedManyWithoutCaissierInput
+  prescriptions?: Prisma.PrescriptionUncheckedCreateNestedManyWithoutAuteurInput
+  consultationsMedecin?: Prisma.ConsultationUncheckedCreateNestedManyWithoutUserMedecinInput
+  dispensations?: Prisma.DispensationUncheckedCreateNestedManyWithoutPharmacienInput
+  dispensationLignes?: Prisma.DispensationLigneUncheckedCreateNestedManyWithoutPharmacienInput
+  auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutUserInput
+}
+
+export type UserCreateOrConnectWithoutMouvementsStockInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutMouvementsStockInput, Prisma.UserUncheckedCreateWithoutMouvementsStockInput>
+}
+
+export type UserUpsertWithoutMouvementsStockInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutMouvementsStockInput, Prisma.UserUncheckedUpdateWithoutMouvementsStockInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutMouvementsStockInput, Prisma.UserUncheckedCreateWithoutMouvementsStockInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutMouvementsStockInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutMouvementsStockInput, Prisma.UserUncheckedUpdateWithoutMouvementsStockInput>
+}
+
+export type UserUpdateWithoutMouvementsStockInput = {
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  telephone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  actif?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  role?: Prisma.RoleUpdateOneWithoutUsersNestedInput
+  employe?: Prisma.EmployeUpdateOneWithoutUserNestedInput
+  medecin?: Prisma.MedecinUpdateOneWithoutUserNestedInput
+  infirmier?: Prisma.InfirmierUpdateOneWithoutUserNestedInput
+  rendezVousCrees?: Prisma.RendezVousUpdateManyWithoutCreatedByNestedInput
+  admissions?: Prisma.AdmissionUpdateManyWithoutCreatedByNestedInput
+  paiements?: Prisma.PaiementUpdateManyWithoutCaissierNestedInput
+  prescriptions?: Prisma.PrescriptionUpdateManyWithoutAuteurNestedInput
+  consultationsMedecin?: Prisma.ConsultationUpdateManyWithoutUserMedecinNestedInput
+  dispensations?: Prisma.DispensationUpdateManyWithoutPharmacienNestedInput
+  dispensationLignes?: Prisma.DispensationLigneUpdateManyWithoutPharmacienNestedInput
+  auditLogs?: Prisma.AuditLogUpdateManyWithoutUserNestedInput
+}
+
+export type UserUncheckedUpdateWithoutMouvementsStockInput = {
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  telephone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  actif?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  roleId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  employe?: Prisma.EmployeUncheckedUpdateOneWithoutUserNestedInput
+  medecin?: Prisma.MedecinUncheckedUpdateOneWithoutUserNestedInput
+  infirmier?: Prisma.InfirmierUncheckedUpdateOneWithoutUserNestedInput
+  rendezVousCrees?: Prisma.RendezVousUncheckedUpdateManyWithoutCreatedByNestedInput
+  admissions?: Prisma.AdmissionUncheckedUpdateManyWithoutCreatedByNestedInput
+  paiements?: Prisma.PaiementUncheckedUpdateManyWithoutCaissierNestedInput
+  prescriptions?: Prisma.PrescriptionUncheckedUpdateManyWithoutAuteurNestedInput
+  consultationsMedecin?: Prisma.ConsultationUncheckedUpdateManyWithoutUserMedecinNestedInput
+  dispensations?: Prisma.DispensationUncheckedUpdateManyWithoutPharmacienNestedInput
+  dispensationLignes?: Prisma.DispensationLigneUncheckedUpdateManyWithoutPharmacienNestedInput
+  auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutUserNestedInput
+}
+
+export type UserCreateWithoutDispensationsInput = {
+  name?: string | null
+  email?: string | null
+  password?: string | null
+  telephone?: string | null
+  actif?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  role?: Prisma.RoleCreateNestedOneWithoutUsersInput
+  employe?: Prisma.EmployeCreateNestedOneWithoutUserInput
+  medecin?: Prisma.MedecinCreateNestedOneWithoutUserInput
+  infirmier?: Prisma.InfirmierCreateNestedOneWithoutUserInput
+  rendezVousCrees?: Prisma.RendezVousCreateNestedManyWithoutCreatedByInput
+  admissions?: Prisma.AdmissionCreateNestedManyWithoutCreatedByInput
+  paiements?: Prisma.PaiementCreateNestedManyWithoutCaissierInput
+  prescriptions?: Prisma.PrescriptionCreateNestedManyWithoutAuteurInput
+  consultationsMedecin?: Prisma.ConsultationCreateNestedManyWithoutUserMedecinInput
+  mouvementsStock?: Prisma.MouvementStockCreateNestedManyWithoutUtilisateurInput
+  dispensationLignes?: Prisma.DispensationLigneCreateNestedManyWithoutPharmacienInput
+  auditLogs?: Prisma.AuditLogCreateNestedManyWithoutUserInput
+}
+
+export type UserUncheckedCreateWithoutDispensationsInput = {
+  id?: number
+  name?: string | null
+  email?: string | null
+  password?: string | null
+  telephone?: string | null
+  actif?: boolean
+  roleId?: number | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  employe?: Prisma.EmployeUncheckedCreateNestedOneWithoutUserInput
+  medecin?: Prisma.MedecinUncheckedCreateNestedOneWithoutUserInput
+  infirmier?: Prisma.InfirmierUncheckedCreateNestedOneWithoutUserInput
+  rendezVousCrees?: Prisma.RendezVousUncheckedCreateNestedManyWithoutCreatedByInput
+  admissions?: Prisma.AdmissionUncheckedCreateNestedManyWithoutCreatedByInput
+  paiements?: Prisma.PaiementUncheckedCreateNestedManyWithoutCaissierInput
+  prescriptions?: Prisma.PrescriptionUncheckedCreateNestedManyWithoutAuteurInput
+  consultationsMedecin?: Prisma.ConsultationUncheckedCreateNestedManyWithoutUserMedecinInput
+  mouvementsStock?: Prisma.MouvementStockUncheckedCreateNestedManyWithoutUtilisateurInput
+  dispensationLignes?: Prisma.DispensationLigneUncheckedCreateNestedManyWithoutPharmacienInput
+  auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutUserInput
+}
+
+export type UserCreateOrConnectWithoutDispensationsInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutDispensationsInput, Prisma.UserUncheckedCreateWithoutDispensationsInput>
+}
+
+export type UserUpsertWithoutDispensationsInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutDispensationsInput, Prisma.UserUncheckedUpdateWithoutDispensationsInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutDispensationsInput, Prisma.UserUncheckedCreateWithoutDispensationsInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutDispensationsInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutDispensationsInput, Prisma.UserUncheckedUpdateWithoutDispensationsInput>
+}
+
+export type UserUpdateWithoutDispensationsInput = {
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  telephone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  actif?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  role?: Prisma.RoleUpdateOneWithoutUsersNestedInput
+  employe?: Prisma.EmployeUpdateOneWithoutUserNestedInput
+  medecin?: Prisma.MedecinUpdateOneWithoutUserNestedInput
+  infirmier?: Prisma.InfirmierUpdateOneWithoutUserNestedInput
+  rendezVousCrees?: Prisma.RendezVousUpdateManyWithoutCreatedByNestedInput
+  admissions?: Prisma.AdmissionUpdateManyWithoutCreatedByNestedInput
+  paiements?: Prisma.PaiementUpdateManyWithoutCaissierNestedInput
+  prescriptions?: Prisma.PrescriptionUpdateManyWithoutAuteurNestedInput
+  consultationsMedecin?: Prisma.ConsultationUpdateManyWithoutUserMedecinNestedInput
+  mouvementsStock?: Prisma.MouvementStockUpdateManyWithoutUtilisateurNestedInput
+  dispensationLignes?: Prisma.DispensationLigneUpdateManyWithoutPharmacienNestedInput
+  auditLogs?: Prisma.AuditLogUpdateManyWithoutUserNestedInput
+}
+
+export type UserUncheckedUpdateWithoutDispensationsInput = {
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  telephone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  actif?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  roleId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  employe?: Prisma.EmployeUncheckedUpdateOneWithoutUserNestedInput
+  medecin?: Prisma.MedecinUncheckedUpdateOneWithoutUserNestedInput
+  infirmier?: Prisma.InfirmierUncheckedUpdateOneWithoutUserNestedInput
+  rendezVousCrees?: Prisma.RendezVousUncheckedUpdateManyWithoutCreatedByNestedInput
+  admissions?: Prisma.AdmissionUncheckedUpdateManyWithoutCreatedByNestedInput
+  paiements?: Prisma.PaiementUncheckedUpdateManyWithoutCaissierNestedInput
+  prescriptions?: Prisma.PrescriptionUncheckedUpdateManyWithoutAuteurNestedInput
+  consultationsMedecin?: Prisma.ConsultationUncheckedUpdateManyWithoutUserMedecinNestedInput
+  mouvementsStock?: Prisma.MouvementStockUncheckedUpdateManyWithoutUtilisateurNestedInput
+  dispensationLignes?: Prisma.DispensationLigneUncheckedUpdateManyWithoutPharmacienNestedInput
+  auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutUserNestedInput
+}
+
+export type UserCreateWithoutDispensationLignesInput = {
+  name?: string | null
+  email?: string | null
+  password?: string | null
+  telephone?: string | null
+  actif?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  role?: Prisma.RoleCreateNestedOneWithoutUsersInput
+  employe?: Prisma.EmployeCreateNestedOneWithoutUserInput
+  medecin?: Prisma.MedecinCreateNestedOneWithoutUserInput
+  infirmier?: Prisma.InfirmierCreateNestedOneWithoutUserInput
+  rendezVousCrees?: Prisma.RendezVousCreateNestedManyWithoutCreatedByInput
+  admissions?: Prisma.AdmissionCreateNestedManyWithoutCreatedByInput
+  paiements?: Prisma.PaiementCreateNestedManyWithoutCaissierInput
+  prescriptions?: Prisma.PrescriptionCreateNestedManyWithoutAuteurInput
+  consultationsMedecin?: Prisma.ConsultationCreateNestedManyWithoutUserMedecinInput
+  mouvementsStock?: Prisma.MouvementStockCreateNestedManyWithoutUtilisateurInput
+  dispensations?: Prisma.DispensationCreateNestedManyWithoutPharmacienInput
+  auditLogs?: Prisma.AuditLogCreateNestedManyWithoutUserInput
+}
+
+export type UserUncheckedCreateWithoutDispensationLignesInput = {
+  id?: number
+  name?: string | null
+  email?: string | null
+  password?: string | null
+  telephone?: string | null
+  actif?: boolean
+  roleId?: number | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  employe?: Prisma.EmployeUncheckedCreateNestedOneWithoutUserInput
+  medecin?: Prisma.MedecinUncheckedCreateNestedOneWithoutUserInput
+  infirmier?: Prisma.InfirmierUncheckedCreateNestedOneWithoutUserInput
+  rendezVousCrees?: Prisma.RendezVousUncheckedCreateNestedManyWithoutCreatedByInput
+  admissions?: Prisma.AdmissionUncheckedCreateNestedManyWithoutCreatedByInput
+  paiements?: Prisma.PaiementUncheckedCreateNestedManyWithoutCaissierInput
+  prescriptions?: Prisma.PrescriptionUncheckedCreateNestedManyWithoutAuteurInput
+  consultationsMedecin?: Prisma.ConsultationUncheckedCreateNestedManyWithoutUserMedecinInput
+  mouvementsStock?: Prisma.MouvementStockUncheckedCreateNestedManyWithoutUtilisateurInput
+  dispensations?: Prisma.DispensationUncheckedCreateNestedManyWithoutPharmacienInput
+  auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutUserInput
+}
+
+export type UserCreateOrConnectWithoutDispensationLignesInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutDispensationLignesInput, Prisma.UserUncheckedCreateWithoutDispensationLignesInput>
+}
+
+export type UserUpsertWithoutDispensationLignesInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutDispensationLignesInput, Prisma.UserUncheckedUpdateWithoutDispensationLignesInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutDispensationLignesInput, Prisma.UserUncheckedCreateWithoutDispensationLignesInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutDispensationLignesInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutDispensationLignesInput, Prisma.UserUncheckedUpdateWithoutDispensationLignesInput>
+}
+
+export type UserUpdateWithoutDispensationLignesInput = {
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  telephone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  actif?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  role?: Prisma.RoleUpdateOneWithoutUsersNestedInput
+  employe?: Prisma.EmployeUpdateOneWithoutUserNestedInput
+  medecin?: Prisma.MedecinUpdateOneWithoutUserNestedInput
+  infirmier?: Prisma.InfirmierUpdateOneWithoutUserNestedInput
+  rendezVousCrees?: Prisma.RendezVousUpdateManyWithoutCreatedByNestedInput
+  admissions?: Prisma.AdmissionUpdateManyWithoutCreatedByNestedInput
+  paiements?: Prisma.PaiementUpdateManyWithoutCaissierNestedInput
+  prescriptions?: Prisma.PrescriptionUpdateManyWithoutAuteurNestedInput
+  consultationsMedecin?: Prisma.ConsultationUpdateManyWithoutUserMedecinNestedInput
+  mouvementsStock?: Prisma.MouvementStockUpdateManyWithoutUtilisateurNestedInput
+  dispensations?: Prisma.DispensationUpdateManyWithoutPharmacienNestedInput
+  auditLogs?: Prisma.AuditLogUpdateManyWithoutUserNestedInput
+}
+
+export type UserUncheckedUpdateWithoutDispensationLignesInput = {
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  telephone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  actif?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  roleId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  employe?: Prisma.EmployeUncheckedUpdateOneWithoutUserNestedInput
+  medecin?: Prisma.MedecinUncheckedUpdateOneWithoutUserNestedInput
+  infirmier?: Prisma.InfirmierUncheckedUpdateOneWithoutUserNestedInput
+  rendezVousCrees?: Prisma.RendezVousUncheckedUpdateManyWithoutCreatedByNestedInput
+  admissions?: Prisma.AdmissionUncheckedUpdateManyWithoutCreatedByNestedInput
+  paiements?: Prisma.PaiementUncheckedUpdateManyWithoutCaissierNestedInput
+  prescriptions?: Prisma.PrescriptionUncheckedUpdateManyWithoutAuteurNestedInput
+  consultationsMedecin?: Prisma.ConsultationUncheckedUpdateManyWithoutUserMedecinNestedInput
+  mouvementsStock?: Prisma.MouvementStockUncheckedUpdateManyWithoutUtilisateurNestedInput
+  dispensations?: Prisma.DispensationUncheckedUpdateManyWithoutPharmacienNestedInput
   auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutUserNestedInput
 }
 
@@ -1487,6 +1964,9 @@ export type UserCreateWithoutPaiementsInput = {
   admissions?: Prisma.AdmissionCreateNestedManyWithoutCreatedByInput
   prescriptions?: Prisma.PrescriptionCreateNestedManyWithoutAuteurInput
   consultationsMedecin?: Prisma.ConsultationCreateNestedManyWithoutUserMedecinInput
+  mouvementsStock?: Prisma.MouvementStockCreateNestedManyWithoutUtilisateurInput
+  dispensations?: Prisma.DispensationCreateNestedManyWithoutPharmacienInput
+  dispensationLignes?: Prisma.DispensationLigneCreateNestedManyWithoutPharmacienInput
   auditLogs?: Prisma.AuditLogCreateNestedManyWithoutUserInput
 }
 
@@ -1507,6 +1987,9 @@ export type UserUncheckedCreateWithoutPaiementsInput = {
   admissions?: Prisma.AdmissionUncheckedCreateNestedManyWithoutCreatedByInput
   prescriptions?: Prisma.PrescriptionUncheckedCreateNestedManyWithoutAuteurInput
   consultationsMedecin?: Prisma.ConsultationUncheckedCreateNestedManyWithoutUserMedecinInput
+  mouvementsStock?: Prisma.MouvementStockUncheckedCreateNestedManyWithoutUtilisateurInput
+  dispensations?: Prisma.DispensationUncheckedCreateNestedManyWithoutPharmacienInput
+  dispensationLignes?: Prisma.DispensationLigneUncheckedCreateNestedManyWithoutPharmacienInput
   auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutUserInput
 }
 
@@ -1542,6 +2025,9 @@ export type UserUpdateWithoutPaiementsInput = {
   admissions?: Prisma.AdmissionUpdateManyWithoutCreatedByNestedInput
   prescriptions?: Prisma.PrescriptionUpdateManyWithoutAuteurNestedInput
   consultationsMedecin?: Prisma.ConsultationUpdateManyWithoutUserMedecinNestedInput
+  mouvementsStock?: Prisma.MouvementStockUpdateManyWithoutUtilisateurNestedInput
+  dispensations?: Prisma.DispensationUpdateManyWithoutPharmacienNestedInput
+  dispensationLignes?: Prisma.DispensationLigneUpdateManyWithoutPharmacienNestedInput
   auditLogs?: Prisma.AuditLogUpdateManyWithoutUserNestedInput
 }
 
@@ -1562,6 +2048,9 @@ export type UserUncheckedUpdateWithoutPaiementsInput = {
   admissions?: Prisma.AdmissionUncheckedUpdateManyWithoutCreatedByNestedInput
   prescriptions?: Prisma.PrescriptionUncheckedUpdateManyWithoutAuteurNestedInput
   consultationsMedecin?: Prisma.ConsultationUncheckedUpdateManyWithoutUserMedecinNestedInput
+  mouvementsStock?: Prisma.MouvementStockUncheckedUpdateManyWithoutUtilisateurNestedInput
+  dispensations?: Prisma.DispensationUncheckedUpdateManyWithoutPharmacienNestedInput
+  dispensationLignes?: Prisma.DispensationLigneUncheckedUpdateManyWithoutPharmacienNestedInput
   auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutUserNestedInput
 }
 
@@ -1582,6 +2071,9 @@ export type UserCreateWithoutAuditLogsInput = {
   paiements?: Prisma.PaiementCreateNestedManyWithoutCaissierInput
   prescriptions?: Prisma.PrescriptionCreateNestedManyWithoutAuteurInput
   consultationsMedecin?: Prisma.ConsultationCreateNestedManyWithoutUserMedecinInput
+  mouvementsStock?: Prisma.MouvementStockCreateNestedManyWithoutUtilisateurInput
+  dispensations?: Prisma.DispensationCreateNestedManyWithoutPharmacienInput
+  dispensationLignes?: Prisma.DispensationLigneCreateNestedManyWithoutPharmacienInput
 }
 
 export type UserUncheckedCreateWithoutAuditLogsInput = {
@@ -1602,6 +2094,9 @@ export type UserUncheckedCreateWithoutAuditLogsInput = {
   paiements?: Prisma.PaiementUncheckedCreateNestedManyWithoutCaissierInput
   prescriptions?: Prisma.PrescriptionUncheckedCreateNestedManyWithoutAuteurInput
   consultationsMedecin?: Prisma.ConsultationUncheckedCreateNestedManyWithoutUserMedecinInput
+  mouvementsStock?: Prisma.MouvementStockUncheckedCreateNestedManyWithoutUtilisateurInput
+  dispensations?: Prisma.DispensationUncheckedCreateNestedManyWithoutPharmacienInput
+  dispensationLignes?: Prisma.DispensationLigneUncheckedCreateNestedManyWithoutPharmacienInput
 }
 
 export type UserCreateOrConnectWithoutAuditLogsInput = {
@@ -1637,6 +2132,9 @@ export type UserUpdateWithoutAuditLogsInput = {
   paiements?: Prisma.PaiementUpdateManyWithoutCaissierNestedInput
   prescriptions?: Prisma.PrescriptionUpdateManyWithoutAuteurNestedInput
   consultationsMedecin?: Prisma.ConsultationUpdateManyWithoutUserMedecinNestedInput
+  mouvementsStock?: Prisma.MouvementStockUpdateManyWithoutUtilisateurNestedInput
+  dispensations?: Prisma.DispensationUpdateManyWithoutPharmacienNestedInput
+  dispensationLignes?: Prisma.DispensationLigneUpdateManyWithoutPharmacienNestedInput
 }
 
 export type UserUncheckedUpdateWithoutAuditLogsInput = {
@@ -1657,6 +2155,9 @@ export type UserUncheckedUpdateWithoutAuditLogsInput = {
   paiements?: Prisma.PaiementUncheckedUpdateManyWithoutCaissierNestedInput
   prescriptions?: Prisma.PrescriptionUncheckedUpdateManyWithoutAuteurNestedInput
   consultationsMedecin?: Prisma.ConsultationUncheckedUpdateManyWithoutUserMedecinNestedInput
+  mouvementsStock?: Prisma.MouvementStockUncheckedUpdateManyWithoutUtilisateurNestedInput
+  dispensations?: Prisma.DispensationUncheckedUpdateManyWithoutPharmacienNestedInput
+  dispensationLignes?: Prisma.DispensationLigneUncheckedUpdateManyWithoutPharmacienNestedInput
 }
 
 export type UserCreateManyRoleInput = {
@@ -1686,6 +2187,9 @@ export type UserUpdateWithoutRoleInput = {
   paiements?: Prisma.PaiementUpdateManyWithoutCaissierNestedInput
   prescriptions?: Prisma.PrescriptionUpdateManyWithoutAuteurNestedInput
   consultationsMedecin?: Prisma.ConsultationUpdateManyWithoutUserMedecinNestedInput
+  mouvementsStock?: Prisma.MouvementStockUpdateManyWithoutUtilisateurNestedInput
+  dispensations?: Prisma.DispensationUpdateManyWithoutPharmacienNestedInput
+  dispensationLignes?: Prisma.DispensationLigneUpdateManyWithoutPharmacienNestedInput
   auditLogs?: Prisma.AuditLogUpdateManyWithoutUserNestedInput
 }
 
@@ -1706,6 +2210,9 @@ export type UserUncheckedUpdateWithoutRoleInput = {
   paiements?: Prisma.PaiementUncheckedUpdateManyWithoutCaissierNestedInput
   prescriptions?: Prisma.PrescriptionUncheckedUpdateManyWithoutAuteurNestedInput
   consultationsMedecin?: Prisma.ConsultationUncheckedUpdateManyWithoutUserMedecinNestedInput
+  mouvementsStock?: Prisma.MouvementStockUncheckedUpdateManyWithoutUtilisateurNestedInput
+  dispensations?: Prisma.DispensationUncheckedUpdateManyWithoutPharmacienNestedInput
+  dispensationLignes?: Prisma.DispensationLigneUncheckedUpdateManyWithoutPharmacienNestedInput
   auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutUserNestedInput
 }
 
@@ -1731,6 +2238,9 @@ export type UserCountOutputType = {
   paiements: number
   prescriptions: number
   consultationsMedecin: number
+  mouvementsStock: number
+  dispensations: number
+  dispensationLignes: number
   auditLogs: number
 }
 
@@ -1740,6 +2250,9 @@ export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.I
   paiements?: boolean | UserCountOutputTypeCountPaiementsArgs
   prescriptions?: boolean | UserCountOutputTypeCountPrescriptionsArgs
   consultationsMedecin?: boolean | UserCountOutputTypeCountConsultationsMedecinArgs
+  mouvementsStock?: boolean | UserCountOutputTypeCountMouvementsStockArgs
+  dispensations?: boolean | UserCountOutputTypeCountDispensationsArgs
+  dispensationLignes?: boolean | UserCountOutputTypeCountDispensationLignesArgs
   auditLogs?: boolean | UserCountOutputTypeCountAuditLogsArgs
 }
 
@@ -1791,6 +2304,27 @@ export type UserCountOutputTypeCountConsultationsMedecinArgs<ExtArgs extends run
 /**
  * UserCountOutputType without action
  */
+export type UserCountOutputTypeCountMouvementsStockArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.MouvementStockWhereInput
+}
+
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountDispensationsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.DispensationWhereInput
+}
+
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountDispensationLignesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.DispensationLigneWhereInput
+}
+
+/**
+ * UserCountOutputType without action
+ */
 export type UserCountOutputTypeCountAuditLogsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   where?: Prisma.AuditLogWhereInput
 }
@@ -1815,6 +2349,9 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   paiements?: boolean | Prisma.User$paiementsArgs<ExtArgs>
   prescriptions?: boolean | Prisma.User$prescriptionsArgs<ExtArgs>
   consultationsMedecin?: boolean | Prisma.User$consultationsMedecinArgs<ExtArgs>
+  mouvementsStock?: boolean | Prisma.User$mouvementsStockArgs<ExtArgs>
+  dispensations?: boolean | Prisma.User$dispensationsArgs<ExtArgs>
+  dispensationLignes?: boolean | Prisma.User$dispensationLignesArgs<ExtArgs>
   auditLogs?: boolean | Prisma.User$auditLogsArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["user"]>
@@ -1868,6 +2405,9 @@ export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   paiements?: boolean | Prisma.User$paiementsArgs<ExtArgs>
   prescriptions?: boolean | Prisma.User$prescriptionsArgs<ExtArgs>
   consultationsMedecin?: boolean | Prisma.User$consultationsMedecinArgs<ExtArgs>
+  mouvementsStock?: boolean | Prisma.User$mouvementsStockArgs<ExtArgs>
+  dispensations?: boolean | Prisma.User$dispensationsArgs<ExtArgs>
+  dispensationLignes?: boolean | Prisma.User$dispensationLignesArgs<ExtArgs>
   auditLogs?: boolean | Prisma.User$auditLogsArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }
@@ -1890,6 +2430,13 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     paiements: Prisma.$PaiementPayload<ExtArgs>[]
     prescriptions: Prisma.$PrescriptionPayload<ExtArgs>[]
     consultationsMedecin: Prisma.$ConsultationPayload<ExtArgs>[]
+    /**
+     * *
+     *    * PHARMACIE
+     */
+    mouvementsStock: Prisma.$MouvementStockPayload<ExtArgs>[]
+    dispensations: Prisma.$DispensationPayload<ExtArgs>[]
+    dispensationLignes: Prisma.$DispensationLignePayload<ExtArgs>[]
     auditLogs: Prisma.$AuditLogPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
@@ -2305,6 +2852,9 @@ export interface Prisma__UserClient<T, Null = never, ExtArgs extends runtime.Typ
   paiements<T extends Prisma.User$paiementsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$paiementsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$PaiementPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   prescriptions<T extends Prisma.User$prescriptionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$prescriptionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$PrescriptionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   consultationsMedecin<T extends Prisma.User$consultationsMedecinArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$consultationsMedecinArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ConsultationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  mouvementsStock<T extends Prisma.User$mouvementsStockArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$mouvementsStockArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$MouvementStockPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  dispensations<T extends Prisma.User$dispensationsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$dispensationsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$DispensationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  dispensationLignes<T extends Prisma.User$dispensationLignesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$dispensationLignesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$DispensationLignePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   auditLogs<T extends Prisma.User$auditLogsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$auditLogsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AuditLogPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -2936,6 +3486,78 @@ export type User$consultationsMedecinArgs<ExtArgs extends runtime.Types.Extensio
   take?: number
   skip?: number
   distinct?: Prisma.ConsultationScalarFieldEnum | Prisma.ConsultationScalarFieldEnum[]
+}
+
+/**
+ * User.mouvementsStock
+ */
+export type User$mouvementsStockArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the MouvementStock
+   */
+  select?: Prisma.MouvementStockSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the MouvementStock
+   */
+  omit?: Prisma.MouvementStockOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.MouvementStockInclude<ExtArgs> | null
+  where?: Prisma.MouvementStockWhereInput
+  orderBy?: Prisma.MouvementStockOrderByWithRelationInput | Prisma.MouvementStockOrderByWithRelationInput[]
+  cursor?: Prisma.MouvementStockWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.MouvementStockScalarFieldEnum | Prisma.MouvementStockScalarFieldEnum[]
+}
+
+/**
+ * User.dispensations
+ */
+export type User$dispensationsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Dispensation
+   */
+  select?: Prisma.DispensationSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Dispensation
+   */
+  omit?: Prisma.DispensationOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.DispensationInclude<ExtArgs> | null
+  where?: Prisma.DispensationWhereInput
+  orderBy?: Prisma.DispensationOrderByWithRelationInput | Prisma.DispensationOrderByWithRelationInput[]
+  cursor?: Prisma.DispensationWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.DispensationScalarFieldEnum | Prisma.DispensationScalarFieldEnum[]
+}
+
+/**
+ * User.dispensationLignes
+ */
+export type User$dispensationLignesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the DispensationLigne
+   */
+  select?: Prisma.DispensationLigneSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the DispensationLigne
+   */
+  omit?: Prisma.DispensationLigneOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.DispensationLigneInclude<ExtArgs> | null
+  where?: Prisma.DispensationLigneWhereInput
+  orderBy?: Prisma.DispensationLigneOrderByWithRelationInput | Prisma.DispensationLigneOrderByWithRelationInput[]
+  cursor?: Prisma.DispensationLigneWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.DispensationLigneScalarFieldEnum | Prisma.DispensationLigneScalarFieldEnum[]
 }
 
 /**

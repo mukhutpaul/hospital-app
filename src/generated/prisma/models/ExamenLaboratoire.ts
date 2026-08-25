@@ -261,6 +261,7 @@ export type ExamenLaboratoireWhereInput = {
   actif?: Prisma.BoolFilter<"ExamenLaboratoire"> | boolean
   createdAt?: Prisma.DateTimeFilter<"ExamenLaboratoire"> | Date | string
   lignes?: Prisma.DemandeLaboratoireLigneListRelationFilter
+  resultats?: Prisma.ResultatLaboratoireListRelationFilter
 }
 
 export type ExamenLaboratoireOrderByWithRelationInput = {
@@ -275,6 +276,7 @@ export type ExamenLaboratoireOrderByWithRelationInput = {
   actif?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   lignes?: Prisma.DemandeLaboratoireLigneOrderByRelationAggregateInput
+  resultats?: Prisma.ResultatLaboratoireOrderByRelationAggregateInput
 }
 
 export type ExamenLaboratoireWhereUniqueInput = Prisma.AtLeast<{
@@ -292,6 +294,7 @@ export type ExamenLaboratoireWhereUniqueInput = Prisma.AtLeast<{
   actif?: Prisma.BoolFilter<"ExamenLaboratoire"> | boolean
   createdAt?: Prisma.DateTimeFilter<"ExamenLaboratoire"> | Date | string
   lignes?: Prisma.DemandeLaboratoireLigneListRelationFilter
+  resultats?: Prisma.ResultatLaboratoireListRelationFilter
 }, "id" | "code">
 
 export type ExamenLaboratoireOrderByWithAggregationInput = {
@@ -339,6 +342,7 @@ export type ExamenLaboratoireCreateInput = {
   actif?: boolean
   createdAt?: Date | string
   lignes?: Prisma.DemandeLaboratoireLigneCreateNestedManyWithoutExamenInput
+  resultats?: Prisma.ResultatLaboratoireCreateNestedManyWithoutExamenInput
 }
 
 export type ExamenLaboratoireUncheckedCreateInput = {
@@ -353,6 +357,7 @@ export type ExamenLaboratoireUncheckedCreateInput = {
   actif?: boolean
   createdAt?: Date | string
   lignes?: Prisma.DemandeLaboratoireLigneUncheckedCreateNestedManyWithoutExamenInput
+  resultats?: Prisma.ResultatLaboratoireUncheckedCreateNestedManyWithoutExamenInput
 }
 
 export type ExamenLaboratoireUpdateInput = {
@@ -366,6 +371,7 @@ export type ExamenLaboratoireUpdateInput = {
   actif?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   lignes?: Prisma.DemandeLaboratoireLigneUpdateManyWithoutExamenNestedInput
+  resultats?: Prisma.ResultatLaboratoireUpdateManyWithoutExamenNestedInput
 }
 
 export type ExamenLaboratoireUncheckedUpdateInput = {
@@ -380,6 +386,7 @@ export type ExamenLaboratoireUncheckedUpdateInput = {
   actif?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   lignes?: Prisma.DemandeLaboratoireLigneUncheckedUpdateManyWithoutExamenNestedInput
+  resultats?: Prisma.ResultatLaboratoireUncheckedUpdateManyWithoutExamenNestedInput
 }
 
 export type ExamenLaboratoireCreateManyInput = {
@@ -474,14 +481,6 @@ export type ExamenLaboratoireScalarRelationFilter = {
   isNot?: Prisma.ExamenLaboratoireWhereInput
 }
 
-export type FloatFieldUpdateOperationsInput = {
-  set?: number
-  increment?: number
-  decrement?: number
-  multiply?: number
-  divide?: number
-}
-
 export type ExamenLaboratoireCreateNestedOneWithoutLignesInput = {
   create?: Prisma.XOR<Prisma.ExamenLaboratoireCreateWithoutLignesInput, Prisma.ExamenLaboratoireUncheckedCreateWithoutLignesInput>
   connectOrCreate?: Prisma.ExamenLaboratoireCreateOrConnectWithoutLignesInput
@@ -496,6 +495,20 @@ export type ExamenLaboratoireUpdateOneRequiredWithoutLignesNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.ExamenLaboratoireUpdateToOneWithWhereWithoutLignesInput, Prisma.ExamenLaboratoireUpdateWithoutLignesInput>, Prisma.ExamenLaboratoireUncheckedUpdateWithoutLignesInput>
 }
 
+export type ExamenLaboratoireCreateNestedOneWithoutResultatsInput = {
+  create?: Prisma.XOR<Prisma.ExamenLaboratoireCreateWithoutResultatsInput, Prisma.ExamenLaboratoireUncheckedCreateWithoutResultatsInput>
+  connectOrCreate?: Prisma.ExamenLaboratoireCreateOrConnectWithoutResultatsInput
+  connect?: Prisma.ExamenLaboratoireWhereUniqueInput
+}
+
+export type ExamenLaboratoireUpdateOneRequiredWithoutResultatsNestedInput = {
+  create?: Prisma.XOR<Prisma.ExamenLaboratoireCreateWithoutResultatsInput, Prisma.ExamenLaboratoireUncheckedCreateWithoutResultatsInput>
+  connectOrCreate?: Prisma.ExamenLaboratoireCreateOrConnectWithoutResultatsInput
+  upsert?: Prisma.ExamenLaboratoireUpsertWithoutResultatsInput
+  connect?: Prisma.ExamenLaboratoireWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.ExamenLaboratoireUpdateToOneWithWhereWithoutResultatsInput, Prisma.ExamenLaboratoireUpdateWithoutResultatsInput>, Prisma.ExamenLaboratoireUncheckedUpdateWithoutResultatsInput>
+}
+
 export type ExamenLaboratoireCreateWithoutLignesInput = {
   code: string
   nom: string
@@ -506,6 +519,7 @@ export type ExamenLaboratoireCreateWithoutLignesInput = {
   devise?: string
   actif?: boolean
   createdAt?: Date | string
+  resultats?: Prisma.ResultatLaboratoireCreateNestedManyWithoutExamenInput
 }
 
 export type ExamenLaboratoireUncheckedCreateWithoutLignesInput = {
@@ -519,6 +533,7 @@ export type ExamenLaboratoireUncheckedCreateWithoutLignesInput = {
   devise?: string
   actif?: boolean
   createdAt?: Date | string
+  resultats?: Prisma.ResultatLaboratoireUncheckedCreateNestedManyWithoutExamenInput
 }
 
 export type ExamenLaboratoireCreateOrConnectWithoutLignesInput = {
@@ -547,6 +562,7 @@ export type ExamenLaboratoireUpdateWithoutLignesInput = {
   devise?: Prisma.StringFieldUpdateOperationsInput | string
   actif?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  resultats?: Prisma.ResultatLaboratoireUpdateManyWithoutExamenNestedInput
 }
 
 export type ExamenLaboratoireUncheckedUpdateWithoutLignesInput = {
@@ -560,6 +576,77 @@ export type ExamenLaboratoireUncheckedUpdateWithoutLignesInput = {
   devise?: Prisma.StringFieldUpdateOperationsInput | string
   actif?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  resultats?: Prisma.ResultatLaboratoireUncheckedUpdateManyWithoutExamenNestedInput
+}
+
+export type ExamenLaboratoireCreateWithoutResultatsInput = {
+  code: string
+  nom: string
+  description?: string | null
+  unite?: string | null
+  valeurNormale?: string | null
+  prix?: number
+  devise?: string
+  actif?: boolean
+  createdAt?: Date | string
+  lignes?: Prisma.DemandeLaboratoireLigneCreateNestedManyWithoutExamenInput
+}
+
+export type ExamenLaboratoireUncheckedCreateWithoutResultatsInput = {
+  id?: number
+  code: string
+  nom: string
+  description?: string | null
+  unite?: string | null
+  valeurNormale?: string | null
+  prix?: number
+  devise?: string
+  actif?: boolean
+  createdAt?: Date | string
+  lignes?: Prisma.DemandeLaboratoireLigneUncheckedCreateNestedManyWithoutExamenInput
+}
+
+export type ExamenLaboratoireCreateOrConnectWithoutResultatsInput = {
+  where: Prisma.ExamenLaboratoireWhereUniqueInput
+  create: Prisma.XOR<Prisma.ExamenLaboratoireCreateWithoutResultatsInput, Prisma.ExamenLaboratoireUncheckedCreateWithoutResultatsInput>
+}
+
+export type ExamenLaboratoireUpsertWithoutResultatsInput = {
+  update: Prisma.XOR<Prisma.ExamenLaboratoireUpdateWithoutResultatsInput, Prisma.ExamenLaboratoireUncheckedUpdateWithoutResultatsInput>
+  create: Prisma.XOR<Prisma.ExamenLaboratoireCreateWithoutResultatsInput, Prisma.ExamenLaboratoireUncheckedCreateWithoutResultatsInput>
+  where?: Prisma.ExamenLaboratoireWhereInput
+}
+
+export type ExamenLaboratoireUpdateToOneWithWhereWithoutResultatsInput = {
+  where?: Prisma.ExamenLaboratoireWhereInput
+  data: Prisma.XOR<Prisma.ExamenLaboratoireUpdateWithoutResultatsInput, Prisma.ExamenLaboratoireUncheckedUpdateWithoutResultatsInput>
+}
+
+export type ExamenLaboratoireUpdateWithoutResultatsInput = {
+  code?: Prisma.StringFieldUpdateOperationsInput | string
+  nom?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  unite?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  valeurNormale?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  prix?: Prisma.FloatFieldUpdateOperationsInput | number
+  devise?: Prisma.StringFieldUpdateOperationsInput | string
+  actif?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  lignes?: Prisma.DemandeLaboratoireLigneUpdateManyWithoutExamenNestedInput
+}
+
+export type ExamenLaboratoireUncheckedUpdateWithoutResultatsInput = {
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  code?: Prisma.StringFieldUpdateOperationsInput | string
+  nom?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  unite?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  valeurNormale?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  prix?: Prisma.FloatFieldUpdateOperationsInput | number
+  devise?: Prisma.StringFieldUpdateOperationsInput | string
+  actif?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  lignes?: Prisma.DemandeLaboratoireLigneUncheckedUpdateManyWithoutExamenNestedInput
 }
 
 
@@ -569,10 +656,12 @@ export type ExamenLaboratoireUncheckedUpdateWithoutLignesInput = {
 
 export type ExamenLaboratoireCountOutputType = {
   lignes: number
+  resultats: number
 }
 
 export type ExamenLaboratoireCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   lignes?: boolean | ExamenLaboratoireCountOutputTypeCountLignesArgs
+  resultats?: boolean | ExamenLaboratoireCountOutputTypeCountResultatsArgs
 }
 
 /**
@@ -592,6 +681,13 @@ export type ExamenLaboratoireCountOutputTypeCountLignesArgs<ExtArgs extends runt
   where?: Prisma.DemandeLaboratoireLigneWhereInput
 }
 
+/**
+ * ExamenLaboratoireCountOutputType without action
+ */
+export type ExamenLaboratoireCountOutputTypeCountResultatsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.ResultatLaboratoireWhereInput
+}
+
 
 export type ExamenLaboratoireSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -605,6 +701,7 @@ export type ExamenLaboratoireSelect<ExtArgs extends runtime.Types.Extensions.Int
   actif?: boolean
   createdAt?: boolean
   lignes?: boolean | Prisma.ExamenLaboratoire$lignesArgs<ExtArgs>
+  resultats?: boolean | Prisma.ExamenLaboratoire$resultatsArgs<ExtArgs>
   _count?: boolean | Prisma.ExamenLaboratoireCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["examenLaboratoire"]>
 
@@ -650,6 +747,7 @@ export type ExamenLaboratoireSelectScalar = {
 export type ExamenLaboratoireOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "code" | "nom" | "description" | "unite" | "valeurNormale" | "prix" | "devise" | "actif" | "createdAt", ExtArgs["result"]["examenLaboratoire"]>
 export type ExamenLaboratoireInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   lignes?: boolean | Prisma.ExamenLaboratoire$lignesArgs<ExtArgs>
+  resultats?: boolean | Prisma.ExamenLaboratoire$resultatsArgs<ExtArgs>
   _count?: boolean | Prisma.ExamenLaboratoireCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type ExamenLaboratoireIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
@@ -659,6 +757,7 @@ export type $ExamenLaboratoirePayload<ExtArgs extends runtime.Types.Extensions.I
   name: "ExamenLaboratoire"
   objects: {
     lignes: Prisma.$DemandeLaboratoireLignePayload<ExtArgs>[]
+    resultats: Prisma.$ResultatLaboratoirePayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: number
@@ -1066,6 +1165,7 @@ readonly fields: ExamenLaboratoireFieldRefs;
 export interface Prisma__ExamenLaboratoireClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
   lignes<T extends Prisma.ExamenLaboratoire$lignesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.ExamenLaboratoire$lignesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$DemandeLaboratoireLignePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  resultats<T extends Prisma.ExamenLaboratoire$resultatsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.ExamenLaboratoire$resultatsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ResultatLaboratoirePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1517,6 +1617,30 @@ export type ExamenLaboratoire$lignesArgs<ExtArgs extends runtime.Types.Extension
   take?: number
   skip?: number
   distinct?: Prisma.DemandeLaboratoireLigneScalarFieldEnum | Prisma.DemandeLaboratoireLigneScalarFieldEnum[]
+}
+
+/**
+ * ExamenLaboratoire.resultats
+ */
+export type ExamenLaboratoire$resultatsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the ResultatLaboratoire
+   */
+  select?: Prisma.ResultatLaboratoireSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the ResultatLaboratoire
+   */
+  omit?: Prisma.ResultatLaboratoireOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.ResultatLaboratoireInclude<ExtArgs> | null
+  where?: Prisma.ResultatLaboratoireWhereInput
+  orderBy?: Prisma.ResultatLaboratoireOrderByWithRelationInput | Prisma.ResultatLaboratoireOrderByWithRelationInput[]
+  cursor?: Prisma.ResultatLaboratoireWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.ResultatLaboratoireScalarFieldEnum | Prisma.ResultatLaboratoireScalarFieldEnum[]
 }
 
 /**

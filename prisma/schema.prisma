@@ -29,18 +29,30 @@ model User {
   medecin   Medecin?
   infirmier Infirmier?
 
-  rendezVousCrees RendezVous[]   @relation("RendezVousCreateur")
-  admissions      Admission[]    @relation("AdmissionCreateur")
-  paiements       Paiement[]     @relation("PaiementCaissier")
-  prescriptions   Prescription[] @relation("PrescriptionAuteur")
-
+  rendezVousCrees      RendezVous[]   @relation("RendezVousCreateur")
+  admissions           Admission[]    @relation("AdmissionCreateur")
+  paiements            Paiement[]     @relation("PaiementCaissier")
+  prescriptions        Prescription[] @relation("PrescriptionAuteur")
   consultationsMedecin Consultation[] @relation("ConsultationMedecin")
+
+  /**
+   * PHARMACIE
+   */
+  mouvementsStock    MouvementStock[]
+  dispensations      Dispensation[]
+  dispensationLignes DispensationLigne[]
 
   auditLogs AuditLog[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
+
+/**
+ * ==========================================================
+ * ROLES
+ * ==========================================================
+ */
 
 model Role {
   id          Int     @id @default(autoincrement())
@@ -77,6 +89,12 @@ model RolePermission {
   @@unique([roleId, permissionId])
 }
 
+/**
+ * ==========================================================
+ * EMPLOYES
+ * ==========================================================
+ */
+
 model Employe {
   id            Int       @id @default(autoincrement())
   matricule     String    @unique
@@ -98,7 +116,7 @@ model Employe {
   serviceId Int?
   service   Service? @relation(fields: [serviceId], references: [id])
 
-  infirmiers Infirmier[] // ← AJOUTER
+  infirmiers Infirmier[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -138,7 +156,7 @@ model Service {
   medecins         Medecin[]
   rendezVous       RendezVous[]
   admissions       Admission[]
-  infirmiers       Infirmier[] // ← AJOUTER
+  infirmiers       Infirmier[]
   consultations    Consultation[]
   hospitalisations Hospitalisation[]
   chambres         Chambre[]
@@ -154,7 +172,8 @@ model Specialite {
   code        String  @unique
   nom         String
   description String?
-  actif       Boolean @default(true)
+
+  actif Boolean @default(true)
 
   serviceId Int?
   service   Service? @relation(fields: [serviceId], references: [id])
@@ -270,6 +289,7 @@ model Patient {
   assurances       PatientAssurance[]
   constantes       Constante[]
   sorties          Sortie[]
+  dispensations    Dispensation[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -498,7 +518,7 @@ model Consultation {
 
 /**
  * ==========================================================
- * PRESCRIPTIONS
+ * PRESCRIPTIONS / ORDONNANCES
  * ==========================================================
  */
 
@@ -516,15 +536,30 @@ model Prescription {
   medecin   Medecin @relation(fields: [medecinId], references: [id])
 
   datePrescription DateTime @default(now())
-  statut           String   @default("ACTIVE")
+
+  statut String @default("ACTIVE")
+
+  /**
+   * ACTIVE
+   * DISPENSEE
+   * PARTIELLE
+   * ANNULEE
+   * EXPIREE
+   */
 
   lignes PrescriptionLigne[]
+
+  dispensations Dispensation[]
 
   auteurId Int?
   auteur   User? @relation("PrescriptionAuteur", fields: [auteurId], references: [id])
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  @@index([patientId])
+  @@index([medecinId])
+  @@index([datePrescription])
 }
 
 model PrescriptionLigne {
@@ -541,9 +576,17 @@ model PrescriptionLigne {
   frequence String?
   duree     String?
   voie      String?
-  quantite  Float?
+
+  quantite Float @default(1)
 
   observation String?
+
+  dispensationLignes DispensationLigne[]
+
+  createdAt DateTime @default(now())
+
+  @@index([prescriptionId])
+  @@index([medicamentId])
 }
 
 /**
@@ -684,6 +727,10 @@ model DemandeImagerie {
  * ==========================================================
  */
 
+/**
+ * MEDICAMENT
+ */
+
 model Medicament {
   id           Int     @id @default(autoincrement())
   code         String  @unique
@@ -702,28 +749,50 @@ model Medicament {
   actif       Boolean @default(true)
 
   prescriptions PrescriptionLigne[]
-  stocks        StockMedicament[]
-  mouvements    MouvementStock[]
+
+  stocks StockMedicament[]
+
+  mouvements MouvementStock[]
+
+  dispensationLignes DispensationLigne[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  @@index([nom])
+  @@index([categorie])
+  @@index([actif])
 }
+
+/**
+ * STOCK PAR LOT
+ */
 
 model StockMedicament {
   id Int @id @default(autoincrement())
 
   medicamentId Int
-  medicament   Medicament @relation(fields: [medicamentId], references: [id])
+  medicament   Medicament @relation(fields: [medicamentId], references: [id], onDelete: Cascade)
 
   lot            String?
   dateExpiration DateTime?
-  quantite       Float     @default(0)
+
+  quantite Float @default(0)
+
+  mouvements         MouvementStock[]
+  dispensationLignes DispensationLigne[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
   @@index([medicamentId])
+  @@index([dateExpiration])
+  @@index([lot])
 }
+
+/**
+ * MOUVEMENTS DE STOCK
+ */
 
 model MouvementStock {
   id Int @id @default(autoincrement())
@@ -731,12 +800,110 @@ model MouvementStock {
   medicamentId Int
   medicament   Medicament @relation(fields: [medicamentId], references: [id])
 
-  type      String
-  quantite  Float
+  stockId Int?
+  stock   StockMedicament? @relation(fields: [stockId], references: [id])
+
+  /**
+   * ENTREE
+   * SORTIE
+   * AJUSTEMENT
+   * RETOUR
+   * PERTE
+   * PEREMPTION
+   */
+
+  type String
+
+  quantite Float
+
   motif     String?
   reference String?
 
+  utilisateurId Int?
+  utilisateur   User? @relation(fields: [utilisateurId], references: [id])
+
   dateMouvement DateTime @default(now())
+
+  @@index([medicamentId])
+  @@index([stockId])
+  @@index([type])
+  @@index([dateMouvement])
+}
+
+/**
+ * ==========================================================
+ * DISPENSATION PHARMACIE
+ * ==========================================================
+ */
+
+model Dispensation {
+  id     Int    @id @default(autoincrement())
+  numero String @unique
+
+  patientId Int
+  patient   Patient @relation(fields: [patientId], references: [id])
+
+  prescriptionId Int?
+  prescription   Prescription? @relation(fields: [prescriptionId], references: [id])
+
+  pharmacienId Int?
+  pharmacien   User? @relation(fields: [pharmacienId], references: [id])
+
+  dateDispensation DateTime @default(now())
+
+  statut String @default("TERMINEE")
+
+  /**
+   * TERMINEE
+   * PARTIELLE
+   * ANNULEE
+   */
+
+  observation String?
+
+  lignes DispensationLigne[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([patientId])
+  @@index([prescriptionId])
+  @@index([pharmacienId])
+  @@index([dateDispensation])
+}
+
+model DispensationLigne {
+  id Int @id @default(autoincrement())
+
+  dispensationId Int
+  dispensation   Dispensation @relation(fields: [dispensationId], references: [id], onDelete: Cascade)
+
+  prescriptionLigneId Int?
+  prescriptionLigne   PrescriptionLigne? @relation(fields: [prescriptionLigneId], references: [id])
+
+  medicamentId Int
+  medicament   Medicament @relation(fields: [medicamentId], references: [id])
+
+  stockId Int?
+  stock   StockMedicament? @relation(fields: [stockId], references: [id])
+
+  pharmacienId Int?
+  pharmacien   User? @relation(fields: [pharmacienId], references: [id])
+
+  quantitePrescrite Float?
+  quantiteDispensee Float
+
+  prixUnitaire Float @default(0)
+  montant      Float @default(0)
+
+  observation String?
+
+  createdAt DateTime @default(now())
+
+  @@index([dispensationId])
+  @@index([medicamentId])
+  @@index([stockId])
+  @@index([pharmacienId])
 }
 
 /**

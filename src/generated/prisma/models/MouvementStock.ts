@@ -29,42 +29,52 @@ export type AggregateMouvementStock = {
 export type MouvementStockAvgAggregateOutputType = {
   id: number | null
   medicamentId: number | null
+  stockId: number | null
   quantite: number | null
+  utilisateurId: number | null
 }
 
 export type MouvementStockSumAggregateOutputType = {
   id: number | null
   medicamentId: number | null
+  stockId: number | null
   quantite: number | null
+  utilisateurId: number | null
 }
 
 export type MouvementStockMinAggregateOutputType = {
   id: number | null
   medicamentId: number | null
+  stockId: number | null
   type: string | null
   quantite: number | null
   motif: string | null
   reference: string | null
+  utilisateurId: number | null
   dateMouvement: Date | null
 }
 
 export type MouvementStockMaxAggregateOutputType = {
   id: number | null
   medicamentId: number | null
+  stockId: number | null
   type: string | null
   quantite: number | null
   motif: string | null
   reference: string | null
+  utilisateurId: number | null
   dateMouvement: Date | null
 }
 
 export type MouvementStockCountAggregateOutputType = {
   id: number
   medicamentId: number
+  stockId: number
   type: number
   quantite: number
   motif: number
   reference: number
+  utilisateurId: number
   dateMouvement: number
   _all: number
 }
@@ -73,42 +83,52 @@ export type MouvementStockCountAggregateOutputType = {
 export type MouvementStockAvgAggregateInputType = {
   id?: true
   medicamentId?: true
+  stockId?: true
   quantite?: true
+  utilisateurId?: true
 }
 
 export type MouvementStockSumAggregateInputType = {
   id?: true
   medicamentId?: true
+  stockId?: true
   quantite?: true
+  utilisateurId?: true
 }
 
 export type MouvementStockMinAggregateInputType = {
   id?: true
   medicamentId?: true
+  stockId?: true
   type?: true
   quantite?: true
   motif?: true
   reference?: true
+  utilisateurId?: true
   dateMouvement?: true
 }
 
 export type MouvementStockMaxAggregateInputType = {
   id?: true
   medicamentId?: true
+  stockId?: true
   type?: true
   quantite?: true
   motif?: true
   reference?: true
+  utilisateurId?: true
   dateMouvement?: true
 }
 
 export type MouvementStockCountAggregateInputType = {
   id?: true
   medicamentId?: true
+  stockId?: true
   type?: true
   quantite?: true
   motif?: true
   reference?: true
+  utilisateurId?: true
   dateMouvement?: true
   _all?: true
 }
@@ -202,10 +222,12 @@ export type MouvementStockGroupByArgs<ExtArgs extends runtime.Types.Extensions.I
 export type MouvementStockGroupByOutputType = {
   id: number
   medicamentId: number
+  stockId: number | null
   type: string
   quantite: number
   motif: string | null
   reference: string | null
+  utilisateurId: number | null
   dateMouvement: Date
   _count: MouvementStockCountAggregateOutputType | null
   _avg: MouvementStockAvgAggregateOutputType | null
@@ -235,23 +257,31 @@ export type MouvementStockWhereInput = {
   NOT?: Prisma.MouvementStockWhereInput | Prisma.MouvementStockWhereInput[]
   id?: Prisma.IntFilter<"MouvementStock"> | number
   medicamentId?: Prisma.IntFilter<"MouvementStock"> | number
+  stockId?: Prisma.IntNullableFilter<"MouvementStock"> | number | null
   type?: Prisma.StringFilter<"MouvementStock"> | string
   quantite?: Prisma.FloatFilter<"MouvementStock"> | number
   motif?: Prisma.StringNullableFilter<"MouvementStock"> | string | null
   reference?: Prisma.StringNullableFilter<"MouvementStock"> | string | null
+  utilisateurId?: Prisma.IntNullableFilter<"MouvementStock"> | number | null
   dateMouvement?: Prisma.DateTimeFilter<"MouvementStock"> | Date | string
   medicament?: Prisma.XOR<Prisma.MedicamentScalarRelationFilter, Prisma.MedicamentWhereInput>
+  stock?: Prisma.XOR<Prisma.StockMedicamentNullableScalarRelationFilter, Prisma.StockMedicamentWhereInput> | null
+  utilisateur?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
 }
 
 export type MouvementStockOrderByWithRelationInput = {
   id?: Prisma.SortOrder
   medicamentId?: Prisma.SortOrder
+  stockId?: Prisma.SortOrderInput | Prisma.SortOrder
   type?: Prisma.SortOrder
   quantite?: Prisma.SortOrder
   motif?: Prisma.SortOrderInput | Prisma.SortOrder
   reference?: Prisma.SortOrderInput | Prisma.SortOrder
+  utilisateurId?: Prisma.SortOrderInput | Prisma.SortOrder
   dateMouvement?: Prisma.SortOrder
   medicament?: Prisma.MedicamentOrderByWithRelationInput
+  stock?: Prisma.StockMedicamentOrderByWithRelationInput
+  utilisateur?: Prisma.UserOrderByWithRelationInput
 }
 
 export type MouvementStockWhereUniqueInput = Prisma.AtLeast<{
@@ -260,21 +290,27 @@ export type MouvementStockWhereUniqueInput = Prisma.AtLeast<{
   OR?: Prisma.MouvementStockWhereInput[]
   NOT?: Prisma.MouvementStockWhereInput | Prisma.MouvementStockWhereInput[]
   medicamentId?: Prisma.IntFilter<"MouvementStock"> | number
+  stockId?: Prisma.IntNullableFilter<"MouvementStock"> | number | null
   type?: Prisma.StringFilter<"MouvementStock"> | string
   quantite?: Prisma.FloatFilter<"MouvementStock"> | number
   motif?: Prisma.StringNullableFilter<"MouvementStock"> | string | null
   reference?: Prisma.StringNullableFilter<"MouvementStock"> | string | null
+  utilisateurId?: Prisma.IntNullableFilter<"MouvementStock"> | number | null
   dateMouvement?: Prisma.DateTimeFilter<"MouvementStock"> | Date | string
   medicament?: Prisma.XOR<Prisma.MedicamentScalarRelationFilter, Prisma.MedicamentWhereInput>
+  stock?: Prisma.XOR<Prisma.StockMedicamentNullableScalarRelationFilter, Prisma.StockMedicamentWhereInput> | null
+  utilisateur?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
 }, "id">
 
 export type MouvementStockOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   medicamentId?: Prisma.SortOrder
+  stockId?: Prisma.SortOrderInput | Prisma.SortOrder
   type?: Prisma.SortOrder
   quantite?: Prisma.SortOrder
   motif?: Prisma.SortOrderInput | Prisma.SortOrder
   reference?: Prisma.SortOrderInput | Prisma.SortOrder
+  utilisateurId?: Prisma.SortOrderInput | Prisma.SortOrder
   dateMouvement?: Prisma.SortOrder
   _count?: Prisma.MouvementStockCountOrderByAggregateInput
   _avg?: Prisma.MouvementStockAvgOrderByAggregateInput
@@ -289,10 +325,12 @@ export type MouvementStockScalarWhereWithAggregatesInput = {
   NOT?: Prisma.MouvementStockScalarWhereWithAggregatesInput | Prisma.MouvementStockScalarWhereWithAggregatesInput[]
   id?: Prisma.IntWithAggregatesFilter<"MouvementStock"> | number
   medicamentId?: Prisma.IntWithAggregatesFilter<"MouvementStock"> | number
+  stockId?: Prisma.IntNullableWithAggregatesFilter<"MouvementStock"> | number | null
   type?: Prisma.StringWithAggregatesFilter<"MouvementStock"> | string
   quantite?: Prisma.FloatWithAggregatesFilter<"MouvementStock"> | number
   motif?: Prisma.StringNullableWithAggregatesFilter<"MouvementStock"> | string | null
   reference?: Prisma.StringNullableWithAggregatesFilter<"MouvementStock"> | string | null
+  utilisateurId?: Prisma.IntNullableWithAggregatesFilter<"MouvementStock"> | number | null
   dateMouvement?: Prisma.DateTimeWithAggregatesFilter<"MouvementStock"> | Date | string
 }
 
@@ -303,15 +341,19 @@ export type MouvementStockCreateInput = {
   reference?: string | null
   dateMouvement?: Date | string
   medicament: Prisma.MedicamentCreateNestedOneWithoutMouvementsInput
+  stock?: Prisma.StockMedicamentCreateNestedOneWithoutMouvementsInput
+  utilisateur?: Prisma.UserCreateNestedOneWithoutMouvementsStockInput
 }
 
 export type MouvementStockUncheckedCreateInput = {
   id?: number
   medicamentId: number
+  stockId?: number | null
   type: string
   quantite: number
   motif?: string | null
   reference?: string | null
+  utilisateurId?: number | null
   dateMouvement?: Date | string
 }
 
@@ -322,25 +364,31 @@ export type MouvementStockUpdateInput = {
   reference?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   dateMouvement?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   medicament?: Prisma.MedicamentUpdateOneRequiredWithoutMouvementsNestedInput
+  stock?: Prisma.StockMedicamentUpdateOneWithoutMouvementsNestedInput
+  utilisateur?: Prisma.UserUpdateOneWithoutMouvementsStockNestedInput
 }
 
 export type MouvementStockUncheckedUpdateInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   medicamentId?: Prisma.IntFieldUpdateOperationsInput | number
+  stockId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   type?: Prisma.StringFieldUpdateOperationsInput | string
   quantite?: Prisma.FloatFieldUpdateOperationsInput | number
   motif?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   reference?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  utilisateurId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   dateMouvement?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type MouvementStockCreateManyInput = {
   id?: number
   medicamentId: number
+  stockId?: number | null
   type: string
   quantite: number
   motif?: string | null
   reference?: string | null
+  utilisateurId?: number | null
   dateMouvement?: Date | string
 }
 
@@ -355,10 +403,12 @@ export type MouvementStockUpdateManyMutationInput = {
 export type MouvementStockUncheckedUpdateManyInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   medicamentId?: Prisma.IntFieldUpdateOperationsInput | number
+  stockId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   type?: Prisma.StringFieldUpdateOperationsInput | string
   quantite?: Prisma.FloatFieldUpdateOperationsInput | number
   motif?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   reference?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  utilisateurId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   dateMouvement?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -375,43 +425,95 @@ export type MouvementStockOrderByRelationAggregateInput = {
 export type MouvementStockCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   medicamentId?: Prisma.SortOrder
+  stockId?: Prisma.SortOrder
   type?: Prisma.SortOrder
   quantite?: Prisma.SortOrder
   motif?: Prisma.SortOrder
   reference?: Prisma.SortOrder
+  utilisateurId?: Prisma.SortOrder
   dateMouvement?: Prisma.SortOrder
 }
 
 export type MouvementStockAvgOrderByAggregateInput = {
   id?: Prisma.SortOrder
   medicamentId?: Prisma.SortOrder
+  stockId?: Prisma.SortOrder
   quantite?: Prisma.SortOrder
+  utilisateurId?: Prisma.SortOrder
 }
 
 export type MouvementStockMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
   medicamentId?: Prisma.SortOrder
+  stockId?: Prisma.SortOrder
   type?: Prisma.SortOrder
   quantite?: Prisma.SortOrder
   motif?: Prisma.SortOrder
   reference?: Prisma.SortOrder
+  utilisateurId?: Prisma.SortOrder
   dateMouvement?: Prisma.SortOrder
 }
 
 export type MouvementStockMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
   medicamentId?: Prisma.SortOrder
+  stockId?: Prisma.SortOrder
   type?: Prisma.SortOrder
   quantite?: Prisma.SortOrder
   motif?: Prisma.SortOrder
   reference?: Prisma.SortOrder
+  utilisateurId?: Prisma.SortOrder
   dateMouvement?: Prisma.SortOrder
 }
 
 export type MouvementStockSumOrderByAggregateInput = {
   id?: Prisma.SortOrder
   medicamentId?: Prisma.SortOrder
+  stockId?: Prisma.SortOrder
   quantite?: Prisma.SortOrder
+  utilisateurId?: Prisma.SortOrder
+}
+
+export type MouvementStockCreateNestedManyWithoutUtilisateurInput = {
+  create?: Prisma.XOR<Prisma.MouvementStockCreateWithoutUtilisateurInput, Prisma.MouvementStockUncheckedCreateWithoutUtilisateurInput> | Prisma.MouvementStockCreateWithoutUtilisateurInput[] | Prisma.MouvementStockUncheckedCreateWithoutUtilisateurInput[]
+  connectOrCreate?: Prisma.MouvementStockCreateOrConnectWithoutUtilisateurInput | Prisma.MouvementStockCreateOrConnectWithoutUtilisateurInput[]
+  createMany?: Prisma.MouvementStockCreateManyUtilisateurInputEnvelope
+  connect?: Prisma.MouvementStockWhereUniqueInput | Prisma.MouvementStockWhereUniqueInput[]
+}
+
+export type MouvementStockUncheckedCreateNestedManyWithoutUtilisateurInput = {
+  create?: Prisma.XOR<Prisma.MouvementStockCreateWithoutUtilisateurInput, Prisma.MouvementStockUncheckedCreateWithoutUtilisateurInput> | Prisma.MouvementStockCreateWithoutUtilisateurInput[] | Prisma.MouvementStockUncheckedCreateWithoutUtilisateurInput[]
+  connectOrCreate?: Prisma.MouvementStockCreateOrConnectWithoutUtilisateurInput | Prisma.MouvementStockCreateOrConnectWithoutUtilisateurInput[]
+  createMany?: Prisma.MouvementStockCreateManyUtilisateurInputEnvelope
+  connect?: Prisma.MouvementStockWhereUniqueInput | Prisma.MouvementStockWhereUniqueInput[]
+}
+
+export type MouvementStockUpdateManyWithoutUtilisateurNestedInput = {
+  create?: Prisma.XOR<Prisma.MouvementStockCreateWithoutUtilisateurInput, Prisma.MouvementStockUncheckedCreateWithoutUtilisateurInput> | Prisma.MouvementStockCreateWithoutUtilisateurInput[] | Prisma.MouvementStockUncheckedCreateWithoutUtilisateurInput[]
+  connectOrCreate?: Prisma.MouvementStockCreateOrConnectWithoutUtilisateurInput | Prisma.MouvementStockCreateOrConnectWithoutUtilisateurInput[]
+  upsert?: Prisma.MouvementStockUpsertWithWhereUniqueWithoutUtilisateurInput | Prisma.MouvementStockUpsertWithWhereUniqueWithoutUtilisateurInput[]
+  createMany?: Prisma.MouvementStockCreateManyUtilisateurInputEnvelope
+  set?: Prisma.MouvementStockWhereUniqueInput | Prisma.MouvementStockWhereUniqueInput[]
+  disconnect?: Prisma.MouvementStockWhereUniqueInput | Prisma.MouvementStockWhereUniqueInput[]
+  delete?: Prisma.MouvementStockWhereUniqueInput | Prisma.MouvementStockWhereUniqueInput[]
+  connect?: Prisma.MouvementStockWhereUniqueInput | Prisma.MouvementStockWhereUniqueInput[]
+  update?: Prisma.MouvementStockUpdateWithWhereUniqueWithoutUtilisateurInput | Prisma.MouvementStockUpdateWithWhereUniqueWithoutUtilisateurInput[]
+  updateMany?: Prisma.MouvementStockUpdateManyWithWhereWithoutUtilisateurInput | Prisma.MouvementStockUpdateManyWithWhereWithoutUtilisateurInput[]
+  deleteMany?: Prisma.MouvementStockScalarWhereInput | Prisma.MouvementStockScalarWhereInput[]
+}
+
+export type MouvementStockUncheckedUpdateManyWithoutUtilisateurNestedInput = {
+  create?: Prisma.XOR<Prisma.MouvementStockCreateWithoutUtilisateurInput, Prisma.MouvementStockUncheckedCreateWithoutUtilisateurInput> | Prisma.MouvementStockCreateWithoutUtilisateurInput[] | Prisma.MouvementStockUncheckedCreateWithoutUtilisateurInput[]
+  connectOrCreate?: Prisma.MouvementStockCreateOrConnectWithoutUtilisateurInput | Prisma.MouvementStockCreateOrConnectWithoutUtilisateurInput[]
+  upsert?: Prisma.MouvementStockUpsertWithWhereUniqueWithoutUtilisateurInput | Prisma.MouvementStockUpsertWithWhereUniqueWithoutUtilisateurInput[]
+  createMany?: Prisma.MouvementStockCreateManyUtilisateurInputEnvelope
+  set?: Prisma.MouvementStockWhereUniqueInput | Prisma.MouvementStockWhereUniqueInput[]
+  disconnect?: Prisma.MouvementStockWhereUniqueInput | Prisma.MouvementStockWhereUniqueInput[]
+  delete?: Prisma.MouvementStockWhereUniqueInput | Prisma.MouvementStockWhereUniqueInput[]
+  connect?: Prisma.MouvementStockWhereUniqueInput | Prisma.MouvementStockWhereUniqueInput[]
+  update?: Prisma.MouvementStockUpdateWithWhereUniqueWithoutUtilisateurInput | Prisma.MouvementStockUpdateWithWhereUniqueWithoutUtilisateurInput[]
+  updateMany?: Prisma.MouvementStockUpdateManyWithWhereWithoutUtilisateurInput | Prisma.MouvementStockUpdateManyWithWhereWithoutUtilisateurInput[]
+  deleteMany?: Prisma.MouvementStockScalarWhereInput | Prisma.MouvementStockScalarWhereInput[]
 }
 
 export type MouvementStockCreateNestedManyWithoutMedicamentInput = {
@@ -456,7 +558,62 @@ export type MouvementStockUncheckedUpdateManyWithoutMedicamentNestedInput = {
   deleteMany?: Prisma.MouvementStockScalarWhereInput | Prisma.MouvementStockScalarWhereInput[]
 }
 
-export type MouvementStockCreateWithoutMedicamentInput = {
+export type MouvementStockCreateNestedManyWithoutStockInput = {
+  create?: Prisma.XOR<Prisma.MouvementStockCreateWithoutStockInput, Prisma.MouvementStockUncheckedCreateWithoutStockInput> | Prisma.MouvementStockCreateWithoutStockInput[] | Prisma.MouvementStockUncheckedCreateWithoutStockInput[]
+  connectOrCreate?: Prisma.MouvementStockCreateOrConnectWithoutStockInput | Prisma.MouvementStockCreateOrConnectWithoutStockInput[]
+  createMany?: Prisma.MouvementStockCreateManyStockInputEnvelope
+  connect?: Prisma.MouvementStockWhereUniqueInput | Prisma.MouvementStockWhereUniqueInput[]
+}
+
+export type MouvementStockUncheckedCreateNestedManyWithoutStockInput = {
+  create?: Prisma.XOR<Prisma.MouvementStockCreateWithoutStockInput, Prisma.MouvementStockUncheckedCreateWithoutStockInput> | Prisma.MouvementStockCreateWithoutStockInput[] | Prisma.MouvementStockUncheckedCreateWithoutStockInput[]
+  connectOrCreate?: Prisma.MouvementStockCreateOrConnectWithoutStockInput | Prisma.MouvementStockCreateOrConnectWithoutStockInput[]
+  createMany?: Prisma.MouvementStockCreateManyStockInputEnvelope
+  connect?: Prisma.MouvementStockWhereUniqueInput | Prisma.MouvementStockWhereUniqueInput[]
+}
+
+export type MouvementStockUpdateManyWithoutStockNestedInput = {
+  create?: Prisma.XOR<Prisma.MouvementStockCreateWithoutStockInput, Prisma.MouvementStockUncheckedCreateWithoutStockInput> | Prisma.MouvementStockCreateWithoutStockInput[] | Prisma.MouvementStockUncheckedCreateWithoutStockInput[]
+  connectOrCreate?: Prisma.MouvementStockCreateOrConnectWithoutStockInput | Prisma.MouvementStockCreateOrConnectWithoutStockInput[]
+  upsert?: Prisma.MouvementStockUpsertWithWhereUniqueWithoutStockInput | Prisma.MouvementStockUpsertWithWhereUniqueWithoutStockInput[]
+  createMany?: Prisma.MouvementStockCreateManyStockInputEnvelope
+  set?: Prisma.MouvementStockWhereUniqueInput | Prisma.MouvementStockWhereUniqueInput[]
+  disconnect?: Prisma.MouvementStockWhereUniqueInput | Prisma.MouvementStockWhereUniqueInput[]
+  delete?: Prisma.MouvementStockWhereUniqueInput | Prisma.MouvementStockWhereUniqueInput[]
+  connect?: Prisma.MouvementStockWhereUniqueInput | Prisma.MouvementStockWhereUniqueInput[]
+  update?: Prisma.MouvementStockUpdateWithWhereUniqueWithoutStockInput | Prisma.MouvementStockUpdateWithWhereUniqueWithoutStockInput[]
+  updateMany?: Prisma.MouvementStockUpdateManyWithWhereWithoutStockInput | Prisma.MouvementStockUpdateManyWithWhereWithoutStockInput[]
+  deleteMany?: Prisma.MouvementStockScalarWhereInput | Prisma.MouvementStockScalarWhereInput[]
+}
+
+export type MouvementStockUncheckedUpdateManyWithoutStockNestedInput = {
+  create?: Prisma.XOR<Prisma.MouvementStockCreateWithoutStockInput, Prisma.MouvementStockUncheckedCreateWithoutStockInput> | Prisma.MouvementStockCreateWithoutStockInput[] | Prisma.MouvementStockUncheckedCreateWithoutStockInput[]
+  connectOrCreate?: Prisma.MouvementStockCreateOrConnectWithoutStockInput | Prisma.MouvementStockCreateOrConnectWithoutStockInput[]
+  upsert?: Prisma.MouvementStockUpsertWithWhereUniqueWithoutStockInput | Prisma.MouvementStockUpsertWithWhereUniqueWithoutStockInput[]
+  createMany?: Prisma.MouvementStockCreateManyStockInputEnvelope
+  set?: Prisma.MouvementStockWhereUniqueInput | Prisma.MouvementStockWhereUniqueInput[]
+  disconnect?: Prisma.MouvementStockWhereUniqueInput | Prisma.MouvementStockWhereUniqueInput[]
+  delete?: Prisma.MouvementStockWhereUniqueInput | Prisma.MouvementStockWhereUniqueInput[]
+  connect?: Prisma.MouvementStockWhereUniqueInput | Prisma.MouvementStockWhereUniqueInput[]
+  update?: Prisma.MouvementStockUpdateWithWhereUniqueWithoutStockInput | Prisma.MouvementStockUpdateWithWhereUniqueWithoutStockInput[]
+  updateMany?: Prisma.MouvementStockUpdateManyWithWhereWithoutStockInput | Prisma.MouvementStockUpdateManyWithWhereWithoutStockInput[]
+  deleteMany?: Prisma.MouvementStockScalarWhereInput | Prisma.MouvementStockScalarWhereInput[]
+}
+
+export type MouvementStockCreateWithoutUtilisateurInput = {
+  type: string
+  quantite: number
+  motif?: string | null
+  reference?: string | null
+  dateMouvement?: Date | string
+  medicament: Prisma.MedicamentCreateNestedOneWithoutMouvementsInput
+  stock?: Prisma.StockMedicamentCreateNestedOneWithoutMouvementsInput
+}
+
+export type MouvementStockUncheckedCreateWithoutUtilisateurInput = {
+  id?: number
+  medicamentId: number
+  stockId?: number | null
   type: string
   quantite: number
   motif?: string | null
@@ -464,12 +621,64 @@ export type MouvementStockCreateWithoutMedicamentInput = {
   dateMouvement?: Date | string
 }
 
-export type MouvementStockUncheckedCreateWithoutMedicamentInput = {
-  id?: number
+export type MouvementStockCreateOrConnectWithoutUtilisateurInput = {
+  where: Prisma.MouvementStockWhereUniqueInput
+  create: Prisma.XOR<Prisma.MouvementStockCreateWithoutUtilisateurInput, Prisma.MouvementStockUncheckedCreateWithoutUtilisateurInput>
+}
+
+export type MouvementStockCreateManyUtilisateurInputEnvelope = {
+  data: Prisma.MouvementStockCreateManyUtilisateurInput | Prisma.MouvementStockCreateManyUtilisateurInput[]
+}
+
+export type MouvementStockUpsertWithWhereUniqueWithoutUtilisateurInput = {
+  where: Prisma.MouvementStockWhereUniqueInput
+  update: Prisma.XOR<Prisma.MouvementStockUpdateWithoutUtilisateurInput, Prisma.MouvementStockUncheckedUpdateWithoutUtilisateurInput>
+  create: Prisma.XOR<Prisma.MouvementStockCreateWithoutUtilisateurInput, Prisma.MouvementStockUncheckedCreateWithoutUtilisateurInput>
+}
+
+export type MouvementStockUpdateWithWhereUniqueWithoutUtilisateurInput = {
+  where: Prisma.MouvementStockWhereUniqueInput
+  data: Prisma.XOR<Prisma.MouvementStockUpdateWithoutUtilisateurInput, Prisma.MouvementStockUncheckedUpdateWithoutUtilisateurInput>
+}
+
+export type MouvementStockUpdateManyWithWhereWithoutUtilisateurInput = {
+  where: Prisma.MouvementStockScalarWhereInput
+  data: Prisma.XOR<Prisma.MouvementStockUpdateManyMutationInput, Prisma.MouvementStockUncheckedUpdateManyWithoutUtilisateurInput>
+}
+
+export type MouvementStockScalarWhereInput = {
+  AND?: Prisma.MouvementStockScalarWhereInput | Prisma.MouvementStockScalarWhereInput[]
+  OR?: Prisma.MouvementStockScalarWhereInput[]
+  NOT?: Prisma.MouvementStockScalarWhereInput | Prisma.MouvementStockScalarWhereInput[]
+  id?: Prisma.IntFilter<"MouvementStock"> | number
+  medicamentId?: Prisma.IntFilter<"MouvementStock"> | number
+  stockId?: Prisma.IntNullableFilter<"MouvementStock"> | number | null
+  type?: Prisma.StringFilter<"MouvementStock"> | string
+  quantite?: Prisma.FloatFilter<"MouvementStock"> | number
+  motif?: Prisma.StringNullableFilter<"MouvementStock"> | string | null
+  reference?: Prisma.StringNullableFilter<"MouvementStock"> | string | null
+  utilisateurId?: Prisma.IntNullableFilter<"MouvementStock"> | number | null
+  dateMouvement?: Prisma.DateTimeFilter<"MouvementStock"> | Date | string
+}
+
+export type MouvementStockCreateWithoutMedicamentInput = {
   type: string
   quantite: number
   motif?: string | null
   reference?: string | null
+  dateMouvement?: Date | string
+  stock?: Prisma.StockMedicamentCreateNestedOneWithoutMouvementsInput
+  utilisateur?: Prisma.UserCreateNestedOneWithoutMouvementsStockInput
+}
+
+export type MouvementStockUncheckedCreateWithoutMedicamentInput = {
+  id?: number
+  stockId?: number | null
+  type: string
+  quantite: number
+  motif?: string | null
+  reference?: string | null
+  utilisateurId?: number | null
   dateMouvement?: Date | string
 }
 
@@ -498,25 +707,103 @@ export type MouvementStockUpdateManyWithWhereWithoutMedicamentInput = {
   data: Prisma.XOR<Prisma.MouvementStockUpdateManyMutationInput, Prisma.MouvementStockUncheckedUpdateManyWithoutMedicamentInput>
 }
 
-export type MouvementStockScalarWhereInput = {
-  AND?: Prisma.MouvementStockScalarWhereInput | Prisma.MouvementStockScalarWhereInput[]
-  OR?: Prisma.MouvementStockScalarWhereInput[]
-  NOT?: Prisma.MouvementStockScalarWhereInput | Prisma.MouvementStockScalarWhereInput[]
-  id?: Prisma.IntFilter<"MouvementStock"> | number
-  medicamentId?: Prisma.IntFilter<"MouvementStock"> | number
-  type?: Prisma.StringFilter<"MouvementStock"> | string
-  quantite?: Prisma.FloatFilter<"MouvementStock"> | number
-  motif?: Prisma.StringNullableFilter<"MouvementStock"> | string | null
-  reference?: Prisma.StringNullableFilter<"MouvementStock"> | string | null
-  dateMouvement?: Prisma.DateTimeFilter<"MouvementStock"> | Date | string
-}
-
-export type MouvementStockCreateManyMedicamentInput = {
-  id?: number
+export type MouvementStockCreateWithoutStockInput = {
   type: string
   quantite: number
   motif?: string | null
   reference?: string | null
+  dateMouvement?: Date | string
+  medicament: Prisma.MedicamentCreateNestedOneWithoutMouvementsInput
+  utilisateur?: Prisma.UserCreateNestedOneWithoutMouvementsStockInput
+}
+
+export type MouvementStockUncheckedCreateWithoutStockInput = {
+  id?: number
+  medicamentId: number
+  type: string
+  quantite: number
+  motif?: string | null
+  reference?: string | null
+  utilisateurId?: number | null
+  dateMouvement?: Date | string
+}
+
+export type MouvementStockCreateOrConnectWithoutStockInput = {
+  where: Prisma.MouvementStockWhereUniqueInput
+  create: Prisma.XOR<Prisma.MouvementStockCreateWithoutStockInput, Prisma.MouvementStockUncheckedCreateWithoutStockInput>
+}
+
+export type MouvementStockCreateManyStockInputEnvelope = {
+  data: Prisma.MouvementStockCreateManyStockInput | Prisma.MouvementStockCreateManyStockInput[]
+}
+
+export type MouvementStockUpsertWithWhereUniqueWithoutStockInput = {
+  where: Prisma.MouvementStockWhereUniqueInput
+  update: Prisma.XOR<Prisma.MouvementStockUpdateWithoutStockInput, Prisma.MouvementStockUncheckedUpdateWithoutStockInput>
+  create: Prisma.XOR<Prisma.MouvementStockCreateWithoutStockInput, Prisma.MouvementStockUncheckedCreateWithoutStockInput>
+}
+
+export type MouvementStockUpdateWithWhereUniqueWithoutStockInput = {
+  where: Prisma.MouvementStockWhereUniqueInput
+  data: Prisma.XOR<Prisma.MouvementStockUpdateWithoutStockInput, Prisma.MouvementStockUncheckedUpdateWithoutStockInput>
+}
+
+export type MouvementStockUpdateManyWithWhereWithoutStockInput = {
+  where: Prisma.MouvementStockScalarWhereInput
+  data: Prisma.XOR<Prisma.MouvementStockUpdateManyMutationInput, Prisma.MouvementStockUncheckedUpdateManyWithoutStockInput>
+}
+
+export type MouvementStockCreateManyUtilisateurInput = {
+  id?: number
+  medicamentId: number
+  stockId?: number | null
+  type: string
+  quantite: number
+  motif?: string | null
+  reference?: string | null
+  dateMouvement?: Date | string
+}
+
+export type MouvementStockUpdateWithoutUtilisateurInput = {
+  type?: Prisma.StringFieldUpdateOperationsInput | string
+  quantite?: Prisma.FloatFieldUpdateOperationsInput | number
+  motif?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  reference?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  dateMouvement?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  medicament?: Prisma.MedicamentUpdateOneRequiredWithoutMouvementsNestedInput
+  stock?: Prisma.StockMedicamentUpdateOneWithoutMouvementsNestedInput
+}
+
+export type MouvementStockUncheckedUpdateWithoutUtilisateurInput = {
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  medicamentId?: Prisma.IntFieldUpdateOperationsInput | number
+  stockId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  type?: Prisma.StringFieldUpdateOperationsInput | string
+  quantite?: Prisma.FloatFieldUpdateOperationsInput | number
+  motif?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  reference?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  dateMouvement?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
+export type MouvementStockUncheckedUpdateManyWithoutUtilisateurInput = {
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  medicamentId?: Prisma.IntFieldUpdateOperationsInput | number
+  stockId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  type?: Prisma.StringFieldUpdateOperationsInput | string
+  quantite?: Prisma.FloatFieldUpdateOperationsInput | number
+  motif?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  reference?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  dateMouvement?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
+export type MouvementStockCreateManyMedicamentInput = {
+  id?: number
+  stockId?: number | null
+  type: string
+  quantite: number
+  motif?: string | null
+  reference?: string | null
+  utilisateurId?: number | null
   dateMouvement?: Date | string
 }
 
@@ -526,23 +813,72 @@ export type MouvementStockUpdateWithoutMedicamentInput = {
   motif?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   reference?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   dateMouvement?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  stock?: Prisma.StockMedicamentUpdateOneWithoutMouvementsNestedInput
+  utilisateur?: Prisma.UserUpdateOneWithoutMouvementsStockNestedInput
 }
 
 export type MouvementStockUncheckedUpdateWithoutMedicamentInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
+  stockId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   type?: Prisma.StringFieldUpdateOperationsInput | string
   quantite?: Prisma.FloatFieldUpdateOperationsInput | number
   motif?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   reference?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  utilisateurId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   dateMouvement?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type MouvementStockUncheckedUpdateManyWithoutMedicamentInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
+  stockId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   type?: Prisma.StringFieldUpdateOperationsInput | string
   quantite?: Prisma.FloatFieldUpdateOperationsInput | number
   motif?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   reference?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  utilisateurId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  dateMouvement?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
+export type MouvementStockCreateManyStockInput = {
+  id?: number
+  medicamentId: number
+  type: string
+  quantite: number
+  motif?: string | null
+  reference?: string | null
+  utilisateurId?: number | null
+  dateMouvement?: Date | string
+}
+
+export type MouvementStockUpdateWithoutStockInput = {
+  type?: Prisma.StringFieldUpdateOperationsInput | string
+  quantite?: Prisma.FloatFieldUpdateOperationsInput | number
+  motif?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  reference?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  dateMouvement?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  medicament?: Prisma.MedicamentUpdateOneRequiredWithoutMouvementsNestedInput
+  utilisateur?: Prisma.UserUpdateOneWithoutMouvementsStockNestedInput
+}
+
+export type MouvementStockUncheckedUpdateWithoutStockInput = {
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  medicamentId?: Prisma.IntFieldUpdateOperationsInput | number
+  type?: Prisma.StringFieldUpdateOperationsInput | string
+  quantite?: Prisma.FloatFieldUpdateOperationsInput | number
+  motif?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  reference?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  utilisateurId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  dateMouvement?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
+export type MouvementStockUncheckedUpdateManyWithoutStockInput = {
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  medicamentId?: Prisma.IntFieldUpdateOperationsInput | number
+  type?: Prisma.StringFieldUpdateOperationsInput | string
+  quantite?: Prisma.FloatFieldUpdateOperationsInput | number
+  motif?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  reference?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  utilisateurId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   dateMouvement?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -551,69 +887,102 @@ export type MouvementStockUncheckedUpdateManyWithoutMedicamentInput = {
 export type MouvementStockSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   medicamentId?: boolean
+  stockId?: boolean
   type?: boolean
   quantite?: boolean
   motif?: boolean
   reference?: boolean
+  utilisateurId?: boolean
   dateMouvement?: boolean
   medicament?: boolean | Prisma.MedicamentDefaultArgs<ExtArgs>
+  stock?: boolean | Prisma.MouvementStock$stockArgs<ExtArgs>
+  utilisateur?: boolean | Prisma.MouvementStock$utilisateurArgs<ExtArgs>
 }, ExtArgs["result"]["mouvementStock"]>
 
 export type MouvementStockSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   medicamentId?: boolean
+  stockId?: boolean
   type?: boolean
   quantite?: boolean
   motif?: boolean
   reference?: boolean
+  utilisateurId?: boolean
   dateMouvement?: boolean
   medicament?: boolean | Prisma.MedicamentDefaultArgs<ExtArgs>
+  stock?: boolean | Prisma.MouvementStock$stockArgs<ExtArgs>
+  utilisateur?: boolean | Prisma.MouvementStock$utilisateurArgs<ExtArgs>
 }, ExtArgs["result"]["mouvementStock"]>
 
 export type MouvementStockSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   medicamentId?: boolean
+  stockId?: boolean
   type?: boolean
   quantite?: boolean
   motif?: boolean
   reference?: boolean
+  utilisateurId?: boolean
   dateMouvement?: boolean
   medicament?: boolean | Prisma.MedicamentDefaultArgs<ExtArgs>
+  stock?: boolean | Prisma.MouvementStock$stockArgs<ExtArgs>
+  utilisateur?: boolean | Prisma.MouvementStock$utilisateurArgs<ExtArgs>
 }, ExtArgs["result"]["mouvementStock"]>
 
 export type MouvementStockSelectScalar = {
   id?: boolean
   medicamentId?: boolean
+  stockId?: boolean
   type?: boolean
   quantite?: boolean
   motif?: boolean
   reference?: boolean
+  utilisateurId?: boolean
   dateMouvement?: boolean
 }
 
-export type MouvementStockOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "medicamentId" | "type" | "quantite" | "motif" | "reference" | "dateMouvement", ExtArgs["result"]["mouvementStock"]>
+export type MouvementStockOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "medicamentId" | "stockId" | "type" | "quantite" | "motif" | "reference" | "utilisateurId" | "dateMouvement", ExtArgs["result"]["mouvementStock"]>
 export type MouvementStockInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   medicament?: boolean | Prisma.MedicamentDefaultArgs<ExtArgs>
+  stock?: boolean | Prisma.MouvementStock$stockArgs<ExtArgs>
+  utilisateur?: boolean | Prisma.MouvementStock$utilisateurArgs<ExtArgs>
 }
 export type MouvementStockIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   medicament?: boolean | Prisma.MedicamentDefaultArgs<ExtArgs>
+  stock?: boolean | Prisma.MouvementStock$stockArgs<ExtArgs>
+  utilisateur?: boolean | Prisma.MouvementStock$utilisateurArgs<ExtArgs>
 }
 export type MouvementStockIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   medicament?: boolean | Prisma.MedicamentDefaultArgs<ExtArgs>
+  stock?: boolean | Prisma.MouvementStock$stockArgs<ExtArgs>
+  utilisateur?: boolean | Prisma.MouvementStock$utilisateurArgs<ExtArgs>
 }
 
 export type $MouvementStockPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "MouvementStock"
   objects: {
     medicament: Prisma.$MedicamentPayload<ExtArgs>
+    stock: Prisma.$StockMedicamentPayload<ExtArgs> | null
+    utilisateur: Prisma.$UserPayload<ExtArgs> | null
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: number
     medicamentId: number
+    stockId: number | null
+    /**
+     * *
+     *    * ENTREE
+     *    * SORTIE
+     *    * AJUSTEMENT
+     *    * RETOUR
+     *    * PERTE
+     *    * PEREMPTION
+     */
     type: string
     quantite: number
     motif: string | null
     reference: string | null
+    utilisateurId: number | null
     dateMouvement: Date
   }, ExtArgs["result"]["mouvementStock"]>
   composites: {}
@@ -1010,6 +1379,8 @@ readonly fields: MouvementStockFieldRefs;
 export interface Prisma__MouvementStockClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
   medicament<T extends Prisma.MedicamentDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.MedicamentDefaultArgs<ExtArgs>>): Prisma.Prisma__MedicamentClient<runtime.Types.Result.GetResult<Prisma.$MedicamentPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+  stock<T extends Prisma.MouvementStock$stockArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.MouvementStock$stockArgs<ExtArgs>>): Prisma.Prisma__StockMedicamentClient<runtime.Types.Result.GetResult<Prisma.$StockMedicamentPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+  utilisateur<T extends Prisma.MouvementStock$utilisateurArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.MouvementStock$utilisateurArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1041,10 +1412,12 @@ export interface Prisma__MouvementStockClient<T, Null = never, ExtArgs extends r
 export interface MouvementStockFieldRefs {
   readonly id: Prisma.FieldRef<"MouvementStock", 'Int'>
   readonly medicamentId: Prisma.FieldRef<"MouvementStock", 'Int'>
+  readonly stockId: Prisma.FieldRef<"MouvementStock", 'Int'>
   readonly type: Prisma.FieldRef<"MouvementStock", 'String'>
   readonly quantite: Prisma.FieldRef<"MouvementStock", 'Float'>
   readonly motif: Prisma.FieldRef<"MouvementStock", 'String'>
   readonly reference: Prisma.FieldRef<"MouvementStock", 'String'>
+  readonly utilisateurId: Prisma.FieldRef<"MouvementStock", 'Int'>
   readonly dateMouvement: Prisma.FieldRef<"MouvementStock", 'DateTime'>
 }
     
@@ -1442,6 +1815,44 @@ export type MouvementStockDeleteManyArgs<ExtArgs extends runtime.Types.Extension
    * Limit how many MouvementStocks to delete.
    */
   limit?: number
+}
+
+/**
+ * MouvementStock.stock
+ */
+export type MouvementStock$stockArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the StockMedicament
+   */
+  select?: Prisma.StockMedicamentSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the StockMedicament
+   */
+  omit?: Prisma.StockMedicamentOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.StockMedicamentInclude<ExtArgs> | null
+  where?: Prisma.StockMedicamentWhereInput
+}
+
+/**
+ * MouvementStock.utilisateur
+ */
+export type MouvementStock$utilisateurArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the User
+   */
+  select?: Prisma.UserSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the User
+   */
+  omit?: Prisma.UserOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.UserInclude<ExtArgs> | null
+  where?: Prisma.UserWhereInput
 }
 
 /**

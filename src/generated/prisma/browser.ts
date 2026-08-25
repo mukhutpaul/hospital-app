@@ -163,6 +163,16 @@ export type StockMedicament = Prisma.StockMedicamentModel
  */
 export type MouvementStock = Prisma.MouvementStockModel
 /**
+ * Model Dispensation
+ * 
+ */
+export type Dispensation = Prisma.DispensationModel
+/**
+ * Model DispensationLigne
+ * 
+ */
+export type DispensationLigne = Prisma.DispensationLigneModel
+/**
  * Model Chambre
  * 
  */

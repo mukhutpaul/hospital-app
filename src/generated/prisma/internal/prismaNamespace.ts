@@ -426,6 +426,8 @@ export const ModelName = {
   Medicament: 'Medicament',
   StockMedicament: 'StockMedicament',
   MouvementStock: 'MouvementStock',
+  Dispensation: 'Dispensation',
+  DispensationLigne: 'DispensationLigne',
   Chambre: 'Chambre',
   Lit: 'Lit',
   Hospitalisation: 'Hospitalisation',
@@ -455,7 +457,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "role" | "permission" | "rolePermission" | "employe" | "departement" | "service" | "specialite" | "medecin" | "infirmier" | "patient" | "allergie" | "antecedent" | "rendezVous" | "admission" | "triage" | "constante" | "consultation" | "prescription" | "prescriptionLigne" | "examenLaboratoire" | "demandeLaboratoire" | "demandeLaboratoireLigne" | "resultatLaboratoire" | "examenImagerie" | "demandeImagerie" | "medicament" | "stockMedicament" | "mouvementStock" | "chambre" | "lit" | "hospitalisation" | "transfert" | "soin" | "sortie" | "acteMedical" | "facture" | "ligneFacture" | "paiement" | "assurance" | "patientAssurance" | "documentPatient" | "auditLog"
+    modelProps: "user" | "role" | "permission" | "rolePermission" | "employe" | "departement" | "service" | "specialite" | "medecin" | "infirmier" | "patient" | "allergie" | "antecedent" | "rendezVous" | "admission" | "triage" | "constante" | "consultation" | "prescription" | "prescriptionLigne" | "examenLaboratoire" | "demandeLaboratoire" | "demandeLaboratoireLigne" | "resultatLaboratoire" | "examenImagerie" | "demandeImagerie" | "medicament" | "stockMedicament" | "mouvementStock" | "dispensation" | "dispensationLigne" | "chambre" | "lit" | "hospitalisation" | "transfert" | "soin" | "sortie" | "acteMedical" | "facture" | "ligneFacture" | "paiement" | "assurance" | "patientAssurance" | "documentPatient" | "auditLog"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -2605,6 +2607,154 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    Dispensation: {
+      payload: Prisma.$DispensationPayload<ExtArgs>
+      fields: Prisma.DispensationFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.DispensationFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DispensationPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.DispensationFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DispensationPayload>
+        }
+        findFirst: {
+          args: Prisma.DispensationFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DispensationPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.DispensationFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DispensationPayload>
+        }
+        findMany: {
+          args: Prisma.DispensationFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DispensationPayload>[]
+        }
+        create: {
+          args: Prisma.DispensationCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DispensationPayload>
+        }
+        createMany: {
+          args: Prisma.DispensationCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.DispensationCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DispensationPayload>[]
+        }
+        delete: {
+          args: Prisma.DispensationDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DispensationPayload>
+        }
+        update: {
+          args: Prisma.DispensationUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DispensationPayload>
+        }
+        deleteMany: {
+          args: Prisma.DispensationDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.DispensationUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.DispensationUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DispensationPayload>[]
+        }
+        upsert: {
+          args: Prisma.DispensationUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DispensationPayload>
+        }
+        aggregate: {
+          args: Prisma.DispensationAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateDispensation>
+        }
+        groupBy: {
+          args: Prisma.DispensationGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.DispensationGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.DispensationCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.DispensationCountAggregateOutputType> | number
+        }
+      }
+    }
+    DispensationLigne: {
+      payload: Prisma.$DispensationLignePayload<ExtArgs>
+      fields: Prisma.DispensationLigneFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.DispensationLigneFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DispensationLignePayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.DispensationLigneFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DispensationLignePayload>
+        }
+        findFirst: {
+          args: Prisma.DispensationLigneFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DispensationLignePayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.DispensationLigneFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DispensationLignePayload>
+        }
+        findMany: {
+          args: Prisma.DispensationLigneFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DispensationLignePayload>[]
+        }
+        create: {
+          args: Prisma.DispensationLigneCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DispensationLignePayload>
+        }
+        createMany: {
+          args: Prisma.DispensationLigneCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.DispensationLigneCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DispensationLignePayload>[]
+        }
+        delete: {
+          args: Prisma.DispensationLigneDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DispensationLignePayload>
+        }
+        update: {
+          args: Prisma.DispensationLigneUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DispensationLignePayload>
+        }
+        deleteMany: {
+          args: Prisma.DispensationLigneDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.DispensationLigneUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.DispensationLigneUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DispensationLignePayload>[]
+        }
+        upsert: {
+          args: Prisma.DispensationLigneUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DispensationLignePayload>
+        }
+        aggregate: {
+          args: Prisma.DispensationLigneAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateDispensationLigne>
+        }
+        groupBy: {
+          args: Prisma.DispensationLigneGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.DispensationLigneGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.DispensationLigneCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.DispensationLigneCountAggregateOutputType> | number
+        }
+      }
+    }
     Chambre: {
       payload: Prisma.$ChambrePayload<ExtArgs>
       fields: Prisma.ChambreFieldRefs
@@ -3998,7 +4148,8 @@ export const PrescriptionLigneScalarFieldEnum = {
   duree: 'duree',
   voie: 'voie',
   quantite: 'quantite',
-  observation: 'observation'
+  observation: 'observation',
+  createdAt: 'createdAt'
 } as const
 
 export type PrescriptionLigneScalarFieldEnum = (typeof PrescriptionLigneScalarFieldEnum)[keyof typeof PrescriptionLigneScalarFieldEnum]
@@ -4136,14 +4287,50 @@ export type StockMedicamentScalarFieldEnum = (typeof StockMedicamentScalarFieldE
 export const MouvementStockScalarFieldEnum = {
   id: 'id',
   medicamentId: 'medicamentId',
+  stockId: 'stockId',
   type: 'type',
   quantite: 'quantite',
   motif: 'motif',
   reference: 'reference',
+  utilisateurId: 'utilisateurId',
   dateMouvement: 'dateMouvement'
 } as const
 
 export type MouvementStockScalarFieldEnum = (typeof MouvementStockScalarFieldEnum)[keyof typeof MouvementStockScalarFieldEnum]
+
+
+export const DispensationScalarFieldEnum = {
+  id: 'id',
+  numero: 'numero',
+  patientId: 'patientId',
+  prescriptionId: 'prescriptionId',
+  pharmacienId: 'pharmacienId',
+  dateDispensation: 'dateDispensation',
+  statut: 'statut',
+  observation: 'observation',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type DispensationScalarFieldEnum = (typeof DispensationScalarFieldEnum)[keyof typeof DispensationScalarFieldEnum]
+
+
+export const DispensationLigneScalarFieldEnum = {
+  id: 'id',
+  dispensationId: 'dispensationId',
+  prescriptionLigneId: 'prescriptionLigneId',
+  medicamentId: 'medicamentId',
+  stockId: 'stockId',
+  pharmacienId: 'pharmacienId',
+  quantitePrescrite: 'quantitePrescrite',
+  quantiteDispensee: 'quantiteDispensee',
+  prixUnitaire: 'prixUnitaire',
+  montant: 'montant',
+  observation: 'observation',
+  createdAt: 'createdAt'
+} as const
+
+export type DispensationLigneScalarFieldEnum = (typeof DispensationLigneScalarFieldEnum)[keyof typeof DispensationLigneScalarFieldEnum]
 
 
 export const ChambreScalarFieldEnum = {
@@ -4593,6 +4780,8 @@ export type GlobalOmitConfig = {
   medicament?: Prisma.MedicamentOmit
   stockMedicament?: Prisma.StockMedicamentOmit
   mouvementStock?: Prisma.MouvementStockOmit
+  dispensation?: Prisma.DispensationOmit
+  dispensationLigne?: Prisma.DispensationLigneOmit
   chambre?: Prisma.ChambreOmit
   lit?: Prisma.LitOmit
   hospitalisation?: Prisma.HospitalisationOmit

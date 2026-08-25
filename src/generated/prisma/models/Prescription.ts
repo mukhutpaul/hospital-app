@@ -276,6 +276,7 @@ export type PrescriptionWhereInput = {
   consultation?: Prisma.XOR<Prisma.ConsultationNullableScalarRelationFilter, Prisma.ConsultationWhereInput> | null
   medecin?: Prisma.XOR<Prisma.MedecinScalarRelationFilter, Prisma.MedecinWhereInput>
   lignes?: Prisma.PrescriptionLigneListRelationFilter
+  dispensations?: Prisma.DispensationListRelationFilter
   auteur?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
 }
 
@@ -294,6 +295,7 @@ export type PrescriptionOrderByWithRelationInput = {
   consultation?: Prisma.ConsultationOrderByWithRelationInput
   medecin?: Prisma.MedecinOrderByWithRelationInput
   lignes?: Prisma.PrescriptionLigneOrderByRelationAggregateInput
+  dispensations?: Prisma.DispensationOrderByRelationAggregateInput
   auteur?: Prisma.UserOrderByWithRelationInput
 }
 
@@ -315,6 +317,7 @@ export type PrescriptionWhereUniqueInput = Prisma.AtLeast<{
   consultation?: Prisma.XOR<Prisma.ConsultationNullableScalarRelationFilter, Prisma.ConsultationWhereInput> | null
   medecin?: Prisma.XOR<Prisma.MedecinScalarRelationFilter, Prisma.MedecinWhereInput>
   lignes?: Prisma.PrescriptionLigneListRelationFilter
+  dispensations?: Prisma.DispensationListRelationFilter
   auteur?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
 }, "id" | "numero">
 
@@ -362,6 +365,7 @@ export type PrescriptionCreateInput = {
   consultation?: Prisma.ConsultationCreateNestedOneWithoutPrescriptionsInput
   medecin: Prisma.MedecinCreateNestedOneWithoutPrescriptionsInput
   lignes?: Prisma.PrescriptionLigneCreateNestedManyWithoutPrescriptionInput
+  dispensations?: Prisma.DispensationCreateNestedManyWithoutPrescriptionInput
   auteur?: Prisma.UserCreateNestedOneWithoutPrescriptionsInput
 }
 
@@ -377,6 +381,7 @@ export type PrescriptionUncheckedCreateInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   lignes?: Prisma.PrescriptionLigneUncheckedCreateNestedManyWithoutPrescriptionInput
+  dispensations?: Prisma.DispensationUncheckedCreateNestedManyWithoutPrescriptionInput
 }
 
 export type PrescriptionUpdateInput = {
@@ -389,6 +394,7 @@ export type PrescriptionUpdateInput = {
   consultation?: Prisma.ConsultationUpdateOneWithoutPrescriptionsNestedInput
   medecin?: Prisma.MedecinUpdateOneRequiredWithoutPrescriptionsNestedInput
   lignes?: Prisma.PrescriptionLigneUpdateManyWithoutPrescriptionNestedInput
+  dispensations?: Prisma.DispensationUpdateManyWithoutPrescriptionNestedInput
   auteur?: Prisma.UserUpdateOneWithoutPrescriptionsNestedInput
 }
 
@@ -404,6 +410,7 @@ export type PrescriptionUncheckedUpdateInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   lignes?: Prisma.PrescriptionLigneUncheckedUpdateManyWithoutPrescriptionNestedInput
+  dispensations?: Prisma.DispensationUncheckedUpdateManyWithoutPrescriptionNestedInput
 }
 
 export type PrescriptionCreateManyInput = {
@@ -508,6 +515,11 @@ export type PrescriptionSumOrderByAggregateInput = {
 export type PrescriptionScalarRelationFilter = {
   is?: Prisma.PrescriptionWhereInput
   isNot?: Prisma.PrescriptionWhereInput
+}
+
+export type PrescriptionNullableScalarRelationFilter = {
+  is?: Prisma.PrescriptionWhereInput | null
+  isNot?: Prisma.PrescriptionWhereInput | null
 }
 
 export type PrescriptionCreateNestedManyWithoutAuteurInput = {
@@ -692,6 +704,22 @@ export type PrescriptionUpdateOneRequiredWithoutLignesNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.PrescriptionUpdateToOneWithWhereWithoutLignesInput, Prisma.PrescriptionUpdateWithoutLignesInput>, Prisma.PrescriptionUncheckedUpdateWithoutLignesInput>
 }
 
+export type PrescriptionCreateNestedOneWithoutDispensationsInput = {
+  create?: Prisma.XOR<Prisma.PrescriptionCreateWithoutDispensationsInput, Prisma.PrescriptionUncheckedCreateWithoutDispensationsInput>
+  connectOrCreate?: Prisma.PrescriptionCreateOrConnectWithoutDispensationsInput
+  connect?: Prisma.PrescriptionWhereUniqueInput
+}
+
+export type PrescriptionUpdateOneWithoutDispensationsNestedInput = {
+  create?: Prisma.XOR<Prisma.PrescriptionCreateWithoutDispensationsInput, Prisma.PrescriptionUncheckedCreateWithoutDispensationsInput>
+  connectOrCreate?: Prisma.PrescriptionCreateOrConnectWithoutDispensationsInput
+  upsert?: Prisma.PrescriptionUpsertWithoutDispensationsInput
+  disconnect?: Prisma.PrescriptionWhereInput | boolean
+  delete?: Prisma.PrescriptionWhereInput | boolean
+  connect?: Prisma.PrescriptionWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.PrescriptionUpdateToOneWithWhereWithoutDispensationsInput, Prisma.PrescriptionUpdateWithoutDispensationsInput>, Prisma.PrescriptionUncheckedUpdateWithoutDispensationsInput>
+}
+
 export type PrescriptionCreateWithoutAuteurInput = {
   numero: string
   datePrescription?: Date | string
@@ -702,6 +730,7 @@ export type PrescriptionCreateWithoutAuteurInput = {
   consultation?: Prisma.ConsultationCreateNestedOneWithoutPrescriptionsInput
   medecin: Prisma.MedecinCreateNestedOneWithoutPrescriptionsInput
   lignes?: Prisma.PrescriptionLigneCreateNestedManyWithoutPrescriptionInput
+  dispensations?: Prisma.DispensationCreateNestedManyWithoutPrescriptionInput
 }
 
 export type PrescriptionUncheckedCreateWithoutAuteurInput = {
@@ -715,6 +744,7 @@ export type PrescriptionUncheckedCreateWithoutAuteurInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   lignes?: Prisma.PrescriptionLigneUncheckedCreateNestedManyWithoutPrescriptionInput
+  dispensations?: Prisma.DispensationUncheckedCreateNestedManyWithoutPrescriptionInput
 }
 
 export type PrescriptionCreateOrConnectWithoutAuteurInput = {
@@ -767,6 +797,7 @@ export type PrescriptionCreateWithoutMedecinInput = {
   patient: Prisma.PatientCreateNestedOneWithoutPrescriptionsInput
   consultation?: Prisma.ConsultationCreateNestedOneWithoutPrescriptionsInput
   lignes?: Prisma.PrescriptionLigneCreateNestedManyWithoutPrescriptionInput
+  dispensations?: Prisma.DispensationCreateNestedManyWithoutPrescriptionInput
   auteur?: Prisma.UserCreateNestedOneWithoutPrescriptionsInput
 }
 
@@ -781,6 +812,7 @@ export type PrescriptionUncheckedCreateWithoutMedecinInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   lignes?: Prisma.PrescriptionLigneUncheckedCreateNestedManyWithoutPrescriptionInput
+  dispensations?: Prisma.DispensationUncheckedCreateNestedManyWithoutPrescriptionInput
 }
 
 export type PrescriptionCreateOrConnectWithoutMedecinInput = {
@@ -817,6 +849,7 @@ export type PrescriptionCreateWithoutPatientInput = {
   consultation?: Prisma.ConsultationCreateNestedOneWithoutPrescriptionsInput
   medecin: Prisma.MedecinCreateNestedOneWithoutPrescriptionsInput
   lignes?: Prisma.PrescriptionLigneCreateNestedManyWithoutPrescriptionInput
+  dispensations?: Prisma.DispensationCreateNestedManyWithoutPrescriptionInput
   auteur?: Prisma.UserCreateNestedOneWithoutPrescriptionsInput
 }
 
@@ -831,6 +864,7 @@ export type PrescriptionUncheckedCreateWithoutPatientInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   lignes?: Prisma.PrescriptionLigneUncheckedCreateNestedManyWithoutPrescriptionInput
+  dispensations?: Prisma.DispensationUncheckedCreateNestedManyWithoutPrescriptionInput
 }
 
 export type PrescriptionCreateOrConnectWithoutPatientInput = {
@@ -867,6 +901,7 @@ export type PrescriptionCreateWithoutConsultationInput = {
   patient: Prisma.PatientCreateNestedOneWithoutPrescriptionsInput
   medecin: Prisma.MedecinCreateNestedOneWithoutPrescriptionsInput
   lignes?: Prisma.PrescriptionLigneCreateNestedManyWithoutPrescriptionInput
+  dispensations?: Prisma.DispensationCreateNestedManyWithoutPrescriptionInput
   auteur?: Prisma.UserCreateNestedOneWithoutPrescriptionsInput
 }
 
@@ -881,6 +916,7 @@ export type PrescriptionUncheckedCreateWithoutConsultationInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   lignes?: Prisma.PrescriptionLigneUncheckedCreateNestedManyWithoutPrescriptionInput
+  dispensations?: Prisma.DispensationUncheckedCreateNestedManyWithoutPrescriptionInput
 }
 
 export type PrescriptionCreateOrConnectWithoutConsultationInput = {
@@ -917,6 +953,7 @@ export type PrescriptionCreateWithoutLignesInput = {
   patient: Prisma.PatientCreateNestedOneWithoutPrescriptionsInput
   consultation?: Prisma.ConsultationCreateNestedOneWithoutPrescriptionsInput
   medecin: Prisma.MedecinCreateNestedOneWithoutPrescriptionsInput
+  dispensations?: Prisma.DispensationCreateNestedManyWithoutPrescriptionInput
   auteur?: Prisma.UserCreateNestedOneWithoutPrescriptionsInput
 }
 
@@ -931,6 +968,7 @@ export type PrescriptionUncheckedCreateWithoutLignesInput = {
   auteurId?: number | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  dispensations?: Prisma.DispensationUncheckedCreateNestedManyWithoutPrescriptionInput
 }
 
 export type PrescriptionCreateOrConnectWithoutLignesInput = {
@@ -958,6 +996,7 @@ export type PrescriptionUpdateWithoutLignesInput = {
   patient?: Prisma.PatientUpdateOneRequiredWithoutPrescriptionsNestedInput
   consultation?: Prisma.ConsultationUpdateOneWithoutPrescriptionsNestedInput
   medecin?: Prisma.MedecinUpdateOneRequiredWithoutPrescriptionsNestedInput
+  dispensations?: Prisma.DispensationUpdateManyWithoutPrescriptionNestedInput
   auteur?: Prisma.UserUpdateOneWithoutPrescriptionsNestedInput
 }
 
@@ -972,6 +1011,77 @@ export type PrescriptionUncheckedUpdateWithoutLignesInput = {
   auteurId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  dispensations?: Prisma.DispensationUncheckedUpdateManyWithoutPrescriptionNestedInput
+}
+
+export type PrescriptionCreateWithoutDispensationsInput = {
+  numero: string
+  datePrescription?: Date | string
+  statut?: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  patient: Prisma.PatientCreateNestedOneWithoutPrescriptionsInput
+  consultation?: Prisma.ConsultationCreateNestedOneWithoutPrescriptionsInput
+  medecin: Prisma.MedecinCreateNestedOneWithoutPrescriptionsInput
+  lignes?: Prisma.PrescriptionLigneCreateNestedManyWithoutPrescriptionInput
+  auteur?: Prisma.UserCreateNestedOneWithoutPrescriptionsInput
+}
+
+export type PrescriptionUncheckedCreateWithoutDispensationsInput = {
+  id?: number
+  numero: string
+  patientId: number
+  consultationId?: number | null
+  medecinId: number
+  datePrescription?: Date | string
+  statut?: string
+  auteurId?: number | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  lignes?: Prisma.PrescriptionLigneUncheckedCreateNestedManyWithoutPrescriptionInput
+}
+
+export type PrescriptionCreateOrConnectWithoutDispensationsInput = {
+  where: Prisma.PrescriptionWhereUniqueInput
+  create: Prisma.XOR<Prisma.PrescriptionCreateWithoutDispensationsInput, Prisma.PrescriptionUncheckedCreateWithoutDispensationsInput>
+}
+
+export type PrescriptionUpsertWithoutDispensationsInput = {
+  update: Prisma.XOR<Prisma.PrescriptionUpdateWithoutDispensationsInput, Prisma.PrescriptionUncheckedUpdateWithoutDispensationsInput>
+  create: Prisma.XOR<Prisma.PrescriptionCreateWithoutDispensationsInput, Prisma.PrescriptionUncheckedCreateWithoutDispensationsInput>
+  where?: Prisma.PrescriptionWhereInput
+}
+
+export type PrescriptionUpdateToOneWithWhereWithoutDispensationsInput = {
+  where?: Prisma.PrescriptionWhereInput
+  data: Prisma.XOR<Prisma.PrescriptionUpdateWithoutDispensationsInput, Prisma.PrescriptionUncheckedUpdateWithoutDispensationsInput>
+}
+
+export type PrescriptionUpdateWithoutDispensationsInput = {
+  numero?: Prisma.StringFieldUpdateOperationsInput | string
+  datePrescription?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  statut?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  patient?: Prisma.PatientUpdateOneRequiredWithoutPrescriptionsNestedInput
+  consultation?: Prisma.ConsultationUpdateOneWithoutPrescriptionsNestedInput
+  medecin?: Prisma.MedecinUpdateOneRequiredWithoutPrescriptionsNestedInput
+  lignes?: Prisma.PrescriptionLigneUpdateManyWithoutPrescriptionNestedInput
+  auteur?: Prisma.UserUpdateOneWithoutPrescriptionsNestedInput
+}
+
+export type PrescriptionUncheckedUpdateWithoutDispensationsInput = {
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  numero?: Prisma.StringFieldUpdateOperationsInput | string
+  patientId?: Prisma.IntFieldUpdateOperationsInput | number
+  consultationId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  medecinId?: Prisma.IntFieldUpdateOperationsInput | number
+  datePrescription?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  statut?: Prisma.StringFieldUpdateOperationsInput | string
+  auteurId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  lignes?: Prisma.PrescriptionLigneUncheckedUpdateManyWithoutPrescriptionNestedInput
 }
 
 export type PrescriptionCreateManyAuteurInput = {
@@ -996,6 +1106,7 @@ export type PrescriptionUpdateWithoutAuteurInput = {
   consultation?: Prisma.ConsultationUpdateOneWithoutPrescriptionsNestedInput
   medecin?: Prisma.MedecinUpdateOneRequiredWithoutPrescriptionsNestedInput
   lignes?: Prisma.PrescriptionLigneUpdateManyWithoutPrescriptionNestedInput
+  dispensations?: Prisma.DispensationUpdateManyWithoutPrescriptionNestedInput
 }
 
 export type PrescriptionUncheckedUpdateWithoutAuteurInput = {
@@ -1009,6 +1120,7 @@ export type PrescriptionUncheckedUpdateWithoutAuteurInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   lignes?: Prisma.PrescriptionLigneUncheckedUpdateManyWithoutPrescriptionNestedInput
+  dispensations?: Prisma.DispensationUncheckedUpdateManyWithoutPrescriptionNestedInput
 }
 
 export type PrescriptionUncheckedUpdateManyWithoutAuteurInput = {
@@ -1044,6 +1156,7 @@ export type PrescriptionUpdateWithoutMedecinInput = {
   patient?: Prisma.PatientUpdateOneRequiredWithoutPrescriptionsNestedInput
   consultation?: Prisma.ConsultationUpdateOneWithoutPrescriptionsNestedInput
   lignes?: Prisma.PrescriptionLigneUpdateManyWithoutPrescriptionNestedInput
+  dispensations?: Prisma.DispensationUpdateManyWithoutPrescriptionNestedInput
   auteur?: Prisma.UserUpdateOneWithoutPrescriptionsNestedInput
 }
 
@@ -1058,6 +1171,7 @@ export type PrescriptionUncheckedUpdateWithoutMedecinInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   lignes?: Prisma.PrescriptionLigneUncheckedUpdateManyWithoutPrescriptionNestedInput
+  dispensations?: Prisma.DispensationUncheckedUpdateManyWithoutPrescriptionNestedInput
 }
 
 export type PrescriptionUncheckedUpdateManyWithoutMedecinInput = {
@@ -1093,6 +1207,7 @@ export type PrescriptionUpdateWithoutPatientInput = {
   consultation?: Prisma.ConsultationUpdateOneWithoutPrescriptionsNestedInput
   medecin?: Prisma.MedecinUpdateOneRequiredWithoutPrescriptionsNestedInput
   lignes?: Prisma.PrescriptionLigneUpdateManyWithoutPrescriptionNestedInput
+  dispensations?: Prisma.DispensationUpdateManyWithoutPrescriptionNestedInput
   auteur?: Prisma.UserUpdateOneWithoutPrescriptionsNestedInput
 }
 
@@ -1107,6 +1222,7 @@ export type PrescriptionUncheckedUpdateWithoutPatientInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   lignes?: Prisma.PrescriptionLigneUncheckedUpdateManyWithoutPrescriptionNestedInput
+  dispensations?: Prisma.DispensationUncheckedUpdateManyWithoutPrescriptionNestedInput
 }
 
 export type PrescriptionUncheckedUpdateManyWithoutPatientInput = {
@@ -1142,6 +1258,7 @@ export type PrescriptionUpdateWithoutConsultationInput = {
   patient?: Prisma.PatientUpdateOneRequiredWithoutPrescriptionsNestedInput
   medecin?: Prisma.MedecinUpdateOneRequiredWithoutPrescriptionsNestedInput
   lignes?: Prisma.PrescriptionLigneUpdateManyWithoutPrescriptionNestedInput
+  dispensations?: Prisma.DispensationUpdateManyWithoutPrescriptionNestedInput
   auteur?: Prisma.UserUpdateOneWithoutPrescriptionsNestedInput
 }
 
@@ -1156,6 +1273,7 @@ export type PrescriptionUncheckedUpdateWithoutConsultationInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   lignes?: Prisma.PrescriptionLigneUncheckedUpdateManyWithoutPrescriptionNestedInput
+  dispensations?: Prisma.DispensationUncheckedUpdateManyWithoutPrescriptionNestedInput
 }
 
 export type PrescriptionUncheckedUpdateManyWithoutConsultationInput = {
@@ -1177,10 +1295,12 @@ export type PrescriptionUncheckedUpdateManyWithoutConsultationInput = {
 
 export type PrescriptionCountOutputType = {
   lignes: number
+  dispensations: number
 }
 
 export type PrescriptionCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   lignes?: boolean | PrescriptionCountOutputTypeCountLignesArgs
+  dispensations?: boolean | PrescriptionCountOutputTypeCountDispensationsArgs
 }
 
 /**
@@ -1200,6 +1320,13 @@ export type PrescriptionCountOutputTypeCountLignesArgs<ExtArgs extends runtime.T
   where?: Prisma.PrescriptionLigneWhereInput
 }
 
+/**
+ * PrescriptionCountOutputType without action
+ */
+export type PrescriptionCountOutputTypeCountDispensationsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.DispensationWhereInput
+}
+
 
 export type PrescriptionSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -1216,6 +1343,7 @@ export type PrescriptionSelect<ExtArgs extends runtime.Types.Extensions.Internal
   consultation?: boolean | Prisma.Prescription$consultationArgs<ExtArgs>
   medecin?: boolean | Prisma.MedecinDefaultArgs<ExtArgs>
   lignes?: boolean | Prisma.Prescription$lignesArgs<ExtArgs>
+  dispensations?: boolean | Prisma.Prescription$dispensationsArgs<ExtArgs>
   auteur?: boolean | Prisma.Prescription$auteurArgs<ExtArgs>
   _count?: boolean | Prisma.PrescriptionCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["prescription"]>
@@ -1273,6 +1401,7 @@ export type PrescriptionInclude<ExtArgs extends runtime.Types.Extensions.Interna
   consultation?: boolean | Prisma.Prescription$consultationArgs<ExtArgs>
   medecin?: boolean | Prisma.MedecinDefaultArgs<ExtArgs>
   lignes?: boolean | Prisma.Prescription$lignesArgs<ExtArgs>
+  dispensations?: boolean | Prisma.Prescription$dispensationsArgs<ExtArgs>
   auteur?: boolean | Prisma.Prescription$auteurArgs<ExtArgs>
   _count?: boolean | Prisma.PrescriptionCountOutputTypeDefaultArgs<ExtArgs>
 }
@@ -1295,7 +1424,16 @@ export type $PrescriptionPayload<ExtArgs extends runtime.Types.Extensions.Intern
     patient: Prisma.$PatientPayload<ExtArgs>
     consultation: Prisma.$ConsultationPayload<ExtArgs> | null
     medecin: Prisma.$MedecinPayload<ExtArgs>
+    /**
+     * *
+     *    * ACTIVE
+     *    * DISPENSEE
+     *    * PARTIELLE
+     *    * ANNULEE
+     *    * EXPIREE
+     */
     lignes: Prisma.$PrescriptionLignePayload<ExtArgs>[]
+    dispensations: Prisma.$DispensationPayload<ExtArgs>[]
     auteur: Prisma.$UserPayload<ExtArgs> | null
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
@@ -1707,6 +1845,7 @@ export interface Prisma__PrescriptionClient<T, Null = never, ExtArgs extends run
   consultation<T extends Prisma.Prescription$consultationArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Prescription$consultationArgs<ExtArgs>>): Prisma.Prisma__ConsultationClient<runtime.Types.Result.GetResult<Prisma.$ConsultationPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   medecin<T extends Prisma.MedecinDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.MedecinDefaultArgs<ExtArgs>>): Prisma.Prisma__MedecinClient<runtime.Types.Result.GetResult<Prisma.$MedecinPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   lignes<T extends Prisma.Prescription$lignesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Prescription$lignesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$PrescriptionLignePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  dispensations<T extends Prisma.Prescription$dispensationsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Prescription$dispensationsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$DispensationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   auteur<T extends Prisma.Prescription$auteurArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Prescription$auteurArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -2186,6 +2325,30 @@ export type Prescription$lignesArgs<ExtArgs extends runtime.Types.Extensions.Int
   take?: number
   skip?: number
   distinct?: Prisma.PrescriptionLigneScalarFieldEnum | Prisma.PrescriptionLigneScalarFieldEnum[]
+}
+
+/**
+ * Prescription.dispensations
+ */
+export type Prescription$dispensationsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Dispensation
+   */
+  select?: Prisma.DispensationSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Dispensation
+   */
+  omit?: Prisma.DispensationOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.DispensationInclude<ExtArgs> | null
+  where?: Prisma.DispensationWhereInput
+  orderBy?: Prisma.DispensationOrderByWithRelationInput | Prisma.DispensationOrderByWithRelationInput[]
+  cursor?: Prisma.DispensationWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.DispensationScalarFieldEnum | Prisma.DispensationScalarFieldEnum[]
 }
 
 /**
