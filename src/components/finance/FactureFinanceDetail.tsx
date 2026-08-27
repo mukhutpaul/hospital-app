@@ -1,0 +1,15 @@
+"use client";
+import Link from "next/link";
+export default function FactureFinanceDetail({ facture }: { facture: any }) {
+  return <div className="mx-auto max-w-6xl p-6 space-y-5">
+    <div className="flex flex-wrap justify-between gap-3"><div><h1 className="text-3xl font-bold">{facture.numero}</h1><p className="opacity-60">Facture traçable patient → consultation → prestations → paiement</p></div><div className="flex gap-2"><button className="btn btn-outline" onClick={()=>window.print()}>Imprimer</button>{facture.reste>0 && <Link className="btn btn-primary" href={`/paiements/nouveau?factureId=${facture.id}`}>Enregistrer un paiement</Link>}</div></div>
+    <div className="grid md:grid-cols-4 gap-3">
+      <div className="card border bg-base-100"><div className="card-body"><div className="opacity-60">Patient</div><b>{facture.patient.nom} {facture.patient.postNom||""} {facture.patient.prenom||""}</b><small>{facture.patient.numeroDossier}</small></div></div>
+      <div className="card border bg-base-100"><div className="card-body"><div className="opacity-60">Consultation</div><b>{facture.consultation ? `CONS-${facture.consultation.idConsultation}` : "—"}</b><small>{facture.consultation?.service?.nom||"—"}</small></div></div>
+      <div className="card border bg-base-100"><div className="card-body"><div className="opacity-60">Net</div><b>{facture.montantTotal} {facture.devise}</b><small>Brut {facture.montantBrut ?? facture.montantTotal}</small></div></div>
+      <div className="card border bg-base-100"><div className="card-body"><div className="opacity-60">Reste</div><b>{facture.reste} {facture.devise}</b><small>{facture.statut}</small></div></div>
+    </div>
+    <div className="card border bg-base-100"><div className="card-body"><h2 className="card-title">Prestations facturées</h2><div className="overflow-x-auto"><table className="table"><thead><tr><th>Origine</th><th>Désignation</th><th>Référence</th><th>Qté</th><th>Total</th></tr></thead><tbody>{facture.lignes.map((l:any)=><tr key={l.id}><td><span className="badge badge-outline">{l.typeOrigine || "AUTRE"}</span></td><td>{l.designation}</td><td>{l.reference||"—"}</td><td>{l.quantite}</td><td>{l.montant} {facture.devise}</td></tr>)}</tbody></table></div><div className="text-right space-y-1 border-t pt-4"><div>Brut : {facture.montantBrut ?? facture.montantTotal} {facture.devise}</div><div>Réduction : {facture.reduction ?? 0} {facture.devise}</div><div className="text-xl font-bold">Net : {facture.montantTotal} {facture.devise}</div></div></div></div>
+    <div className="card border bg-base-100"><div className="card-body"><h2 className="card-title">Historique des paiements</h2>{facture.paiements.length===0?<p className="opacity-60">Aucun paiement.</p>:<div className="overflow-x-auto"><table className="table"><thead><tr><th>Référence</th><th>Date</th><th>Mode</th><th>Montant</th></tr></thead><tbody>{facture.paiements.map((p:any)=><tr key={p.id}><td>{p.reference}</td><td>{new Date(p.datePaiement).toLocaleString("fr-FR")}</td><td>{p.modePaiement}</td><td>{p.montant} {p.devise}</td></tr>)}</tbody></table></div>}</div></div>
+  </div>;
+}

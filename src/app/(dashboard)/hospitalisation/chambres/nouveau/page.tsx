@@ -1,0 +1,1 @@
+import {prisma} from "@/lib/prisma";import ChambreForm from "@/components/hospitalisation/ChambreForm";export default async function Page(){const services=await prisma.service.findMany({where:{actif:true},orderBy:{nom:"asc"}});return <main className="mx-auto max-w-4xl p-6"><ChambreForm services={services}/></main>}

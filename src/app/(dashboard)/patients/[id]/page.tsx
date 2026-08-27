@@ -1,17 +1,13 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { ArrowLeft, Edit, UserRound } from "lucide-react";
+import { getPatient } from "@/app/actions/patients";
+import PatientDossier from "@/components/patients/PatientDossier";
 
-import { prisma } from "@/lib/prisma";
-import PatientDetails from "@/components/patients/PatientDetails";
-
-type Props = {
-  params: Promise<{
-    id: string;
-  }>;
-};
-
-export default async function PatientDetailsPage({ params }: Props) {
+export default async function Page({
+  params,
+}: {
+  params: Promise<{ id: string }>;
+}) {
   const { id } = await params;
 
   const patientId = Number(id);
@@ -20,219 +16,98 @@ export default async function PatientDetailsPage({ params }: Props) {
     notFound();
   }
 
-  const patient = await prisma.patient.findUnique({
-    where: {
-      id: patientId,
-    },
+  const r = await getPatient(patientId);
 
-    include: {
-      _count: {
-        select: {
-          allergies: true,
-          antecedents: true,
-          rendezVous: true,
-          admissions: true,
-          consultations: true,
-          prescriptions: true,
-          demandesLabo: true,
-          demandesImagerie: true,
-          hospitalisations: true,
-          factures: true,
-          paiements: true,
-          documents: true,
-          assurances: true,
-          constantes: true,
-          sorties: true,
-        },
-      },
-
-      allergies: {
-        orderBy: {
-          createdAt: "desc",
-        },
-      },
-
-      antecedents: {
-        orderBy: {
-          createdAt: "desc",
-        },
-      },
-
-      rendezVous: {
-        orderBy: {
-          dateHeure: "desc",
-        },
-        include: {
-          medecin: true,
-          specialite: true,
-          service: true,
-        },
-      },
-
-      admissions: {
-        orderBy: {
-          dateAdmission: "desc",
-        },
-        include: {
-          service: true,
-        },
-      },
-
-      consultations: {
-        orderBy: {
-          dateConsultation: "desc",
-        },
-        include: {
-          medecin: true,
-          service: true,
-          specialite: true,
-        },
-      },
-
-      prescriptions: {
-        orderBy: {
-          datePrescription: "desc",
-        },
-        include: {
-          medecin: true,
-          lignes: {
-            include: {
-              medicament: true,
-            },
-          },
-        },
-      },
-
-      demandesLabo: {
-        orderBy: {
-          dateDemande: "desc",
-        },
-        include: {
-          consultation: true,
-          lignes: {
-            include: {
-              examen: true,
-            },
-          },
-        },
-      },
-
-      demandesImagerie: {
-        orderBy: {
-          dateDemande: "desc",
-        },
-        include: {
-          consultation: true,
-          examen: true,
-        },
-      },
-
-      hospitalisations: {
-        orderBy: {
-          dateEntree: "desc",
-        },
-        include: {
-          service: true,
-          medecin: true,
-          lit: {
-            include: {
-              chambre: true,
-            },
-          },
-        },
-      },
-
-      factures: {
-        orderBy: {
-          dateFacture: "desc",
-        },
-        include: {
-          lignes: true,
-          paiements: true,
-        },
-      },
-
-      paiements: {
-        orderBy: {
-          datePaiement: "desc",
-        },
-      },
-
-      assurances: {
-        include: {
-          assurance: true,
-        },
-      },
-
-      documents: {
-        orderBy: {
-          dateDocument: "desc",
-        },
-      },
-
-      constantes: {
-        orderBy: {
-          dateMesure: "desc",
-        },
-      },
-
-      sorties: {
-        orderBy: {
-          dateSortie: "desc",
-        },
-        include: {
-          hospitalisation: true,
-        },
-      },
-    },
-  });
-
-  if (!patient) {
+  if (!r.success || !r.data) {
     notFound();
   }
 
-  return (
-    <main className="p-4 md:p-6 lg:p-8 space-y-6">
-      {/* =====================================================
-          EN-TÊTE
-      ===================================================== */}
+  const p = r.data as any;
 
-      <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
-        <div className="flex items-center gap-3">
-          <div className="flex items-center justify-center w-11 h-11 rounded-xl bg-primary/10 text-primary">
-            <UserRound size={24} />
+  return (
+    <main className="p-6 max-w-[1600px] mx-auto space-y-6">
+
+      <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
+
+        <div className="flex items-center gap-4">
+
+          <div className="avatar">
+            <div className="w-20 h-20 rounded-2xl bg-base-200 overflow-hidden">
+
+              {p.photo ? (
+                <img
+                  src={p.photo}
+                  alt={`Photo de ${p.nom}`}
+                  className="w-full h-full object-cover"
+                />
+              ) : (
+                <div className="flex h-full items-center justify-center text-2xl font-bold">
+                  {p.nom?.[0] || ""}
+                  {p.postNom?.[0] || ""}
+                </div>
+              )}
+
+            </div>
           </div>
 
           <div>
-            <h1 className="text-2xl font-bold">Dossier patient</h1>
 
-            <p className="text-sm text-base-content/60">
-              {patient.numeroDossier}
+            <div className="text-sm font-mono text-primary">
+              {p.numeroDossier}
+            </div>
+
+            <h1 className="text-3xl font-black">
+              {p.nom} {p.postNom || ""} {p.prenom || ""}
+            </h1>
+
+            <p className="text-base-content/60">
+              {p.sexe} ·{" "}
+              {p.dateNaissance
+                ? new Date(p.dateNaissance).toLocaleDateString("fr-FR")
+                : "Date de naissance non renseignée"}{" "}
+              ·{" "}
+              {p.telephone || "Téléphone non renseigné"}
             </p>
+
           </div>
         </div>
 
-        <div className="flex items-center gap-2">
-          <Link href="/patients" className="btn btn-ghost gap-2">
-            <ArrowLeft size={18} />
+        <div className="flex gap-2">
+
+          <Link
+            href="/patients"
+            className="btn btn-ghost"
+          >
             Retour
           </Link>
 
           <Link
-            href={`/patients/${patient.id}/modifier`}
-            className="btn btn-primary gap-2"
+            href={`/patients/${p.id}/modifier`}
+            className="btn btn-primary"
           >
-            <Edit size={18} />
             Modifier
           </Link>
+
+        </div>
+
+      </div>
+
+      <div className="alert bg-primary/5 border-primary/20">
+        <div>
+
+          <b>Dossier médical centralisé</b>
+
+          <div className="text-sm">
+            Le parcours ci-dessous rassemble rendez-vous, admissions,
+            consultations, hospitalisations, examens, prescriptions,
+            paiements et soins enregistrés.
+          </div>
+
         </div>
       </div>
 
-      {/* =====================================================
-          DÉTAILS
-      ===================================================== */}
+      <PatientDossier patient={p} />
 
-      <PatientDetails patient={patient} />
     </main>
   );
 }

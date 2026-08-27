@@ -68,7 +68,7 @@ const menus = [
       },
       {
         label: "Hospitalisations",
-        href: "/hospitalisations",
+        href: "/hospitalisation",
         icon: Bed,
       },
       {

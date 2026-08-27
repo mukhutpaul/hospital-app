@@ -1,0 +1,1 @@
+import {prisma} from "@/lib/prisma";import LitForm from "@/components/hospitalisation/LitForm";export default async function Page(){const chambres=await prisma.chambre.findMany({where:{actif:true},orderBy:{numero:"asc"}});return <main className="mx-auto max-w-3xl p-6"><LitForm chambres={chambres}/></main>}

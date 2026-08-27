@@ -1,0 +1,1 @@
+import {prisma} from "@/lib/prisma";import SoinForm from "@/components/hospitalisation/SoinForm";export default async function Page(){const hospitalisations=await prisma.hospitalisation.findMany({where:{statut:"EN_COURS"},include:{patient:true},orderBy:{dateEntree:"desc"}});return <main className="mx-auto max-w-3xl p-6"><SoinForm hospitalisations={hospitalisations}/></main>}

@@ -256,6 +256,10 @@ export type ServiceWhereInput = {
   chambres?: Prisma.ChambreListRelationFilter
   demandesLabo?: Prisma.DemandeLaboratoireListRelationFilter
   demandesImagerie?: Prisma.DemandeImagerieListRelationFilter
+  lignesFacture?: Prisma.LigneFactureListRelationFilter
+  proformaLignes?: Prisma.ProformaLigneListRelationFilter
+  transfertsAnciens?: Prisma.TransfertListRelationFilter
+  transfertsNouveaux?: Prisma.TransfertListRelationFilter
 }
 
 export type ServiceOrderByWithRelationInput = {
@@ -279,6 +283,10 @@ export type ServiceOrderByWithRelationInput = {
   chambres?: Prisma.ChambreOrderByRelationAggregateInput
   demandesLabo?: Prisma.DemandeLaboratoireOrderByRelationAggregateInput
   demandesImagerie?: Prisma.DemandeImagerieOrderByRelationAggregateInput
+  lignesFacture?: Prisma.LigneFactureOrderByRelationAggregateInput
+  proformaLignes?: Prisma.ProformaLigneOrderByRelationAggregateInput
+  transfertsAnciens?: Prisma.TransfertOrderByRelationAggregateInput
+  transfertsNouveaux?: Prisma.TransfertOrderByRelationAggregateInput
 }
 
 export type ServiceWhereUniqueInput = Prisma.AtLeast<{
@@ -305,6 +313,10 @@ export type ServiceWhereUniqueInput = Prisma.AtLeast<{
   chambres?: Prisma.ChambreListRelationFilter
   demandesLabo?: Prisma.DemandeLaboratoireListRelationFilter
   demandesImagerie?: Prisma.DemandeImagerieListRelationFilter
+  lignesFacture?: Prisma.LigneFactureListRelationFilter
+  proformaLignes?: Prisma.ProformaLigneListRelationFilter
+  transfertsAnciens?: Prisma.TransfertListRelationFilter
+  transfertsNouveaux?: Prisma.TransfertListRelationFilter
 }, "id" | "code">
 
 export type ServiceOrderByWithAggregationInput = {
@@ -356,6 +368,10 @@ export type ServiceCreateInput = {
   chambres?: Prisma.ChambreCreateNestedManyWithoutServiceInput
   demandesLabo?: Prisma.DemandeLaboratoireCreateNestedManyWithoutServiceInput
   demandesImagerie?: Prisma.DemandeImagerieCreateNestedManyWithoutServiceInput
+  lignesFacture?: Prisma.LigneFactureCreateNestedManyWithoutServiceInput
+  proformaLignes?: Prisma.ProformaLigneCreateNestedManyWithoutServiceInput
+  transfertsAnciens?: Prisma.TransfertCreateNestedManyWithoutAncienServiceInput
+  transfertsNouveaux?: Prisma.TransfertCreateNestedManyWithoutNouveauServiceInput
 }
 
 export type ServiceUncheckedCreateInput = {
@@ -378,6 +394,10 @@ export type ServiceUncheckedCreateInput = {
   chambres?: Prisma.ChambreUncheckedCreateNestedManyWithoutServiceInput
   demandesLabo?: Prisma.DemandeLaboratoireUncheckedCreateNestedManyWithoutServiceInput
   demandesImagerie?: Prisma.DemandeImagerieUncheckedCreateNestedManyWithoutServiceInput
+  lignesFacture?: Prisma.LigneFactureUncheckedCreateNestedManyWithoutServiceInput
+  proformaLignes?: Prisma.ProformaLigneUncheckedCreateNestedManyWithoutServiceInput
+  transfertsAnciens?: Prisma.TransfertUncheckedCreateNestedManyWithoutAncienServiceInput
+  transfertsNouveaux?: Prisma.TransfertUncheckedCreateNestedManyWithoutNouveauServiceInput
 }
 
 export type ServiceUpdateInput = {
@@ -399,6 +419,10 @@ export type ServiceUpdateInput = {
   chambres?: Prisma.ChambreUpdateManyWithoutServiceNestedInput
   demandesLabo?: Prisma.DemandeLaboratoireUpdateManyWithoutServiceNestedInput
   demandesImagerie?: Prisma.DemandeImagerieUpdateManyWithoutServiceNestedInput
+  lignesFacture?: Prisma.LigneFactureUpdateManyWithoutServiceNestedInput
+  proformaLignes?: Prisma.ProformaLigneUpdateManyWithoutServiceNestedInput
+  transfertsAnciens?: Prisma.TransfertUpdateManyWithoutAncienServiceNestedInput
+  transfertsNouveaux?: Prisma.TransfertUpdateManyWithoutNouveauServiceNestedInput
 }
 
 export type ServiceUncheckedUpdateInput = {
@@ -421,6 +445,10 @@ export type ServiceUncheckedUpdateInput = {
   chambres?: Prisma.ChambreUncheckedUpdateManyWithoutServiceNestedInput
   demandesLabo?: Prisma.DemandeLaboratoireUncheckedUpdateManyWithoutServiceNestedInput
   demandesImagerie?: Prisma.DemandeImagerieUncheckedUpdateManyWithoutServiceNestedInput
+  lignesFacture?: Prisma.LigneFactureUncheckedUpdateManyWithoutServiceNestedInput
+  proformaLignes?: Prisma.ProformaLigneUncheckedUpdateManyWithoutServiceNestedInput
+  transfertsAnciens?: Prisma.TransfertUncheckedUpdateManyWithoutAncienServiceNestedInput
+  transfertsNouveaux?: Prisma.TransfertUncheckedUpdateManyWithoutNouveauServiceNestedInput
 }
 
 export type ServiceCreateManyInput = {
@@ -730,6 +758,70 @@ export type ServiceUpdateOneWithoutHospitalisationsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.ServiceUpdateToOneWithWhereWithoutHospitalisationsInput, Prisma.ServiceUpdateWithoutHospitalisationsInput>, Prisma.ServiceUncheckedUpdateWithoutHospitalisationsInput>
 }
 
+export type ServiceCreateNestedOneWithoutTransfertsAnciensInput = {
+  create?: Prisma.XOR<Prisma.ServiceCreateWithoutTransfertsAnciensInput, Prisma.ServiceUncheckedCreateWithoutTransfertsAnciensInput>
+  connectOrCreate?: Prisma.ServiceCreateOrConnectWithoutTransfertsAnciensInput
+  connect?: Prisma.ServiceWhereUniqueInput
+}
+
+export type ServiceCreateNestedOneWithoutTransfertsNouveauxInput = {
+  create?: Prisma.XOR<Prisma.ServiceCreateWithoutTransfertsNouveauxInput, Prisma.ServiceUncheckedCreateWithoutTransfertsNouveauxInput>
+  connectOrCreate?: Prisma.ServiceCreateOrConnectWithoutTransfertsNouveauxInput
+  connect?: Prisma.ServiceWhereUniqueInput
+}
+
+export type ServiceUpdateOneWithoutTransfertsAnciensNestedInput = {
+  create?: Prisma.XOR<Prisma.ServiceCreateWithoutTransfertsAnciensInput, Prisma.ServiceUncheckedCreateWithoutTransfertsAnciensInput>
+  connectOrCreate?: Prisma.ServiceCreateOrConnectWithoutTransfertsAnciensInput
+  upsert?: Prisma.ServiceUpsertWithoutTransfertsAnciensInput
+  disconnect?: Prisma.ServiceWhereInput | boolean
+  delete?: Prisma.ServiceWhereInput | boolean
+  connect?: Prisma.ServiceWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.ServiceUpdateToOneWithWhereWithoutTransfertsAnciensInput, Prisma.ServiceUpdateWithoutTransfertsAnciensInput>, Prisma.ServiceUncheckedUpdateWithoutTransfertsAnciensInput>
+}
+
+export type ServiceUpdateOneWithoutTransfertsNouveauxNestedInput = {
+  create?: Prisma.XOR<Prisma.ServiceCreateWithoutTransfertsNouveauxInput, Prisma.ServiceUncheckedCreateWithoutTransfertsNouveauxInput>
+  connectOrCreate?: Prisma.ServiceCreateOrConnectWithoutTransfertsNouveauxInput
+  upsert?: Prisma.ServiceUpsertWithoutTransfertsNouveauxInput
+  disconnect?: Prisma.ServiceWhereInput | boolean
+  delete?: Prisma.ServiceWhereInput | boolean
+  connect?: Prisma.ServiceWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.ServiceUpdateToOneWithWhereWithoutTransfertsNouveauxInput, Prisma.ServiceUpdateWithoutTransfertsNouveauxInput>, Prisma.ServiceUncheckedUpdateWithoutTransfertsNouveauxInput>
+}
+
+export type ServiceCreateNestedOneWithoutLignesFactureInput = {
+  create?: Prisma.XOR<Prisma.ServiceCreateWithoutLignesFactureInput, Prisma.ServiceUncheckedCreateWithoutLignesFactureInput>
+  connectOrCreate?: Prisma.ServiceCreateOrConnectWithoutLignesFactureInput
+  connect?: Prisma.ServiceWhereUniqueInput
+}
+
+export type ServiceUpdateOneWithoutLignesFactureNestedInput = {
+  create?: Prisma.XOR<Prisma.ServiceCreateWithoutLignesFactureInput, Prisma.ServiceUncheckedCreateWithoutLignesFactureInput>
+  connectOrCreate?: Prisma.ServiceCreateOrConnectWithoutLignesFactureInput
+  upsert?: Prisma.ServiceUpsertWithoutLignesFactureInput
+  disconnect?: Prisma.ServiceWhereInput | boolean
+  delete?: Prisma.ServiceWhereInput | boolean
+  connect?: Prisma.ServiceWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.ServiceUpdateToOneWithWhereWithoutLignesFactureInput, Prisma.ServiceUpdateWithoutLignesFactureInput>, Prisma.ServiceUncheckedUpdateWithoutLignesFactureInput>
+}
+
+export type ServiceCreateNestedOneWithoutProformaLignesInput = {
+  create?: Prisma.XOR<Prisma.ServiceCreateWithoutProformaLignesInput, Prisma.ServiceUncheckedCreateWithoutProformaLignesInput>
+  connectOrCreate?: Prisma.ServiceCreateOrConnectWithoutProformaLignesInput
+  connect?: Prisma.ServiceWhereUniqueInput
+}
+
+export type ServiceUpdateOneWithoutProformaLignesNestedInput = {
+  create?: Prisma.XOR<Prisma.ServiceCreateWithoutProformaLignesInput, Prisma.ServiceUncheckedCreateWithoutProformaLignesInput>
+  connectOrCreate?: Prisma.ServiceCreateOrConnectWithoutProformaLignesInput
+  upsert?: Prisma.ServiceUpsertWithoutProformaLignesInput
+  disconnect?: Prisma.ServiceWhereInput | boolean
+  delete?: Prisma.ServiceWhereInput | boolean
+  connect?: Prisma.ServiceWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.ServiceUpdateToOneWithWhereWithoutProformaLignesInput, Prisma.ServiceUpdateWithoutProformaLignesInput>, Prisma.ServiceUncheckedUpdateWithoutProformaLignesInput>
+}
+
 export type ServiceCreateWithoutEmployesInput = {
   code: string
   nom: string
@@ -748,6 +840,10 @@ export type ServiceCreateWithoutEmployesInput = {
   chambres?: Prisma.ChambreCreateNestedManyWithoutServiceInput
   demandesLabo?: Prisma.DemandeLaboratoireCreateNestedManyWithoutServiceInput
   demandesImagerie?: Prisma.DemandeImagerieCreateNestedManyWithoutServiceInput
+  lignesFacture?: Prisma.LigneFactureCreateNestedManyWithoutServiceInput
+  proformaLignes?: Prisma.ProformaLigneCreateNestedManyWithoutServiceInput
+  transfertsAnciens?: Prisma.TransfertCreateNestedManyWithoutAncienServiceInput
+  transfertsNouveaux?: Prisma.TransfertCreateNestedManyWithoutNouveauServiceInput
 }
 
 export type ServiceUncheckedCreateWithoutEmployesInput = {
@@ -769,6 +865,10 @@ export type ServiceUncheckedCreateWithoutEmployesInput = {
   chambres?: Prisma.ChambreUncheckedCreateNestedManyWithoutServiceInput
   demandesLabo?: Prisma.DemandeLaboratoireUncheckedCreateNestedManyWithoutServiceInput
   demandesImagerie?: Prisma.DemandeImagerieUncheckedCreateNestedManyWithoutServiceInput
+  lignesFacture?: Prisma.LigneFactureUncheckedCreateNestedManyWithoutServiceInput
+  proformaLignes?: Prisma.ProformaLigneUncheckedCreateNestedManyWithoutServiceInput
+  transfertsAnciens?: Prisma.TransfertUncheckedCreateNestedManyWithoutAncienServiceInput
+  transfertsNouveaux?: Prisma.TransfertUncheckedCreateNestedManyWithoutNouveauServiceInput
 }
 
 export type ServiceCreateOrConnectWithoutEmployesInput = {
@@ -805,6 +905,10 @@ export type ServiceUpdateWithoutEmployesInput = {
   chambres?: Prisma.ChambreUpdateManyWithoutServiceNestedInput
   demandesLabo?: Prisma.DemandeLaboratoireUpdateManyWithoutServiceNestedInput
   demandesImagerie?: Prisma.DemandeImagerieUpdateManyWithoutServiceNestedInput
+  lignesFacture?: Prisma.LigneFactureUpdateManyWithoutServiceNestedInput
+  proformaLignes?: Prisma.ProformaLigneUpdateManyWithoutServiceNestedInput
+  transfertsAnciens?: Prisma.TransfertUpdateManyWithoutAncienServiceNestedInput
+  transfertsNouveaux?: Prisma.TransfertUpdateManyWithoutNouveauServiceNestedInput
 }
 
 export type ServiceUncheckedUpdateWithoutEmployesInput = {
@@ -826,6 +930,10 @@ export type ServiceUncheckedUpdateWithoutEmployesInput = {
   chambres?: Prisma.ChambreUncheckedUpdateManyWithoutServiceNestedInput
   demandesLabo?: Prisma.DemandeLaboratoireUncheckedUpdateManyWithoutServiceNestedInput
   demandesImagerie?: Prisma.DemandeImagerieUncheckedUpdateManyWithoutServiceNestedInput
+  lignesFacture?: Prisma.LigneFactureUncheckedUpdateManyWithoutServiceNestedInput
+  proformaLignes?: Prisma.ProformaLigneUncheckedUpdateManyWithoutServiceNestedInput
+  transfertsAnciens?: Prisma.TransfertUncheckedUpdateManyWithoutAncienServiceNestedInput
+  transfertsNouveaux?: Prisma.TransfertUncheckedUpdateManyWithoutNouveauServiceNestedInput
 }
 
 export type ServiceCreateWithoutDepartementInput = {
@@ -846,6 +954,10 @@ export type ServiceCreateWithoutDepartementInput = {
   chambres?: Prisma.ChambreCreateNestedManyWithoutServiceInput
   demandesLabo?: Prisma.DemandeLaboratoireCreateNestedManyWithoutServiceInput
   demandesImagerie?: Prisma.DemandeImagerieCreateNestedManyWithoutServiceInput
+  lignesFacture?: Prisma.LigneFactureCreateNestedManyWithoutServiceInput
+  proformaLignes?: Prisma.ProformaLigneCreateNestedManyWithoutServiceInput
+  transfertsAnciens?: Prisma.TransfertCreateNestedManyWithoutAncienServiceInput
+  transfertsNouveaux?: Prisma.TransfertCreateNestedManyWithoutNouveauServiceInput
 }
 
 export type ServiceUncheckedCreateWithoutDepartementInput = {
@@ -867,6 +979,10 @@ export type ServiceUncheckedCreateWithoutDepartementInput = {
   chambres?: Prisma.ChambreUncheckedCreateNestedManyWithoutServiceInput
   demandesLabo?: Prisma.DemandeLaboratoireUncheckedCreateNestedManyWithoutServiceInput
   demandesImagerie?: Prisma.DemandeImagerieUncheckedCreateNestedManyWithoutServiceInput
+  lignesFacture?: Prisma.LigneFactureUncheckedCreateNestedManyWithoutServiceInput
+  proformaLignes?: Prisma.ProformaLigneUncheckedCreateNestedManyWithoutServiceInput
+  transfertsAnciens?: Prisma.TransfertUncheckedCreateNestedManyWithoutAncienServiceInput
+  transfertsNouveaux?: Prisma.TransfertUncheckedCreateNestedManyWithoutNouveauServiceInput
 }
 
 export type ServiceCreateOrConnectWithoutDepartementInput = {
@@ -926,6 +1042,10 @@ export type ServiceCreateWithoutSpecialitesInput = {
   chambres?: Prisma.ChambreCreateNestedManyWithoutServiceInput
   demandesLabo?: Prisma.DemandeLaboratoireCreateNestedManyWithoutServiceInput
   demandesImagerie?: Prisma.DemandeImagerieCreateNestedManyWithoutServiceInput
+  lignesFacture?: Prisma.LigneFactureCreateNestedManyWithoutServiceInput
+  proformaLignes?: Prisma.ProformaLigneCreateNestedManyWithoutServiceInput
+  transfertsAnciens?: Prisma.TransfertCreateNestedManyWithoutAncienServiceInput
+  transfertsNouveaux?: Prisma.TransfertCreateNestedManyWithoutNouveauServiceInput
 }
 
 export type ServiceUncheckedCreateWithoutSpecialitesInput = {
@@ -947,6 +1067,10 @@ export type ServiceUncheckedCreateWithoutSpecialitesInput = {
   chambres?: Prisma.ChambreUncheckedCreateNestedManyWithoutServiceInput
   demandesLabo?: Prisma.DemandeLaboratoireUncheckedCreateNestedManyWithoutServiceInput
   demandesImagerie?: Prisma.DemandeImagerieUncheckedCreateNestedManyWithoutServiceInput
+  lignesFacture?: Prisma.LigneFactureUncheckedCreateNestedManyWithoutServiceInput
+  proformaLignes?: Prisma.ProformaLigneUncheckedCreateNestedManyWithoutServiceInput
+  transfertsAnciens?: Prisma.TransfertUncheckedCreateNestedManyWithoutAncienServiceInput
+  transfertsNouveaux?: Prisma.TransfertUncheckedCreateNestedManyWithoutNouveauServiceInput
 }
 
 export type ServiceCreateOrConnectWithoutSpecialitesInput = {
@@ -983,6 +1107,10 @@ export type ServiceUpdateWithoutSpecialitesInput = {
   chambres?: Prisma.ChambreUpdateManyWithoutServiceNestedInput
   demandesLabo?: Prisma.DemandeLaboratoireUpdateManyWithoutServiceNestedInput
   demandesImagerie?: Prisma.DemandeImagerieUpdateManyWithoutServiceNestedInput
+  lignesFacture?: Prisma.LigneFactureUpdateManyWithoutServiceNestedInput
+  proformaLignes?: Prisma.ProformaLigneUpdateManyWithoutServiceNestedInput
+  transfertsAnciens?: Prisma.TransfertUpdateManyWithoutAncienServiceNestedInput
+  transfertsNouveaux?: Prisma.TransfertUpdateManyWithoutNouveauServiceNestedInput
 }
 
 export type ServiceUncheckedUpdateWithoutSpecialitesInput = {
@@ -1004,6 +1132,10 @@ export type ServiceUncheckedUpdateWithoutSpecialitesInput = {
   chambres?: Prisma.ChambreUncheckedUpdateManyWithoutServiceNestedInput
   demandesLabo?: Prisma.DemandeLaboratoireUncheckedUpdateManyWithoutServiceNestedInput
   demandesImagerie?: Prisma.DemandeImagerieUncheckedUpdateManyWithoutServiceNestedInput
+  lignesFacture?: Prisma.LigneFactureUncheckedUpdateManyWithoutServiceNestedInput
+  proformaLignes?: Prisma.ProformaLigneUncheckedUpdateManyWithoutServiceNestedInput
+  transfertsAnciens?: Prisma.TransfertUncheckedUpdateManyWithoutAncienServiceNestedInput
+  transfertsNouveaux?: Prisma.TransfertUncheckedUpdateManyWithoutNouveauServiceNestedInput
 }
 
 export type ServiceCreateWithoutMedecinsInput = {
@@ -1024,6 +1156,10 @@ export type ServiceCreateWithoutMedecinsInput = {
   chambres?: Prisma.ChambreCreateNestedManyWithoutServiceInput
   demandesLabo?: Prisma.DemandeLaboratoireCreateNestedManyWithoutServiceInput
   demandesImagerie?: Prisma.DemandeImagerieCreateNestedManyWithoutServiceInput
+  lignesFacture?: Prisma.LigneFactureCreateNestedManyWithoutServiceInput
+  proformaLignes?: Prisma.ProformaLigneCreateNestedManyWithoutServiceInput
+  transfertsAnciens?: Prisma.TransfertCreateNestedManyWithoutAncienServiceInput
+  transfertsNouveaux?: Prisma.TransfertCreateNestedManyWithoutNouveauServiceInput
 }
 
 export type ServiceUncheckedCreateWithoutMedecinsInput = {
@@ -1045,6 +1181,10 @@ export type ServiceUncheckedCreateWithoutMedecinsInput = {
   chambres?: Prisma.ChambreUncheckedCreateNestedManyWithoutServiceInput
   demandesLabo?: Prisma.DemandeLaboratoireUncheckedCreateNestedManyWithoutServiceInput
   demandesImagerie?: Prisma.DemandeImagerieUncheckedCreateNestedManyWithoutServiceInput
+  lignesFacture?: Prisma.LigneFactureUncheckedCreateNestedManyWithoutServiceInput
+  proformaLignes?: Prisma.ProformaLigneUncheckedCreateNestedManyWithoutServiceInput
+  transfertsAnciens?: Prisma.TransfertUncheckedCreateNestedManyWithoutAncienServiceInput
+  transfertsNouveaux?: Prisma.TransfertUncheckedCreateNestedManyWithoutNouveauServiceInput
 }
 
 export type ServiceCreateOrConnectWithoutMedecinsInput = {
@@ -1081,6 +1221,10 @@ export type ServiceUpdateWithoutMedecinsInput = {
   chambres?: Prisma.ChambreUpdateManyWithoutServiceNestedInput
   demandesLabo?: Prisma.DemandeLaboratoireUpdateManyWithoutServiceNestedInput
   demandesImagerie?: Prisma.DemandeImagerieUpdateManyWithoutServiceNestedInput
+  lignesFacture?: Prisma.LigneFactureUpdateManyWithoutServiceNestedInput
+  proformaLignes?: Prisma.ProformaLigneUpdateManyWithoutServiceNestedInput
+  transfertsAnciens?: Prisma.TransfertUpdateManyWithoutAncienServiceNestedInput
+  transfertsNouveaux?: Prisma.TransfertUpdateManyWithoutNouveauServiceNestedInput
 }
 
 export type ServiceUncheckedUpdateWithoutMedecinsInput = {
@@ -1102,6 +1246,10 @@ export type ServiceUncheckedUpdateWithoutMedecinsInput = {
   chambres?: Prisma.ChambreUncheckedUpdateManyWithoutServiceNestedInput
   demandesLabo?: Prisma.DemandeLaboratoireUncheckedUpdateManyWithoutServiceNestedInput
   demandesImagerie?: Prisma.DemandeImagerieUncheckedUpdateManyWithoutServiceNestedInput
+  lignesFacture?: Prisma.LigneFactureUncheckedUpdateManyWithoutServiceNestedInput
+  proformaLignes?: Prisma.ProformaLigneUncheckedUpdateManyWithoutServiceNestedInput
+  transfertsAnciens?: Prisma.TransfertUncheckedUpdateManyWithoutAncienServiceNestedInput
+  transfertsNouveaux?: Prisma.TransfertUncheckedUpdateManyWithoutNouveauServiceNestedInput
 }
 
 export type ServiceCreateWithoutInfirmiersInput = {
@@ -1122,6 +1270,10 @@ export type ServiceCreateWithoutInfirmiersInput = {
   chambres?: Prisma.ChambreCreateNestedManyWithoutServiceInput
   demandesLabo?: Prisma.DemandeLaboratoireCreateNestedManyWithoutServiceInput
   demandesImagerie?: Prisma.DemandeImagerieCreateNestedManyWithoutServiceInput
+  lignesFacture?: Prisma.LigneFactureCreateNestedManyWithoutServiceInput
+  proformaLignes?: Prisma.ProformaLigneCreateNestedManyWithoutServiceInput
+  transfertsAnciens?: Prisma.TransfertCreateNestedManyWithoutAncienServiceInput
+  transfertsNouveaux?: Prisma.TransfertCreateNestedManyWithoutNouveauServiceInput
 }
 
 export type ServiceUncheckedCreateWithoutInfirmiersInput = {
@@ -1143,6 +1295,10 @@ export type ServiceUncheckedCreateWithoutInfirmiersInput = {
   chambres?: Prisma.ChambreUncheckedCreateNestedManyWithoutServiceInput
   demandesLabo?: Prisma.DemandeLaboratoireUncheckedCreateNestedManyWithoutServiceInput
   demandesImagerie?: Prisma.DemandeImagerieUncheckedCreateNestedManyWithoutServiceInput
+  lignesFacture?: Prisma.LigneFactureUncheckedCreateNestedManyWithoutServiceInput
+  proformaLignes?: Prisma.ProformaLigneUncheckedCreateNestedManyWithoutServiceInput
+  transfertsAnciens?: Prisma.TransfertUncheckedCreateNestedManyWithoutAncienServiceInput
+  transfertsNouveaux?: Prisma.TransfertUncheckedCreateNestedManyWithoutNouveauServiceInput
 }
 
 export type ServiceCreateOrConnectWithoutInfirmiersInput = {
@@ -1179,6 +1335,10 @@ export type ServiceUpdateWithoutInfirmiersInput = {
   chambres?: Prisma.ChambreUpdateManyWithoutServiceNestedInput
   demandesLabo?: Prisma.DemandeLaboratoireUpdateManyWithoutServiceNestedInput
   demandesImagerie?: Prisma.DemandeImagerieUpdateManyWithoutServiceNestedInput
+  lignesFacture?: Prisma.LigneFactureUpdateManyWithoutServiceNestedInput
+  proformaLignes?: Prisma.ProformaLigneUpdateManyWithoutServiceNestedInput
+  transfertsAnciens?: Prisma.TransfertUpdateManyWithoutAncienServiceNestedInput
+  transfertsNouveaux?: Prisma.TransfertUpdateManyWithoutNouveauServiceNestedInput
 }
 
 export type ServiceUncheckedUpdateWithoutInfirmiersInput = {
@@ -1200,6 +1360,10 @@ export type ServiceUncheckedUpdateWithoutInfirmiersInput = {
   chambres?: Prisma.ChambreUncheckedUpdateManyWithoutServiceNestedInput
   demandesLabo?: Prisma.DemandeLaboratoireUncheckedUpdateManyWithoutServiceNestedInput
   demandesImagerie?: Prisma.DemandeImagerieUncheckedUpdateManyWithoutServiceNestedInput
+  lignesFacture?: Prisma.LigneFactureUncheckedUpdateManyWithoutServiceNestedInput
+  proformaLignes?: Prisma.ProformaLigneUncheckedUpdateManyWithoutServiceNestedInput
+  transfertsAnciens?: Prisma.TransfertUncheckedUpdateManyWithoutAncienServiceNestedInput
+  transfertsNouveaux?: Prisma.TransfertUncheckedUpdateManyWithoutNouveauServiceNestedInput
 }
 
 export type ServiceCreateWithoutRendezVousInput = {
@@ -1220,6 +1384,10 @@ export type ServiceCreateWithoutRendezVousInput = {
   chambres?: Prisma.ChambreCreateNestedManyWithoutServiceInput
   demandesLabo?: Prisma.DemandeLaboratoireCreateNestedManyWithoutServiceInput
   demandesImagerie?: Prisma.DemandeImagerieCreateNestedManyWithoutServiceInput
+  lignesFacture?: Prisma.LigneFactureCreateNestedManyWithoutServiceInput
+  proformaLignes?: Prisma.ProformaLigneCreateNestedManyWithoutServiceInput
+  transfertsAnciens?: Prisma.TransfertCreateNestedManyWithoutAncienServiceInput
+  transfertsNouveaux?: Prisma.TransfertCreateNestedManyWithoutNouveauServiceInput
 }
 
 export type ServiceUncheckedCreateWithoutRendezVousInput = {
@@ -1241,6 +1409,10 @@ export type ServiceUncheckedCreateWithoutRendezVousInput = {
   chambres?: Prisma.ChambreUncheckedCreateNestedManyWithoutServiceInput
   demandesLabo?: Prisma.DemandeLaboratoireUncheckedCreateNestedManyWithoutServiceInput
   demandesImagerie?: Prisma.DemandeImagerieUncheckedCreateNestedManyWithoutServiceInput
+  lignesFacture?: Prisma.LigneFactureUncheckedCreateNestedManyWithoutServiceInput
+  proformaLignes?: Prisma.ProformaLigneUncheckedCreateNestedManyWithoutServiceInput
+  transfertsAnciens?: Prisma.TransfertUncheckedCreateNestedManyWithoutAncienServiceInput
+  transfertsNouveaux?: Prisma.TransfertUncheckedCreateNestedManyWithoutNouveauServiceInput
 }
 
 export type ServiceCreateOrConnectWithoutRendezVousInput = {
@@ -1277,6 +1449,10 @@ export type ServiceUpdateWithoutRendezVousInput = {
   chambres?: Prisma.ChambreUpdateManyWithoutServiceNestedInput
   demandesLabo?: Prisma.DemandeLaboratoireUpdateManyWithoutServiceNestedInput
   demandesImagerie?: Prisma.DemandeImagerieUpdateManyWithoutServiceNestedInput
+  lignesFacture?: Prisma.LigneFactureUpdateManyWithoutServiceNestedInput
+  proformaLignes?: Prisma.ProformaLigneUpdateManyWithoutServiceNestedInput
+  transfertsAnciens?: Prisma.TransfertUpdateManyWithoutAncienServiceNestedInput
+  transfertsNouveaux?: Prisma.TransfertUpdateManyWithoutNouveauServiceNestedInput
 }
 
 export type ServiceUncheckedUpdateWithoutRendezVousInput = {
@@ -1298,6 +1474,10 @@ export type ServiceUncheckedUpdateWithoutRendezVousInput = {
   chambres?: Prisma.ChambreUncheckedUpdateManyWithoutServiceNestedInput
   demandesLabo?: Prisma.DemandeLaboratoireUncheckedUpdateManyWithoutServiceNestedInput
   demandesImagerie?: Prisma.DemandeImagerieUncheckedUpdateManyWithoutServiceNestedInput
+  lignesFacture?: Prisma.LigneFactureUncheckedUpdateManyWithoutServiceNestedInput
+  proformaLignes?: Prisma.ProformaLigneUncheckedUpdateManyWithoutServiceNestedInput
+  transfertsAnciens?: Prisma.TransfertUncheckedUpdateManyWithoutAncienServiceNestedInput
+  transfertsNouveaux?: Prisma.TransfertUncheckedUpdateManyWithoutNouveauServiceNestedInput
 }
 
 export type ServiceCreateWithoutAdmissionsInput = {
@@ -1318,6 +1498,10 @@ export type ServiceCreateWithoutAdmissionsInput = {
   chambres?: Prisma.ChambreCreateNestedManyWithoutServiceInput
   demandesLabo?: Prisma.DemandeLaboratoireCreateNestedManyWithoutServiceInput
   demandesImagerie?: Prisma.DemandeImagerieCreateNestedManyWithoutServiceInput
+  lignesFacture?: Prisma.LigneFactureCreateNestedManyWithoutServiceInput
+  proformaLignes?: Prisma.ProformaLigneCreateNestedManyWithoutServiceInput
+  transfertsAnciens?: Prisma.TransfertCreateNestedManyWithoutAncienServiceInput
+  transfertsNouveaux?: Prisma.TransfertCreateNestedManyWithoutNouveauServiceInput
 }
 
 export type ServiceUncheckedCreateWithoutAdmissionsInput = {
@@ -1339,6 +1523,10 @@ export type ServiceUncheckedCreateWithoutAdmissionsInput = {
   chambres?: Prisma.ChambreUncheckedCreateNestedManyWithoutServiceInput
   demandesLabo?: Prisma.DemandeLaboratoireUncheckedCreateNestedManyWithoutServiceInput
   demandesImagerie?: Prisma.DemandeImagerieUncheckedCreateNestedManyWithoutServiceInput
+  lignesFacture?: Prisma.LigneFactureUncheckedCreateNestedManyWithoutServiceInput
+  proformaLignes?: Prisma.ProformaLigneUncheckedCreateNestedManyWithoutServiceInput
+  transfertsAnciens?: Prisma.TransfertUncheckedCreateNestedManyWithoutAncienServiceInput
+  transfertsNouveaux?: Prisma.TransfertUncheckedCreateNestedManyWithoutNouveauServiceInput
 }
 
 export type ServiceCreateOrConnectWithoutAdmissionsInput = {
@@ -1375,6 +1563,10 @@ export type ServiceUpdateWithoutAdmissionsInput = {
   chambres?: Prisma.ChambreUpdateManyWithoutServiceNestedInput
   demandesLabo?: Prisma.DemandeLaboratoireUpdateManyWithoutServiceNestedInput
   demandesImagerie?: Prisma.DemandeImagerieUpdateManyWithoutServiceNestedInput
+  lignesFacture?: Prisma.LigneFactureUpdateManyWithoutServiceNestedInput
+  proformaLignes?: Prisma.ProformaLigneUpdateManyWithoutServiceNestedInput
+  transfertsAnciens?: Prisma.TransfertUpdateManyWithoutAncienServiceNestedInput
+  transfertsNouveaux?: Prisma.TransfertUpdateManyWithoutNouveauServiceNestedInput
 }
 
 export type ServiceUncheckedUpdateWithoutAdmissionsInput = {
@@ -1396,6 +1588,10 @@ export type ServiceUncheckedUpdateWithoutAdmissionsInput = {
   chambres?: Prisma.ChambreUncheckedUpdateManyWithoutServiceNestedInput
   demandesLabo?: Prisma.DemandeLaboratoireUncheckedUpdateManyWithoutServiceNestedInput
   demandesImagerie?: Prisma.DemandeImagerieUncheckedUpdateManyWithoutServiceNestedInput
+  lignesFacture?: Prisma.LigneFactureUncheckedUpdateManyWithoutServiceNestedInput
+  proformaLignes?: Prisma.ProformaLigneUncheckedUpdateManyWithoutServiceNestedInput
+  transfertsAnciens?: Prisma.TransfertUncheckedUpdateManyWithoutAncienServiceNestedInput
+  transfertsNouveaux?: Prisma.TransfertUncheckedUpdateManyWithoutNouveauServiceNestedInput
 }
 
 export type ServiceCreateWithoutConsultationsInput = {
@@ -1416,6 +1612,10 @@ export type ServiceCreateWithoutConsultationsInput = {
   chambres?: Prisma.ChambreCreateNestedManyWithoutServiceInput
   demandesLabo?: Prisma.DemandeLaboratoireCreateNestedManyWithoutServiceInput
   demandesImagerie?: Prisma.DemandeImagerieCreateNestedManyWithoutServiceInput
+  lignesFacture?: Prisma.LigneFactureCreateNestedManyWithoutServiceInput
+  proformaLignes?: Prisma.ProformaLigneCreateNestedManyWithoutServiceInput
+  transfertsAnciens?: Prisma.TransfertCreateNestedManyWithoutAncienServiceInput
+  transfertsNouveaux?: Prisma.TransfertCreateNestedManyWithoutNouveauServiceInput
 }
 
 export type ServiceUncheckedCreateWithoutConsultationsInput = {
@@ -1437,6 +1637,10 @@ export type ServiceUncheckedCreateWithoutConsultationsInput = {
   chambres?: Prisma.ChambreUncheckedCreateNestedManyWithoutServiceInput
   demandesLabo?: Prisma.DemandeLaboratoireUncheckedCreateNestedManyWithoutServiceInput
   demandesImagerie?: Prisma.DemandeImagerieUncheckedCreateNestedManyWithoutServiceInput
+  lignesFacture?: Prisma.LigneFactureUncheckedCreateNestedManyWithoutServiceInput
+  proformaLignes?: Prisma.ProformaLigneUncheckedCreateNestedManyWithoutServiceInput
+  transfertsAnciens?: Prisma.TransfertUncheckedCreateNestedManyWithoutAncienServiceInput
+  transfertsNouveaux?: Prisma.TransfertUncheckedCreateNestedManyWithoutNouveauServiceInput
 }
 
 export type ServiceCreateOrConnectWithoutConsultationsInput = {
@@ -1473,6 +1677,10 @@ export type ServiceUpdateWithoutConsultationsInput = {
   chambres?: Prisma.ChambreUpdateManyWithoutServiceNestedInput
   demandesLabo?: Prisma.DemandeLaboratoireUpdateManyWithoutServiceNestedInput
   demandesImagerie?: Prisma.DemandeImagerieUpdateManyWithoutServiceNestedInput
+  lignesFacture?: Prisma.LigneFactureUpdateManyWithoutServiceNestedInput
+  proformaLignes?: Prisma.ProformaLigneUpdateManyWithoutServiceNestedInput
+  transfertsAnciens?: Prisma.TransfertUpdateManyWithoutAncienServiceNestedInput
+  transfertsNouveaux?: Prisma.TransfertUpdateManyWithoutNouveauServiceNestedInput
 }
 
 export type ServiceUncheckedUpdateWithoutConsultationsInput = {
@@ -1494,6 +1702,10 @@ export type ServiceUncheckedUpdateWithoutConsultationsInput = {
   chambres?: Prisma.ChambreUncheckedUpdateManyWithoutServiceNestedInput
   demandesLabo?: Prisma.DemandeLaboratoireUncheckedUpdateManyWithoutServiceNestedInput
   demandesImagerie?: Prisma.DemandeImagerieUncheckedUpdateManyWithoutServiceNestedInput
+  lignesFacture?: Prisma.LigneFactureUncheckedUpdateManyWithoutServiceNestedInput
+  proformaLignes?: Prisma.ProformaLigneUncheckedUpdateManyWithoutServiceNestedInput
+  transfertsAnciens?: Prisma.TransfertUncheckedUpdateManyWithoutAncienServiceNestedInput
+  transfertsNouveaux?: Prisma.TransfertUncheckedUpdateManyWithoutNouveauServiceNestedInput
 }
 
 export type ServiceCreateWithoutDemandesLaboInput = {
@@ -1514,6 +1726,10 @@ export type ServiceCreateWithoutDemandesLaboInput = {
   hospitalisations?: Prisma.HospitalisationCreateNestedManyWithoutServiceInput
   chambres?: Prisma.ChambreCreateNestedManyWithoutServiceInput
   demandesImagerie?: Prisma.DemandeImagerieCreateNestedManyWithoutServiceInput
+  lignesFacture?: Prisma.LigneFactureCreateNestedManyWithoutServiceInput
+  proformaLignes?: Prisma.ProformaLigneCreateNestedManyWithoutServiceInput
+  transfertsAnciens?: Prisma.TransfertCreateNestedManyWithoutAncienServiceInput
+  transfertsNouveaux?: Prisma.TransfertCreateNestedManyWithoutNouveauServiceInput
 }
 
 export type ServiceUncheckedCreateWithoutDemandesLaboInput = {
@@ -1535,6 +1751,10 @@ export type ServiceUncheckedCreateWithoutDemandesLaboInput = {
   hospitalisations?: Prisma.HospitalisationUncheckedCreateNestedManyWithoutServiceInput
   chambres?: Prisma.ChambreUncheckedCreateNestedManyWithoutServiceInput
   demandesImagerie?: Prisma.DemandeImagerieUncheckedCreateNestedManyWithoutServiceInput
+  lignesFacture?: Prisma.LigneFactureUncheckedCreateNestedManyWithoutServiceInput
+  proformaLignes?: Prisma.ProformaLigneUncheckedCreateNestedManyWithoutServiceInput
+  transfertsAnciens?: Prisma.TransfertUncheckedCreateNestedManyWithoutAncienServiceInput
+  transfertsNouveaux?: Prisma.TransfertUncheckedCreateNestedManyWithoutNouveauServiceInput
 }
 
 export type ServiceCreateOrConnectWithoutDemandesLaboInput = {
@@ -1571,6 +1791,10 @@ export type ServiceUpdateWithoutDemandesLaboInput = {
   hospitalisations?: Prisma.HospitalisationUpdateManyWithoutServiceNestedInput
   chambres?: Prisma.ChambreUpdateManyWithoutServiceNestedInput
   demandesImagerie?: Prisma.DemandeImagerieUpdateManyWithoutServiceNestedInput
+  lignesFacture?: Prisma.LigneFactureUpdateManyWithoutServiceNestedInput
+  proformaLignes?: Prisma.ProformaLigneUpdateManyWithoutServiceNestedInput
+  transfertsAnciens?: Prisma.TransfertUpdateManyWithoutAncienServiceNestedInput
+  transfertsNouveaux?: Prisma.TransfertUpdateManyWithoutNouveauServiceNestedInput
 }
 
 export type ServiceUncheckedUpdateWithoutDemandesLaboInput = {
@@ -1592,6 +1816,10 @@ export type ServiceUncheckedUpdateWithoutDemandesLaboInput = {
   hospitalisations?: Prisma.HospitalisationUncheckedUpdateManyWithoutServiceNestedInput
   chambres?: Prisma.ChambreUncheckedUpdateManyWithoutServiceNestedInput
   demandesImagerie?: Prisma.DemandeImagerieUncheckedUpdateManyWithoutServiceNestedInput
+  lignesFacture?: Prisma.LigneFactureUncheckedUpdateManyWithoutServiceNestedInput
+  proformaLignes?: Prisma.ProformaLigneUncheckedUpdateManyWithoutServiceNestedInput
+  transfertsAnciens?: Prisma.TransfertUncheckedUpdateManyWithoutAncienServiceNestedInput
+  transfertsNouveaux?: Prisma.TransfertUncheckedUpdateManyWithoutNouveauServiceNestedInput
 }
 
 export type ServiceCreateWithoutDemandesImagerieInput = {
@@ -1612,6 +1840,10 @@ export type ServiceCreateWithoutDemandesImagerieInput = {
   hospitalisations?: Prisma.HospitalisationCreateNestedManyWithoutServiceInput
   chambres?: Prisma.ChambreCreateNestedManyWithoutServiceInput
   demandesLabo?: Prisma.DemandeLaboratoireCreateNestedManyWithoutServiceInput
+  lignesFacture?: Prisma.LigneFactureCreateNestedManyWithoutServiceInput
+  proformaLignes?: Prisma.ProformaLigneCreateNestedManyWithoutServiceInput
+  transfertsAnciens?: Prisma.TransfertCreateNestedManyWithoutAncienServiceInput
+  transfertsNouveaux?: Prisma.TransfertCreateNestedManyWithoutNouveauServiceInput
 }
 
 export type ServiceUncheckedCreateWithoutDemandesImagerieInput = {
@@ -1633,6 +1865,10 @@ export type ServiceUncheckedCreateWithoutDemandesImagerieInput = {
   hospitalisations?: Prisma.HospitalisationUncheckedCreateNestedManyWithoutServiceInput
   chambres?: Prisma.ChambreUncheckedCreateNestedManyWithoutServiceInput
   demandesLabo?: Prisma.DemandeLaboratoireUncheckedCreateNestedManyWithoutServiceInput
+  lignesFacture?: Prisma.LigneFactureUncheckedCreateNestedManyWithoutServiceInput
+  proformaLignes?: Prisma.ProformaLigneUncheckedCreateNestedManyWithoutServiceInput
+  transfertsAnciens?: Prisma.TransfertUncheckedCreateNestedManyWithoutAncienServiceInput
+  transfertsNouveaux?: Prisma.TransfertUncheckedCreateNestedManyWithoutNouveauServiceInput
 }
 
 export type ServiceCreateOrConnectWithoutDemandesImagerieInput = {
@@ -1669,6 +1905,10 @@ export type ServiceUpdateWithoutDemandesImagerieInput = {
   hospitalisations?: Prisma.HospitalisationUpdateManyWithoutServiceNestedInput
   chambres?: Prisma.ChambreUpdateManyWithoutServiceNestedInput
   demandesLabo?: Prisma.DemandeLaboratoireUpdateManyWithoutServiceNestedInput
+  lignesFacture?: Prisma.LigneFactureUpdateManyWithoutServiceNestedInput
+  proformaLignes?: Prisma.ProformaLigneUpdateManyWithoutServiceNestedInput
+  transfertsAnciens?: Prisma.TransfertUpdateManyWithoutAncienServiceNestedInput
+  transfertsNouveaux?: Prisma.TransfertUpdateManyWithoutNouveauServiceNestedInput
 }
 
 export type ServiceUncheckedUpdateWithoutDemandesImagerieInput = {
@@ -1690,6 +1930,10 @@ export type ServiceUncheckedUpdateWithoutDemandesImagerieInput = {
   hospitalisations?: Prisma.HospitalisationUncheckedUpdateManyWithoutServiceNestedInput
   chambres?: Prisma.ChambreUncheckedUpdateManyWithoutServiceNestedInput
   demandesLabo?: Prisma.DemandeLaboratoireUncheckedUpdateManyWithoutServiceNestedInput
+  lignesFacture?: Prisma.LigneFactureUncheckedUpdateManyWithoutServiceNestedInput
+  proformaLignes?: Prisma.ProformaLigneUncheckedUpdateManyWithoutServiceNestedInput
+  transfertsAnciens?: Prisma.TransfertUncheckedUpdateManyWithoutAncienServiceNestedInput
+  transfertsNouveaux?: Prisma.TransfertUncheckedUpdateManyWithoutNouveauServiceNestedInput
 }
 
 export type ServiceCreateWithoutChambresInput = {
@@ -1710,6 +1954,10 @@ export type ServiceCreateWithoutChambresInput = {
   hospitalisations?: Prisma.HospitalisationCreateNestedManyWithoutServiceInput
   demandesLabo?: Prisma.DemandeLaboratoireCreateNestedManyWithoutServiceInput
   demandesImagerie?: Prisma.DemandeImagerieCreateNestedManyWithoutServiceInput
+  lignesFacture?: Prisma.LigneFactureCreateNestedManyWithoutServiceInput
+  proformaLignes?: Prisma.ProformaLigneCreateNestedManyWithoutServiceInput
+  transfertsAnciens?: Prisma.TransfertCreateNestedManyWithoutAncienServiceInput
+  transfertsNouveaux?: Prisma.TransfertCreateNestedManyWithoutNouveauServiceInput
 }
 
 export type ServiceUncheckedCreateWithoutChambresInput = {
@@ -1731,6 +1979,10 @@ export type ServiceUncheckedCreateWithoutChambresInput = {
   hospitalisations?: Prisma.HospitalisationUncheckedCreateNestedManyWithoutServiceInput
   demandesLabo?: Prisma.DemandeLaboratoireUncheckedCreateNestedManyWithoutServiceInput
   demandesImagerie?: Prisma.DemandeImagerieUncheckedCreateNestedManyWithoutServiceInput
+  lignesFacture?: Prisma.LigneFactureUncheckedCreateNestedManyWithoutServiceInput
+  proformaLignes?: Prisma.ProformaLigneUncheckedCreateNestedManyWithoutServiceInput
+  transfertsAnciens?: Prisma.TransfertUncheckedCreateNestedManyWithoutAncienServiceInput
+  transfertsNouveaux?: Prisma.TransfertUncheckedCreateNestedManyWithoutNouveauServiceInput
 }
 
 export type ServiceCreateOrConnectWithoutChambresInput = {
@@ -1767,6 +2019,10 @@ export type ServiceUpdateWithoutChambresInput = {
   hospitalisations?: Prisma.HospitalisationUpdateManyWithoutServiceNestedInput
   demandesLabo?: Prisma.DemandeLaboratoireUpdateManyWithoutServiceNestedInput
   demandesImagerie?: Prisma.DemandeImagerieUpdateManyWithoutServiceNestedInput
+  lignesFacture?: Prisma.LigneFactureUpdateManyWithoutServiceNestedInput
+  proformaLignes?: Prisma.ProformaLigneUpdateManyWithoutServiceNestedInput
+  transfertsAnciens?: Prisma.TransfertUpdateManyWithoutAncienServiceNestedInput
+  transfertsNouveaux?: Prisma.TransfertUpdateManyWithoutNouveauServiceNestedInput
 }
 
 export type ServiceUncheckedUpdateWithoutChambresInput = {
@@ -1788,6 +2044,10 @@ export type ServiceUncheckedUpdateWithoutChambresInput = {
   hospitalisations?: Prisma.HospitalisationUncheckedUpdateManyWithoutServiceNestedInput
   demandesLabo?: Prisma.DemandeLaboratoireUncheckedUpdateManyWithoutServiceNestedInput
   demandesImagerie?: Prisma.DemandeImagerieUncheckedUpdateManyWithoutServiceNestedInput
+  lignesFacture?: Prisma.LigneFactureUncheckedUpdateManyWithoutServiceNestedInput
+  proformaLignes?: Prisma.ProformaLigneUncheckedUpdateManyWithoutServiceNestedInput
+  transfertsAnciens?: Prisma.TransfertUncheckedUpdateManyWithoutAncienServiceNestedInput
+  transfertsNouveaux?: Prisma.TransfertUncheckedUpdateManyWithoutNouveauServiceNestedInput
 }
 
 export type ServiceCreateWithoutHospitalisationsInput = {
@@ -1808,6 +2068,10 @@ export type ServiceCreateWithoutHospitalisationsInput = {
   chambres?: Prisma.ChambreCreateNestedManyWithoutServiceInput
   demandesLabo?: Prisma.DemandeLaboratoireCreateNestedManyWithoutServiceInput
   demandesImagerie?: Prisma.DemandeImagerieCreateNestedManyWithoutServiceInput
+  lignesFacture?: Prisma.LigneFactureCreateNestedManyWithoutServiceInput
+  proformaLignes?: Prisma.ProformaLigneCreateNestedManyWithoutServiceInput
+  transfertsAnciens?: Prisma.TransfertCreateNestedManyWithoutAncienServiceInput
+  transfertsNouveaux?: Prisma.TransfertCreateNestedManyWithoutNouveauServiceInput
 }
 
 export type ServiceUncheckedCreateWithoutHospitalisationsInput = {
@@ -1829,6 +2093,10 @@ export type ServiceUncheckedCreateWithoutHospitalisationsInput = {
   chambres?: Prisma.ChambreUncheckedCreateNestedManyWithoutServiceInput
   demandesLabo?: Prisma.DemandeLaboratoireUncheckedCreateNestedManyWithoutServiceInput
   demandesImagerie?: Prisma.DemandeImagerieUncheckedCreateNestedManyWithoutServiceInput
+  lignesFacture?: Prisma.LigneFactureUncheckedCreateNestedManyWithoutServiceInput
+  proformaLignes?: Prisma.ProformaLigneUncheckedCreateNestedManyWithoutServiceInput
+  transfertsAnciens?: Prisma.TransfertUncheckedCreateNestedManyWithoutAncienServiceInput
+  transfertsNouveaux?: Prisma.TransfertUncheckedCreateNestedManyWithoutNouveauServiceInput
 }
 
 export type ServiceCreateOrConnectWithoutHospitalisationsInput = {
@@ -1865,6 +2133,10 @@ export type ServiceUpdateWithoutHospitalisationsInput = {
   chambres?: Prisma.ChambreUpdateManyWithoutServiceNestedInput
   demandesLabo?: Prisma.DemandeLaboratoireUpdateManyWithoutServiceNestedInput
   demandesImagerie?: Prisma.DemandeImagerieUpdateManyWithoutServiceNestedInput
+  lignesFacture?: Prisma.LigneFactureUpdateManyWithoutServiceNestedInput
+  proformaLignes?: Prisma.ProformaLigneUpdateManyWithoutServiceNestedInput
+  transfertsAnciens?: Prisma.TransfertUpdateManyWithoutAncienServiceNestedInput
+  transfertsNouveaux?: Prisma.TransfertUpdateManyWithoutNouveauServiceNestedInput
 }
 
 export type ServiceUncheckedUpdateWithoutHospitalisationsInput = {
@@ -1886,6 +2158,466 @@ export type ServiceUncheckedUpdateWithoutHospitalisationsInput = {
   chambres?: Prisma.ChambreUncheckedUpdateManyWithoutServiceNestedInput
   demandesLabo?: Prisma.DemandeLaboratoireUncheckedUpdateManyWithoutServiceNestedInput
   demandesImagerie?: Prisma.DemandeImagerieUncheckedUpdateManyWithoutServiceNestedInput
+  lignesFacture?: Prisma.LigneFactureUncheckedUpdateManyWithoutServiceNestedInput
+  proformaLignes?: Prisma.ProformaLigneUncheckedUpdateManyWithoutServiceNestedInput
+  transfertsAnciens?: Prisma.TransfertUncheckedUpdateManyWithoutAncienServiceNestedInput
+  transfertsNouveaux?: Prisma.TransfertUncheckedUpdateManyWithoutNouveauServiceNestedInput
+}
+
+export type ServiceCreateWithoutTransfertsAnciensInput = {
+  code: string
+  nom: string
+  description?: string | null
+  actif?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  departement?: Prisma.DepartementCreateNestedOneWithoutServicesInput
+  employes?: Prisma.EmployeCreateNestedManyWithoutServiceInput
+  specialites?: Prisma.SpecialiteCreateNestedManyWithoutServiceInput
+  medecins?: Prisma.MedecinCreateNestedManyWithoutServiceInput
+  rendezVous?: Prisma.RendezVousCreateNestedManyWithoutServiceInput
+  admissions?: Prisma.AdmissionCreateNestedManyWithoutServiceInput
+  infirmiers?: Prisma.InfirmierCreateNestedManyWithoutServiceInput
+  consultations?: Prisma.ConsultationCreateNestedManyWithoutServiceInput
+  hospitalisations?: Prisma.HospitalisationCreateNestedManyWithoutServiceInput
+  chambres?: Prisma.ChambreCreateNestedManyWithoutServiceInput
+  demandesLabo?: Prisma.DemandeLaboratoireCreateNestedManyWithoutServiceInput
+  demandesImagerie?: Prisma.DemandeImagerieCreateNestedManyWithoutServiceInput
+  lignesFacture?: Prisma.LigneFactureCreateNestedManyWithoutServiceInput
+  proformaLignes?: Prisma.ProformaLigneCreateNestedManyWithoutServiceInput
+  transfertsNouveaux?: Prisma.TransfertCreateNestedManyWithoutNouveauServiceInput
+}
+
+export type ServiceUncheckedCreateWithoutTransfertsAnciensInput = {
+  id?: number
+  code: string
+  nom: string
+  description?: string | null
+  actif?: boolean
+  departementId?: number | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  employes?: Prisma.EmployeUncheckedCreateNestedManyWithoutServiceInput
+  specialites?: Prisma.SpecialiteUncheckedCreateNestedManyWithoutServiceInput
+  medecins?: Prisma.MedecinUncheckedCreateNestedManyWithoutServiceInput
+  rendezVous?: Prisma.RendezVousUncheckedCreateNestedManyWithoutServiceInput
+  admissions?: Prisma.AdmissionUncheckedCreateNestedManyWithoutServiceInput
+  infirmiers?: Prisma.InfirmierUncheckedCreateNestedManyWithoutServiceInput
+  consultations?: Prisma.ConsultationUncheckedCreateNestedManyWithoutServiceInput
+  hospitalisations?: Prisma.HospitalisationUncheckedCreateNestedManyWithoutServiceInput
+  chambres?: Prisma.ChambreUncheckedCreateNestedManyWithoutServiceInput
+  demandesLabo?: Prisma.DemandeLaboratoireUncheckedCreateNestedManyWithoutServiceInput
+  demandesImagerie?: Prisma.DemandeImagerieUncheckedCreateNestedManyWithoutServiceInput
+  lignesFacture?: Prisma.LigneFactureUncheckedCreateNestedManyWithoutServiceInput
+  proformaLignes?: Prisma.ProformaLigneUncheckedCreateNestedManyWithoutServiceInput
+  transfertsNouveaux?: Prisma.TransfertUncheckedCreateNestedManyWithoutNouveauServiceInput
+}
+
+export type ServiceCreateOrConnectWithoutTransfertsAnciensInput = {
+  where: Prisma.ServiceWhereUniqueInput
+  create: Prisma.XOR<Prisma.ServiceCreateWithoutTransfertsAnciensInput, Prisma.ServiceUncheckedCreateWithoutTransfertsAnciensInput>
+}
+
+export type ServiceCreateWithoutTransfertsNouveauxInput = {
+  code: string
+  nom: string
+  description?: string | null
+  actif?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  departement?: Prisma.DepartementCreateNestedOneWithoutServicesInput
+  employes?: Prisma.EmployeCreateNestedManyWithoutServiceInput
+  specialites?: Prisma.SpecialiteCreateNestedManyWithoutServiceInput
+  medecins?: Prisma.MedecinCreateNestedManyWithoutServiceInput
+  rendezVous?: Prisma.RendezVousCreateNestedManyWithoutServiceInput
+  admissions?: Prisma.AdmissionCreateNestedManyWithoutServiceInput
+  infirmiers?: Prisma.InfirmierCreateNestedManyWithoutServiceInput
+  consultations?: Prisma.ConsultationCreateNestedManyWithoutServiceInput
+  hospitalisations?: Prisma.HospitalisationCreateNestedManyWithoutServiceInput
+  chambres?: Prisma.ChambreCreateNestedManyWithoutServiceInput
+  demandesLabo?: Prisma.DemandeLaboratoireCreateNestedManyWithoutServiceInput
+  demandesImagerie?: Prisma.DemandeImagerieCreateNestedManyWithoutServiceInput
+  lignesFacture?: Prisma.LigneFactureCreateNestedManyWithoutServiceInput
+  proformaLignes?: Prisma.ProformaLigneCreateNestedManyWithoutServiceInput
+  transfertsAnciens?: Prisma.TransfertCreateNestedManyWithoutAncienServiceInput
+}
+
+export type ServiceUncheckedCreateWithoutTransfertsNouveauxInput = {
+  id?: number
+  code: string
+  nom: string
+  description?: string | null
+  actif?: boolean
+  departementId?: number | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  employes?: Prisma.EmployeUncheckedCreateNestedManyWithoutServiceInput
+  specialites?: Prisma.SpecialiteUncheckedCreateNestedManyWithoutServiceInput
+  medecins?: Prisma.MedecinUncheckedCreateNestedManyWithoutServiceInput
+  rendezVous?: Prisma.RendezVousUncheckedCreateNestedManyWithoutServiceInput
+  admissions?: Prisma.AdmissionUncheckedCreateNestedManyWithoutServiceInput
+  infirmiers?: Prisma.InfirmierUncheckedCreateNestedManyWithoutServiceInput
+  consultations?: Prisma.ConsultationUncheckedCreateNestedManyWithoutServiceInput
+  hospitalisations?: Prisma.HospitalisationUncheckedCreateNestedManyWithoutServiceInput
+  chambres?: Prisma.ChambreUncheckedCreateNestedManyWithoutServiceInput
+  demandesLabo?: Prisma.DemandeLaboratoireUncheckedCreateNestedManyWithoutServiceInput
+  demandesImagerie?: Prisma.DemandeImagerieUncheckedCreateNestedManyWithoutServiceInput
+  lignesFacture?: Prisma.LigneFactureUncheckedCreateNestedManyWithoutServiceInput
+  proformaLignes?: Prisma.ProformaLigneUncheckedCreateNestedManyWithoutServiceInput
+  transfertsAnciens?: Prisma.TransfertUncheckedCreateNestedManyWithoutAncienServiceInput
+}
+
+export type ServiceCreateOrConnectWithoutTransfertsNouveauxInput = {
+  where: Prisma.ServiceWhereUniqueInput
+  create: Prisma.XOR<Prisma.ServiceCreateWithoutTransfertsNouveauxInput, Prisma.ServiceUncheckedCreateWithoutTransfertsNouveauxInput>
+}
+
+export type ServiceUpsertWithoutTransfertsAnciensInput = {
+  update: Prisma.XOR<Prisma.ServiceUpdateWithoutTransfertsAnciensInput, Prisma.ServiceUncheckedUpdateWithoutTransfertsAnciensInput>
+  create: Prisma.XOR<Prisma.ServiceCreateWithoutTransfertsAnciensInput, Prisma.ServiceUncheckedCreateWithoutTransfertsAnciensInput>
+  where?: Prisma.ServiceWhereInput
+}
+
+export type ServiceUpdateToOneWithWhereWithoutTransfertsAnciensInput = {
+  where?: Prisma.ServiceWhereInput
+  data: Prisma.XOR<Prisma.ServiceUpdateWithoutTransfertsAnciensInput, Prisma.ServiceUncheckedUpdateWithoutTransfertsAnciensInput>
+}
+
+export type ServiceUpdateWithoutTransfertsAnciensInput = {
+  code?: Prisma.StringFieldUpdateOperationsInput | string
+  nom?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  actif?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  departement?: Prisma.DepartementUpdateOneWithoutServicesNestedInput
+  employes?: Prisma.EmployeUpdateManyWithoutServiceNestedInput
+  specialites?: Prisma.SpecialiteUpdateManyWithoutServiceNestedInput
+  medecins?: Prisma.MedecinUpdateManyWithoutServiceNestedInput
+  rendezVous?: Prisma.RendezVousUpdateManyWithoutServiceNestedInput
+  admissions?: Prisma.AdmissionUpdateManyWithoutServiceNestedInput
+  infirmiers?: Prisma.InfirmierUpdateManyWithoutServiceNestedInput
+  consultations?: Prisma.ConsultationUpdateManyWithoutServiceNestedInput
+  hospitalisations?: Prisma.HospitalisationUpdateManyWithoutServiceNestedInput
+  chambres?: Prisma.ChambreUpdateManyWithoutServiceNestedInput
+  demandesLabo?: Prisma.DemandeLaboratoireUpdateManyWithoutServiceNestedInput
+  demandesImagerie?: Prisma.DemandeImagerieUpdateManyWithoutServiceNestedInput
+  lignesFacture?: Prisma.LigneFactureUpdateManyWithoutServiceNestedInput
+  proformaLignes?: Prisma.ProformaLigneUpdateManyWithoutServiceNestedInput
+  transfertsNouveaux?: Prisma.TransfertUpdateManyWithoutNouveauServiceNestedInput
+}
+
+export type ServiceUncheckedUpdateWithoutTransfertsAnciensInput = {
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  code?: Prisma.StringFieldUpdateOperationsInput | string
+  nom?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  actif?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  departementId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  employes?: Prisma.EmployeUncheckedUpdateManyWithoutServiceNestedInput
+  specialites?: Prisma.SpecialiteUncheckedUpdateManyWithoutServiceNestedInput
+  medecins?: Prisma.MedecinUncheckedUpdateManyWithoutServiceNestedInput
+  rendezVous?: Prisma.RendezVousUncheckedUpdateManyWithoutServiceNestedInput
+  admissions?: Prisma.AdmissionUncheckedUpdateManyWithoutServiceNestedInput
+  infirmiers?: Prisma.InfirmierUncheckedUpdateManyWithoutServiceNestedInput
+  consultations?: Prisma.ConsultationUncheckedUpdateManyWithoutServiceNestedInput
+  hospitalisations?: Prisma.HospitalisationUncheckedUpdateManyWithoutServiceNestedInput
+  chambres?: Prisma.ChambreUncheckedUpdateManyWithoutServiceNestedInput
+  demandesLabo?: Prisma.DemandeLaboratoireUncheckedUpdateManyWithoutServiceNestedInput
+  demandesImagerie?: Prisma.DemandeImagerieUncheckedUpdateManyWithoutServiceNestedInput
+  lignesFacture?: Prisma.LigneFactureUncheckedUpdateManyWithoutServiceNestedInput
+  proformaLignes?: Prisma.ProformaLigneUncheckedUpdateManyWithoutServiceNestedInput
+  transfertsNouveaux?: Prisma.TransfertUncheckedUpdateManyWithoutNouveauServiceNestedInput
+}
+
+export type ServiceUpsertWithoutTransfertsNouveauxInput = {
+  update: Prisma.XOR<Prisma.ServiceUpdateWithoutTransfertsNouveauxInput, Prisma.ServiceUncheckedUpdateWithoutTransfertsNouveauxInput>
+  create: Prisma.XOR<Prisma.ServiceCreateWithoutTransfertsNouveauxInput, Prisma.ServiceUncheckedCreateWithoutTransfertsNouveauxInput>
+  where?: Prisma.ServiceWhereInput
+}
+
+export type ServiceUpdateToOneWithWhereWithoutTransfertsNouveauxInput = {
+  where?: Prisma.ServiceWhereInput
+  data: Prisma.XOR<Prisma.ServiceUpdateWithoutTransfertsNouveauxInput, Prisma.ServiceUncheckedUpdateWithoutTransfertsNouveauxInput>
+}
+
+export type ServiceUpdateWithoutTransfertsNouveauxInput = {
+  code?: Prisma.StringFieldUpdateOperationsInput | string
+  nom?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  actif?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  departement?: Prisma.DepartementUpdateOneWithoutServicesNestedInput
+  employes?: Prisma.EmployeUpdateManyWithoutServiceNestedInput
+  specialites?: Prisma.SpecialiteUpdateManyWithoutServiceNestedInput
+  medecins?: Prisma.MedecinUpdateManyWithoutServiceNestedInput
+  rendezVous?: Prisma.RendezVousUpdateManyWithoutServiceNestedInput
+  admissions?: Prisma.AdmissionUpdateManyWithoutServiceNestedInput
+  infirmiers?: Prisma.InfirmierUpdateManyWithoutServiceNestedInput
+  consultations?: Prisma.ConsultationUpdateManyWithoutServiceNestedInput
+  hospitalisations?: Prisma.HospitalisationUpdateManyWithoutServiceNestedInput
+  chambres?: Prisma.ChambreUpdateManyWithoutServiceNestedInput
+  demandesLabo?: Prisma.DemandeLaboratoireUpdateManyWithoutServiceNestedInput
+  demandesImagerie?: Prisma.DemandeImagerieUpdateManyWithoutServiceNestedInput
+  lignesFacture?: Prisma.LigneFactureUpdateManyWithoutServiceNestedInput
+  proformaLignes?: Prisma.ProformaLigneUpdateManyWithoutServiceNestedInput
+  transfertsAnciens?: Prisma.TransfertUpdateManyWithoutAncienServiceNestedInput
+}
+
+export type ServiceUncheckedUpdateWithoutTransfertsNouveauxInput = {
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  code?: Prisma.StringFieldUpdateOperationsInput | string
+  nom?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  actif?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  departementId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  employes?: Prisma.EmployeUncheckedUpdateManyWithoutServiceNestedInput
+  specialites?: Prisma.SpecialiteUncheckedUpdateManyWithoutServiceNestedInput
+  medecins?: Prisma.MedecinUncheckedUpdateManyWithoutServiceNestedInput
+  rendezVous?: Prisma.RendezVousUncheckedUpdateManyWithoutServiceNestedInput
+  admissions?: Prisma.AdmissionUncheckedUpdateManyWithoutServiceNestedInput
+  infirmiers?: Prisma.InfirmierUncheckedUpdateManyWithoutServiceNestedInput
+  consultations?: Prisma.ConsultationUncheckedUpdateManyWithoutServiceNestedInput
+  hospitalisations?: Prisma.HospitalisationUncheckedUpdateManyWithoutServiceNestedInput
+  chambres?: Prisma.ChambreUncheckedUpdateManyWithoutServiceNestedInput
+  demandesLabo?: Prisma.DemandeLaboratoireUncheckedUpdateManyWithoutServiceNestedInput
+  demandesImagerie?: Prisma.DemandeImagerieUncheckedUpdateManyWithoutServiceNestedInput
+  lignesFacture?: Prisma.LigneFactureUncheckedUpdateManyWithoutServiceNestedInput
+  proformaLignes?: Prisma.ProformaLigneUncheckedUpdateManyWithoutServiceNestedInput
+  transfertsAnciens?: Prisma.TransfertUncheckedUpdateManyWithoutAncienServiceNestedInput
+}
+
+export type ServiceCreateWithoutLignesFactureInput = {
+  code: string
+  nom: string
+  description?: string | null
+  actif?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  departement?: Prisma.DepartementCreateNestedOneWithoutServicesInput
+  employes?: Prisma.EmployeCreateNestedManyWithoutServiceInput
+  specialites?: Prisma.SpecialiteCreateNestedManyWithoutServiceInput
+  medecins?: Prisma.MedecinCreateNestedManyWithoutServiceInput
+  rendezVous?: Prisma.RendezVousCreateNestedManyWithoutServiceInput
+  admissions?: Prisma.AdmissionCreateNestedManyWithoutServiceInput
+  infirmiers?: Prisma.InfirmierCreateNestedManyWithoutServiceInput
+  consultations?: Prisma.ConsultationCreateNestedManyWithoutServiceInput
+  hospitalisations?: Prisma.HospitalisationCreateNestedManyWithoutServiceInput
+  chambres?: Prisma.ChambreCreateNestedManyWithoutServiceInput
+  demandesLabo?: Prisma.DemandeLaboratoireCreateNestedManyWithoutServiceInput
+  demandesImagerie?: Prisma.DemandeImagerieCreateNestedManyWithoutServiceInput
+  proformaLignes?: Prisma.ProformaLigneCreateNestedManyWithoutServiceInput
+  transfertsAnciens?: Prisma.TransfertCreateNestedManyWithoutAncienServiceInput
+  transfertsNouveaux?: Prisma.TransfertCreateNestedManyWithoutNouveauServiceInput
+}
+
+export type ServiceUncheckedCreateWithoutLignesFactureInput = {
+  id?: number
+  code: string
+  nom: string
+  description?: string | null
+  actif?: boolean
+  departementId?: number | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  employes?: Prisma.EmployeUncheckedCreateNestedManyWithoutServiceInput
+  specialites?: Prisma.SpecialiteUncheckedCreateNestedManyWithoutServiceInput
+  medecins?: Prisma.MedecinUncheckedCreateNestedManyWithoutServiceInput
+  rendezVous?: Prisma.RendezVousUncheckedCreateNestedManyWithoutServiceInput
+  admissions?: Prisma.AdmissionUncheckedCreateNestedManyWithoutServiceInput
+  infirmiers?: Prisma.InfirmierUncheckedCreateNestedManyWithoutServiceInput
+  consultations?: Prisma.ConsultationUncheckedCreateNestedManyWithoutServiceInput
+  hospitalisations?: Prisma.HospitalisationUncheckedCreateNestedManyWithoutServiceInput
+  chambres?: Prisma.ChambreUncheckedCreateNestedManyWithoutServiceInput
+  demandesLabo?: Prisma.DemandeLaboratoireUncheckedCreateNestedManyWithoutServiceInput
+  demandesImagerie?: Prisma.DemandeImagerieUncheckedCreateNestedManyWithoutServiceInput
+  proformaLignes?: Prisma.ProformaLigneUncheckedCreateNestedManyWithoutServiceInput
+  transfertsAnciens?: Prisma.TransfertUncheckedCreateNestedManyWithoutAncienServiceInput
+  transfertsNouveaux?: Prisma.TransfertUncheckedCreateNestedManyWithoutNouveauServiceInput
+}
+
+export type ServiceCreateOrConnectWithoutLignesFactureInput = {
+  where: Prisma.ServiceWhereUniqueInput
+  create: Prisma.XOR<Prisma.ServiceCreateWithoutLignesFactureInput, Prisma.ServiceUncheckedCreateWithoutLignesFactureInput>
+}
+
+export type ServiceUpsertWithoutLignesFactureInput = {
+  update: Prisma.XOR<Prisma.ServiceUpdateWithoutLignesFactureInput, Prisma.ServiceUncheckedUpdateWithoutLignesFactureInput>
+  create: Prisma.XOR<Prisma.ServiceCreateWithoutLignesFactureInput, Prisma.ServiceUncheckedCreateWithoutLignesFactureInput>
+  where?: Prisma.ServiceWhereInput
+}
+
+export type ServiceUpdateToOneWithWhereWithoutLignesFactureInput = {
+  where?: Prisma.ServiceWhereInput
+  data: Prisma.XOR<Prisma.ServiceUpdateWithoutLignesFactureInput, Prisma.ServiceUncheckedUpdateWithoutLignesFactureInput>
+}
+
+export type ServiceUpdateWithoutLignesFactureInput = {
+  code?: Prisma.StringFieldUpdateOperationsInput | string
+  nom?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  actif?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  departement?: Prisma.DepartementUpdateOneWithoutServicesNestedInput
+  employes?: Prisma.EmployeUpdateManyWithoutServiceNestedInput
+  specialites?: Prisma.SpecialiteUpdateManyWithoutServiceNestedInput
+  medecins?: Prisma.MedecinUpdateManyWithoutServiceNestedInput
+  rendezVous?: Prisma.RendezVousUpdateManyWithoutServiceNestedInput
+  admissions?: Prisma.AdmissionUpdateManyWithoutServiceNestedInput
+  infirmiers?: Prisma.InfirmierUpdateManyWithoutServiceNestedInput
+  consultations?: Prisma.ConsultationUpdateManyWithoutServiceNestedInput
+  hospitalisations?: Prisma.HospitalisationUpdateManyWithoutServiceNestedInput
+  chambres?: Prisma.ChambreUpdateManyWithoutServiceNestedInput
+  demandesLabo?: Prisma.DemandeLaboratoireUpdateManyWithoutServiceNestedInput
+  demandesImagerie?: Prisma.DemandeImagerieUpdateManyWithoutServiceNestedInput
+  proformaLignes?: Prisma.ProformaLigneUpdateManyWithoutServiceNestedInput
+  transfertsAnciens?: Prisma.TransfertUpdateManyWithoutAncienServiceNestedInput
+  transfertsNouveaux?: Prisma.TransfertUpdateManyWithoutNouveauServiceNestedInput
+}
+
+export type ServiceUncheckedUpdateWithoutLignesFactureInput = {
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  code?: Prisma.StringFieldUpdateOperationsInput | string
+  nom?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  actif?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  departementId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  employes?: Prisma.EmployeUncheckedUpdateManyWithoutServiceNestedInput
+  specialites?: Prisma.SpecialiteUncheckedUpdateManyWithoutServiceNestedInput
+  medecins?: Prisma.MedecinUncheckedUpdateManyWithoutServiceNestedInput
+  rendezVous?: Prisma.RendezVousUncheckedUpdateManyWithoutServiceNestedInput
+  admissions?: Prisma.AdmissionUncheckedUpdateManyWithoutServiceNestedInput
+  infirmiers?: Prisma.InfirmierUncheckedUpdateManyWithoutServiceNestedInput
+  consultations?: Prisma.ConsultationUncheckedUpdateManyWithoutServiceNestedInput
+  hospitalisations?: Prisma.HospitalisationUncheckedUpdateManyWithoutServiceNestedInput
+  chambres?: Prisma.ChambreUncheckedUpdateManyWithoutServiceNestedInput
+  demandesLabo?: Prisma.DemandeLaboratoireUncheckedUpdateManyWithoutServiceNestedInput
+  demandesImagerie?: Prisma.DemandeImagerieUncheckedUpdateManyWithoutServiceNestedInput
+  proformaLignes?: Prisma.ProformaLigneUncheckedUpdateManyWithoutServiceNestedInput
+  transfertsAnciens?: Prisma.TransfertUncheckedUpdateManyWithoutAncienServiceNestedInput
+  transfertsNouveaux?: Prisma.TransfertUncheckedUpdateManyWithoutNouveauServiceNestedInput
+}
+
+export type ServiceCreateWithoutProformaLignesInput = {
+  code: string
+  nom: string
+  description?: string | null
+  actif?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  departement?: Prisma.DepartementCreateNestedOneWithoutServicesInput
+  employes?: Prisma.EmployeCreateNestedManyWithoutServiceInput
+  specialites?: Prisma.SpecialiteCreateNestedManyWithoutServiceInput
+  medecins?: Prisma.MedecinCreateNestedManyWithoutServiceInput
+  rendezVous?: Prisma.RendezVousCreateNestedManyWithoutServiceInput
+  admissions?: Prisma.AdmissionCreateNestedManyWithoutServiceInput
+  infirmiers?: Prisma.InfirmierCreateNestedManyWithoutServiceInput
+  consultations?: Prisma.ConsultationCreateNestedManyWithoutServiceInput
+  hospitalisations?: Prisma.HospitalisationCreateNestedManyWithoutServiceInput
+  chambres?: Prisma.ChambreCreateNestedManyWithoutServiceInput
+  demandesLabo?: Prisma.DemandeLaboratoireCreateNestedManyWithoutServiceInput
+  demandesImagerie?: Prisma.DemandeImagerieCreateNestedManyWithoutServiceInput
+  lignesFacture?: Prisma.LigneFactureCreateNestedManyWithoutServiceInput
+  transfertsAnciens?: Prisma.TransfertCreateNestedManyWithoutAncienServiceInput
+  transfertsNouveaux?: Prisma.TransfertCreateNestedManyWithoutNouveauServiceInput
+}
+
+export type ServiceUncheckedCreateWithoutProformaLignesInput = {
+  id?: number
+  code: string
+  nom: string
+  description?: string | null
+  actif?: boolean
+  departementId?: number | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  employes?: Prisma.EmployeUncheckedCreateNestedManyWithoutServiceInput
+  specialites?: Prisma.SpecialiteUncheckedCreateNestedManyWithoutServiceInput
+  medecins?: Prisma.MedecinUncheckedCreateNestedManyWithoutServiceInput
+  rendezVous?: Prisma.RendezVousUncheckedCreateNestedManyWithoutServiceInput
+  admissions?: Prisma.AdmissionUncheckedCreateNestedManyWithoutServiceInput
+  infirmiers?: Prisma.InfirmierUncheckedCreateNestedManyWithoutServiceInput
+  consultations?: Prisma.ConsultationUncheckedCreateNestedManyWithoutServiceInput
+  hospitalisations?: Prisma.HospitalisationUncheckedCreateNestedManyWithoutServiceInput
+  chambres?: Prisma.ChambreUncheckedCreateNestedManyWithoutServiceInput
+  demandesLabo?: Prisma.DemandeLaboratoireUncheckedCreateNestedManyWithoutServiceInput
+  demandesImagerie?: Prisma.DemandeImagerieUncheckedCreateNestedManyWithoutServiceInput
+  lignesFacture?: Prisma.LigneFactureUncheckedCreateNestedManyWithoutServiceInput
+  transfertsAnciens?: Prisma.TransfertUncheckedCreateNestedManyWithoutAncienServiceInput
+  transfertsNouveaux?: Prisma.TransfertUncheckedCreateNestedManyWithoutNouveauServiceInput
+}
+
+export type ServiceCreateOrConnectWithoutProformaLignesInput = {
+  where: Prisma.ServiceWhereUniqueInput
+  create: Prisma.XOR<Prisma.ServiceCreateWithoutProformaLignesInput, Prisma.ServiceUncheckedCreateWithoutProformaLignesInput>
+}
+
+export type ServiceUpsertWithoutProformaLignesInput = {
+  update: Prisma.XOR<Prisma.ServiceUpdateWithoutProformaLignesInput, Prisma.ServiceUncheckedUpdateWithoutProformaLignesInput>
+  create: Prisma.XOR<Prisma.ServiceCreateWithoutProformaLignesInput, Prisma.ServiceUncheckedCreateWithoutProformaLignesInput>
+  where?: Prisma.ServiceWhereInput
+}
+
+export type ServiceUpdateToOneWithWhereWithoutProformaLignesInput = {
+  where?: Prisma.ServiceWhereInput
+  data: Prisma.XOR<Prisma.ServiceUpdateWithoutProformaLignesInput, Prisma.ServiceUncheckedUpdateWithoutProformaLignesInput>
+}
+
+export type ServiceUpdateWithoutProformaLignesInput = {
+  code?: Prisma.StringFieldUpdateOperationsInput | string
+  nom?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  actif?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  departement?: Prisma.DepartementUpdateOneWithoutServicesNestedInput
+  employes?: Prisma.EmployeUpdateManyWithoutServiceNestedInput
+  specialites?: Prisma.SpecialiteUpdateManyWithoutServiceNestedInput
+  medecins?: Prisma.MedecinUpdateManyWithoutServiceNestedInput
+  rendezVous?: Prisma.RendezVousUpdateManyWithoutServiceNestedInput
+  admissions?: Prisma.AdmissionUpdateManyWithoutServiceNestedInput
+  infirmiers?: Prisma.InfirmierUpdateManyWithoutServiceNestedInput
+  consultations?: Prisma.ConsultationUpdateManyWithoutServiceNestedInput
+  hospitalisations?: Prisma.HospitalisationUpdateManyWithoutServiceNestedInput
+  chambres?: Prisma.ChambreUpdateManyWithoutServiceNestedInput
+  demandesLabo?: Prisma.DemandeLaboratoireUpdateManyWithoutServiceNestedInput
+  demandesImagerie?: Prisma.DemandeImagerieUpdateManyWithoutServiceNestedInput
+  lignesFacture?: Prisma.LigneFactureUpdateManyWithoutServiceNestedInput
+  transfertsAnciens?: Prisma.TransfertUpdateManyWithoutAncienServiceNestedInput
+  transfertsNouveaux?: Prisma.TransfertUpdateManyWithoutNouveauServiceNestedInput
+}
+
+export type ServiceUncheckedUpdateWithoutProformaLignesInput = {
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  code?: Prisma.StringFieldUpdateOperationsInput | string
+  nom?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  actif?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  departementId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  employes?: Prisma.EmployeUncheckedUpdateManyWithoutServiceNestedInput
+  specialites?: Prisma.SpecialiteUncheckedUpdateManyWithoutServiceNestedInput
+  medecins?: Prisma.MedecinUncheckedUpdateManyWithoutServiceNestedInput
+  rendezVous?: Prisma.RendezVousUncheckedUpdateManyWithoutServiceNestedInput
+  admissions?: Prisma.AdmissionUncheckedUpdateManyWithoutServiceNestedInput
+  infirmiers?: Prisma.InfirmierUncheckedUpdateManyWithoutServiceNestedInput
+  consultations?: Prisma.ConsultationUncheckedUpdateManyWithoutServiceNestedInput
+  hospitalisations?: Prisma.HospitalisationUncheckedUpdateManyWithoutServiceNestedInput
+  chambres?: Prisma.ChambreUncheckedUpdateManyWithoutServiceNestedInput
+  demandesLabo?: Prisma.DemandeLaboratoireUncheckedUpdateManyWithoutServiceNestedInput
+  demandesImagerie?: Prisma.DemandeImagerieUncheckedUpdateManyWithoutServiceNestedInput
+  lignesFacture?: Prisma.LigneFactureUncheckedUpdateManyWithoutServiceNestedInput
+  transfertsAnciens?: Prisma.TransfertUncheckedUpdateManyWithoutAncienServiceNestedInput
+  transfertsNouveaux?: Prisma.TransfertUncheckedUpdateManyWithoutNouveauServiceNestedInput
 }
 
 export type ServiceCreateManyDepartementInput = {
@@ -1916,6 +2648,10 @@ export type ServiceUpdateWithoutDepartementInput = {
   chambres?: Prisma.ChambreUpdateManyWithoutServiceNestedInput
   demandesLabo?: Prisma.DemandeLaboratoireUpdateManyWithoutServiceNestedInput
   demandesImagerie?: Prisma.DemandeImagerieUpdateManyWithoutServiceNestedInput
+  lignesFacture?: Prisma.LigneFactureUpdateManyWithoutServiceNestedInput
+  proformaLignes?: Prisma.ProformaLigneUpdateManyWithoutServiceNestedInput
+  transfertsAnciens?: Prisma.TransfertUpdateManyWithoutAncienServiceNestedInput
+  transfertsNouveaux?: Prisma.TransfertUpdateManyWithoutNouveauServiceNestedInput
 }
 
 export type ServiceUncheckedUpdateWithoutDepartementInput = {
@@ -1937,6 +2673,10 @@ export type ServiceUncheckedUpdateWithoutDepartementInput = {
   chambres?: Prisma.ChambreUncheckedUpdateManyWithoutServiceNestedInput
   demandesLabo?: Prisma.DemandeLaboratoireUncheckedUpdateManyWithoutServiceNestedInput
   demandesImagerie?: Prisma.DemandeImagerieUncheckedUpdateManyWithoutServiceNestedInput
+  lignesFacture?: Prisma.LigneFactureUncheckedUpdateManyWithoutServiceNestedInput
+  proformaLignes?: Prisma.ProformaLigneUncheckedUpdateManyWithoutServiceNestedInput
+  transfertsAnciens?: Prisma.TransfertUncheckedUpdateManyWithoutAncienServiceNestedInput
+  transfertsNouveaux?: Prisma.TransfertUncheckedUpdateManyWithoutNouveauServiceNestedInput
 }
 
 export type ServiceUncheckedUpdateManyWithoutDepartementInput = {
@@ -1966,6 +2706,10 @@ export type ServiceCountOutputType = {
   chambres: number
   demandesLabo: number
   demandesImagerie: number
+  lignesFacture: number
+  proformaLignes: number
+  transfertsAnciens: number
+  transfertsNouveaux: number
 }
 
 export type ServiceCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1980,6 +2724,10 @@ export type ServiceCountOutputTypeSelect<ExtArgs extends runtime.Types.Extension
   chambres?: boolean | ServiceCountOutputTypeCountChambresArgs
   demandesLabo?: boolean | ServiceCountOutputTypeCountDemandesLaboArgs
   demandesImagerie?: boolean | ServiceCountOutputTypeCountDemandesImagerieArgs
+  lignesFacture?: boolean | ServiceCountOutputTypeCountLignesFactureArgs
+  proformaLignes?: boolean | ServiceCountOutputTypeCountProformaLignesArgs
+  transfertsAnciens?: boolean | ServiceCountOutputTypeCountTransfertsAnciensArgs
+  transfertsNouveaux?: boolean | ServiceCountOutputTypeCountTransfertsNouveauxArgs
 }
 
 /**
@@ -2069,6 +2817,34 @@ export type ServiceCountOutputTypeCountDemandesImagerieArgs<ExtArgs extends runt
   where?: Prisma.DemandeImagerieWhereInput
 }
 
+/**
+ * ServiceCountOutputType without action
+ */
+export type ServiceCountOutputTypeCountLignesFactureArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.LigneFactureWhereInput
+}
+
+/**
+ * ServiceCountOutputType without action
+ */
+export type ServiceCountOutputTypeCountProformaLignesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.ProformaLigneWhereInput
+}
+
+/**
+ * ServiceCountOutputType without action
+ */
+export type ServiceCountOutputTypeCountTransfertsAnciensArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.TransfertWhereInput
+}
+
+/**
+ * ServiceCountOutputType without action
+ */
+export type ServiceCountOutputTypeCountTransfertsNouveauxArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.TransfertWhereInput
+}
+
 
 export type ServiceSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -2091,6 +2867,10 @@ export type ServiceSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   chambres?: boolean | Prisma.Service$chambresArgs<ExtArgs>
   demandesLabo?: boolean | Prisma.Service$demandesLaboArgs<ExtArgs>
   demandesImagerie?: boolean | Prisma.Service$demandesImagerieArgs<ExtArgs>
+  lignesFacture?: boolean | Prisma.Service$lignesFactureArgs<ExtArgs>
+  proformaLignes?: boolean | Prisma.Service$proformaLignesArgs<ExtArgs>
+  transfertsAnciens?: boolean | Prisma.Service$transfertsAnciensArgs<ExtArgs>
+  transfertsNouveaux?: boolean | Prisma.Service$transfertsNouveauxArgs<ExtArgs>
   _count?: boolean | Prisma.ServiceCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["service"]>
 
@@ -2143,6 +2923,10 @@ export type ServiceInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs
   chambres?: boolean | Prisma.Service$chambresArgs<ExtArgs>
   demandesLabo?: boolean | Prisma.Service$demandesLaboArgs<ExtArgs>
   demandesImagerie?: boolean | Prisma.Service$demandesImagerieArgs<ExtArgs>
+  lignesFacture?: boolean | Prisma.Service$lignesFactureArgs<ExtArgs>
+  proformaLignes?: boolean | Prisma.Service$proformaLignesArgs<ExtArgs>
+  transfertsAnciens?: boolean | Prisma.Service$transfertsAnciensArgs<ExtArgs>
+  transfertsNouveaux?: boolean | Prisma.Service$transfertsNouveauxArgs<ExtArgs>
   _count?: boolean | Prisma.ServiceCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type ServiceIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -2167,6 +2951,10 @@ export type $ServicePayload<ExtArgs extends runtime.Types.Extensions.InternalArg
     chambres: Prisma.$ChambrePayload<ExtArgs>[]
     demandesLabo: Prisma.$DemandeLaboratoirePayload<ExtArgs>[]
     demandesImagerie: Prisma.$DemandeImageriePayload<ExtArgs>[]
+    lignesFacture: Prisma.$LigneFacturePayload<ExtArgs>[]
+    proformaLignes: Prisma.$ProformaLignePayload<ExtArgs>[]
+    transfertsAnciens: Prisma.$TransfertPayload<ExtArgs>[]
+    transfertsNouveaux: Prisma.$TransfertPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: number
@@ -2583,6 +3371,10 @@ export interface Prisma__ServiceClient<T, Null = never, ExtArgs extends runtime.
   chambres<T extends Prisma.Service$chambresArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Service$chambresArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ChambrePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   demandesLabo<T extends Prisma.Service$demandesLaboArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Service$demandesLaboArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$DemandeLaboratoirePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   demandesImagerie<T extends Prisma.Service$demandesImagerieArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Service$demandesImagerieArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$DemandeImageriePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  lignesFacture<T extends Prisma.Service$lignesFactureArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Service$lignesFactureArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$LigneFacturePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  proformaLignes<T extends Prisma.Service$proformaLignesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Service$proformaLignesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ProformaLignePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  transfertsAnciens<T extends Prisma.Service$transfertsAnciensArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Service$transfertsAnciensArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$TransfertPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  transfertsNouveaux<T extends Prisma.Service$transfertsNouveauxArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Service$transfertsNouveauxArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$TransfertPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -3299,6 +4091,102 @@ export type Service$demandesImagerieArgs<ExtArgs extends runtime.Types.Extension
   take?: number
   skip?: number
   distinct?: Prisma.DemandeImagerieScalarFieldEnum | Prisma.DemandeImagerieScalarFieldEnum[]
+}
+
+/**
+ * Service.lignesFacture
+ */
+export type Service$lignesFactureArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the LigneFacture
+   */
+  select?: Prisma.LigneFactureSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the LigneFacture
+   */
+  omit?: Prisma.LigneFactureOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.LigneFactureInclude<ExtArgs> | null
+  where?: Prisma.LigneFactureWhereInput
+  orderBy?: Prisma.LigneFactureOrderByWithRelationInput | Prisma.LigneFactureOrderByWithRelationInput[]
+  cursor?: Prisma.LigneFactureWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.LigneFactureScalarFieldEnum | Prisma.LigneFactureScalarFieldEnum[]
+}
+
+/**
+ * Service.proformaLignes
+ */
+export type Service$proformaLignesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the ProformaLigne
+   */
+  select?: Prisma.ProformaLigneSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the ProformaLigne
+   */
+  omit?: Prisma.ProformaLigneOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.ProformaLigneInclude<ExtArgs> | null
+  where?: Prisma.ProformaLigneWhereInput
+  orderBy?: Prisma.ProformaLigneOrderByWithRelationInput | Prisma.ProformaLigneOrderByWithRelationInput[]
+  cursor?: Prisma.ProformaLigneWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.ProformaLigneScalarFieldEnum | Prisma.ProformaLigneScalarFieldEnum[]
+}
+
+/**
+ * Service.transfertsAnciens
+ */
+export type Service$transfertsAnciensArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Transfert
+   */
+  select?: Prisma.TransfertSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Transfert
+   */
+  omit?: Prisma.TransfertOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.TransfertInclude<ExtArgs> | null
+  where?: Prisma.TransfertWhereInput
+  orderBy?: Prisma.TransfertOrderByWithRelationInput | Prisma.TransfertOrderByWithRelationInput[]
+  cursor?: Prisma.TransfertWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.TransfertScalarFieldEnum | Prisma.TransfertScalarFieldEnum[]
+}
+
+/**
+ * Service.transfertsNouveaux
+ */
+export type Service$transfertsNouveauxArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Transfert
+   */
+  select?: Prisma.TransfertSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Transfert
+   */
+  omit?: Prisma.TransfertOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.TransfertInclude<ExtArgs> | null
+  where?: Prisma.TransfertWhereInput
+  orderBy?: Prisma.TransfertOrderByWithRelationInput | Prisma.TransfertOrderByWithRelationInput[]
+  cursor?: Prisma.TransfertWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.TransfertScalarFieldEnum | Prisma.TransfertScalarFieldEnum[]
 }
 
 /**

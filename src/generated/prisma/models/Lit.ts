@@ -214,6 +214,8 @@ export type LitWhereInput = {
   statut?: Prisma.StringFilter<"Lit"> | string
   chambre?: Prisma.XOR<Prisma.ChambreScalarRelationFilter, Prisma.ChambreWhereInput>
   hospitalisations?: Prisma.HospitalisationListRelationFilter
+  anciensTransferts?: Prisma.TransfertListRelationFilter
+  nouveauxTransferts?: Prisma.TransfertListRelationFilter
 }
 
 export type LitOrderByWithRelationInput = {
@@ -223,6 +225,8 @@ export type LitOrderByWithRelationInput = {
   statut?: Prisma.SortOrder
   chambre?: Prisma.ChambreOrderByWithRelationInput
   hospitalisations?: Prisma.HospitalisationOrderByRelationAggregateInput
+  anciensTransferts?: Prisma.TransfertOrderByRelationAggregateInput
+  nouveauxTransferts?: Prisma.TransfertOrderByRelationAggregateInput
 }
 
 export type LitWhereUniqueInput = Prisma.AtLeast<{
@@ -236,6 +240,8 @@ export type LitWhereUniqueInput = Prisma.AtLeast<{
   statut?: Prisma.StringFilter<"Lit"> | string
   chambre?: Prisma.XOR<Prisma.ChambreScalarRelationFilter, Prisma.ChambreWhereInput>
   hospitalisations?: Prisma.HospitalisationListRelationFilter
+  anciensTransferts?: Prisma.TransfertListRelationFilter
+  nouveauxTransferts?: Prisma.TransfertListRelationFilter
 }, "id" | "chambreId_numero">
 
 export type LitOrderByWithAggregationInput = {
@@ -265,6 +271,8 @@ export type LitCreateInput = {
   statut?: string
   chambre: Prisma.ChambreCreateNestedOneWithoutLitsInput
   hospitalisations?: Prisma.HospitalisationCreateNestedManyWithoutLitInput
+  anciensTransferts?: Prisma.TransfertCreateNestedManyWithoutAncienLitInput
+  nouveauxTransferts?: Prisma.TransfertCreateNestedManyWithoutNouveauLitInput
 }
 
 export type LitUncheckedCreateInput = {
@@ -273,6 +281,8 @@ export type LitUncheckedCreateInput = {
   chambreId: number
   statut?: string
   hospitalisations?: Prisma.HospitalisationUncheckedCreateNestedManyWithoutLitInput
+  anciensTransferts?: Prisma.TransfertUncheckedCreateNestedManyWithoutAncienLitInput
+  nouveauxTransferts?: Prisma.TransfertUncheckedCreateNestedManyWithoutNouveauLitInput
 }
 
 export type LitUpdateInput = {
@@ -280,6 +290,8 @@ export type LitUpdateInput = {
   statut?: Prisma.StringFieldUpdateOperationsInput | string
   chambre?: Prisma.ChambreUpdateOneRequiredWithoutLitsNestedInput
   hospitalisations?: Prisma.HospitalisationUpdateManyWithoutLitNestedInput
+  anciensTransferts?: Prisma.TransfertUpdateManyWithoutAncienLitNestedInput
+  nouveauxTransferts?: Prisma.TransfertUpdateManyWithoutNouveauLitNestedInput
 }
 
 export type LitUncheckedUpdateInput = {
@@ -288,6 +300,8 @@ export type LitUncheckedUpdateInput = {
   chambreId?: Prisma.IntFieldUpdateOperationsInput | number
   statut?: Prisma.StringFieldUpdateOperationsInput | string
   hospitalisations?: Prisma.HospitalisationUncheckedUpdateManyWithoutLitNestedInput
+  anciensTransferts?: Prisma.TransfertUncheckedUpdateManyWithoutAncienLitNestedInput
+  nouveauxTransferts?: Prisma.TransfertUncheckedUpdateManyWithoutNouveauLitNestedInput
 }
 
 export type LitCreateManyInput = {
@@ -418,10 +432,44 @@ export type LitUpdateOneWithoutHospitalisationsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.LitUpdateToOneWithWhereWithoutHospitalisationsInput, Prisma.LitUpdateWithoutHospitalisationsInput>, Prisma.LitUncheckedUpdateWithoutHospitalisationsInput>
 }
 
+export type LitCreateNestedOneWithoutAnciensTransfertsInput = {
+  create?: Prisma.XOR<Prisma.LitCreateWithoutAnciensTransfertsInput, Prisma.LitUncheckedCreateWithoutAnciensTransfertsInput>
+  connectOrCreate?: Prisma.LitCreateOrConnectWithoutAnciensTransfertsInput
+  connect?: Prisma.LitWhereUniqueInput
+}
+
+export type LitCreateNestedOneWithoutNouveauxTransfertsInput = {
+  create?: Prisma.XOR<Prisma.LitCreateWithoutNouveauxTransfertsInput, Prisma.LitUncheckedCreateWithoutNouveauxTransfertsInput>
+  connectOrCreate?: Prisma.LitCreateOrConnectWithoutNouveauxTransfertsInput
+  connect?: Prisma.LitWhereUniqueInput
+}
+
+export type LitUpdateOneWithoutAnciensTransfertsNestedInput = {
+  create?: Prisma.XOR<Prisma.LitCreateWithoutAnciensTransfertsInput, Prisma.LitUncheckedCreateWithoutAnciensTransfertsInput>
+  connectOrCreate?: Prisma.LitCreateOrConnectWithoutAnciensTransfertsInput
+  upsert?: Prisma.LitUpsertWithoutAnciensTransfertsInput
+  disconnect?: Prisma.LitWhereInput | boolean
+  delete?: Prisma.LitWhereInput | boolean
+  connect?: Prisma.LitWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.LitUpdateToOneWithWhereWithoutAnciensTransfertsInput, Prisma.LitUpdateWithoutAnciensTransfertsInput>, Prisma.LitUncheckedUpdateWithoutAnciensTransfertsInput>
+}
+
+export type LitUpdateOneWithoutNouveauxTransfertsNestedInput = {
+  create?: Prisma.XOR<Prisma.LitCreateWithoutNouveauxTransfertsInput, Prisma.LitUncheckedCreateWithoutNouveauxTransfertsInput>
+  connectOrCreate?: Prisma.LitCreateOrConnectWithoutNouveauxTransfertsInput
+  upsert?: Prisma.LitUpsertWithoutNouveauxTransfertsInput
+  disconnect?: Prisma.LitWhereInput | boolean
+  delete?: Prisma.LitWhereInput | boolean
+  connect?: Prisma.LitWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.LitUpdateToOneWithWhereWithoutNouveauxTransfertsInput, Prisma.LitUpdateWithoutNouveauxTransfertsInput>, Prisma.LitUncheckedUpdateWithoutNouveauxTransfertsInput>
+}
+
 export type LitCreateWithoutChambreInput = {
   numero: string
   statut?: string
   hospitalisations?: Prisma.HospitalisationCreateNestedManyWithoutLitInput
+  anciensTransferts?: Prisma.TransfertCreateNestedManyWithoutAncienLitInput
+  nouveauxTransferts?: Prisma.TransfertCreateNestedManyWithoutNouveauLitInput
 }
 
 export type LitUncheckedCreateWithoutChambreInput = {
@@ -429,6 +477,8 @@ export type LitUncheckedCreateWithoutChambreInput = {
   numero: string
   statut?: string
   hospitalisations?: Prisma.HospitalisationUncheckedCreateNestedManyWithoutLitInput
+  anciensTransferts?: Prisma.TransfertUncheckedCreateNestedManyWithoutAncienLitInput
+  nouveauxTransferts?: Prisma.TransfertUncheckedCreateNestedManyWithoutNouveauLitInput
 }
 
 export type LitCreateOrConnectWithoutChambreInput = {
@@ -470,6 +520,8 @@ export type LitCreateWithoutHospitalisationsInput = {
   numero: string
   statut?: string
   chambre: Prisma.ChambreCreateNestedOneWithoutLitsInput
+  anciensTransferts?: Prisma.TransfertCreateNestedManyWithoutAncienLitInput
+  nouveauxTransferts?: Prisma.TransfertCreateNestedManyWithoutNouveauLitInput
 }
 
 export type LitUncheckedCreateWithoutHospitalisationsInput = {
@@ -477,6 +529,8 @@ export type LitUncheckedCreateWithoutHospitalisationsInput = {
   numero: string
   chambreId: number
   statut?: string
+  anciensTransferts?: Prisma.TransfertUncheckedCreateNestedManyWithoutAncienLitInput
+  nouveauxTransferts?: Prisma.TransfertUncheckedCreateNestedManyWithoutNouveauLitInput
 }
 
 export type LitCreateOrConnectWithoutHospitalisationsInput = {
@@ -499,6 +553,8 @@ export type LitUpdateWithoutHospitalisationsInput = {
   numero?: Prisma.StringFieldUpdateOperationsInput | string
   statut?: Prisma.StringFieldUpdateOperationsInput | string
   chambre?: Prisma.ChambreUpdateOneRequiredWithoutLitsNestedInput
+  anciensTransferts?: Prisma.TransfertUpdateManyWithoutAncienLitNestedInput
+  nouveauxTransferts?: Prisma.TransfertUpdateManyWithoutNouveauLitNestedInput
 }
 
 export type LitUncheckedUpdateWithoutHospitalisationsInput = {
@@ -506,6 +562,108 @@ export type LitUncheckedUpdateWithoutHospitalisationsInput = {
   numero?: Prisma.StringFieldUpdateOperationsInput | string
   chambreId?: Prisma.IntFieldUpdateOperationsInput | number
   statut?: Prisma.StringFieldUpdateOperationsInput | string
+  anciensTransferts?: Prisma.TransfertUncheckedUpdateManyWithoutAncienLitNestedInput
+  nouveauxTransferts?: Prisma.TransfertUncheckedUpdateManyWithoutNouveauLitNestedInput
+}
+
+export type LitCreateWithoutAnciensTransfertsInput = {
+  numero: string
+  statut?: string
+  chambre: Prisma.ChambreCreateNestedOneWithoutLitsInput
+  hospitalisations?: Prisma.HospitalisationCreateNestedManyWithoutLitInput
+  nouveauxTransferts?: Prisma.TransfertCreateNestedManyWithoutNouveauLitInput
+}
+
+export type LitUncheckedCreateWithoutAnciensTransfertsInput = {
+  id?: number
+  numero: string
+  chambreId: number
+  statut?: string
+  hospitalisations?: Prisma.HospitalisationUncheckedCreateNestedManyWithoutLitInput
+  nouveauxTransferts?: Prisma.TransfertUncheckedCreateNestedManyWithoutNouveauLitInput
+}
+
+export type LitCreateOrConnectWithoutAnciensTransfertsInput = {
+  where: Prisma.LitWhereUniqueInput
+  create: Prisma.XOR<Prisma.LitCreateWithoutAnciensTransfertsInput, Prisma.LitUncheckedCreateWithoutAnciensTransfertsInput>
+}
+
+export type LitCreateWithoutNouveauxTransfertsInput = {
+  numero: string
+  statut?: string
+  chambre: Prisma.ChambreCreateNestedOneWithoutLitsInput
+  hospitalisations?: Prisma.HospitalisationCreateNestedManyWithoutLitInput
+  anciensTransferts?: Prisma.TransfertCreateNestedManyWithoutAncienLitInput
+}
+
+export type LitUncheckedCreateWithoutNouveauxTransfertsInput = {
+  id?: number
+  numero: string
+  chambreId: number
+  statut?: string
+  hospitalisations?: Prisma.HospitalisationUncheckedCreateNestedManyWithoutLitInput
+  anciensTransferts?: Prisma.TransfertUncheckedCreateNestedManyWithoutAncienLitInput
+}
+
+export type LitCreateOrConnectWithoutNouveauxTransfertsInput = {
+  where: Prisma.LitWhereUniqueInput
+  create: Prisma.XOR<Prisma.LitCreateWithoutNouveauxTransfertsInput, Prisma.LitUncheckedCreateWithoutNouveauxTransfertsInput>
+}
+
+export type LitUpsertWithoutAnciensTransfertsInput = {
+  update: Prisma.XOR<Prisma.LitUpdateWithoutAnciensTransfertsInput, Prisma.LitUncheckedUpdateWithoutAnciensTransfertsInput>
+  create: Prisma.XOR<Prisma.LitCreateWithoutAnciensTransfertsInput, Prisma.LitUncheckedCreateWithoutAnciensTransfertsInput>
+  where?: Prisma.LitWhereInput
+}
+
+export type LitUpdateToOneWithWhereWithoutAnciensTransfertsInput = {
+  where?: Prisma.LitWhereInput
+  data: Prisma.XOR<Prisma.LitUpdateWithoutAnciensTransfertsInput, Prisma.LitUncheckedUpdateWithoutAnciensTransfertsInput>
+}
+
+export type LitUpdateWithoutAnciensTransfertsInput = {
+  numero?: Prisma.StringFieldUpdateOperationsInput | string
+  statut?: Prisma.StringFieldUpdateOperationsInput | string
+  chambre?: Prisma.ChambreUpdateOneRequiredWithoutLitsNestedInput
+  hospitalisations?: Prisma.HospitalisationUpdateManyWithoutLitNestedInput
+  nouveauxTransferts?: Prisma.TransfertUpdateManyWithoutNouveauLitNestedInput
+}
+
+export type LitUncheckedUpdateWithoutAnciensTransfertsInput = {
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  numero?: Prisma.StringFieldUpdateOperationsInput | string
+  chambreId?: Prisma.IntFieldUpdateOperationsInput | number
+  statut?: Prisma.StringFieldUpdateOperationsInput | string
+  hospitalisations?: Prisma.HospitalisationUncheckedUpdateManyWithoutLitNestedInput
+  nouveauxTransferts?: Prisma.TransfertUncheckedUpdateManyWithoutNouveauLitNestedInput
+}
+
+export type LitUpsertWithoutNouveauxTransfertsInput = {
+  update: Prisma.XOR<Prisma.LitUpdateWithoutNouveauxTransfertsInput, Prisma.LitUncheckedUpdateWithoutNouveauxTransfertsInput>
+  create: Prisma.XOR<Prisma.LitCreateWithoutNouveauxTransfertsInput, Prisma.LitUncheckedCreateWithoutNouveauxTransfertsInput>
+  where?: Prisma.LitWhereInput
+}
+
+export type LitUpdateToOneWithWhereWithoutNouveauxTransfertsInput = {
+  where?: Prisma.LitWhereInput
+  data: Prisma.XOR<Prisma.LitUpdateWithoutNouveauxTransfertsInput, Prisma.LitUncheckedUpdateWithoutNouveauxTransfertsInput>
+}
+
+export type LitUpdateWithoutNouveauxTransfertsInput = {
+  numero?: Prisma.StringFieldUpdateOperationsInput | string
+  statut?: Prisma.StringFieldUpdateOperationsInput | string
+  chambre?: Prisma.ChambreUpdateOneRequiredWithoutLitsNestedInput
+  hospitalisations?: Prisma.HospitalisationUpdateManyWithoutLitNestedInput
+  anciensTransferts?: Prisma.TransfertUpdateManyWithoutAncienLitNestedInput
+}
+
+export type LitUncheckedUpdateWithoutNouveauxTransfertsInput = {
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  numero?: Prisma.StringFieldUpdateOperationsInput | string
+  chambreId?: Prisma.IntFieldUpdateOperationsInput | number
+  statut?: Prisma.StringFieldUpdateOperationsInput | string
+  hospitalisations?: Prisma.HospitalisationUncheckedUpdateManyWithoutLitNestedInput
+  anciensTransferts?: Prisma.TransfertUncheckedUpdateManyWithoutAncienLitNestedInput
 }
 
 export type LitCreateManyChambreInput = {
@@ -518,6 +676,8 @@ export type LitUpdateWithoutChambreInput = {
   numero?: Prisma.StringFieldUpdateOperationsInput | string
   statut?: Prisma.StringFieldUpdateOperationsInput | string
   hospitalisations?: Prisma.HospitalisationUpdateManyWithoutLitNestedInput
+  anciensTransferts?: Prisma.TransfertUpdateManyWithoutAncienLitNestedInput
+  nouveauxTransferts?: Prisma.TransfertUpdateManyWithoutNouveauLitNestedInput
 }
 
 export type LitUncheckedUpdateWithoutChambreInput = {
@@ -525,6 +685,8 @@ export type LitUncheckedUpdateWithoutChambreInput = {
   numero?: Prisma.StringFieldUpdateOperationsInput | string
   statut?: Prisma.StringFieldUpdateOperationsInput | string
   hospitalisations?: Prisma.HospitalisationUncheckedUpdateManyWithoutLitNestedInput
+  anciensTransferts?: Prisma.TransfertUncheckedUpdateManyWithoutAncienLitNestedInput
+  nouveauxTransferts?: Prisma.TransfertUncheckedUpdateManyWithoutNouveauLitNestedInput
 }
 
 export type LitUncheckedUpdateManyWithoutChambreInput = {
@@ -540,10 +702,14 @@ export type LitUncheckedUpdateManyWithoutChambreInput = {
 
 export type LitCountOutputType = {
   hospitalisations: number
+  anciensTransferts: number
+  nouveauxTransferts: number
 }
 
 export type LitCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   hospitalisations?: boolean | LitCountOutputTypeCountHospitalisationsArgs
+  anciensTransferts?: boolean | LitCountOutputTypeCountAnciensTransfertsArgs
+  nouveauxTransferts?: boolean | LitCountOutputTypeCountNouveauxTransfertsArgs
 }
 
 /**
@@ -563,6 +729,20 @@ export type LitCountOutputTypeCountHospitalisationsArgs<ExtArgs extends runtime.
   where?: Prisma.HospitalisationWhereInput
 }
 
+/**
+ * LitCountOutputType without action
+ */
+export type LitCountOutputTypeCountAnciensTransfertsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.TransfertWhereInput
+}
+
+/**
+ * LitCountOutputType without action
+ */
+export type LitCountOutputTypeCountNouveauxTransfertsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.TransfertWhereInput
+}
+
 
 export type LitSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -571,6 +751,8 @@ export type LitSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = ru
   statut?: boolean
   chambre?: boolean | Prisma.ChambreDefaultArgs<ExtArgs>
   hospitalisations?: boolean | Prisma.Lit$hospitalisationsArgs<ExtArgs>
+  anciensTransferts?: boolean | Prisma.Lit$anciensTransfertsArgs<ExtArgs>
+  nouveauxTransferts?: boolean | Prisma.Lit$nouveauxTransfertsArgs<ExtArgs>
   _count?: boolean | Prisma.LitCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["lit"]>
 
@@ -601,6 +783,8 @@ export type LitOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
 export type LitInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   chambre?: boolean | Prisma.ChambreDefaultArgs<ExtArgs>
   hospitalisations?: boolean | Prisma.Lit$hospitalisationsArgs<ExtArgs>
+  anciensTransferts?: boolean | Prisma.Lit$anciensTransfertsArgs<ExtArgs>
+  nouveauxTransferts?: boolean | Prisma.Lit$nouveauxTransfertsArgs<ExtArgs>
   _count?: boolean | Prisma.LitCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type LitIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -615,6 +799,8 @@ export type $LitPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   objects: {
     chambre: Prisma.$ChambrePayload<ExtArgs>
     hospitalisations: Prisma.$HospitalisationPayload<ExtArgs>[]
+    anciensTransferts: Prisma.$TransfertPayload<ExtArgs>[]
+    nouveauxTransferts: Prisma.$TransfertPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: number
@@ -1017,6 +1203,8 @@ export interface Prisma__LitClient<T, Null = never, ExtArgs extends runtime.Type
   readonly [Symbol.toStringTag]: "PrismaPromise"
   chambre<T extends Prisma.ChambreDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.ChambreDefaultArgs<ExtArgs>>): Prisma.Prisma__ChambreClient<runtime.Types.Result.GetResult<Prisma.$ChambrePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   hospitalisations<T extends Prisma.Lit$hospitalisationsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Lit$hospitalisationsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$HospitalisationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  anciensTransferts<T extends Prisma.Lit$anciensTransfertsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Lit$anciensTransfertsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$TransfertPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  nouveauxTransferts<T extends Prisma.Lit$nouveauxTransfertsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Lit$nouveauxTransfertsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$TransfertPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1470,6 +1658,54 @@ export type Lit$hospitalisationsArgs<ExtArgs extends runtime.Types.Extensions.In
   take?: number
   skip?: number
   distinct?: Prisma.HospitalisationScalarFieldEnum | Prisma.HospitalisationScalarFieldEnum[]
+}
+
+/**
+ * Lit.anciensTransferts
+ */
+export type Lit$anciensTransfertsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Transfert
+   */
+  select?: Prisma.TransfertSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Transfert
+   */
+  omit?: Prisma.TransfertOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.TransfertInclude<ExtArgs> | null
+  where?: Prisma.TransfertWhereInput
+  orderBy?: Prisma.TransfertOrderByWithRelationInput | Prisma.TransfertOrderByWithRelationInput[]
+  cursor?: Prisma.TransfertWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.TransfertScalarFieldEnum | Prisma.TransfertScalarFieldEnum[]
+}
+
+/**
+ * Lit.nouveauxTransferts
+ */
+export type Lit$nouveauxTransfertsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Transfert
+   */
+  select?: Prisma.TransfertSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Transfert
+   */
+  omit?: Prisma.TransfertOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.TransfertInclude<ExtArgs> | null
+  where?: Prisma.TransfertWhereInput
+  orderBy?: Prisma.TransfertOrderByWithRelationInput | Prisma.TransfertOrderByWithRelationInput[]
+  cursor?: Prisma.TransfertWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.TransfertScalarFieldEnum | Prisma.TransfertScalarFieldEnum[]
 }
 
 /**

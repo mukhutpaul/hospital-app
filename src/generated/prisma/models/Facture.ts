@@ -29,6 +29,12 @@ export type AggregateFacture = {
 export type FactureAvgAggregateOutputType = {
   id: number | null
   patientId: number | null
+  consultationId: number | null
+  admissionId: number | null
+  hospitalisationId: number | null
+  proformaId: number | null
+  montantBrut: number | null
+  reduction: number | null
   montantTotal: number | null
   montantPaye: number | null
   reste: number | null
@@ -37,6 +43,12 @@ export type FactureAvgAggregateOutputType = {
 export type FactureSumAggregateOutputType = {
   id: number | null
   patientId: number | null
+  consultationId: number | null
+  admissionId: number | null
+  hospitalisationId: number | null
+  proformaId: number | null
+  montantBrut: number | null
+  reduction: number | null
   montantTotal: number | null
   montantPaye: number | null
   reste: number | null
@@ -46,11 +58,18 @@ export type FactureMinAggregateOutputType = {
   id: number | null
   numero: string | null
   patientId: number | null
+  consultationId: number | null
+  admissionId: number | null
+  hospitalisationId: number | null
+  proformaId: number | null
   dateFacture: Date | null
   dateEcheance: Date | null
+  montantBrut: number | null
+  reduction: number | null
   montantTotal: number | null
   montantPaye: number | null
   reste: number | null
+  typeReduction: string | null
   devise: string | null
   statut: string | null
   createdAt: Date | null
@@ -61,11 +80,18 @@ export type FactureMaxAggregateOutputType = {
   id: number | null
   numero: string | null
   patientId: number | null
+  consultationId: number | null
+  admissionId: number | null
+  hospitalisationId: number | null
+  proformaId: number | null
   dateFacture: Date | null
   dateEcheance: Date | null
+  montantBrut: number | null
+  reduction: number | null
   montantTotal: number | null
   montantPaye: number | null
   reste: number | null
+  typeReduction: string | null
   devise: string | null
   statut: string | null
   createdAt: Date | null
@@ -76,11 +102,18 @@ export type FactureCountAggregateOutputType = {
   id: number
   numero: number
   patientId: number
+  consultationId: number
+  admissionId: number
+  hospitalisationId: number
+  proformaId: number
   dateFacture: number
   dateEcheance: number
+  montantBrut: number
+  reduction: number
   montantTotal: number
   montantPaye: number
   reste: number
+  typeReduction: number
   devise: number
   statut: number
   createdAt: number
@@ -92,6 +125,12 @@ export type FactureCountAggregateOutputType = {
 export type FactureAvgAggregateInputType = {
   id?: true
   patientId?: true
+  consultationId?: true
+  admissionId?: true
+  hospitalisationId?: true
+  proformaId?: true
+  montantBrut?: true
+  reduction?: true
   montantTotal?: true
   montantPaye?: true
   reste?: true
@@ -100,6 +139,12 @@ export type FactureAvgAggregateInputType = {
 export type FactureSumAggregateInputType = {
   id?: true
   patientId?: true
+  consultationId?: true
+  admissionId?: true
+  hospitalisationId?: true
+  proformaId?: true
+  montantBrut?: true
+  reduction?: true
   montantTotal?: true
   montantPaye?: true
   reste?: true
@@ -109,11 +154,18 @@ export type FactureMinAggregateInputType = {
   id?: true
   numero?: true
   patientId?: true
+  consultationId?: true
+  admissionId?: true
+  hospitalisationId?: true
+  proformaId?: true
   dateFacture?: true
   dateEcheance?: true
+  montantBrut?: true
+  reduction?: true
   montantTotal?: true
   montantPaye?: true
   reste?: true
+  typeReduction?: true
   devise?: true
   statut?: true
   createdAt?: true
@@ -124,11 +176,18 @@ export type FactureMaxAggregateInputType = {
   id?: true
   numero?: true
   patientId?: true
+  consultationId?: true
+  admissionId?: true
+  hospitalisationId?: true
+  proformaId?: true
   dateFacture?: true
   dateEcheance?: true
+  montantBrut?: true
+  reduction?: true
   montantTotal?: true
   montantPaye?: true
   reste?: true
+  typeReduction?: true
   devise?: true
   statut?: true
   createdAt?: true
@@ -139,11 +198,18 @@ export type FactureCountAggregateInputType = {
   id?: true
   numero?: true
   patientId?: true
+  consultationId?: true
+  admissionId?: true
+  hospitalisationId?: true
+  proformaId?: true
   dateFacture?: true
   dateEcheance?: true
+  montantBrut?: true
+  reduction?: true
   montantTotal?: true
   montantPaye?: true
   reste?: true
+  typeReduction?: true
   devise?: true
   statut?: true
   createdAt?: true
@@ -241,11 +307,18 @@ export type FactureGroupByOutputType = {
   id: number
   numero: string
   patientId: number
+  consultationId: number | null
+  admissionId: number | null
+  hospitalisationId: number | null
+  proformaId: number | null
   dateFacture: Date
   dateEcheance: Date | null
+  montantBrut: number
+  reduction: number
   montantTotal: number
   montantPaye: number
   reste: number
+  typeReduction: string | null
   devise: string
   statut: string
   createdAt: Date
@@ -279,16 +352,27 @@ export type FactureWhereInput = {
   id?: Prisma.IntFilter<"Facture"> | number
   numero?: Prisma.StringFilter<"Facture"> | string
   patientId?: Prisma.IntFilter<"Facture"> | number
+  consultationId?: Prisma.IntNullableFilter<"Facture"> | number | null
+  admissionId?: Prisma.IntNullableFilter<"Facture"> | number | null
+  hospitalisationId?: Prisma.IntNullableFilter<"Facture"> | number | null
+  proformaId?: Prisma.IntNullableFilter<"Facture"> | number | null
   dateFacture?: Prisma.DateTimeFilter<"Facture"> | Date | string
   dateEcheance?: Prisma.DateTimeNullableFilter<"Facture"> | Date | string | null
+  montantBrut?: Prisma.FloatFilter<"Facture"> | number
+  reduction?: Prisma.FloatFilter<"Facture"> | number
   montantTotal?: Prisma.FloatFilter<"Facture"> | number
   montantPaye?: Prisma.FloatFilter<"Facture"> | number
   reste?: Prisma.FloatFilter<"Facture"> | number
+  typeReduction?: Prisma.StringNullableFilter<"Facture"> | string | null
   devise?: Prisma.StringFilter<"Facture"> | string
   statut?: Prisma.StringFilter<"Facture"> | string
   createdAt?: Prisma.DateTimeFilter<"Facture"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Facture"> | Date | string
   patient?: Prisma.XOR<Prisma.PatientScalarRelationFilter, Prisma.PatientWhereInput>
+  consultation?: Prisma.XOR<Prisma.ConsultationNullableScalarRelationFilter, Prisma.ConsultationWhereInput> | null
+  admission?: Prisma.XOR<Prisma.AdmissionNullableScalarRelationFilter, Prisma.AdmissionWhereInput> | null
+  hospitalisation?: Prisma.XOR<Prisma.HospitalisationNullableScalarRelationFilter, Prisma.HospitalisationWhereInput> | null
+  proforma?: Prisma.XOR<Prisma.ProformaNullableScalarRelationFilter, Prisma.ProformaWhereInput> | null
   lignes?: Prisma.LigneFactureListRelationFilter
   paiements?: Prisma.PaiementListRelationFilter
 }
@@ -297,16 +381,27 @@ export type FactureOrderByWithRelationInput = {
   id?: Prisma.SortOrder
   numero?: Prisma.SortOrder
   patientId?: Prisma.SortOrder
+  consultationId?: Prisma.SortOrderInput | Prisma.SortOrder
+  admissionId?: Prisma.SortOrderInput | Prisma.SortOrder
+  hospitalisationId?: Prisma.SortOrderInput | Prisma.SortOrder
+  proformaId?: Prisma.SortOrderInput | Prisma.SortOrder
   dateFacture?: Prisma.SortOrder
   dateEcheance?: Prisma.SortOrderInput | Prisma.SortOrder
+  montantBrut?: Prisma.SortOrder
+  reduction?: Prisma.SortOrder
   montantTotal?: Prisma.SortOrder
   montantPaye?: Prisma.SortOrder
   reste?: Prisma.SortOrder
+  typeReduction?: Prisma.SortOrderInput | Prisma.SortOrder
   devise?: Prisma.SortOrder
   statut?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   patient?: Prisma.PatientOrderByWithRelationInput
+  consultation?: Prisma.ConsultationOrderByWithRelationInput
+  admission?: Prisma.AdmissionOrderByWithRelationInput
+  hospitalisation?: Prisma.HospitalisationOrderByWithRelationInput
+  proforma?: Prisma.ProformaOrderByWithRelationInput
   lignes?: Prisma.LigneFactureOrderByRelationAggregateInput
   paiements?: Prisma.PaiementOrderByRelationAggregateInput
 }
@@ -314,33 +409,51 @@ export type FactureOrderByWithRelationInput = {
 export type FactureWhereUniqueInput = Prisma.AtLeast<{
   id?: number
   numero?: string
+  proformaId?: number
   AND?: Prisma.FactureWhereInput | Prisma.FactureWhereInput[]
   OR?: Prisma.FactureWhereInput[]
   NOT?: Prisma.FactureWhereInput | Prisma.FactureWhereInput[]
   patientId?: Prisma.IntFilter<"Facture"> | number
+  consultationId?: Prisma.IntNullableFilter<"Facture"> | number | null
+  admissionId?: Prisma.IntNullableFilter<"Facture"> | number | null
+  hospitalisationId?: Prisma.IntNullableFilter<"Facture"> | number | null
   dateFacture?: Prisma.DateTimeFilter<"Facture"> | Date | string
   dateEcheance?: Prisma.DateTimeNullableFilter<"Facture"> | Date | string | null
+  montantBrut?: Prisma.FloatFilter<"Facture"> | number
+  reduction?: Prisma.FloatFilter<"Facture"> | number
   montantTotal?: Prisma.FloatFilter<"Facture"> | number
   montantPaye?: Prisma.FloatFilter<"Facture"> | number
   reste?: Prisma.FloatFilter<"Facture"> | number
+  typeReduction?: Prisma.StringNullableFilter<"Facture"> | string | null
   devise?: Prisma.StringFilter<"Facture"> | string
   statut?: Prisma.StringFilter<"Facture"> | string
   createdAt?: Prisma.DateTimeFilter<"Facture"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Facture"> | Date | string
   patient?: Prisma.XOR<Prisma.PatientScalarRelationFilter, Prisma.PatientWhereInput>
+  consultation?: Prisma.XOR<Prisma.ConsultationNullableScalarRelationFilter, Prisma.ConsultationWhereInput> | null
+  admission?: Prisma.XOR<Prisma.AdmissionNullableScalarRelationFilter, Prisma.AdmissionWhereInput> | null
+  hospitalisation?: Prisma.XOR<Prisma.HospitalisationNullableScalarRelationFilter, Prisma.HospitalisationWhereInput> | null
+  proforma?: Prisma.XOR<Prisma.ProformaNullableScalarRelationFilter, Prisma.ProformaWhereInput> | null
   lignes?: Prisma.LigneFactureListRelationFilter
   paiements?: Prisma.PaiementListRelationFilter
-}, "id" | "numero">
+}, "id" | "numero" | "proformaId">
 
 export type FactureOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   numero?: Prisma.SortOrder
   patientId?: Prisma.SortOrder
+  consultationId?: Prisma.SortOrderInput | Prisma.SortOrder
+  admissionId?: Prisma.SortOrderInput | Prisma.SortOrder
+  hospitalisationId?: Prisma.SortOrderInput | Prisma.SortOrder
+  proformaId?: Prisma.SortOrderInput | Prisma.SortOrder
   dateFacture?: Prisma.SortOrder
   dateEcheance?: Prisma.SortOrderInput | Prisma.SortOrder
+  montantBrut?: Prisma.SortOrder
+  reduction?: Prisma.SortOrder
   montantTotal?: Prisma.SortOrder
   montantPaye?: Prisma.SortOrder
   reste?: Prisma.SortOrder
+  typeReduction?: Prisma.SortOrderInput | Prisma.SortOrder
   devise?: Prisma.SortOrder
   statut?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -359,11 +472,18 @@ export type FactureScalarWhereWithAggregatesInput = {
   id?: Prisma.IntWithAggregatesFilter<"Facture"> | number
   numero?: Prisma.StringWithAggregatesFilter<"Facture"> | string
   patientId?: Prisma.IntWithAggregatesFilter<"Facture"> | number
+  consultationId?: Prisma.IntNullableWithAggregatesFilter<"Facture"> | number | null
+  admissionId?: Prisma.IntNullableWithAggregatesFilter<"Facture"> | number | null
+  hospitalisationId?: Prisma.IntNullableWithAggregatesFilter<"Facture"> | number | null
+  proformaId?: Prisma.IntNullableWithAggregatesFilter<"Facture"> | number | null
   dateFacture?: Prisma.DateTimeWithAggregatesFilter<"Facture"> | Date | string
   dateEcheance?: Prisma.DateTimeNullableWithAggregatesFilter<"Facture"> | Date | string | null
+  montantBrut?: Prisma.FloatWithAggregatesFilter<"Facture"> | number
+  reduction?: Prisma.FloatWithAggregatesFilter<"Facture"> | number
   montantTotal?: Prisma.FloatWithAggregatesFilter<"Facture"> | number
   montantPaye?: Prisma.FloatWithAggregatesFilter<"Facture"> | number
   reste?: Prisma.FloatWithAggregatesFilter<"Facture"> | number
+  typeReduction?: Prisma.StringNullableWithAggregatesFilter<"Facture"> | string | null
   devise?: Prisma.StringWithAggregatesFilter<"Facture"> | string
   statut?: Prisma.StringWithAggregatesFilter<"Facture"> | string
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Facture"> | Date | string
@@ -374,14 +494,21 @@ export type FactureCreateInput = {
   numero: string
   dateFacture?: Date | string
   dateEcheance?: Date | string | null
+  montantBrut?: number
+  reduction?: number
   montantTotal?: number
   montantPaye?: number
   reste?: number
+  typeReduction?: string | null
   devise?: string
   statut?: string
   createdAt?: Date | string
   updatedAt?: Date | string
   patient: Prisma.PatientCreateNestedOneWithoutFacturesInput
+  consultation?: Prisma.ConsultationCreateNestedOneWithoutFacturesInput
+  admission?: Prisma.AdmissionCreateNestedOneWithoutFacturesInput
+  hospitalisation?: Prisma.HospitalisationCreateNestedOneWithoutFacturesInput
+  proforma?: Prisma.ProformaCreateNestedOneWithoutFactureInput
   lignes?: Prisma.LigneFactureCreateNestedManyWithoutFactureInput
   paiements?: Prisma.PaiementCreateNestedManyWithoutFactureInput
 }
@@ -390,11 +517,18 @@ export type FactureUncheckedCreateInput = {
   id?: number
   numero: string
   patientId: number
+  consultationId?: number | null
+  admissionId?: number | null
+  hospitalisationId?: number | null
+  proformaId?: number | null
   dateFacture?: Date | string
   dateEcheance?: Date | string | null
+  montantBrut?: number
+  reduction?: number
   montantTotal?: number
   montantPaye?: number
   reste?: number
+  typeReduction?: string | null
   devise?: string
   statut?: string
   createdAt?: Date | string
@@ -407,14 +541,21 @@ export type FactureUpdateInput = {
   numero?: Prisma.StringFieldUpdateOperationsInput | string
   dateFacture?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   dateEcheance?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  montantBrut?: Prisma.FloatFieldUpdateOperationsInput | number
+  reduction?: Prisma.FloatFieldUpdateOperationsInput | number
   montantTotal?: Prisma.FloatFieldUpdateOperationsInput | number
   montantPaye?: Prisma.FloatFieldUpdateOperationsInput | number
   reste?: Prisma.FloatFieldUpdateOperationsInput | number
+  typeReduction?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   devise?: Prisma.StringFieldUpdateOperationsInput | string
   statut?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   patient?: Prisma.PatientUpdateOneRequiredWithoutFacturesNestedInput
+  consultation?: Prisma.ConsultationUpdateOneWithoutFacturesNestedInput
+  admission?: Prisma.AdmissionUpdateOneWithoutFacturesNestedInput
+  hospitalisation?: Prisma.HospitalisationUpdateOneWithoutFacturesNestedInput
+  proforma?: Prisma.ProformaUpdateOneWithoutFactureNestedInput
   lignes?: Prisma.LigneFactureUpdateManyWithoutFactureNestedInput
   paiements?: Prisma.PaiementUpdateManyWithoutFactureNestedInput
 }
@@ -423,11 +564,18 @@ export type FactureUncheckedUpdateInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   numero?: Prisma.StringFieldUpdateOperationsInput | string
   patientId?: Prisma.IntFieldUpdateOperationsInput | number
+  consultationId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  admissionId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  hospitalisationId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  proformaId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   dateFacture?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   dateEcheance?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  montantBrut?: Prisma.FloatFieldUpdateOperationsInput | number
+  reduction?: Prisma.FloatFieldUpdateOperationsInput | number
   montantTotal?: Prisma.FloatFieldUpdateOperationsInput | number
   montantPaye?: Prisma.FloatFieldUpdateOperationsInput | number
   reste?: Prisma.FloatFieldUpdateOperationsInput | number
+  typeReduction?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   devise?: Prisma.StringFieldUpdateOperationsInput | string
   statut?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -440,11 +588,18 @@ export type FactureCreateManyInput = {
   id?: number
   numero: string
   patientId: number
+  consultationId?: number | null
+  admissionId?: number | null
+  hospitalisationId?: number | null
+  proformaId?: number | null
   dateFacture?: Date | string
   dateEcheance?: Date | string | null
+  montantBrut?: number
+  reduction?: number
   montantTotal?: number
   montantPaye?: number
   reste?: number
+  typeReduction?: string | null
   devise?: string
   statut?: string
   createdAt?: Date | string
@@ -455,9 +610,12 @@ export type FactureUpdateManyMutationInput = {
   numero?: Prisma.StringFieldUpdateOperationsInput | string
   dateFacture?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   dateEcheance?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  montantBrut?: Prisma.FloatFieldUpdateOperationsInput | number
+  reduction?: Prisma.FloatFieldUpdateOperationsInput | number
   montantTotal?: Prisma.FloatFieldUpdateOperationsInput | number
   montantPaye?: Prisma.FloatFieldUpdateOperationsInput | number
   reste?: Prisma.FloatFieldUpdateOperationsInput | number
+  typeReduction?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   devise?: Prisma.StringFieldUpdateOperationsInput | string
   statut?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -468,11 +626,18 @@ export type FactureUncheckedUpdateManyInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   numero?: Prisma.StringFieldUpdateOperationsInput | string
   patientId?: Prisma.IntFieldUpdateOperationsInput | number
+  consultationId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  admissionId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  hospitalisationId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  proformaId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   dateFacture?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   dateEcheance?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  montantBrut?: Prisma.FloatFieldUpdateOperationsInput | number
+  reduction?: Prisma.FloatFieldUpdateOperationsInput | number
   montantTotal?: Prisma.FloatFieldUpdateOperationsInput | number
   montantPaye?: Prisma.FloatFieldUpdateOperationsInput | number
   reste?: Prisma.FloatFieldUpdateOperationsInput | number
+  typeReduction?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   devise?: Prisma.StringFieldUpdateOperationsInput | string
   statut?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -493,11 +658,18 @@ export type FactureCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   numero?: Prisma.SortOrder
   patientId?: Prisma.SortOrder
+  consultationId?: Prisma.SortOrder
+  admissionId?: Prisma.SortOrder
+  hospitalisationId?: Prisma.SortOrder
+  proformaId?: Prisma.SortOrder
   dateFacture?: Prisma.SortOrder
   dateEcheance?: Prisma.SortOrder
+  montantBrut?: Prisma.SortOrder
+  reduction?: Prisma.SortOrder
   montantTotal?: Prisma.SortOrder
   montantPaye?: Prisma.SortOrder
   reste?: Prisma.SortOrder
+  typeReduction?: Prisma.SortOrder
   devise?: Prisma.SortOrder
   statut?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -507,6 +679,12 @@ export type FactureCountOrderByAggregateInput = {
 export type FactureAvgOrderByAggregateInput = {
   id?: Prisma.SortOrder
   patientId?: Prisma.SortOrder
+  consultationId?: Prisma.SortOrder
+  admissionId?: Prisma.SortOrder
+  hospitalisationId?: Prisma.SortOrder
+  proformaId?: Prisma.SortOrder
+  montantBrut?: Prisma.SortOrder
+  reduction?: Prisma.SortOrder
   montantTotal?: Prisma.SortOrder
   montantPaye?: Prisma.SortOrder
   reste?: Prisma.SortOrder
@@ -516,11 +694,18 @@ export type FactureMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
   numero?: Prisma.SortOrder
   patientId?: Prisma.SortOrder
+  consultationId?: Prisma.SortOrder
+  admissionId?: Prisma.SortOrder
+  hospitalisationId?: Prisma.SortOrder
+  proformaId?: Prisma.SortOrder
   dateFacture?: Prisma.SortOrder
   dateEcheance?: Prisma.SortOrder
+  montantBrut?: Prisma.SortOrder
+  reduction?: Prisma.SortOrder
   montantTotal?: Prisma.SortOrder
   montantPaye?: Prisma.SortOrder
   reste?: Prisma.SortOrder
+  typeReduction?: Prisma.SortOrder
   devise?: Prisma.SortOrder
   statut?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -531,11 +716,18 @@ export type FactureMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
   numero?: Prisma.SortOrder
   patientId?: Prisma.SortOrder
+  consultationId?: Prisma.SortOrder
+  admissionId?: Prisma.SortOrder
+  hospitalisationId?: Prisma.SortOrder
+  proformaId?: Prisma.SortOrder
   dateFacture?: Prisma.SortOrder
   dateEcheance?: Prisma.SortOrder
+  montantBrut?: Prisma.SortOrder
+  reduction?: Prisma.SortOrder
   montantTotal?: Prisma.SortOrder
   montantPaye?: Prisma.SortOrder
   reste?: Prisma.SortOrder
+  typeReduction?: Prisma.SortOrder
   devise?: Prisma.SortOrder
   statut?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -545,6 +737,12 @@ export type FactureMinOrderByAggregateInput = {
 export type FactureSumOrderByAggregateInput = {
   id?: Prisma.SortOrder
   patientId?: Prisma.SortOrder
+  consultationId?: Prisma.SortOrder
+  admissionId?: Prisma.SortOrder
+  hospitalisationId?: Prisma.SortOrder
+  proformaId?: Prisma.SortOrder
+  montantBrut?: Prisma.SortOrder
+  reduction?: Prisma.SortOrder
   montantTotal?: Prisma.SortOrder
   montantPaye?: Prisma.SortOrder
   reste?: Prisma.SortOrder
@@ -602,6 +800,132 @@ export type FactureUncheckedUpdateManyWithoutPatientNestedInput = {
   deleteMany?: Prisma.FactureScalarWhereInput | Prisma.FactureScalarWhereInput[]
 }
 
+export type FactureCreateNestedManyWithoutAdmissionInput = {
+  create?: Prisma.XOR<Prisma.FactureCreateWithoutAdmissionInput, Prisma.FactureUncheckedCreateWithoutAdmissionInput> | Prisma.FactureCreateWithoutAdmissionInput[] | Prisma.FactureUncheckedCreateWithoutAdmissionInput[]
+  connectOrCreate?: Prisma.FactureCreateOrConnectWithoutAdmissionInput | Prisma.FactureCreateOrConnectWithoutAdmissionInput[]
+  createMany?: Prisma.FactureCreateManyAdmissionInputEnvelope
+  connect?: Prisma.FactureWhereUniqueInput | Prisma.FactureWhereUniqueInput[]
+}
+
+export type FactureUncheckedCreateNestedManyWithoutAdmissionInput = {
+  create?: Prisma.XOR<Prisma.FactureCreateWithoutAdmissionInput, Prisma.FactureUncheckedCreateWithoutAdmissionInput> | Prisma.FactureCreateWithoutAdmissionInput[] | Prisma.FactureUncheckedCreateWithoutAdmissionInput[]
+  connectOrCreate?: Prisma.FactureCreateOrConnectWithoutAdmissionInput | Prisma.FactureCreateOrConnectWithoutAdmissionInput[]
+  createMany?: Prisma.FactureCreateManyAdmissionInputEnvelope
+  connect?: Prisma.FactureWhereUniqueInput | Prisma.FactureWhereUniqueInput[]
+}
+
+export type FactureUpdateManyWithoutAdmissionNestedInput = {
+  create?: Prisma.XOR<Prisma.FactureCreateWithoutAdmissionInput, Prisma.FactureUncheckedCreateWithoutAdmissionInput> | Prisma.FactureCreateWithoutAdmissionInput[] | Prisma.FactureUncheckedCreateWithoutAdmissionInput[]
+  connectOrCreate?: Prisma.FactureCreateOrConnectWithoutAdmissionInput | Prisma.FactureCreateOrConnectWithoutAdmissionInput[]
+  upsert?: Prisma.FactureUpsertWithWhereUniqueWithoutAdmissionInput | Prisma.FactureUpsertWithWhereUniqueWithoutAdmissionInput[]
+  createMany?: Prisma.FactureCreateManyAdmissionInputEnvelope
+  set?: Prisma.FactureWhereUniqueInput | Prisma.FactureWhereUniqueInput[]
+  disconnect?: Prisma.FactureWhereUniqueInput | Prisma.FactureWhereUniqueInput[]
+  delete?: Prisma.FactureWhereUniqueInput | Prisma.FactureWhereUniqueInput[]
+  connect?: Prisma.FactureWhereUniqueInput | Prisma.FactureWhereUniqueInput[]
+  update?: Prisma.FactureUpdateWithWhereUniqueWithoutAdmissionInput | Prisma.FactureUpdateWithWhereUniqueWithoutAdmissionInput[]
+  updateMany?: Prisma.FactureUpdateManyWithWhereWithoutAdmissionInput | Prisma.FactureUpdateManyWithWhereWithoutAdmissionInput[]
+  deleteMany?: Prisma.FactureScalarWhereInput | Prisma.FactureScalarWhereInput[]
+}
+
+export type FactureUncheckedUpdateManyWithoutAdmissionNestedInput = {
+  create?: Prisma.XOR<Prisma.FactureCreateWithoutAdmissionInput, Prisma.FactureUncheckedCreateWithoutAdmissionInput> | Prisma.FactureCreateWithoutAdmissionInput[] | Prisma.FactureUncheckedCreateWithoutAdmissionInput[]
+  connectOrCreate?: Prisma.FactureCreateOrConnectWithoutAdmissionInput | Prisma.FactureCreateOrConnectWithoutAdmissionInput[]
+  upsert?: Prisma.FactureUpsertWithWhereUniqueWithoutAdmissionInput | Prisma.FactureUpsertWithWhereUniqueWithoutAdmissionInput[]
+  createMany?: Prisma.FactureCreateManyAdmissionInputEnvelope
+  set?: Prisma.FactureWhereUniqueInput | Prisma.FactureWhereUniqueInput[]
+  disconnect?: Prisma.FactureWhereUniqueInput | Prisma.FactureWhereUniqueInput[]
+  delete?: Prisma.FactureWhereUniqueInput | Prisma.FactureWhereUniqueInput[]
+  connect?: Prisma.FactureWhereUniqueInput | Prisma.FactureWhereUniqueInput[]
+  update?: Prisma.FactureUpdateWithWhereUniqueWithoutAdmissionInput | Prisma.FactureUpdateWithWhereUniqueWithoutAdmissionInput[]
+  updateMany?: Prisma.FactureUpdateManyWithWhereWithoutAdmissionInput | Prisma.FactureUpdateManyWithWhereWithoutAdmissionInput[]
+  deleteMany?: Prisma.FactureScalarWhereInput | Prisma.FactureScalarWhereInput[]
+}
+
+export type FactureCreateNestedManyWithoutConsultationInput = {
+  create?: Prisma.XOR<Prisma.FactureCreateWithoutConsultationInput, Prisma.FactureUncheckedCreateWithoutConsultationInput> | Prisma.FactureCreateWithoutConsultationInput[] | Prisma.FactureUncheckedCreateWithoutConsultationInput[]
+  connectOrCreate?: Prisma.FactureCreateOrConnectWithoutConsultationInput | Prisma.FactureCreateOrConnectWithoutConsultationInput[]
+  createMany?: Prisma.FactureCreateManyConsultationInputEnvelope
+  connect?: Prisma.FactureWhereUniqueInput | Prisma.FactureWhereUniqueInput[]
+}
+
+export type FactureUncheckedCreateNestedManyWithoutConsultationInput = {
+  create?: Prisma.XOR<Prisma.FactureCreateWithoutConsultationInput, Prisma.FactureUncheckedCreateWithoutConsultationInput> | Prisma.FactureCreateWithoutConsultationInput[] | Prisma.FactureUncheckedCreateWithoutConsultationInput[]
+  connectOrCreate?: Prisma.FactureCreateOrConnectWithoutConsultationInput | Prisma.FactureCreateOrConnectWithoutConsultationInput[]
+  createMany?: Prisma.FactureCreateManyConsultationInputEnvelope
+  connect?: Prisma.FactureWhereUniqueInput | Prisma.FactureWhereUniqueInput[]
+}
+
+export type FactureUpdateManyWithoutConsultationNestedInput = {
+  create?: Prisma.XOR<Prisma.FactureCreateWithoutConsultationInput, Prisma.FactureUncheckedCreateWithoutConsultationInput> | Prisma.FactureCreateWithoutConsultationInput[] | Prisma.FactureUncheckedCreateWithoutConsultationInput[]
+  connectOrCreate?: Prisma.FactureCreateOrConnectWithoutConsultationInput | Prisma.FactureCreateOrConnectWithoutConsultationInput[]
+  upsert?: Prisma.FactureUpsertWithWhereUniqueWithoutConsultationInput | Prisma.FactureUpsertWithWhereUniqueWithoutConsultationInput[]
+  createMany?: Prisma.FactureCreateManyConsultationInputEnvelope
+  set?: Prisma.FactureWhereUniqueInput | Prisma.FactureWhereUniqueInput[]
+  disconnect?: Prisma.FactureWhereUniqueInput | Prisma.FactureWhereUniqueInput[]
+  delete?: Prisma.FactureWhereUniqueInput | Prisma.FactureWhereUniqueInput[]
+  connect?: Prisma.FactureWhereUniqueInput | Prisma.FactureWhereUniqueInput[]
+  update?: Prisma.FactureUpdateWithWhereUniqueWithoutConsultationInput | Prisma.FactureUpdateWithWhereUniqueWithoutConsultationInput[]
+  updateMany?: Prisma.FactureUpdateManyWithWhereWithoutConsultationInput | Prisma.FactureUpdateManyWithWhereWithoutConsultationInput[]
+  deleteMany?: Prisma.FactureScalarWhereInput | Prisma.FactureScalarWhereInput[]
+}
+
+export type FactureUncheckedUpdateManyWithoutConsultationNestedInput = {
+  create?: Prisma.XOR<Prisma.FactureCreateWithoutConsultationInput, Prisma.FactureUncheckedCreateWithoutConsultationInput> | Prisma.FactureCreateWithoutConsultationInput[] | Prisma.FactureUncheckedCreateWithoutConsultationInput[]
+  connectOrCreate?: Prisma.FactureCreateOrConnectWithoutConsultationInput | Prisma.FactureCreateOrConnectWithoutConsultationInput[]
+  upsert?: Prisma.FactureUpsertWithWhereUniqueWithoutConsultationInput | Prisma.FactureUpsertWithWhereUniqueWithoutConsultationInput[]
+  createMany?: Prisma.FactureCreateManyConsultationInputEnvelope
+  set?: Prisma.FactureWhereUniqueInput | Prisma.FactureWhereUniqueInput[]
+  disconnect?: Prisma.FactureWhereUniqueInput | Prisma.FactureWhereUniqueInput[]
+  delete?: Prisma.FactureWhereUniqueInput | Prisma.FactureWhereUniqueInput[]
+  connect?: Prisma.FactureWhereUniqueInput | Prisma.FactureWhereUniqueInput[]
+  update?: Prisma.FactureUpdateWithWhereUniqueWithoutConsultationInput | Prisma.FactureUpdateWithWhereUniqueWithoutConsultationInput[]
+  updateMany?: Prisma.FactureUpdateManyWithWhereWithoutConsultationInput | Prisma.FactureUpdateManyWithWhereWithoutConsultationInput[]
+  deleteMany?: Prisma.FactureScalarWhereInput | Prisma.FactureScalarWhereInput[]
+}
+
+export type FactureCreateNestedManyWithoutHospitalisationInput = {
+  create?: Prisma.XOR<Prisma.FactureCreateWithoutHospitalisationInput, Prisma.FactureUncheckedCreateWithoutHospitalisationInput> | Prisma.FactureCreateWithoutHospitalisationInput[] | Prisma.FactureUncheckedCreateWithoutHospitalisationInput[]
+  connectOrCreate?: Prisma.FactureCreateOrConnectWithoutHospitalisationInput | Prisma.FactureCreateOrConnectWithoutHospitalisationInput[]
+  createMany?: Prisma.FactureCreateManyHospitalisationInputEnvelope
+  connect?: Prisma.FactureWhereUniqueInput | Prisma.FactureWhereUniqueInput[]
+}
+
+export type FactureUncheckedCreateNestedManyWithoutHospitalisationInput = {
+  create?: Prisma.XOR<Prisma.FactureCreateWithoutHospitalisationInput, Prisma.FactureUncheckedCreateWithoutHospitalisationInput> | Prisma.FactureCreateWithoutHospitalisationInput[] | Prisma.FactureUncheckedCreateWithoutHospitalisationInput[]
+  connectOrCreate?: Prisma.FactureCreateOrConnectWithoutHospitalisationInput | Prisma.FactureCreateOrConnectWithoutHospitalisationInput[]
+  createMany?: Prisma.FactureCreateManyHospitalisationInputEnvelope
+  connect?: Prisma.FactureWhereUniqueInput | Prisma.FactureWhereUniqueInput[]
+}
+
+export type FactureUpdateManyWithoutHospitalisationNestedInput = {
+  create?: Prisma.XOR<Prisma.FactureCreateWithoutHospitalisationInput, Prisma.FactureUncheckedCreateWithoutHospitalisationInput> | Prisma.FactureCreateWithoutHospitalisationInput[] | Prisma.FactureUncheckedCreateWithoutHospitalisationInput[]
+  connectOrCreate?: Prisma.FactureCreateOrConnectWithoutHospitalisationInput | Prisma.FactureCreateOrConnectWithoutHospitalisationInput[]
+  upsert?: Prisma.FactureUpsertWithWhereUniqueWithoutHospitalisationInput | Prisma.FactureUpsertWithWhereUniqueWithoutHospitalisationInput[]
+  createMany?: Prisma.FactureCreateManyHospitalisationInputEnvelope
+  set?: Prisma.FactureWhereUniqueInput | Prisma.FactureWhereUniqueInput[]
+  disconnect?: Prisma.FactureWhereUniqueInput | Prisma.FactureWhereUniqueInput[]
+  delete?: Prisma.FactureWhereUniqueInput | Prisma.FactureWhereUniqueInput[]
+  connect?: Prisma.FactureWhereUniqueInput | Prisma.FactureWhereUniqueInput[]
+  update?: Prisma.FactureUpdateWithWhereUniqueWithoutHospitalisationInput | Prisma.FactureUpdateWithWhereUniqueWithoutHospitalisationInput[]
+  updateMany?: Prisma.FactureUpdateManyWithWhereWithoutHospitalisationInput | Prisma.FactureUpdateManyWithWhereWithoutHospitalisationInput[]
+  deleteMany?: Prisma.FactureScalarWhereInput | Prisma.FactureScalarWhereInput[]
+}
+
+export type FactureUncheckedUpdateManyWithoutHospitalisationNestedInput = {
+  create?: Prisma.XOR<Prisma.FactureCreateWithoutHospitalisationInput, Prisma.FactureUncheckedCreateWithoutHospitalisationInput> | Prisma.FactureCreateWithoutHospitalisationInput[] | Prisma.FactureUncheckedCreateWithoutHospitalisationInput[]
+  connectOrCreate?: Prisma.FactureCreateOrConnectWithoutHospitalisationInput | Prisma.FactureCreateOrConnectWithoutHospitalisationInput[]
+  upsert?: Prisma.FactureUpsertWithWhereUniqueWithoutHospitalisationInput | Prisma.FactureUpsertWithWhereUniqueWithoutHospitalisationInput[]
+  createMany?: Prisma.FactureCreateManyHospitalisationInputEnvelope
+  set?: Prisma.FactureWhereUniqueInput | Prisma.FactureWhereUniqueInput[]
+  disconnect?: Prisma.FactureWhereUniqueInput | Prisma.FactureWhereUniqueInput[]
+  delete?: Prisma.FactureWhereUniqueInput | Prisma.FactureWhereUniqueInput[]
+  connect?: Prisma.FactureWhereUniqueInput | Prisma.FactureWhereUniqueInput[]
+  update?: Prisma.FactureUpdateWithWhereUniqueWithoutHospitalisationInput | Prisma.FactureUpdateWithWhereUniqueWithoutHospitalisationInput[]
+  updateMany?: Prisma.FactureUpdateManyWithWhereWithoutHospitalisationInput | Prisma.FactureUpdateManyWithWhereWithoutHospitalisationInput[]
+  deleteMany?: Prisma.FactureScalarWhereInput | Prisma.FactureScalarWhereInput[]
+}
+
 export type FactureCreateNestedOneWithoutLignesInput = {
   create?: Prisma.XOR<Prisma.FactureCreateWithoutLignesInput, Prisma.FactureUncheckedCreateWithoutLignesInput>
   connectOrCreate?: Prisma.FactureCreateOrConnectWithoutLignesInput
@@ -632,17 +956,56 @@ export type FactureUpdateOneWithoutPaiementsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.FactureUpdateToOneWithWhereWithoutPaiementsInput, Prisma.FactureUpdateWithoutPaiementsInput>, Prisma.FactureUncheckedUpdateWithoutPaiementsInput>
 }
 
+export type FactureCreateNestedOneWithoutProformaInput = {
+  create?: Prisma.XOR<Prisma.FactureCreateWithoutProformaInput, Prisma.FactureUncheckedCreateWithoutProformaInput>
+  connectOrCreate?: Prisma.FactureCreateOrConnectWithoutProformaInput
+  connect?: Prisma.FactureWhereUniqueInput
+}
+
+export type FactureUncheckedCreateNestedOneWithoutProformaInput = {
+  create?: Prisma.XOR<Prisma.FactureCreateWithoutProformaInput, Prisma.FactureUncheckedCreateWithoutProformaInput>
+  connectOrCreate?: Prisma.FactureCreateOrConnectWithoutProformaInput
+  connect?: Prisma.FactureWhereUniqueInput
+}
+
+export type FactureUpdateOneWithoutProformaNestedInput = {
+  create?: Prisma.XOR<Prisma.FactureCreateWithoutProformaInput, Prisma.FactureUncheckedCreateWithoutProformaInput>
+  connectOrCreate?: Prisma.FactureCreateOrConnectWithoutProformaInput
+  upsert?: Prisma.FactureUpsertWithoutProformaInput
+  disconnect?: Prisma.FactureWhereInput | boolean
+  delete?: Prisma.FactureWhereInput | boolean
+  connect?: Prisma.FactureWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.FactureUpdateToOneWithWhereWithoutProformaInput, Prisma.FactureUpdateWithoutProformaInput>, Prisma.FactureUncheckedUpdateWithoutProformaInput>
+}
+
+export type FactureUncheckedUpdateOneWithoutProformaNestedInput = {
+  create?: Prisma.XOR<Prisma.FactureCreateWithoutProformaInput, Prisma.FactureUncheckedCreateWithoutProformaInput>
+  connectOrCreate?: Prisma.FactureCreateOrConnectWithoutProformaInput
+  upsert?: Prisma.FactureUpsertWithoutProformaInput
+  disconnect?: Prisma.FactureWhereInput | boolean
+  delete?: Prisma.FactureWhereInput | boolean
+  connect?: Prisma.FactureWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.FactureUpdateToOneWithWhereWithoutProformaInput, Prisma.FactureUpdateWithoutProformaInput>, Prisma.FactureUncheckedUpdateWithoutProformaInput>
+}
+
 export type FactureCreateWithoutPatientInput = {
   numero: string
   dateFacture?: Date | string
   dateEcheance?: Date | string | null
+  montantBrut?: number
+  reduction?: number
   montantTotal?: number
   montantPaye?: number
   reste?: number
+  typeReduction?: string | null
   devise?: string
   statut?: string
   createdAt?: Date | string
   updatedAt?: Date | string
+  consultation?: Prisma.ConsultationCreateNestedOneWithoutFacturesInput
+  admission?: Prisma.AdmissionCreateNestedOneWithoutFacturesInput
+  hospitalisation?: Prisma.HospitalisationCreateNestedOneWithoutFacturesInput
+  proforma?: Prisma.ProformaCreateNestedOneWithoutFactureInput
   lignes?: Prisma.LigneFactureCreateNestedManyWithoutFactureInput
   paiements?: Prisma.PaiementCreateNestedManyWithoutFactureInput
 }
@@ -650,11 +1013,18 @@ export type FactureCreateWithoutPatientInput = {
 export type FactureUncheckedCreateWithoutPatientInput = {
   id?: number
   numero: string
+  consultationId?: number | null
+  admissionId?: number | null
+  hospitalisationId?: number | null
+  proformaId?: number | null
   dateFacture?: Date | string
   dateEcheance?: Date | string | null
+  montantBrut?: number
+  reduction?: number
   montantTotal?: number
   montantPaye?: number
   reste?: number
+  typeReduction?: string | null
   devise?: string
   statut?: string
   createdAt?: Date | string
@@ -695,29 +1065,253 @@ export type FactureScalarWhereInput = {
   id?: Prisma.IntFilter<"Facture"> | number
   numero?: Prisma.StringFilter<"Facture"> | string
   patientId?: Prisma.IntFilter<"Facture"> | number
+  consultationId?: Prisma.IntNullableFilter<"Facture"> | number | null
+  admissionId?: Prisma.IntNullableFilter<"Facture"> | number | null
+  hospitalisationId?: Prisma.IntNullableFilter<"Facture"> | number | null
+  proformaId?: Prisma.IntNullableFilter<"Facture"> | number | null
   dateFacture?: Prisma.DateTimeFilter<"Facture"> | Date | string
   dateEcheance?: Prisma.DateTimeNullableFilter<"Facture"> | Date | string | null
+  montantBrut?: Prisma.FloatFilter<"Facture"> | number
+  reduction?: Prisma.FloatFilter<"Facture"> | number
   montantTotal?: Prisma.FloatFilter<"Facture"> | number
   montantPaye?: Prisma.FloatFilter<"Facture"> | number
   reste?: Prisma.FloatFilter<"Facture"> | number
+  typeReduction?: Prisma.StringNullableFilter<"Facture"> | string | null
   devise?: Prisma.StringFilter<"Facture"> | string
   statut?: Prisma.StringFilter<"Facture"> | string
   createdAt?: Prisma.DateTimeFilter<"Facture"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Facture"> | Date | string
 }
 
-export type FactureCreateWithoutLignesInput = {
+export type FactureCreateWithoutAdmissionInput = {
   numero: string
   dateFacture?: Date | string
   dateEcheance?: Date | string | null
+  montantBrut?: number
+  reduction?: number
   montantTotal?: number
   montantPaye?: number
   reste?: number
+  typeReduction?: string | null
   devise?: string
   statut?: string
   createdAt?: Date | string
   updatedAt?: Date | string
   patient: Prisma.PatientCreateNestedOneWithoutFacturesInput
+  consultation?: Prisma.ConsultationCreateNestedOneWithoutFacturesInput
+  hospitalisation?: Prisma.HospitalisationCreateNestedOneWithoutFacturesInput
+  proforma?: Prisma.ProformaCreateNestedOneWithoutFactureInput
+  lignes?: Prisma.LigneFactureCreateNestedManyWithoutFactureInput
+  paiements?: Prisma.PaiementCreateNestedManyWithoutFactureInput
+}
+
+export type FactureUncheckedCreateWithoutAdmissionInput = {
+  id?: number
+  numero: string
+  patientId: number
+  consultationId?: number | null
+  hospitalisationId?: number | null
+  proformaId?: number | null
+  dateFacture?: Date | string
+  dateEcheance?: Date | string | null
+  montantBrut?: number
+  reduction?: number
+  montantTotal?: number
+  montantPaye?: number
+  reste?: number
+  typeReduction?: string | null
+  devise?: string
+  statut?: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  lignes?: Prisma.LigneFactureUncheckedCreateNestedManyWithoutFactureInput
+  paiements?: Prisma.PaiementUncheckedCreateNestedManyWithoutFactureInput
+}
+
+export type FactureCreateOrConnectWithoutAdmissionInput = {
+  where: Prisma.FactureWhereUniqueInput
+  create: Prisma.XOR<Prisma.FactureCreateWithoutAdmissionInput, Prisma.FactureUncheckedCreateWithoutAdmissionInput>
+}
+
+export type FactureCreateManyAdmissionInputEnvelope = {
+  data: Prisma.FactureCreateManyAdmissionInput | Prisma.FactureCreateManyAdmissionInput[]
+}
+
+export type FactureUpsertWithWhereUniqueWithoutAdmissionInput = {
+  where: Prisma.FactureWhereUniqueInput
+  update: Prisma.XOR<Prisma.FactureUpdateWithoutAdmissionInput, Prisma.FactureUncheckedUpdateWithoutAdmissionInput>
+  create: Prisma.XOR<Prisma.FactureCreateWithoutAdmissionInput, Prisma.FactureUncheckedCreateWithoutAdmissionInput>
+}
+
+export type FactureUpdateWithWhereUniqueWithoutAdmissionInput = {
+  where: Prisma.FactureWhereUniqueInput
+  data: Prisma.XOR<Prisma.FactureUpdateWithoutAdmissionInput, Prisma.FactureUncheckedUpdateWithoutAdmissionInput>
+}
+
+export type FactureUpdateManyWithWhereWithoutAdmissionInput = {
+  where: Prisma.FactureScalarWhereInput
+  data: Prisma.XOR<Prisma.FactureUpdateManyMutationInput, Prisma.FactureUncheckedUpdateManyWithoutAdmissionInput>
+}
+
+export type FactureCreateWithoutConsultationInput = {
+  numero: string
+  dateFacture?: Date | string
+  dateEcheance?: Date | string | null
+  montantBrut?: number
+  reduction?: number
+  montantTotal?: number
+  montantPaye?: number
+  reste?: number
+  typeReduction?: string | null
+  devise?: string
+  statut?: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  patient: Prisma.PatientCreateNestedOneWithoutFacturesInput
+  admission?: Prisma.AdmissionCreateNestedOneWithoutFacturesInput
+  hospitalisation?: Prisma.HospitalisationCreateNestedOneWithoutFacturesInput
+  proforma?: Prisma.ProformaCreateNestedOneWithoutFactureInput
+  lignes?: Prisma.LigneFactureCreateNestedManyWithoutFactureInput
+  paiements?: Prisma.PaiementCreateNestedManyWithoutFactureInput
+}
+
+export type FactureUncheckedCreateWithoutConsultationInput = {
+  id?: number
+  numero: string
+  patientId: number
+  admissionId?: number | null
+  hospitalisationId?: number | null
+  proformaId?: number | null
+  dateFacture?: Date | string
+  dateEcheance?: Date | string | null
+  montantBrut?: number
+  reduction?: number
+  montantTotal?: number
+  montantPaye?: number
+  reste?: number
+  typeReduction?: string | null
+  devise?: string
+  statut?: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  lignes?: Prisma.LigneFactureUncheckedCreateNestedManyWithoutFactureInput
+  paiements?: Prisma.PaiementUncheckedCreateNestedManyWithoutFactureInput
+}
+
+export type FactureCreateOrConnectWithoutConsultationInput = {
+  where: Prisma.FactureWhereUniqueInput
+  create: Prisma.XOR<Prisma.FactureCreateWithoutConsultationInput, Prisma.FactureUncheckedCreateWithoutConsultationInput>
+}
+
+export type FactureCreateManyConsultationInputEnvelope = {
+  data: Prisma.FactureCreateManyConsultationInput | Prisma.FactureCreateManyConsultationInput[]
+}
+
+export type FactureUpsertWithWhereUniqueWithoutConsultationInput = {
+  where: Prisma.FactureWhereUniqueInput
+  update: Prisma.XOR<Prisma.FactureUpdateWithoutConsultationInput, Prisma.FactureUncheckedUpdateWithoutConsultationInput>
+  create: Prisma.XOR<Prisma.FactureCreateWithoutConsultationInput, Prisma.FactureUncheckedCreateWithoutConsultationInput>
+}
+
+export type FactureUpdateWithWhereUniqueWithoutConsultationInput = {
+  where: Prisma.FactureWhereUniqueInput
+  data: Prisma.XOR<Prisma.FactureUpdateWithoutConsultationInput, Prisma.FactureUncheckedUpdateWithoutConsultationInput>
+}
+
+export type FactureUpdateManyWithWhereWithoutConsultationInput = {
+  where: Prisma.FactureScalarWhereInput
+  data: Prisma.XOR<Prisma.FactureUpdateManyMutationInput, Prisma.FactureUncheckedUpdateManyWithoutConsultationInput>
+}
+
+export type FactureCreateWithoutHospitalisationInput = {
+  numero: string
+  dateFacture?: Date | string
+  dateEcheance?: Date | string | null
+  montantBrut?: number
+  reduction?: number
+  montantTotal?: number
+  montantPaye?: number
+  reste?: number
+  typeReduction?: string | null
+  devise?: string
+  statut?: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  patient: Prisma.PatientCreateNestedOneWithoutFacturesInput
+  consultation?: Prisma.ConsultationCreateNestedOneWithoutFacturesInput
+  admission?: Prisma.AdmissionCreateNestedOneWithoutFacturesInput
+  proforma?: Prisma.ProformaCreateNestedOneWithoutFactureInput
+  lignes?: Prisma.LigneFactureCreateNestedManyWithoutFactureInput
+  paiements?: Prisma.PaiementCreateNestedManyWithoutFactureInput
+}
+
+export type FactureUncheckedCreateWithoutHospitalisationInput = {
+  id?: number
+  numero: string
+  patientId: number
+  consultationId?: number | null
+  admissionId?: number | null
+  proformaId?: number | null
+  dateFacture?: Date | string
+  dateEcheance?: Date | string | null
+  montantBrut?: number
+  reduction?: number
+  montantTotal?: number
+  montantPaye?: number
+  reste?: number
+  typeReduction?: string | null
+  devise?: string
+  statut?: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  lignes?: Prisma.LigneFactureUncheckedCreateNestedManyWithoutFactureInput
+  paiements?: Prisma.PaiementUncheckedCreateNestedManyWithoutFactureInput
+}
+
+export type FactureCreateOrConnectWithoutHospitalisationInput = {
+  where: Prisma.FactureWhereUniqueInput
+  create: Prisma.XOR<Prisma.FactureCreateWithoutHospitalisationInput, Prisma.FactureUncheckedCreateWithoutHospitalisationInput>
+}
+
+export type FactureCreateManyHospitalisationInputEnvelope = {
+  data: Prisma.FactureCreateManyHospitalisationInput | Prisma.FactureCreateManyHospitalisationInput[]
+}
+
+export type FactureUpsertWithWhereUniqueWithoutHospitalisationInput = {
+  where: Prisma.FactureWhereUniqueInput
+  update: Prisma.XOR<Prisma.FactureUpdateWithoutHospitalisationInput, Prisma.FactureUncheckedUpdateWithoutHospitalisationInput>
+  create: Prisma.XOR<Prisma.FactureCreateWithoutHospitalisationInput, Prisma.FactureUncheckedCreateWithoutHospitalisationInput>
+}
+
+export type FactureUpdateWithWhereUniqueWithoutHospitalisationInput = {
+  where: Prisma.FactureWhereUniqueInput
+  data: Prisma.XOR<Prisma.FactureUpdateWithoutHospitalisationInput, Prisma.FactureUncheckedUpdateWithoutHospitalisationInput>
+}
+
+export type FactureUpdateManyWithWhereWithoutHospitalisationInput = {
+  where: Prisma.FactureScalarWhereInput
+  data: Prisma.XOR<Prisma.FactureUpdateManyMutationInput, Prisma.FactureUncheckedUpdateManyWithoutHospitalisationInput>
+}
+
+export type FactureCreateWithoutLignesInput = {
+  numero: string
+  dateFacture?: Date | string
+  dateEcheance?: Date | string | null
+  montantBrut?: number
+  reduction?: number
+  montantTotal?: number
+  montantPaye?: number
+  reste?: number
+  typeReduction?: string | null
+  devise?: string
+  statut?: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  patient: Prisma.PatientCreateNestedOneWithoutFacturesInput
+  consultation?: Prisma.ConsultationCreateNestedOneWithoutFacturesInput
+  admission?: Prisma.AdmissionCreateNestedOneWithoutFacturesInput
+  hospitalisation?: Prisma.HospitalisationCreateNestedOneWithoutFacturesInput
+  proforma?: Prisma.ProformaCreateNestedOneWithoutFactureInput
   paiements?: Prisma.PaiementCreateNestedManyWithoutFactureInput
 }
 
@@ -725,11 +1319,18 @@ export type FactureUncheckedCreateWithoutLignesInput = {
   id?: number
   numero: string
   patientId: number
+  consultationId?: number | null
+  admissionId?: number | null
+  hospitalisationId?: number | null
+  proformaId?: number | null
   dateFacture?: Date | string
   dateEcheance?: Date | string | null
+  montantBrut?: number
+  reduction?: number
   montantTotal?: number
   montantPaye?: number
   reste?: number
+  typeReduction?: string | null
   devise?: string
   statut?: string
   createdAt?: Date | string
@@ -757,14 +1358,21 @@ export type FactureUpdateWithoutLignesInput = {
   numero?: Prisma.StringFieldUpdateOperationsInput | string
   dateFacture?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   dateEcheance?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  montantBrut?: Prisma.FloatFieldUpdateOperationsInput | number
+  reduction?: Prisma.FloatFieldUpdateOperationsInput | number
   montantTotal?: Prisma.FloatFieldUpdateOperationsInput | number
   montantPaye?: Prisma.FloatFieldUpdateOperationsInput | number
   reste?: Prisma.FloatFieldUpdateOperationsInput | number
+  typeReduction?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   devise?: Prisma.StringFieldUpdateOperationsInput | string
   statut?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   patient?: Prisma.PatientUpdateOneRequiredWithoutFacturesNestedInput
+  consultation?: Prisma.ConsultationUpdateOneWithoutFacturesNestedInput
+  admission?: Prisma.AdmissionUpdateOneWithoutFacturesNestedInput
+  hospitalisation?: Prisma.HospitalisationUpdateOneWithoutFacturesNestedInput
+  proforma?: Prisma.ProformaUpdateOneWithoutFactureNestedInput
   paiements?: Prisma.PaiementUpdateManyWithoutFactureNestedInput
 }
 
@@ -772,11 +1380,18 @@ export type FactureUncheckedUpdateWithoutLignesInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   numero?: Prisma.StringFieldUpdateOperationsInput | string
   patientId?: Prisma.IntFieldUpdateOperationsInput | number
+  consultationId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  admissionId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  hospitalisationId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  proformaId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   dateFacture?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   dateEcheance?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  montantBrut?: Prisma.FloatFieldUpdateOperationsInput | number
+  reduction?: Prisma.FloatFieldUpdateOperationsInput | number
   montantTotal?: Prisma.FloatFieldUpdateOperationsInput | number
   montantPaye?: Prisma.FloatFieldUpdateOperationsInput | number
   reste?: Prisma.FloatFieldUpdateOperationsInput | number
+  typeReduction?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   devise?: Prisma.StringFieldUpdateOperationsInput | string
   statut?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -788,14 +1403,21 @@ export type FactureCreateWithoutPaiementsInput = {
   numero: string
   dateFacture?: Date | string
   dateEcheance?: Date | string | null
+  montantBrut?: number
+  reduction?: number
   montantTotal?: number
   montantPaye?: number
   reste?: number
+  typeReduction?: string | null
   devise?: string
   statut?: string
   createdAt?: Date | string
   updatedAt?: Date | string
   patient: Prisma.PatientCreateNestedOneWithoutFacturesInput
+  consultation?: Prisma.ConsultationCreateNestedOneWithoutFacturesInput
+  admission?: Prisma.AdmissionCreateNestedOneWithoutFacturesInput
+  hospitalisation?: Prisma.HospitalisationCreateNestedOneWithoutFacturesInput
+  proforma?: Prisma.ProformaCreateNestedOneWithoutFactureInput
   lignes?: Prisma.LigneFactureCreateNestedManyWithoutFactureInput
 }
 
@@ -803,11 +1425,18 @@ export type FactureUncheckedCreateWithoutPaiementsInput = {
   id?: number
   numero: string
   patientId: number
+  consultationId?: number | null
+  admissionId?: number | null
+  hospitalisationId?: number | null
+  proformaId?: number | null
   dateFacture?: Date | string
   dateEcheance?: Date | string | null
+  montantBrut?: number
+  reduction?: number
   montantTotal?: number
   montantPaye?: number
   reste?: number
+  typeReduction?: string | null
   devise?: string
   statut?: string
   createdAt?: Date | string
@@ -835,14 +1464,21 @@ export type FactureUpdateWithoutPaiementsInput = {
   numero?: Prisma.StringFieldUpdateOperationsInput | string
   dateFacture?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   dateEcheance?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  montantBrut?: Prisma.FloatFieldUpdateOperationsInput | number
+  reduction?: Prisma.FloatFieldUpdateOperationsInput | number
   montantTotal?: Prisma.FloatFieldUpdateOperationsInput | number
   montantPaye?: Prisma.FloatFieldUpdateOperationsInput | number
   reste?: Prisma.FloatFieldUpdateOperationsInput | number
+  typeReduction?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   devise?: Prisma.StringFieldUpdateOperationsInput | string
   statut?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   patient?: Prisma.PatientUpdateOneRequiredWithoutFacturesNestedInput
+  consultation?: Prisma.ConsultationUpdateOneWithoutFacturesNestedInput
+  admission?: Prisma.AdmissionUpdateOneWithoutFacturesNestedInput
+  hospitalisation?: Prisma.HospitalisationUpdateOneWithoutFacturesNestedInput
+  proforma?: Prisma.ProformaUpdateOneWithoutFactureNestedInput
   lignes?: Prisma.LigneFactureUpdateManyWithoutFactureNestedInput
 }
 
@@ -850,11 +1486,18 @@ export type FactureUncheckedUpdateWithoutPaiementsInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   numero?: Prisma.StringFieldUpdateOperationsInput | string
   patientId?: Prisma.IntFieldUpdateOperationsInput | number
+  consultationId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  admissionId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  hospitalisationId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  proformaId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   dateFacture?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   dateEcheance?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  montantBrut?: Prisma.FloatFieldUpdateOperationsInput | number
+  reduction?: Prisma.FloatFieldUpdateOperationsInput | number
   montantTotal?: Prisma.FloatFieldUpdateOperationsInput | number
   montantPaye?: Prisma.FloatFieldUpdateOperationsInput | number
   reste?: Prisma.FloatFieldUpdateOperationsInput | number
+  typeReduction?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   devise?: Prisma.StringFieldUpdateOperationsInput | string
   statut?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -862,14 +1505,127 @@ export type FactureUncheckedUpdateWithoutPaiementsInput = {
   lignes?: Prisma.LigneFactureUncheckedUpdateManyWithoutFactureNestedInput
 }
 
-export type FactureCreateManyPatientInput = {
-  id?: number
+export type FactureCreateWithoutProformaInput = {
   numero: string
   dateFacture?: Date | string
   dateEcheance?: Date | string | null
+  montantBrut?: number
+  reduction?: number
   montantTotal?: number
   montantPaye?: number
   reste?: number
+  typeReduction?: string | null
+  devise?: string
+  statut?: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  patient: Prisma.PatientCreateNestedOneWithoutFacturesInput
+  consultation?: Prisma.ConsultationCreateNestedOneWithoutFacturesInput
+  admission?: Prisma.AdmissionCreateNestedOneWithoutFacturesInput
+  hospitalisation?: Prisma.HospitalisationCreateNestedOneWithoutFacturesInput
+  lignes?: Prisma.LigneFactureCreateNestedManyWithoutFactureInput
+  paiements?: Prisma.PaiementCreateNestedManyWithoutFactureInput
+}
+
+export type FactureUncheckedCreateWithoutProformaInput = {
+  id?: number
+  numero: string
+  patientId: number
+  consultationId?: number | null
+  admissionId?: number | null
+  hospitalisationId?: number | null
+  dateFacture?: Date | string
+  dateEcheance?: Date | string | null
+  montantBrut?: number
+  reduction?: number
+  montantTotal?: number
+  montantPaye?: number
+  reste?: number
+  typeReduction?: string | null
+  devise?: string
+  statut?: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  lignes?: Prisma.LigneFactureUncheckedCreateNestedManyWithoutFactureInput
+  paiements?: Prisma.PaiementUncheckedCreateNestedManyWithoutFactureInput
+}
+
+export type FactureCreateOrConnectWithoutProformaInput = {
+  where: Prisma.FactureWhereUniqueInput
+  create: Prisma.XOR<Prisma.FactureCreateWithoutProformaInput, Prisma.FactureUncheckedCreateWithoutProformaInput>
+}
+
+export type FactureUpsertWithoutProformaInput = {
+  update: Prisma.XOR<Prisma.FactureUpdateWithoutProformaInput, Prisma.FactureUncheckedUpdateWithoutProformaInput>
+  create: Prisma.XOR<Prisma.FactureCreateWithoutProformaInput, Prisma.FactureUncheckedCreateWithoutProformaInput>
+  where?: Prisma.FactureWhereInput
+}
+
+export type FactureUpdateToOneWithWhereWithoutProformaInput = {
+  where?: Prisma.FactureWhereInput
+  data: Prisma.XOR<Prisma.FactureUpdateWithoutProformaInput, Prisma.FactureUncheckedUpdateWithoutProformaInput>
+}
+
+export type FactureUpdateWithoutProformaInput = {
+  numero?: Prisma.StringFieldUpdateOperationsInput | string
+  dateFacture?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  dateEcheance?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  montantBrut?: Prisma.FloatFieldUpdateOperationsInput | number
+  reduction?: Prisma.FloatFieldUpdateOperationsInput | number
+  montantTotal?: Prisma.FloatFieldUpdateOperationsInput | number
+  montantPaye?: Prisma.FloatFieldUpdateOperationsInput | number
+  reste?: Prisma.FloatFieldUpdateOperationsInput | number
+  typeReduction?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  devise?: Prisma.StringFieldUpdateOperationsInput | string
+  statut?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  patient?: Prisma.PatientUpdateOneRequiredWithoutFacturesNestedInput
+  consultation?: Prisma.ConsultationUpdateOneWithoutFacturesNestedInput
+  admission?: Prisma.AdmissionUpdateOneWithoutFacturesNestedInput
+  hospitalisation?: Prisma.HospitalisationUpdateOneWithoutFacturesNestedInput
+  lignes?: Prisma.LigneFactureUpdateManyWithoutFactureNestedInput
+  paiements?: Prisma.PaiementUpdateManyWithoutFactureNestedInput
+}
+
+export type FactureUncheckedUpdateWithoutProformaInput = {
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  numero?: Prisma.StringFieldUpdateOperationsInput | string
+  patientId?: Prisma.IntFieldUpdateOperationsInput | number
+  consultationId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  admissionId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  hospitalisationId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  dateFacture?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  dateEcheance?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  montantBrut?: Prisma.FloatFieldUpdateOperationsInput | number
+  reduction?: Prisma.FloatFieldUpdateOperationsInput | number
+  montantTotal?: Prisma.FloatFieldUpdateOperationsInput | number
+  montantPaye?: Prisma.FloatFieldUpdateOperationsInput | number
+  reste?: Prisma.FloatFieldUpdateOperationsInput | number
+  typeReduction?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  devise?: Prisma.StringFieldUpdateOperationsInput | string
+  statut?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  lignes?: Prisma.LigneFactureUncheckedUpdateManyWithoutFactureNestedInput
+  paiements?: Prisma.PaiementUncheckedUpdateManyWithoutFactureNestedInput
+}
+
+export type FactureCreateManyPatientInput = {
+  id?: number
+  numero: string
+  consultationId?: number | null
+  admissionId?: number | null
+  hospitalisationId?: number | null
+  proformaId?: number | null
+  dateFacture?: Date | string
+  dateEcheance?: Date | string | null
+  montantBrut?: number
+  reduction?: number
+  montantTotal?: number
+  montantPaye?: number
+  reste?: number
+  typeReduction?: string | null
   devise?: string
   statut?: string
   createdAt?: Date | string
@@ -880,13 +1636,20 @@ export type FactureUpdateWithoutPatientInput = {
   numero?: Prisma.StringFieldUpdateOperationsInput | string
   dateFacture?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   dateEcheance?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  montantBrut?: Prisma.FloatFieldUpdateOperationsInput | number
+  reduction?: Prisma.FloatFieldUpdateOperationsInput | number
   montantTotal?: Prisma.FloatFieldUpdateOperationsInput | number
   montantPaye?: Prisma.FloatFieldUpdateOperationsInput | number
   reste?: Prisma.FloatFieldUpdateOperationsInput | number
+  typeReduction?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   devise?: Prisma.StringFieldUpdateOperationsInput | string
   statut?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  consultation?: Prisma.ConsultationUpdateOneWithoutFacturesNestedInput
+  admission?: Prisma.AdmissionUpdateOneWithoutFacturesNestedInput
+  hospitalisation?: Prisma.HospitalisationUpdateOneWithoutFacturesNestedInput
+  proforma?: Prisma.ProformaUpdateOneWithoutFactureNestedInput
   lignes?: Prisma.LigneFactureUpdateManyWithoutFactureNestedInput
   paiements?: Prisma.PaiementUpdateManyWithoutFactureNestedInput
 }
@@ -894,11 +1657,18 @@ export type FactureUpdateWithoutPatientInput = {
 export type FactureUncheckedUpdateWithoutPatientInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   numero?: Prisma.StringFieldUpdateOperationsInput | string
+  consultationId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  admissionId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  hospitalisationId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  proformaId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   dateFacture?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   dateEcheance?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  montantBrut?: Prisma.FloatFieldUpdateOperationsInput | number
+  reduction?: Prisma.FloatFieldUpdateOperationsInput | number
   montantTotal?: Prisma.FloatFieldUpdateOperationsInput | number
   montantPaye?: Prisma.FloatFieldUpdateOperationsInput | number
   reste?: Prisma.FloatFieldUpdateOperationsInput | number
+  typeReduction?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   devise?: Prisma.StringFieldUpdateOperationsInput | string
   statut?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -910,11 +1680,279 @@ export type FactureUncheckedUpdateWithoutPatientInput = {
 export type FactureUncheckedUpdateManyWithoutPatientInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   numero?: Prisma.StringFieldUpdateOperationsInput | string
+  consultationId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  admissionId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  hospitalisationId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  proformaId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   dateFacture?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   dateEcheance?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  montantBrut?: Prisma.FloatFieldUpdateOperationsInput | number
+  reduction?: Prisma.FloatFieldUpdateOperationsInput | number
   montantTotal?: Prisma.FloatFieldUpdateOperationsInput | number
   montantPaye?: Prisma.FloatFieldUpdateOperationsInput | number
   reste?: Prisma.FloatFieldUpdateOperationsInput | number
+  typeReduction?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  devise?: Prisma.StringFieldUpdateOperationsInput | string
+  statut?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
+export type FactureCreateManyAdmissionInput = {
+  id?: number
+  numero: string
+  patientId: number
+  consultationId?: number | null
+  hospitalisationId?: number | null
+  proformaId?: number | null
+  dateFacture?: Date | string
+  dateEcheance?: Date | string | null
+  montantBrut?: number
+  reduction?: number
+  montantTotal?: number
+  montantPaye?: number
+  reste?: number
+  typeReduction?: string | null
+  devise?: string
+  statut?: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+}
+
+export type FactureUpdateWithoutAdmissionInput = {
+  numero?: Prisma.StringFieldUpdateOperationsInput | string
+  dateFacture?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  dateEcheance?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  montantBrut?: Prisma.FloatFieldUpdateOperationsInput | number
+  reduction?: Prisma.FloatFieldUpdateOperationsInput | number
+  montantTotal?: Prisma.FloatFieldUpdateOperationsInput | number
+  montantPaye?: Prisma.FloatFieldUpdateOperationsInput | number
+  reste?: Prisma.FloatFieldUpdateOperationsInput | number
+  typeReduction?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  devise?: Prisma.StringFieldUpdateOperationsInput | string
+  statut?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  patient?: Prisma.PatientUpdateOneRequiredWithoutFacturesNestedInput
+  consultation?: Prisma.ConsultationUpdateOneWithoutFacturesNestedInput
+  hospitalisation?: Prisma.HospitalisationUpdateOneWithoutFacturesNestedInput
+  proforma?: Prisma.ProformaUpdateOneWithoutFactureNestedInput
+  lignes?: Prisma.LigneFactureUpdateManyWithoutFactureNestedInput
+  paiements?: Prisma.PaiementUpdateManyWithoutFactureNestedInput
+}
+
+export type FactureUncheckedUpdateWithoutAdmissionInput = {
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  numero?: Prisma.StringFieldUpdateOperationsInput | string
+  patientId?: Prisma.IntFieldUpdateOperationsInput | number
+  consultationId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  hospitalisationId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  proformaId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  dateFacture?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  dateEcheance?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  montantBrut?: Prisma.FloatFieldUpdateOperationsInput | number
+  reduction?: Prisma.FloatFieldUpdateOperationsInput | number
+  montantTotal?: Prisma.FloatFieldUpdateOperationsInput | number
+  montantPaye?: Prisma.FloatFieldUpdateOperationsInput | number
+  reste?: Prisma.FloatFieldUpdateOperationsInput | number
+  typeReduction?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  devise?: Prisma.StringFieldUpdateOperationsInput | string
+  statut?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  lignes?: Prisma.LigneFactureUncheckedUpdateManyWithoutFactureNestedInput
+  paiements?: Prisma.PaiementUncheckedUpdateManyWithoutFactureNestedInput
+}
+
+export type FactureUncheckedUpdateManyWithoutAdmissionInput = {
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  numero?: Prisma.StringFieldUpdateOperationsInput | string
+  patientId?: Prisma.IntFieldUpdateOperationsInput | number
+  consultationId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  hospitalisationId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  proformaId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  dateFacture?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  dateEcheance?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  montantBrut?: Prisma.FloatFieldUpdateOperationsInput | number
+  reduction?: Prisma.FloatFieldUpdateOperationsInput | number
+  montantTotal?: Prisma.FloatFieldUpdateOperationsInput | number
+  montantPaye?: Prisma.FloatFieldUpdateOperationsInput | number
+  reste?: Prisma.FloatFieldUpdateOperationsInput | number
+  typeReduction?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  devise?: Prisma.StringFieldUpdateOperationsInput | string
+  statut?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
+export type FactureCreateManyConsultationInput = {
+  id?: number
+  numero: string
+  patientId: number
+  admissionId?: number | null
+  hospitalisationId?: number | null
+  proformaId?: number | null
+  dateFacture?: Date | string
+  dateEcheance?: Date | string | null
+  montantBrut?: number
+  reduction?: number
+  montantTotal?: number
+  montantPaye?: number
+  reste?: number
+  typeReduction?: string | null
+  devise?: string
+  statut?: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+}
+
+export type FactureUpdateWithoutConsultationInput = {
+  numero?: Prisma.StringFieldUpdateOperationsInput | string
+  dateFacture?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  dateEcheance?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  montantBrut?: Prisma.FloatFieldUpdateOperationsInput | number
+  reduction?: Prisma.FloatFieldUpdateOperationsInput | number
+  montantTotal?: Prisma.FloatFieldUpdateOperationsInput | number
+  montantPaye?: Prisma.FloatFieldUpdateOperationsInput | number
+  reste?: Prisma.FloatFieldUpdateOperationsInput | number
+  typeReduction?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  devise?: Prisma.StringFieldUpdateOperationsInput | string
+  statut?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  patient?: Prisma.PatientUpdateOneRequiredWithoutFacturesNestedInput
+  admission?: Prisma.AdmissionUpdateOneWithoutFacturesNestedInput
+  hospitalisation?: Prisma.HospitalisationUpdateOneWithoutFacturesNestedInput
+  proforma?: Prisma.ProformaUpdateOneWithoutFactureNestedInput
+  lignes?: Prisma.LigneFactureUpdateManyWithoutFactureNestedInput
+  paiements?: Prisma.PaiementUpdateManyWithoutFactureNestedInput
+}
+
+export type FactureUncheckedUpdateWithoutConsultationInput = {
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  numero?: Prisma.StringFieldUpdateOperationsInput | string
+  patientId?: Prisma.IntFieldUpdateOperationsInput | number
+  admissionId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  hospitalisationId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  proformaId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  dateFacture?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  dateEcheance?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  montantBrut?: Prisma.FloatFieldUpdateOperationsInput | number
+  reduction?: Prisma.FloatFieldUpdateOperationsInput | number
+  montantTotal?: Prisma.FloatFieldUpdateOperationsInput | number
+  montantPaye?: Prisma.FloatFieldUpdateOperationsInput | number
+  reste?: Prisma.FloatFieldUpdateOperationsInput | number
+  typeReduction?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  devise?: Prisma.StringFieldUpdateOperationsInput | string
+  statut?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  lignes?: Prisma.LigneFactureUncheckedUpdateManyWithoutFactureNestedInput
+  paiements?: Prisma.PaiementUncheckedUpdateManyWithoutFactureNestedInput
+}
+
+export type FactureUncheckedUpdateManyWithoutConsultationInput = {
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  numero?: Prisma.StringFieldUpdateOperationsInput | string
+  patientId?: Prisma.IntFieldUpdateOperationsInput | number
+  admissionId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  hospitalisationId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  proformaId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  dateFacture?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  dateEcheance?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  montantBrut?: Prisma.FloatFieldUpdateOperationsInput | number
+  reduction?: Prisma.FloatFieldUpdateOperationsInput | number
+  montantTotal?: Prisma.FloatFieldUpdateOperationsInput | number
+  montantPaye?: Prisma.FloatFieldUpdateOperationsInput | number
+  reste?: Prisma.FloatFieldUpdateOperationsInput | number
+  typeReduction?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  devise?: Prisma.StringFieldUpdateOperationsInput | string
+  statut?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
+export type FactureCreateManyHospitalisationInput = {
+  id?: number
+  numero: string
+  patientId: number
+  consultationId?: number | null
+  admissionId?: number | null
+  proformaId?: number | null
+  dateFacture?: Date | string
+  dateEcheance?: Date | string | null
+  montantBrut?: number
+  reduction?: number
+  montantTotal?: number
+  montantPaye?: number
+  reste?: number
+  typeReduction?: string | null
+  devise?: string
+  statut?: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+}
+
+export type FactureUpdateWithoutHospitalisationInput = {
+  numero?: Prisma.StringFieldUpdateOperationsInput | string
+  dateFacture?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  dateEcheance?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  montantBrut?: Prisma.FloatFieldUpdateOperationsInput | number
+  reduction?: Prisma.FloatFieldUpdateOperationsInput | number
+  montantTotal?: Prisma.FloatFieldUpdateOperationsInput | number
+  montantPaye?: Prisma.FloatFieldUpdateOperationsInput | number
+  reste?: Prisma.FloatFieldUpdateOperationsInput | number
+  typeReduction?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  devise?: Prisma.StringFieldUpdateOperationsInput | string
+  statut?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  patient?: Prisma.PatientUpdateOneRequiredWithoutFacturesNestedInput
+  consultation?: Prisma.ConsultationUpdateOneWithoutFacturesNestedInput
+  admission?: Prisma.AdmissionUpdateOneWithoutFacturesNestedInput
+  proforma?: Prisma.ProformaUpdateOneWithoutFactureNestedInput
+  lignes?: Prisma.LigneFactureUpdateManyWithoutFactureNestedInput
+  paiements?: Prisma.PaiementUpdateManyWithoutFactureNestedInput
+}
+
+export type FactureUncheckedUpdateWithoutHospitalisationInput = {
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  numero?: Prisma.StringFieldUpdateOperationsInput | string
+  patientId?: Prisma.IntFieldUpdateOperationsInput | number
+  consultationId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  admissionId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  proformaId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  dateFacture?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  dateEcheance?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  montantBrut?: Prisma.FloatFieldUpdateOperationsInput | number
+  reduction?: Prisma.FloatFieldUpdateOperationsInput | number
+  montantTotal?: Prisma.FloatFieldUpdateOperationsInput | number
+  montantPaye?: Prisma.FloatFieldUpdateOperationsInput | number
+  reste?: Prisma.FloatFieldUpdateOperationsInput | number
+  typeReduction?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  devise?: Prisma.StringFieldUpdateOperationsInput | string
+  statut?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  lignes?: Prisma.LigneFactureUncheckedUpdateManyWithoutFactureNestedInput
+  paiements?: Prisma.PaiementUncheckedUpdateManyWithoutFactureNestedInput
+}
+
+export type FactureUncheckedUpdateManyWithoutHospitalisationInput = {
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  numero?: Prisma.StringFieldUpdateOperationsInput | string
+  patientId?: Prisma.IntFieldUpdateOperationsInput | number
+  consultationId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  admissionId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  proformaId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  dateFacture?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  dateEcheance?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  montantBrut?: Prisma.FloatFieldUpdateOperationsInput | number
+  reduction?: Prisma.FloatFieldUpdateOperationsInput | number
+  montantTotal?: Prisma.FloatFieldUpdateOperationsInput | number
+  montantPaye?: Prisma.FloatFieldUpdateOperationsInput | number
+  reste?: Prisma.FloatFieldUpdateOperationsInput | number
+  typeReduction?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   devise?: Prisma.StringFieldUpdateOperationsInput | string
   statut?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -965,16 +2003,27 @@ export type FactureSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   id?: boolean
   numero?: boolean
   patientId?: boolean
+  consultationId?: boolean
+  admissionId?: boolean
+  hospitalisationId?: boolean
+  proformaId?: boolean
   dateFacture?: boolean
   dateEcheance?: boolean
+  montantBrut?: boolean
+  reduction?: boolean
   montantTotal?: boolean
   montantPaye?: boolean
   reste?: boolean
+  typeReduction?: boolean
   devise?: boolean
   statut?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   patient?: boolean | Prisma.PatientDefaultArgs<ExtArgs>
+  consultation?: boolean | Prisma.Facture$consultationArgs<ExtArgs>
+  admission?: boolean | Prisma.Facture$admissionArgs<ExtArgs>
+  hospitalisation?: boolean | Prisma.Facture$hospitalisationArgs<ExtArgs>
+  proforma?: boolean | Prisma.Facture$proformaArgs<ExtArgs>
   lignes?: boolean | Prisma.Facture$lignesArgs<ExtArgs>
   paiements?: boolean | Prisma.Facture$paiementsArgs<ExtArgs>
   _count?: boolean | Prisma.FactureCountOutputTypeDefaultArgs<ExtArgs>
@@ -984,67 +2033,112 @@ export type FactureSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Exten
   id?: boolean
   numero?: boolean
   patientId?: boolean
+  consultationId?: boolean
+  admissionId?: boolean
+  hospitalisationId?: boolean
+  proformaId?: boolean
   dateFacture?: boolean
   dateEcheance?: boolean
+  montantBrut?: boolean
+  reduction?: boolean
   montantTotal?: boolean
   montantPaye?: boolean
   reste?: boolean
+  typeReduction?: boolean
   devise?: boolean
   statut?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   patient?: boolean | Prisma.PatientDefaultArgs<ExtArgs>
+  consultation?: boolean | Prisma.Facture$consultationArgs<ExtArgs>
+  admission?: boolean | Prisma.Facture$admissionArgs<ExtArgs>
+  hospitalisation?: boolean | Prisma.Facture$hospitalisationArgs<ExtArgs>
+  proforma?: boolean | Prisma.Facture$proformaArgs<ExtArgs>
 }, ExtArgs["result"]["facture"]>
 
 export type FactureSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   numero?: boolean
   patientId?: boolean
+  consultationId?: boolean
+  admissionId?: boolean
+  hospitalisationId?: boolean
+  proformaId?: boolean
   dateFacture?: boolean
   dateEcheance?: boolean
+  montantBrut?: boolean
+  reduction?: boolean
   montantTotal?: boolean
   montantPaye?: boolean
   reste?: boolean
+  typeReduction?: boolean
   devise?: boolean
   statut?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   patient?: boolean | Prisma.PatientDefaultArgs<ExtArgs>
+  consultation?: boolean | Prisma.Facture$consultationArgs<ExtArgs>
+  admission?: boolean | Prisma.Facture$admissionArgs<ExtArgs>
+  hospitalisation?: boolean | Prisma.Facture$hospitalisationArgs<ExtArgs>
+  proforma?: boolean | Prisma.Facture$proformaArgs<ExtArgs>
 }, ExtArgs["result"]["facture"]>
 
 export type FactureSelectScalar = {
   id?: boolean
   numero?: boolean
   patientId?: boolean
+  consultationId?: boolean
+  admissionId?: boolean
+  hospitalisationId?: boolean
+  proformaId?: boolean
   dateFacture?: boolean
   dateEcheance?: boolean
+  montantBrut?: boolean
+  reduction?: boolean
   montantTotal?: boolean
   montantPaye?: boolean
   reste?: boolean
+  typeReduction?: boolean
   devise?: boolean
   statut?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type FactureOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "numero" | "patientId" | "dateFacture" | "dateEcheance" | "montantTotal" | "montantPaye" | "reste" | "devise" | "statut" | "createdAt" | "updatedAt", ExtArgs["result"]["facture"]>
+export type FactureOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "numero" | "patientId" | "consultationId" | "admissionId" | "hospitalisationId" | "proformaId" | "dateFacture" | "dateEcheance" | "montantBrut" | "reduction" | "montantTotal" | "montantPaye" | "reste" | "typeReduction" | "devise" | "statut" | "createdAt" | "updatedAt", ExtArgs["result"]["facture"]>
 export type FactureInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   patient?: boolean | Prisma.PatientDefaultArgs<ExtArgs>
+  consultation?: boolean | Prisma.Facture$consultationArgs<ExtArgs>
+  admission?: boolean | Prisma.Facture$admissionArgs<ExtArgs>
+  hospitalisation?: boolean | Prisma.Facture$hospitalisationArgs<ExtArgs>
+  proforma?: boolean | Prisma.Facture$proformaArgs<ExtArgs>
   lignes?: boolean | Prisma.Facture$lignesArgs<ExtArgs>
   paiements?: boolean | Prisma.Facture$paiementsArgs<ExtArgs>
   _count?: boolean | Prisma.FactureCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type FactureIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   patient?: boolean | Prisma.PatientDefaultArgs<ExtArgs>
+  consultation?: boolean | Prisma.Facture$consultationArgs<ExtArgs>
+  admission?: boolean | Prisma.Facture$admissionArgs<ExtArgs>
+  hospitalisation?: boolean | Prisma.Facture$hospitalisationArgs<ExtArgs>
+  proforma?: boolean | Prisma.Facture$proformaArgs<ExtArgs>
 }
 export type FactureIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   patient?: boolean | Prisma.PatientDefaultArgs<ExtArgs>
+  consultation?: boolean | Prisma.Facture$consultationArgs<ExtArgs>
+  admission?: boolean | Prisma.Facture$admissionArgs<ExtArgs>
+  hospitalisation?: boolean | Prisma.Facture$hospitalisationArgs<ExtArgs>
+  proforma?: boolean | Prisma.Facture$proformaArgs<ExtArgs>
 }
 
 export type $FacturePayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "Facture"
   objects: {
     patient: Prisma.$PatientPayload<ExtArgs>
+    consultation: Prisma.$ConsultationPayload<ExtArgs> | null
+    admission: Prisma.$AdmissionPayload<ExtArgs> | null
+    hospitalisation: Prisma.$HospitalisationPayload<ExtArgs> | null
+    proforma: Prisma.$ProformaPayload<ExtArgs> | null
     lignes: Prisma.$LigneFacturePayload<ExtArgs>[]
     paiements: Prisma.$PaiementPayload<ExtArgs>[]
   }
@@ -1052,11 +2146,18 @@ export type $FacturePayload<ExtArgs extends runtime.Types.Extensions.InternalArg
     id: number
     numero: string
     patientId: number
+    consultationId: number | null
+    admissionId: number | null
+    hospitalisationId: number | null
+    proformaId: number | null
     dateFacture: Date
     dateEcheance: Date | null
+    montantBrut: number
+    reduction: number
     montantTotal: number
     montantPaye: number
     reste: number
+    typeReduction: string | null
     devise: string
     statut: string
     createdAt: Date
@@ -1456,6 +2557,10 @@ readonly fields: FactureFieldRefs;
 export interface Prisma__FactureClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
   patient<T extends Prisma.PatientDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.PatientDefaultArgs<ExtArgs>>): Prisma.Prisma__PatientClient<runtime.Types.Result.GetResult<Prisma.$PatientPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+  consultation<T extends Prisma.Facture$consultationArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Facture$consultationArgs<ExtArgs>>): Prisma.Prisma__ConsultationClient<runtime.Types.Result.GetResult<Prisma.$ConsultationPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+  admission<T extends Prisma.Facture$admissionArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Facture$admissionArgs<ExtArgs>>): Prisma.Prisma__AdmissionClient<runtime.Types.Result.GetResult<Prisma.$AdmissionPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+  hospitalisation<T extends Prisma.Facture$hospitalisationArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Facture$hospitalisationArgs<ExtArgs>>): Prisma.Prisma__HospitalisationClient<runtime.Types.Result.GetResult<Prisma.$HospitalisationPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+  proforma<T extends Prisma.Facture$proformaArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Facture$proformaArgs<ExtArgs>>): Prisma.Prisma__ProformaClient<runtime.Types.Result.GetResult<Prisma.$ProformaPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   lignes<T extends Prisma.Facture$lignesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Facture$lignesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$LigneFacturePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   paiements<T extends Prisma.Facture$paiementsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Facture$paiementsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$PaiementPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
@@ -1490,11 +2595,18 @@ export interface FactureFieldRefs {
   readonly id: Prisma.FieldRef<"Facture", 'Int'>
   readonly numero: Prisma.FieldRef<"Facture", 'String'>
   readonly patientId: Prisma.FieldRef<"Facture", 'Int'>
+  readonly consultationId: Prisma.FieldRef<"Facture", 'Int'>
+  readonly admissionId: Prisma.FieldRef<"Facture", 'Int'>
+  readonly hospitalisationId: Prisma.FieldRef<"Facture", 'Int'>
+  readonly proformaId: Prisma.FieldRef<"Facture", 'Int'>
   readonly dateFacture: Prisma.FieldRef<"Facture", 'DateTime'>
   readonly dateEcheance: Prisma.FieldRef<"Facture", 'DateTime'>
+  readonly montantBrut: Prisma.FieldRef<"Facture", 'Float'>
+  readonly reduction: Prisma.FieldRef<"Facture", 'Float'>
   readonly montantTotal: Prisma.FieldRef<"Facture", 'Float'>
   readonly montantPaye: Prisma.FieldRef<"Facture", 'Float'>
   readonly reste: Prisma.FieldRef<"Facture", 'Float'>
+  readonly typeReduction: Prisma.FieldRef<"Facture", 'String'>
   readonly devise: Prisma.FieldRef<"Facture", 'String'>
   readonly statut: Prisma.FieldRef<"Facture", 'String'>
   readonly createdAt: Prisma.FieldRef<"Facture", 'DateTime'>
@@ -1895,6 +3007,82 @@ export type FactureDeleteManyArgs<ExtArgs extends runtime.Types.Extensions.Inter
    * Limit how many Factures to delete.
    */
   limit?: number
+}
+
+/**
+ * Facture.consultation
+ */
+export type Facture$consultationArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Consultation
+   */
+  select?: Prisma.ConsultationSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Consultation
+   */
+  omit?: Prisma.ConsultationOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.ConsultationInclude<ExtArgs> | null
+  where?: Prisma.ConsultationWhereInput
+}
+
+/**
+ * Facture.admission
+ */
+export type Facture$admissionArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Admission
+   */
+  select?: Prisma.AdmissionSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Admission
+   */
+  omit?: Prisma.AdmissionOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.AdmissionInclude<ExtArgs> | null
+  where?: Prisma.AdmissionWhereInput
+}
+
+/**
+ * Facture.hospitalisation
+ */
+export type Facture$hospitalisationArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Hospitalisation
+   */
+  select?: Prisma.HospitalisationSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Hospitalisation
+   */
+  omit?: Prisma.HospitalisationOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.HospitalisationInclude<ExtArgs> | null
+  where?: Prisma.HospitalisationWhereInput
+}
+
+/**
+ * Facture.proforma
+ */
+export type Facture$proformaArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Proforma
+   */
+  select?: Prisma.ProformaSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Proforma
+   */
+  omit?: Prisma.ProformaOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.ProformaInclude<ExtArgs> | null
+  where?: Prisma.ProformaWhereInput
 }
 
 /**

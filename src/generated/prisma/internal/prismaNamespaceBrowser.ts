@@ -95,7 +95,10 @@ export const ModelName = {
   Assurance: 'Assurance',
   PatientAssurance: 'PatientAssurance',
   DocumentPatient: 'DocumentPatient',
-  AuditLog: 'AuditLog'
+  AuditLog: 'AuditLog',
+  Proforma: 'Proforma',
+  ProformaLigne: 'ProformaLigne',
+  ConsultationActe: 'ConsultationActe'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -722,11 +725,18 @@ export const FactureScalarFieldEnum = {
   id: 'id',
   numero: 'numero',
   patientId: 'patientId',
+  consultationId: 'consultationId',
+  admissionId: 'admissionId',
+  hospitalisationId: 'hospitalisationId',
+  proformaId: 'proformaId',
   dateFacture: 'dateFacture',
   dateEcheance: 'dateEcheance',
+  montantBrut: 'montantBrut',
+  reduction: 'reduction',
   montantTotal: 'montantTotal',
   montantPaye: 'montantPaye',
   reste: 'reste',
+  typeReduction: 'typeReduction',
   devise: 'devise',
   statut: 'statut',
   createdAt: 'createdAt',
@@ -740,6 +750,7 @@ export const LigneFactureScalarFieldEnum = {
   id: 'id',
   factureId: 'factureId',
   acteId: 'acteId',
+  serviceId: 'serviceId',
   designation: 'designation',
   quantite: 'quantite',
   prixUnitaire: 'prixUnitaire',
@@ -827,6 +838,65 @@ export const AuditLogScalarFieldEnum = {
 } as const
 
 export type AuditLogScalarFieldEnum = (typeof AuditLogScalarFieldEnum)[keyof typeof AuditLogScalarFieldEnum]
+
+
+export const ProformaScalarFieldEnum = {
+  id: 'id',
+  numero: 'numero',
+  patientId: 'patientId',
+  consultationId: 'consultationId',
+  admissionId: 'admissionId',
+  hospitalisationId: 'hospitalisationId',
+  montantBrut: 'montantBrut',
+  typeReduction: 'typeReduction',
+  reduction: 'reduction',
+  montantTotal: 'montantTotal',
+  devise: 'devise',
+  statut: 'statut',
+  dateEmission: 'dateEmission',
+  dateExpiration: 'dateExpiration',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type ProformaScalarFieldEnum = (typeof ProformaScalarFieldEnum)[keyof typeof ProformaScalarFieldEnum]
+
+
+export const ProformaLigneScalarFieldEnum = {
+  id: 'id',
+  proformaId: 'proformaId',
+  typeOrigine: 'typeOrigine',
+  acteId: 'acteId',
+  serviceId: 'serviceId',
+  consultationId: 'consultationId',
+  demandeLaboratoireId: 'demandeLaboratoireId',
+  demandeImagerieId: 'demandeImagerieId',
+  dispensationId: 'dispensationId',
+  hospitalisationId: 'hospitalisationId',
+  designation: 'designation',
+  quantite: 'quantite',
+  prixUnitaire: 'prixUnitaire',
+  montant: 'montant',
+  reference: 'reference',
+  createdAt: 'createdAt'
+} as const
+
+export type ProformaLigneScalarFieldEnum = (typeof ProformaLigneScalarFieldEnum)[keyof typeof ProformaLigneScalarFieldEnum]
+
+
+export const ConsultationActeScalarFieldEnum = {
+  id: 'id',
+  consultationId: 'consultationId',
+  acteId: 'acteId',
+  quantite: 'quantite',
+  prixUnitaire: 'prixUnitaire',
+  montant: 'montant',
+  observation: 'observation',
+  dateActe: 'dateActe',
+  createdAt: 'createdAt'
+} as const
+
+export type ConsultationActeScalarFieldEnum = (typeof ConsultationActeScalarFieldEnum)[keyof typeof ConsultationActeScalarFieldEnum]
 
 
 export const SortOrder = {

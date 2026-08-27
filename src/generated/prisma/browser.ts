@@ -242,3 +242,18 @@ export type DocumentPatient = Prisma.DocumentPatientModel
  * 
  */
 export type AuditLog = Prisma.AuditLogModel
+/**
+ * Model Proforma
+ * 
+ */
+export type Proforma = Prisma.ProformaModel
+/**
+ * Model ProformaLigne
+ * 
+ */
+export type ProformaLigne = Prisma.ProformaLigneModel
+/**
+ * Model ConsultationActe
+ * 
+ */
+export type ConsultationActe = Prisma.ConsultationActeModel

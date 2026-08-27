@@ -316,6 +316,8 @@ export type HospitalisationWhereInput = {
   transferts?: Prisma.TransfertListRelationFilter
   soins?: Prisma.SoinListRelationFilter
   sorties?: Prisma.SortieListRelationFilter
+  proformas?: Prisma.ProformaListRelationFilter
+  factures?: Prisma.FactureListRelationFilter
 }
 
 export type HospitalisationOrderByWithRelationInput = {
@@ -341,6 +343,8 @@ export type HospitalisationOrderByWithRelationInput = {
   transferts?: Prisma.TransfertOrderByRelationAggregateInput
   soins?: Prisma.SoinOrderByRelationAggregateInput
   sorties?: Prisma.SortieOrderByRelationAggregateInput
+  proformas?: Prisma.ProformaOrderByRelationAggregateInput
+  factures?: Prisma.FactureOrderByRelationAggregateInput
 }
 
 export type HospitalisationWhereUniqueInput = Prisma.AtLeast<{
@@ -369,6 +373,8 @@ export type HospitalisationWhereUniqueInput = Prisma.AtLeast<{
   transferts?: Prisma.TransfertListRelationFilter
   soins?: Prisma.SoinListRelationFilter
   sorties?: Prisma.SortieListRelationFilter
+  proformas?: Prisma.ProformaListRelationFilter
+  factures?: Prisma.FactureListRelationFilter
 }, "id" | "numero" | "admissionId">
 
 export type HospitalisationOrderByWithAggregationInput = {
@@ -430,6 +436,8 @@ export type HospitalisationCreateInput = {
   transferts?: Prisma.TransfertCreateNestedManyWithoutHospitalisationInput
   soins?: Prisma.SoinCreateNestedManyWithoutHospitalisationInput
   sorties?: Prisma.SortieCreateNestedManyWithoutHospitalisationInput
+  proformas?: Prisma.ProformaCreateNestedManyWithoutHospitalisationInput
+  factures?: Prisma.FactureCreateNestedManyWithoutHospitalisationInput
 }
 
 export type HospitalisationUncheckedCreateInput = {
@@ -450,6 +458,8 @@ export type HospitalisationUncheckedCreateInput = {
   transferts?: Prisma.TransfertUncheckedCreateNestedManyWithoutHospitalisationInput
   soins?: Prisma.SoinUncheckedCreateNestedManyWithoutHospitalisationInput
   sorties?: Prisma.SortieUncheckedCreateNestedManyWithoutHospitalisationInput
+  proformas?: Prisma.ProformaUncheckedCreateNestedManyWithoutHospitalisationInput
+  factures?: Prisma.FactureUncheckedCreateNestedManyWithoutHospitalisationInput
 }
 
 export type HospitalisationUpdateInput = {
@@ -469,6 +479,8 @@ export type HospitalisationUpdateInput = {
   transferts?: Prisma.TransfertUpdateManyWithoutHospitalisationNestedInput
   soins?: Prisma.SoinUpdateManyWithoutHospitalisationNestedInput
   sorties?: Prisma.SortieUpdateManyWithoutHospitalisationNestedInput
+  proformas?: Prisma.ProformaUpdateManyWithoutHospitalisationNestedInput
+  factures?: Prisma.FactureUpdateManyWithoutHospitalisationNestedInput
 }
 
 export type HospitalisationUncheckedUpdateInput = {
@@ -489,6 +501,8 @@ export type HospitalisationUncheckedUpdateInput = {
   transferts?: Prisma.TransfertUncheckedUpdateManyWithoutHospitalisationNestedInput
   soins?: Prisma.SoinUncheckedUpdateManyWithoutHospitalisationNestedInput
   sorties?: Prisma.SortieUncheckedUpdateManyWithoutHospitalisationNestedInput
+  proformas?: Prisma.ProformaUncheckedUpdateManyWithoutHospitalisationNestedInput
+  factures?: Prisma.FactureUncheckedUpdateManyWithoutHospitalisationNestedInput
 }
 
 export type HospitalisationCreateManyInput = {
@@ -869,6 +883,38 @@ export type HospitalisationUpdateOneWithoutSortiesNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.HospitalisationUpdateToOneWithWhereWithoutSortiesInput, Prisma.HospitalisationUpdateWithoutSortiesInput>, Prisma.HospitalisationUncheckedUpdateWithoutSortiesInput>
 }
 
+export type HospitalisationCreateNestedOneWithoutFacturesInput = {
+  create?: Prisma.XOR<Prisma.HospitalisationCreateWithoutFacturesInput, Prisma.HospitalisationUncheckedCreateWithoutFacturesInput>
+  connectOrCreate?: Prisma.HospitalisationCreateOrConnectWithoutFacturesInput
+  connect?: Prisma.HospitalisationWhereUniqueInput
+}
+
+export type HospitalisationUpdateOneWithoutFacturesNestedInput = {
+  create?: Prisma.XOR<Prisma.HospitalisationCreateWithoutFacturesInput, Prisma.HospitalisationUncheckedCreateWithoutFacturesInput>
+  connectOrCreate?: Prisma.HospitalisationCreateOrConnectWithoutFacturesInput
+  upsert?: Prisma.HospitalisationUpsertWithoutFacturesInput
+  disconnect?: Prisma.HospitalisationWhereInput | boolean
+  delete?: Prisma.HospitalisationWhereInput | boolean
+  connect?: Prisma.HospitalisationWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.HospitalisationUpdateToOneWithWhereWithoutFacturesInput, Prisma.HospitalisationUpdateWithoutFacturesInput>, Prisma.HospitalisationUncheckedUpdateWithoutFacturesInput>
+}
+
+export type HospitalisationCreateNestedOneWithoutProformasInput = {
+  create?: Prisma.XOR<Prisma.HospitalisationCreateWithoutProformasInput, Prisma.HospitalisationUncheckedCreateWithoutProformasInput>
+  connectOrCreate?: Prisma.HospitalisationCreateOrConnectWithoutProformasInput
+  connect?: Prisma.HospitalisationWhereUniqueInput
+}
+
+export type HospitalisationUpdateOneWithoutProformasNestedInput = {
+  create?: Prisma.XOR<Prisma.HospitalisationCreateWithoutProformasInput, Prisma.HospitalisationUncheckedCreateWithoutProformasInput>
+  connectOrCreate?: Prisma.HospitalisationCreateOrConnectWithoutProformasInput
+  upsert?: Prisma.HospitalisationUpsertWithoutProformasInput
+  disconnect?: Prisma.HospitalisationWhereInput | boolean
+  delete?: Prisma.HospitalisationWhereInput | boolean
+  connect?: Prisma.HospitalisationWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.HospitalisationUpdateToOneWithWhereWithoutProformasInput, Prisma.HospitalisationUpdateWithoutProformasInput>, Prisma.HospitalisationUncheckedUpdateWithoutProformasInput>
+}
+
 export type HospitalisationCreateWithoutServiceInput = {
   numero: string
   motif?: string | null
@@ -885,6 +931,8 @@ export type HospitalisationCreateWithoutServiceInput = {
   transferts?: Prisma.TransfertCreateNestedManyWithoutHospitalisationInput
   soins?: Prisma.SoinCreateNestedManyWithoutHospitalisationInput
   sorties?: Prisma.SortieCreateNestedManyWithoutHospitalisationInput
+  proformas?: Prisma.ProformaCreateNestedManyWithoutHospitalisationInput
+  factures?: Prisma.FactureCreateNestedManyWithoutHospitalisationInput
 }
 
 export type HospitalisationUncheckedCreateWithoutServiceInput = {
@@ -904,6 +952,8 @@ export type HospitalisationUncheckedCreateWithoutServiceInput = {
   transferts?: Prisma.TransfertUncheckedCreateNestedManyWithoutHospitalisationInput
   soins?: Prisma.SoinUncheckedCreateNestedManyWithoutHospitalisationInput
   sorties?: Prisma.SortieUncheckedCreateNestedManyWithoutHospitalisationInput
+  proformas?: Prisma.ProformaUncheckedCreateNestedManyWithoutHospitalisationInput
+  factures?: Prisma.FactureUncheckedCreateNestedManyWithoutHospitalisationInput
 }
 
 export type HospitalisationCreateOrConnectWithoutServiceInput = {
@@ -967,6 +1017,8 @@ export type HospitalisationCreateWithoutMedecinInput = {
   transferts?: Prisma.TransfertCreateNestedManyWithoutHospitalisationInput
   soins?: Prisma.SoinCreateNestedManyWithoutHospitalisationInput
   sorties?: Prisma.SortieCreateNestedManyWithoutHospitalisationInput
+  proformas?: Prisma.ProformaCreateNestedManyWithoutHospitalisationInput
+  factures?: Prisma.FactureCreateNestedManyWithoutHospitalisationInput
 }
 
 export type HospitalisationUncheckedCreateWithoutMedecinInput = {
@@ -986,6 +1038,8 @@ export type HospitalisationUncheckedCreateWithoutMedecinInput = {
   transferts?: Prisma.TransfertUncheckedCreateNestedManyWithoutHospitalisationInput
   soins?: Prisma.SoinUncheckedCreateNestedManyWithoutHospitalisationInput
   sorties?: Prisma.SortieUncheckedCreateNestedManyWithoutHospitalisationInput
+  proformas?: Prisma.ProformaUncheckedCreateNestedManyWithoutHospitalisationInput
+  factures?: Prisma.FactureUncheckedCreateNestedManyWithoutHospitalisationInput
 }
 
 export type HospitalisationCreateOrConnectWithoutMedecinInput = {
@@ -1029,6 +1083,8 @@ export type HospitalisationCreateWithoutPatientInput = {
   transferts?: Prisma.TransfertCreateNestedManyWithoutHospitalisationInput
   soins?: Prisma.SoinCreateNestedManyWithoutHospitalisationInput
   sorties?: Prisma.SortieCreateNestedManyWithoutHospitalisationInput
+  proformas?: Prisma.ProformaCreateNestedManyWithoutHospitalisationInput
+  factures?: Prisma.FactureCreateNestedManyWithoutHospitalisationInput
 }
 
 export type HospitalisationUncheckedCreateWithoutPatientInput = {
@@ -1048,6 +1104,8 @@ export type HospitalisationUncheckedCreateWithoutPatientInput = {
   transferts?: Prisma.TransfertUncheckedCreateNestedManyWithoutHospitalisationInput
   soins?: Prisma.SoinUncheckedCreateNestedManyWithoutHospitalisationInput
   sorties?: Prisma.SortieUncheckedCreateNestedManyWithoutHospitalisationInput
+  proformas?: Prisma.ProformaUncheckedCreateNestedManyWithoutHospitalisationInput
+  factures?: Prisma.FactureUncheckedCreateNestedManyWithoutHospitalisationInput
 }
 
 export type HospitalisationCreateOrConnectWithoutPatientInput = {
@@ -1091,6 +1149,8 @@ export type HospitalisationCreateWithoutAdmissionInput = {
   transferts?: Prisma.TransfertCreateNestedManyWithoutHospitalisationInput
   soins?: Prisma.SoinCreateNestedManyWithoutHospitalisationInput
   sorties?: Prisma.SortieCreateNestedManyWithoutHospitalisationInput
+  proformas?: Prisma.ProformaCreateNestedManyWithoutHospitalisationInput
+  factures?: Prisma.FactureCreateNestedManyWithoutHospitalisationInput
 }
 
 export type HospitalisationUncheckedCreateWithoutAdmissionInput = {
@@ -1110,6 +1170,8 @@ export type HospitalisationUncheckedCreateWithoutAdmissionInput = {
   transferts?: Prisma.TransfertUncheckedCreateNestedManyWithoutHospitalisationInput
   soins?: Prisma.SoinUncheckedCreateNestedManyWithoutHospitalisationInput
   sorties?: Prisma.SortieUncheckedCreateNestedManyWithoutHospitalisationInput
+  proformas?: Prisma.ProformaUncheckedCreateNestedManyWithoutHospitalisationInput
+  factures?: Prisma.FactureUncheckedCreateNestedManyWithoutHospitalisationInput
 }
 
 export type HospitalisationCreateOrConnectWithoutAdmissionInput = {
@@ -1144,6 +1206,8 @@ export type HospitalisationUpdateWithoutAdmissionInput = {
   transferts?: Prisma.TransfertUpdateManyWithoutHospitalisationNestedInput
   soins?: Prisma.SoinUpdateManyWithoutHospitalisationNestedInput
   sorties?: Prisma.SortieUpdateManyWithoutHospitalisationNestedInput
+  proformas?: Prisma.ProformaUpdateManyWithoutHospitalisationNestedInput
+  factures?: Prisma.FactureUpdateManyWithoutHospitalisationNestedInput
 }
 
 export type HospitalisationUncheckedUpdateWithoutAdmissionInput = {
@@ -1163,6 +1227,8 @@ export type HospitalisationUncheckedUpdateWithoutAdmissionInput = {
   transferts?: Prisma.TransfertUncheckedUpdateManyWithoutHospitalisationNestedInput
   soins?: Prisma.SoinUncheckedUpdateManyWithoutHospitalisationNestedInput
   sorties?: Prisma.SortieUncheckedUpdateManyWithoutHospitalisationNestedInput
+  proformas?: Prisma.ProformaUncheckedUpdateManyWithoutHospitalisationNestedInput
+  factures?: Prisma.FactureUncheckedUpdateManyWithoutHospitalisationNestedInput
 }
 
 export type HospitalisationCreateWithoutLitInput = {
@@ -1181,6 +1247,8 @@ export type HospitalisationCreateWithoutLitInput = {
   transferts?: Prisma.TransfertCreateNestedManyWithoutHospitalisationInput
   soins?: Prisma.SoinCreateNestedManyWithoutHospitalisationInput
   sorties?: Prisma.SortieCreateNestedManyWithoutHospitalisationInput
+  proformas?: Prisma.ProformaCreateNestedManyWithoutHospitalisationInput
+  factures?: Prisma.FactureCreateNestedManyWithoutHospitalisationInput
 }
 
 export type HospitalisationUncheckedCreateWithoutLitInput = {
@@ -1200,6 +1268,8 @@ export type HospitalisationUncheckedCreateWithoutLitInput = {
   transferts?: Prisma.TransfertUncheckedCreateNestedManyWithoutHospitalisationInput
   soins?: Prisma.SoinUncheckedCreateNestedManyWithoutHospitalisationInput
   sorties?: Prisma.SortieUncheckedCreateNestedManyWithoutHospitalisationInput
+  proformas?: Prisma.ProformaUncheckedCreateNestedManyWithoutHospitalisationInput
+  factures?: Prisma.FactureUncheckedCreateNestedManyWithoutHospitalisationInput
 }
 
 export type HospitalisationCreateOrConnectWithoutLitInput = {
@@ -1243,6 +1313,8 @@ export type HospitalisationCreateWithoutTransfertsInput = {
   lit?: Prisma.LitCreateNestedOneWithoutHospitalisationsInput
   soins?: Prisma.SoinCreateNestedManyWithoutHospitalisationInput
   sorties?: Prisma.SortieCreateNestedManyWithoutHospitalisationInput
+  proformas?: Prisma.ProformaCreateNestedManyWithoutHospitalisationInput
+  factures?: Prisma.FactureCreateNestedManyWithoutHospitalisationInput
 }
 
 export type HospitalisationUncheckedCreateWithoutTransfertsInput = {
@@ -1262,6 +1334,8 @@ export type HospitalisationUncheckedCreateWithoutTransfertsInput = {
   updatedAt?: Date | string
   soins?: Prisma.SoinUncheckedCreateNestedManyWithoutHospitalisationInput
   sorties?: Prisma.SortieUncheckedCreateNestedManyWithoutHospitalisationInput
+  proformas?: Prisma.ProformaUncheckedCreateNestedManyWithoutHospitalisationInput
+  factures?: Prisma.FactureUncheckedCreateNestedManyWithoutHospitalisationInput
 }
 
 export type HospitalisationCreateOrConnectWithoutTransfertsInput = {
@@ -1296,6 +1370,8 @@ export type HospitalisationUpdateWithoutTransfertsInput = {
   lit?: Prisma.LitUpdateOneWithoutHospitalisationsNestedInput
   soins?: Prisma.SoinUpdateManyWithoutHospitalisationNestedInput
   sorties?: Prisma.SortieUpdateManyWithoutHospitalisationNestedInput
+  proformas?: Prisma.ProformaUpdateManyWithoutHospitalisationNestedInput
+  factures?: Prisma.FactureUpdateManyWithoutHospitalisationNestedInput
 }
 
 export type HospitalisationUncheckedUpdateWithoutTransfertsInput = {
@@ -1315,6 +1391,8 @@ export type HospitalisationUncheckedUpdateWithoutTransfertsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   soins?: Prisma.SoinUncheckedUpdateManyWithoutHospitalisationNestedInput
   sorties?: Prisma.SortieUncheckedUpdateManyWithoutHospitalisationNestedInput
+  proformas?: Prisma.ProformaUncheckedUpdateManyWithoutHospitalisationNestedInput
+  factures?: Prisma.FactureUncheckedUpdateManyWithoutHospitalisationNestedInput
 }
 
 export type HospitalisationCreateWithoutSoinsInput = {
@@ -1333,6 +1411,8 @@ export type HospitalisationCreateWithoutSoinsInput = {
   lit?: Prisma.LitCreateNestedOneWithoutHospitalisationsInput
   transferts?: Prisma.TransfertCreateNestedManyWithoutHospitalisationInput
   sorties?: Prisma.SortieCreateNestedManyWithoutHospitalisationInput
+  proformas?: Prisma.ProformaCreateNestedManyWithoutHospitalisationInput
+  factures?: Prisma.FactureCreateNestedManyWithoutHospitalisationInput
 }
 
 export type HospitalisationUncheckedCreateWithoutSoinsInput = {
@@ -1352,6 +1432,8 @@ export type HospitalisationUncheckedCreateWithoutSoinsInput = {
   updatedAt?: Date | string
   transferts?: Prisma.TransfertUncheckedCreateNestedManyWithoutHospitalisationInput
   sorties?: Prisma.SortieUncheckedCreateNestedManyWithoutHospitalisationInput
+  proformas?: Prisma.ProformaUncheckedCreateNestedManyWithoutHospitalisationInput
+  factures?: Prisma.FactureUncheckedCreateNestedManyWithoutHospitalisationInput
 }
 
 export type HospitalisationCreateOrConnectWithoutSoinsInput = {
@@ -1386,6 +1468,8 @@ export type HospitalisationUpdateWithoutSoinsInput = {
   lit?: Prisma.LitUpdateOneWithoutHospitalisationsNestedInput
   transferts?: Prisma.TransfertUpdateManyWithoutHospitalisationNestedInput
   sorties?: Prisma.SortieUpdateManyWithoutHospitalisationNestedInput
+  proformas?: Prisma.ProformaUpdateManyWithoutHospitalisationNestedInput
+  factures?: Prisma.FactureUpdateManyWithoutHospitalisationNestedInput
 }
 
 export type HospitalisationUncheckedUpdateWithoutSoinsInput = {
@@ -1405,6 +1489,8 @@ export type HospitalisationUncheckedUpdateWithoutSoinsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   transferts?: Prisma.TransfertUncheckedUpdateManyWithoutHospitalisationNestedInput
   sorties?: Prisma.SortieUncheckedUpdateManyWithoutHospitalisationNestedInput
+  proformas?: Prisma.ProformaUncheckedUpdateManyWithoutHospitalisationNestedInput
+  factures?: Prisma.FactureUncheckedUpdateManyWithoutHospitalisationNestedInput
 }
 
 export type HospitalisationCreateWithoutSortiesInput = {
@@ -1423,6 +1509,8 @@ export type HospitalisationCreateWithoutSortiesInput = {
   lit?: Prisma.LitCreateNestedOneWithoutHospitalisationsInput
   transferts?: Prisma.TransfertCreateNestedManyWithoutHospitalisationInput
   soins?: Prisma.SoinCreateNestedManyWithoutHospitalisationInput
+  proformas?: Prisma.ProformaCreateNestedManyWithoutHospitalisationInput
+  factures?: Prisma.FactureCreateNestedManyWithoutHospitalisationInput
 }
 
 export type HospitalisationUncheckedCreateWithoutSortiesInput = {
@@ -1442,6 +1530,8 @@ export type HospitalisationUncheckedCreateWithoutSortiesInput = {
   updatedAt?: Date | string
   transferts?: Prisma.TransfertUncheckedCreateNestedManyWithoutHospitalisationInput
   soins?: Prisma.SoinUncheckedCreateNestedManyWithoutHospitalisationInput
+  proformas?: Prisma.ProformaUncheckedCreateNestedManyWithoutHospitalisationInput
+  factures?: Prisma.FactureUncheckedCreateNestedManyWithoutHospitalisationInput
 }
 
 export type HospitalisationCreateOrConnectWithoutSortiesInput = {
@@ -1476,6 +1566,8 @@ export type HospitalisationUpdateWithoutSortiesInput = {
   lit?: Prisma.LitUpdateOneWithoutHospitalisationsNestedInput
   transferts?: Prisma.TransfertUpdateManyWithoutHospitalisationNestedInput
   soins?: Prisma.SoinUpdateManyWithoutHospitalisationNestedInput
+  proformas?: Prisma.ProformaUpdateManyWithoutHospitalisationNestedInput
+  factures?: Prisma.FactureUpdateManyWithoutHospitalisationNestedInput
 }
 
 export type HospitalisationUncheckedUpdateWithoutSortiesInput = {
@@ -1495,6 +1587,204 @@ export type HospitalisationUncheckedUpdateWithoutSortiesInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   transferts?: Prisma.TransfertUncheckedUpdateManyWithoutHospitalisationNestedInput
   soins?: Prisma.SoinUncheckedUpdateManyWithoutHospitalisationNestedInput
+  proformas?: Prisma.ProformaUncheckedUpdateManyWithoutHospitalisationNestedInput
+  factures?: Prisma.FactureUncheckedUpdateManyWithoutHospitalisationNestedInput
+}
+
+export type HospitalisationCreateWithoutFacturesInput = {
+  numero: string
+  motif?: string | null
+  diagnostic?: string | null
+  dateEntree?: Date | string
+  dateSortie?: Date | string | null
+  statut?: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  patient: Prisma.PatientCreateNestedOneWithoutHospitalisationsInput
+  admission: Prisma.AdmissionCreateNestedOneWithoutHospitalisationInput
+  service?: Prisma.ServiceCreateNestedOneWithoutHospitalisationsInput
+  medecin?: Prisma.MedecinCreateNestedOneWithoutHospitalisationsInput
+  lit?: Prisma.LitCreateNestedOneWithoutHospitalisationsInput
+  transferts?: Prisma.TransfertCreateNestedManyWithoutHospitalisationInput
+  soins?: Prisma.SoinCreateNestedManyWithoutHospitalisationInput
+  sorties?: Prisma.SortieCreateNestedManyWithoutHospitalisationInput
+  proformas?: Prisma.ProformaCreateNestedManyWithoutHospitalisationInput
+}
+
+export type HospitalisationUncheckedCreateWithoutFacturesInput = {
+  id?: number
+  numero: string
+  patientId: number
+  admissionId: number
+  serviceId?: number | null
+  medecinId?: number | null
+  litId?: number | null
+  motif?: string | null
+  diagnostic?: string | null
+  dateEntree?: Date | string
+  dateSortie?: Date | string | null
+  statut?: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  transferts?: Prisma.TransfertUncheckedCreateNestedManyWithoutHospitalisationInput
+  soins?: Prisma.SoinUncheckedCreateNestedManyWithoutHospitalisationInput
+  sorties?: Prisma.SortieUncheckedCreateNestedManyWithoutHospitalisationInput
+  proformas?: Prisma.ProformaUncheckedCreateNestedManyWithoutHospitalisationInput
+}
+
+export type HospitalisationCreateOrConnectWithoutFacturesInput = {
+  where: Prisma.HospitalisationWhereUniqueInput
+  create: Prisma.XOR<Prisma.HospitalisationCreateWithoutFacturesInput, Prisma.HospitalisationUncheckedCreateWithoutFacturesInput>
+}
+
+export type HospitalisationUpsertWithoutFacturesInput = {
+  update: Prisma.XOR<Prisma.HospitalisationUpdateWithoutFacturesInput, Prisma.HospitalisationUncheckedUpdateWithoutFacturesInput>
+  create: Prisma.XOR<Prisma.HospitalisationCreateWithoutFacturesInput, Prisma.HospitalisationUncheckedCreateWithoutFacturesInput>
+  where?: Prisma.HospitalisationWhereInput
+}
+
+export type HospitalisationUpdateToOneWithWhereWithoutFacturesInput = {
+  where?: Prisma.HospitalisationWhereInput
+  data: Prisma.XOR<Prisma.HospitalisationUpdateWithoutFacturesInput, Prisma.HospitalisationUncheckedUpdateWithoutFacturesInput>
+}
+
+export type HospitalisationUpdateWithoutFacturesInput = {
+  numero?: Prisma.StringFieldUpdateOperationsInput | string
+  motif?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  diagnostic?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  dateEntree?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  dateSortie?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  statut?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  patient?: Prisma.PatientUpdateOneRequiredWithoutHospitalisationsNestedInput
+  admission?: Prisma.AdmissionUpdateOneRequiredWithoutHospitalisationNestedInput
+  service?: Prisma.ServiceUpdateOneWithoutHospitalisationsNestedInput
+  medecin?: Prisma.MedecinUpdateOneWithoutHospitalisationsNestedInput
+  lit?: Prisma.LitUpdateOneWithoutHospitalisationsNestedInput
+  transferts?: Prisma.TransfertUpdateManyWithoutHospitalisationNestedInput
+  soins?: Prisma.SoinUpdateManyWithoutHospitalisationNestedInput
+  sorties?: Prisma.SortieUpdateManyWithoutHospitalisationNestedInput
+  proformas?: Prisma.ProformaUpdateManyWithoutHospitalisationNestedInput
+}
+
+export type HospitalisationUncheckedUpdateWithoutFacturesInput = {
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  numero?: Prisma.StringFieldUpdateOperationsInput | string
+  patientId?: Prisma.IntFieldUpdateOperationsInput | number
+  admissionId?: Prisma.IntFieldUpdateOperationsInput | number
+  serviceId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  medecinId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  litId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  motif?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  diagnostic?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  dateEntree?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  dateSortie?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  statut?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  transferts?: Prisma.TransfertUncheckedUpdateManyWithoutHospitalisationNestedInput
+  soins?: Prisma.SoinUncheckedUpdateManyWithoutHospitalisationNestedInput
+  sorties?: Prisma.SortieUncheckedUpdateManyWithoutHospitalisationNestedInput
+  proformas?: Prisma.ProformaUncheckedUpdateManyWithoutHospitalisationNestedInput
+}
+
+export type HospitalisationCreateWithoutProformasInput = {
+  numero: string
+  motif?: string | null
+  diagnostic?: string | null
+  dateEntree?: Date | string
+  dateSortie?: Date | string | null
+  statut?: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  patient: Prisma.PatientCreateNestedOneWithoutHospitalisationsInput
+  admission: Prisma.AdmissionCreateNestedOneWithoutHospitalisationInput
+  service?: Prisma.ServiceCreateNestedOneWithoutHospitalisationsInput
+  medecin?: Prisma.MedecinCreateNestedOneWithoutHospitalisationsInput
+  lit?: Prisma.LitCreateNestedOneWithoutHospitalisationsInput
+  transferts?: Prisma.TransfertCreateNestedManyWithoutHospitalisationInput
+  soins?: Prisma.SoinCreateNestedManyWithoutHospitalisationInput
+  sorties?: Prisma.SortieCreateNestedManyWithoutHospitalisationInput
+  factures?: Prisma.FactureCreateNestedManyWithoutHospitalisationInput
+}
+
+export type HospitalisationUncheckedCreateWithoutProformasInput = {
+  id?: number
+  numero: string
+  patientId: number
+  admissionId: number
+  serviceId?: number | null
+  medecinId?: number | null
+  litId?: number | null
+  motif?: string | null
+  diagnostic?: string | null
+  dateEntree?: Date | string
+  dateSortie?: Date | string | null
+  statut?: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  transferts?: Prisma.TransfertUncheckedCreateNestedManyWithoutHospitalisationInput
+  soins?: Prisma.SoinUncheckedCreateNestedManyWithoutHospitalisationInput
+  sorties?: Prisma.SortieUncheckedCreateNestedManyWithoutHospitalisationInput
+  factures?: Prisma.FactureUncheckedCreateNestedManyWithoutHospitalisationInput
+}
+
+export type HospitalisationCreateOrConnectWithoutProformasInput = {
+  where: Prisma.HospitalisationWhereUniqueInput
+  create: Prisma.XOR<Prisma.HospitalisationCreateWithoutProformasInput, Prisma.HospitalisationUncheckedCreateWithoutProformasInput>
+}
+
+export type HospitalisationUpsertWithoutProformasInput = {
+  update: Prisma.XOR<Prisma.HospitalisationUpdateWithoutProformasInput, Prisma.HospitalisationUncheckedUpdateWithoutProformasInput>
+  create: Prisma.XOR<Prisma.HospitalisationCreateWithoutProformasInput, Prisma.HospitalisationUncheckedCreateWithoutProformasInput>
+  where?: Prisma.HospitalisationWhereInput
+}
+
+export type HospitalisationUpdateToOneWithWhereWithoutProformasInput = {
+  where?: Prisma.HospitalisationWhereInput
+  data: Prisma.XOR<Prisma.HospitalisationUpdateWithoutProformasInput, Prisma.HospitalisationUncheckedUpdateWithoutProformasInput>
+}
+
+export type HospitalisationUpdateWithoutProformasInput = {
+  numero?: Prisma.StringFieldUpdateOperationsInput | string
+  motif?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  diagnostic?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  dateEntree?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  dateSortie?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  statut?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  patient?: Prisma.PatientUpdateOneRequiredWithoutHospitalisationsNestedInput
+  admission?: Prisma.AdmissionUpdateOneRequiredWithoutHospitalisationNestedInput
+  service?: Prisma.ServiceUpdateOneWithoutHospitalisationsNestedInput
+  medecin?: Prisma.MedecinUpdateOneWithoutHospitalisationsNestedInput
+  lit?: Prisma.LitUpdateOneWithoutHospitalisationsNestedInput
+  transferts?: Prisma.TransfertUpdateManyWithoutHospitalisationNestedInput
+  soins?: Prisma.SoinUpdateManyWithoutHospitalisationNestedInput
+  sorties?: Prisma.SortieUpdateManyWithoutHospitalisationNestedInput
+  factures?: Prisma.FactureUpdateManyWithoutHospitalisationNestedInput
+}
+
+export type HospitalisationUncheckedUpdateWithoutProformasInput = {
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  numero?: Prisma.StringFieldUpdateOperationsInput | string
+  patientId?: Prisma.IntFieldUpdateOperationsInput | number
+  admissionId?: Prisma.IntFieldUpdateOperationsInput | number
+  serviceId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  medecinId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  litId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  motif?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  diagnostic?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  dateEntree?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  dateSortie?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  statut?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  transferts?: Prisma.TransfertUncheckedUpdateManyWithoutHospitalisationNestedInput
+  soins?: Prisma.SoinUncheckedUpdateManyWithoutHospitalisationNestedInput
+  sorties?: Prisma.SortieUncheckedUpdateManyWithoutHospitalisationNestedInput
+  factures?: Prisma.FactureUncheckedUpdateManyWithoutHospitalisationNestedInput
 }
 
 export type HospitalisationCreateManyServiceInput = {
@@ -1529,6 +1819,8 @@ export type HospitalisationUpdateWithoutServiceInput = {
   transferts?: Prisma.TransfertUpdateManyWithoutHospitalisationNestedInput
   soins?: Prisma.SoinUpdateManyWithoutHospitalisationNestedInput
   sorties?: Prisma.SortieUpdateManyWithoutHospitalisationNestedInput
+  proformas?: Prisma.ProformaUpdateManyWithoutHospitalisationNestedInput
+  factures?: Prisma.FactureUpdateManyWithoutHospitalisationNestedInput
 }
 
 export type HospitalisationUncheckedUpdateWithoutServiceInput = {
@@ -1548,6 +1840,8 @@ export type HospitalisationUncheckedUpdateWithoutServiceInput = {
   transferts?: Prisma.TransfertUncheckedUpdateManyWithoutHospitalisationNestedInput
   soins?: Prisma.SoinUncheckedUpdateManyWithoutHospitalisationNestedInput
   sorties?: Prisma.SortieUncheckedUpdateManyWithoutHospitalisationNestedInput
+  proformas?: Prisma.ProformaUncheckedUpdateManyWithoutHospitalisationNestedInput
+  factures?: Prisma.FactureUncheckedUpdateManyWithoutHospitalisationNestedInput
 }
 
 export type HospitalisationUncheckedUpdateManyWithoutServiceInput = {
@@ -1598,6 +1892,8 @@ export type HospitalisationUpdateWithoutMedecinInput = {
   transferts?: Prisma.TransfertUpdateManyWithoutHospitalisationNestedInput
   soins?: Prisma.SoinUpdateManyWithoutHospitalisationNestedInput
   sorties?: Prisma.SortieUpdateManyWithoutHospitalisationNestedInput
+  proformas?: Prisma.ProformaUpdateManyWithoutHospitalisationNestedInput
+  factures?: Prisma.FactureUpdateManyWithoutHospitalisationNestedInput
 }
 
 export type HospitalisationUncheckedUpdateWithoutMedecinInput = {
@@ -1617,6 +1913,8 @@ export type HospitalisationUncheckedUpdateWithoutMedecinInput = {
   transferts?: Prisma.TransfertUncheckedUpdateManyWithoutHospitalisationNestedInput
   soins?: Prisma.SoinUncheckedUpdateManyWithoutHospitalisationNestedInput
   sorties?: Prisma.SortieUncheckedUpdateManyWithoutHospitalisationNestedInput
+  proformas?: Prisma.ProformaUncheckedUpdateManyWithoutHospitalisationNestedInput
+  factures?: Prisma.FactureUncheckedUpdateManyWithoutHospitalisationNestedInput
 }
 
 export type HospitalisationUncheckedUpdateManyWithoutMedecinInput = {
@@ -1667,6 +1965,8 @@ export type HospitalisationUpdateWithoutPatientInput = {
   transferts?: Prisma.TransfertUpdateManyWithoutHospitalisationNestedInput
   soins?: Prisma.SoinUpdateManyWithoutHospitalisationNestedInput
   sorties?: Prisma.SortieUpdateManyWithoutHospitalisationNestedInput
+  proformas?: Prisma.ProformaUpdateManyWithoutHospitalisationNestedInput
+  factures?: Prisma.FactureUpdateManyWithoutHospitalisationNestedInput
 }
 
 export type HospitalisationUncheckedUpdateWithoutPatientInput = {
@@ -1686,6 +1986,8 @@ export type HospitalisationUncheckedUpdateWithoutPatientInput = {
   transferts?: Prisma.TransfertUncheckedUpdateManyWithoutHospitalisationNestedInput
   soins?: Prisma.SoinUncheckedUpdateManyWithoutHospitalisationNestedInput
   sorties?: Prisma.SortieUncheckedUpdateManyWithoutHospitalisationNestedInput
+  proformas?: Prisma.ProformaUncheckedUpdateManyWithoutHospitalisationNestedInput
+  factures?: Prisma.FactureUncheckedUpdateManyWithoutHospitalisationNestedInput
 }
 
 export type HospitalisationUncheckedUpdateManyWithoutPatientInput = {
@@ -1736,6 +2038,8 @@ export type HospitalisationUpdateWithoutLitInput = {
   transferts?: Prisma.TransfertUpdateManyWithoutHospitalisationNestedInput
   soins?: Prisma.SoinUpdateManyWithoutHospitalisationNestedInput
   sorties?: Prisma.SortieUpdateManyWithoutHospitalisationNestedInput
+  proformas?: Prisma.ProformaUpdateManyWithoutHospitalisationNestedInput
+  factures?: Prisma.FactureUpdateManyWithoutHospitalisationNestedInput
 }
 
 export type HospitalisationUncheckedUpdateWithoutLitInput = {
@@ -1755,6 +2059,8 @@ export type HospitalisationUncheckedUpdateWithoutLitInput = {
   transferts?: Prisma.TransfertUncheckedUpdateManyWithoutHospitalisationNestedInput
   soins?: Prisma.SoinUncheckedUpdateManyWithoutHospitalisationNestedInput
   sorties?: Prisma.SortieUncheckedUpdateManyWithoutHospitalisationNestedInput
+  proformas?: Prisma.ProformaUncheckedUpdateManyWithoutHospitalisationNestedInput
+  factures?: Prisma.FactureUncheckedUpdateManyWithoutHospitalisationNestedInput
 }
 
 export type HospitalisationUncheckedUpdateManyWithoutLitInput = {
@@ -1782,12 +2088,16 @@ export type HospitalisationCountOutputType = {
   transferts: number
   soins: number
   sorties: number
+  proformas: number
+  factures: number
 }
 
 export type HospitalisationCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   transferts?: boolean | HospitalisationCountOutputTypeCountTransfertsArgs
   soins?: boolean | HospitalisationCountOutputTypeCountSoinsArgs
   sorties?: boolean | HospitalisationCountOutputTypeCountSortiesArgs
+  proformas?: boolean | HospitalisationCountOutputTypeCountProformasArgs
+  factures?: boolean | HospitalisationCountOutputTypeCountFacturesArgs
 }
 
 /**
@@ -1821,6 +2131,20 @@ export type HospitalisationCountOutputTypeCountSortiesArgs<ExtArgs extends runti
   where?: Prisma.SortieWhereInput
 }
 
+/**
+ * HospitalisationCountOutputType without action
+ */
+export type HospitalisationCountOutputTypeCountProformasArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.ProformaWhereInput
+}
+
+/**
+ * HospitalisationCountOutputType without action
+ */
+export type HospitalisationCountOutputTypeCountFacturesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.FactureWhereInput
+}
+
 
 export type HospitalisationSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -1845,6 +2169,8 @@ export type HospitalisationSelect<ExtArgs extends runtime.Types.Extensions.Inter
   transferts?: boolean | Prisma.Hospitalisation$transfertsArgs<ExtArgs>
   soins?: boolean | Prisma.Hospitalisation$soinsArgs<ExtArgs>
   sorties?: boolean | Prisma.Hospitalisation$sortiesArgs<ExtArgs>
+  proformas?: boolean | Prisma.Hospitalisation$proformasArgs<ExtArgs>
+  factures?: boolean | Prisma.Hospitalisation$facturesArgs<ExtArgs>
   _count?: boolean | Prisma.HospitalisationCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["hospitalisation"]>
 
@@ -1919,6 +2245,8 @@ export type HospitalisationInclude<ExtArgs extends runtime.Types.Extensions.Inte
   transferts?: boolean | Prisma.Hospitalisation$transfertsArgs<ExtArgs>
   soins?: boolean | Prisma.Hospitalisation$soinsArgs<ExtArgs>
   sorties?: boolean | Prisma.Hospitalisation$sortiesArgs<ExtArgs>
+  proformas?: boolean | Prisma.Hospitalisation$proformasArgs<ExtArgs>
+  factures?: boolean | Prisma.Hospitalisation$facturesArgs<ExtArgs>
   _count?: boolean | Prisma.HospitalisationCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type HospitalisationIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1947,6 +2275,8 @@ export type $HospitalisationPayload<ExtArgs extends runtime.Types.Extensions.Int
     transferts: Prisma.$TransfertPayload<ExtArgs>[]
     soins: Prisma.$SoinPayload<ExtArgs>[]
     sorties: Prisma.$SortiePayload<ExtArgs>[]
+    proformas: Prisma.$ProformaPayload<ExtArgs>[]
+    factures: Prisma.$FacturePayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: number
@@ -2365,6 +2695,8 @@ export interface Prisma__HospitalisationClient<T, Null = never, ExtArgs extends 
   transferts<T extends Prisma.Hospitalisation$transfertsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Hospitalisation$transfertsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$TransfertPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   soins<T extends Prisma.Hospitalisation$soinsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Hospitalisation$soinsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$SoinPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   sorties<T extends Prisma.Hospitalisation$sortiesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Hospitalisation$sortiesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$SortiePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  proformas<T extends Prisma.Hospitalisation$proformasArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Hospitalisation$proformasArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ProformaPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  factures<T extends Prisma.Hospitalisation$facturesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Hospitalisation$facturesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$FacturePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -2933,6 +3265,54 @@ export type Hospitalisation$sortiesArgs<ExtArgs extends runtime.Types.Extensions
   take?: number
   skip?: number
   distinct?: Prisma.SortieScalarFieldEnum | Prisma.SortieScalarFieldEnum[]
+}
+
+/**
+ * Hospitalisation.proformas
+ */
+export type Hospitalisation$proformasArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Proforma
+   */
+  select?: Prisma.ProformaSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Proforma
+   */
+  omit?: Prisma.ProformaOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.ProformaInclude<ExtArgs> | null
+  where?: Prisma.ProformaWhereInput
+  orderBy?: Prisma.ProformaOrderByWithRelationInput | Prisma.ProformaOrderByWithRelationInput[]
+  cursor?: Prisma.ProformaWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.ProformaScalarFieldEnum | Prisma.ProformaScalarFieldEnum[]
+}
+
+/**
+ * Hospitalisation.factures
+ */
+export type Hospitalisation$facturesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Facture
+   */
+  select?: Prisma.FactureSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Facture
+   */
+  omit?: Prisma.FactureOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.FactureInclude<ExtArgs> | null
+  where?: Prisma.FactureWhereInput
+  orderBy?: Prisma.FactureOrderByWithRelationInput | Prisma.FactureOrderByWithRelationInput[]
+  cursor?: Prisma.FactureWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.FactureScalarFieldEnum | Prisma.FactureScalarFieldEnum[]
 }
 
 /**

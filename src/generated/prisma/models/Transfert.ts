@@ -261,6 +261,10 @@ export type TransfertWhereInput = {
   motif?: Prisma.StringNullableFilter<"Transfert"> | string | null
   dateTransfert?: Prisma.DateTimeFilter<"Transfert"> | Date | string
   hospitalisation?: Prisma.XOR<Prisma.HospitalisationScalarRelationFilter, Prisma.HospitalisationWhereInput>
+  ancienService?: Prisma.XOR<Prisma.ServiceNullableScalarRelationFilter, Prisma.ServiceWhereInput> | null
+  nouveauService?: Prisma.XOR<Prisma.ServiceNullableScalarRelationFilter, Prisma.ServiceWhereInput> | null
+  ancienLit?: Prisma.XOR<Prisma.LitNullableScalarRelationFilter, Prisma.LitWhereInput> | null
+  nouveauLit?: Prisma.XOR<Prisma.LitNullableScalarRelationFilter, Prisma.LitWhereInput> | null
 }
 
 export type TransfertOrderByWithRelationInput = {
@@ -273,6 +277,10 @@ export type TransfertOrderByWithRelationInput = {
   motif?: Prisma.SortOrderInput | Prisma.SortOrder
   dateTransfert?: Prisma.SortOrder
   hospitalisation?: Prisma.HospitalisationOrderByWithRelationInput
+  ancienService?: Prisma.ServiceOrderByWithRelationInput
+  nouveauService?: Prisma.ServiceOrderByWithRelationInput
+  ancienLit?: Prisma.LitOrderByWithRelationInput
+  nouveauLit?: Prisma.LitOrderByWithRelationInput
 }
 
 export type TransfertWhereUniqueInput = Prisma.AtLeast<{
@@ -288,6 +296,10 @@ export type TransfertWhereUniqueInput = Prisma.AtLeast<{
   motif?: Prisma.StringNullableFilter<"Transfert"> | string | null
   dateTransfert?: Prisma.DateTimeFilter<"Transfert"> | Date | string
   hospitalisation?: Prisma.XOR<Prisma.HospitalisationScalarRelationFilter, Prisma.HospitalisationWhereInput>
+  ancienService?: Prisma.XOR<Prisma.ServiceNullableScalarRelationFilter, Prisma.ServiceWhereInput> | null
+  nouveauService?: Prisma.XOR<Prisma.ServiceNullableScalarRelationFilter, Prisma.ServiceWhereInput> | null
+  ancienLit?: Prisma.XOR<Prisma.LitNullableScalarRelationFilter, Prisma.LitWhereInput> | null
+  nouveauLit?: Prisma.XOR<Prisma.LitNullableScalarRelationFilter, Prisma.LitWhereInput> | null
 }, "id">
 
 export type TransfertOrderByWithAggregationInput = {
@@ -321,13 +333,13 @@ export type TransfertScalarWhereWithAggregatesInput = {
 }
 
 export type TransfertCreateInput = {
-  ancienServiceId?: number | null
-  nouveauServiceId?: number | null
-  ancienLitId?: number | null
-  nouveauLitId?: number | null
   motif?: string | null
   dateTransfert?: Date | string
   hospitalisation: Prisma.HospitalisationCreateNestedOneWithoutTransfertsInput
+  ancienService?: Prisma.ServiceCreateNestedOneWithoutTransfertsAnciensInput
+  nouveauService?: Prisma.ServiceCreateNestedOneWithoutTransfertsNouveauxInput
+  ancienLit?: Prisma.LitCreateNestedOneWithoutAnciensTransfertsInput
+  nouveauLit?: Prisma.LitCreateNestedOneWithoutNouveauxTransfertsInput
 }
 
 export type TransfertUncheckedCreateInput = {
@@ -342,13 +354,13 @@ export type TransfertUncheckedCreateInput = {
 }
 
 export type TransfertUpdateInput = {
-  ancienServiceId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
-  nouveauServiceId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
-  ancienLitId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
-  nouveauLitId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   motif?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   dateTransfert?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   hospitalisation?: Prisma.HospitalisationUpdateOneRequiredWithoutTransfertsNestedInput
+  ancienService?: Prisma.ServiceUpdateOneWithoutTransfertsAnciensNestedInput
+  nouveauService?: Prisma.ServiceUpdateOneWithoutTransfertsNouveauxNestedInput
+  ancienLit?: Prisma.LitUpdateOneWithoutAnciensTransfertsNestedInput
+  nouveauLit?: Prisma.LitUpdateOneWithoutNouveauxTransfertsNestedInput
 }
 
 export type TransfertUncheckedUpdateInput = {
@@ -374,10 +386,6 @@ export type TransfertCreateManyInput = {
 }
 
 export type TransfertUpdateManyMutationInput = {
-  ancienServiceId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
-  nouveauServiceId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
-  ancienLitId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
-  nouveauLitId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   motif?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   dateTransfert?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -454,6 +462,174 @@ export type TransfertSumOrderByAggregateInput = {
   nouveauLitId?: Prisma.SortOrder
 }
 
+export type TransfertCreateNestedManyWithoutAncienServiceInput = {
+  create?: Prisma.XOR<Prisma.TransfertCreateWithoutAncienServiceInput, Prisma.TransfertUncheckedCreateWithoutAncienServiceInput> | Prisma.TransfertCreateWithoutAncienServiceInput[] | Prisma.TransfertUncheckedCreateWithoutAncienServiceInput[]
+  connectOrCreate?: Prisma.TransfertCreateOrConnectWithoutAncienServiceInput | Prisma.TransfertCreateOrConnectWithoutAncienServiceInput[]
+  createMany?: Prisma.TransfertCreateManyAncienServiceInputEnvelope
+  connect?: Prisma.TransfertWhereUniqueInput | Prisma.TransfertWhereUniqueInput[]
+}
+
+export type TransfertCreateNestedManyWithoutNouveauServiceInput = {
+  create?: Prisma.XOR<Prisma.TransfertCreateWithoutNouveauServiceInput, Prisma.TransfertUncheckedCreateWithoutNouveauServiceInput> | Prisma.TransfertCreateWithoutNouveauServiceInput[] | Prisma.TransfertUncheckedCreateWithoutNouveauServiceInput[]
+  connectOrCreate?: Prisma.TransfertCreateOrConnectWithoutNouveauServiceInput | Prisma.TransfertCreateOrConnectWithoutNouveauServiceInput[]
+  createMany?: Prisma.TransfertCreateManyNouveauServiceInputEnvelope
+  connect?: Prisma.TransfertWhereUniqueInput | Prisma.TransfertWhereUniqueInput[]
+}
+
+export type TransfertUncheckedCreateNestedManyWithoutAncienServiceInput = {
+  create?: Prisma.XOR<Prisma.TransfertCreateWithoutAncienServiceInput, Prisma.TransfertUncheckedCreateWithoutAncienServiceInput> | Prisma.TransfertCreateWithoutAncienServiceInput[] | Prisma.TransfertUncheckedCreateWithoutAncienServiceInput[]
+  connectOrCreate?: Prisma.TransfertCreateOrConnectWithoutAncienServiceInput | Prisma.TransfertCreateOrConnectWithoutAncienServiceInput[]
+  createMany?: Prisma.TransfertCreateManyAncienServiceInputEnvelope
+  connect?: Prisma.TransfertWhereUniqueInput | Prisma.TransfertWhereUniqueInput[]
+}
+
+export type TransfertUncheckedCreateNestedManyWithoutNouveauServiceInput = {
+  create?: Prisma.XOR<Prisma.TransfertCreateWithoutNouveauServiceInput, Prisma.TransfertUncheckedCreateWithoutNouveauServiceInput> | Prisma.TransfertCreateWithoutNouveauServiceInput[] | Prisma.TransfertUncheckedCreateWithoutNouveauServiceInput[]
+  connectOrCreate?: Prisma.TransfertCreateOrConnectWithoutNouveauServiceInput | Prisma.TransfertCreateOrConnectWithoutNouveauServiceInput[]
+  createMany?: Prisma.TransfertCreateManyNouveauServiceInputEnvelope
+  connect?: Prisma.TransfertWhereUniqueInput | Prisma.TransfertWhereUniqueInput[]
+}
+
+export type TransfertUpdateManyWithoutAncienServiceNestedInput = {
+  create?: Prisma.XOR<Prisma.TransfertCreateWithoutAncienServiceInput, Prisma.TransfertUncheckedCreateWithoutAncienServiceInput> | Prisma.TransfertCreateWithoutAncienServiceInput[] | Prisma.TransfertUncheckedCreateWithoutAncienServiceInput[]
+  connectOrCreate?: Prisma.TransfertCreateOrConnectWithoutAncienServiceInput | Prisma.TransfertCreateOrConnectWithoutAncienServiceInput[]
+  upsert?: Prisma.TransfertUpsertWithWhereUniqueWithoutAncienServiceInput | Prisma.TransfertUpsertWithWhereUniqueWithoutAncienServiceInput[]
+  createMany?: Prisma.TransfertCreateManyAncienServiceInputEnvelope
+  set?: Prisma.TransfertWhereUniqueInput | Prisma.TransfertWhereUniqueInput[]
+  disconnect?: Prisma.TransfertWhereUniqueInput | Prisma.TransfertWhereUniqueInput[]
+  delete?: Prisma.TransfertWhereUniqueInput | Prisma.TransfertWhereUniqueInput[]
+  connect?: Prisma.TransfertWhereUniqueInput | Prisma.TransfertWhereUniqueInput[]
+  update?: Prisma.TransfertUpdateWithWhereUniqueWithoutAncienServiceInput | Prisma.TransfertUpdateWithWhereUniqueWithoutAncienServiceInput[]
+  updateMany?: Prisma.TransfertUpdateManyWithWhereWithoutAncienServiceInput | Prisma.TransfertUpdateManyWithWhereWithoutAncienServiceInput[]
+  deleteMany?: Prisma.TransfertScalarWhereInput | Prisma.TransfertScalarWhereInput[]
+}
+
+export type TransfertUpdateManyWithoutNouveauServiceNestedInput = {
+  create?: Prisma.XOR<Prisma.TransfertCreateWithoutNouveauServiceInput, Prisma.TransfertUncheckedCreateWithoutNouveauServiceInput> | Prisma.TransfertCreateWithoutNouveauServiceInput[] | Prisma.TransfertUncheckedCreateWithoutNouveauServiceInput[]
+  connectOrCreate?: Prisma.TransfertCreateOrConnectWithoutNouveauServiceInput | Prisma.TransfertCreateOrConnectWithoutNouveauServiceInput[]
+  upsert?: Prisma.TransfertUpsertWithWhereUniqueWithoutNouveauServiceInput | Prisma.TransfertUpsertWithWhereUniqueWithoutNouveauServiceInput[]
+  createMany?: Prisma.TransfertCreateManyNouveauServiceInputEnvelope
+  set?: Prisma.TransfertWhereUniqueInput | Prisma.TransfertWhereUniqueInput[]
+  disconnect?: Prisma.TransfertWhereUniqueInput | Prisma.TransfertWhereUniqueInput[]
+  delete?: Prisma.TransfertWhereUniqueInput | Prisma.TransfertWhereUniqueInput[]
+  connect?: Prisma.TransfertWhereUniqueInput | Prisma.TransfertWhereUniqueInput[]
+  update?: Prisma.TransfertUpdateWithWhereUniqueWithoutNouveauServiceInput | Prisma.TransfertUpdateWithWhereUniqueWithoutNouveauServiceInput[]
+  updateMany?: Prisma.TransfertUpdateManyWithWhereWithoutNouveauServiceInput | Prisma.TransfertUpdateManyWithWhereWithoutNouveauServiceInput[]
+  deleteMany?: Prisma.TransfertScalarWhereInput | Prisma.TransfertScalarWhereInput[]
+}
+
+export type TransfertUncheckedUpdateManyWithoutAncienServiceNestedInput = {
+  create?: Prisma.XOR<Prisma.TransfertCreateWithoutAncienServiceInput, Prisma.TransfertUncheckedCreateWithoutAncienServiceInput> | Prisma.TransfertCreateWithoutAncienServiceInput[] | Prisma.TransfertUncheckedCreateWithoutAncienServiceInput[]
+  connectOrCreate?: Prisma.TransfertCreateOrConnectWithoutAncienServiceInput | Prisma.TransfertCreateOrConnectWithoutAncienServiceInput[]
+  upsert?: Prisma.TransfertUpsertWithWhereUniqueWithoutAncienServiceInput | Prisma.TransfertUpsertWithWhereUniqueWithoutAncienServiceInput[]
+  createMany?: Prisma.TransfertCreateManyAncienServiceInputEnvelope
+  set?: Prisma.TransfertWhereUniqueInput | Prisma.TransfertWhereUniqueInput[]
+  disconnect?: Prisma.TransfertWhereUniqueInput | Prisma.TransfertWhereUniqueInput[]
+  delete?: Prisma.TransfertWhereUniqueInput | Prisma.TransfertWhereUniqueInput[]
+  connect?: Prisma.TransfertWhereUniqueInput | Prisma.TransfertWhereUniqueInput[]
+  update?: Prisma.TransfertUpdateWithWhereUniqueWithoutAncienServiceInput | Prisma.TransfertUpdateWithWhereUniqueWithoutAncienServiceInput[]
+  updateMany?: Prisma.TransfertUpdateManyWithWhereWithoutAncienServiceInput | Prisma.TransfertUpdateManyWithWhereWithoutAncienServiceInput[]
+  deleteMany?: Prisma.TransfertScalarWhereInput | Prisma.TransfertScalarWhereInput[]
+}
+
+export type TransfertUncheckedUpdateManyWithoutNouveauServiceNestedInput = {
+  create?: Prisma.XOR<Prisma.TransfertCreateWithoutNouveauServiceInput, Prisma.TransfertUncheckedCreateWithoutNouveauServiceInput> | Prisma.TransfertCreateWithoutNouveauServiceInput[] | Prisma.TransfertUncheckedCreateWithoutNouveauServiceInput[]
+  connectOrCreate?: Prisma.TransfertCreateOrConnectWithoutNouveauServiceInput | Prisma.TransfertCreateOrConnectWithoutNouveauServiceInput[]
+  upsert?: Prisma.TransfertUpsertWithWhereUniqueWithoutNouveauServiceInput | Prisma.TransfertUpsertWithWhereUniqueWithoutNouveauServiceInput[]
+  createMany?: Prisma.TransfertCreateManyNouveauServiceInputEnvelope
+  set?: Prisma.TransfertWhereUniqueInput | Prisma.TransfertWhereUniqueInput[]
+  disconnect?: Prisma.TransfertWhereUniqueInput | Prisma.TransfertWhereUniqueInput[]
+  delete?: Prisma.TransfertWhereUniqueInput | Prisma.TransfertWhereUniqueInput[]
+  connect?: Prisma.TransfertWhereUniqueInput | Prisma.TransfertWhereUniqueInput[]
+  update?: Prisma.TransfertUpdateWithWhereUniqueWithoutNouveauServiceInput | Prisma.TransfertUpdateWithWhereUniqueWithoutNouveauServiceInput[]
+  updateMany?: Prisma.TransfertUpdateManyWithWhereWithoutNouveauServiceInput | Prisma.TransfertUpdateManyWithWhereWithoutNouveauServiceInput[]
+  deleteMany?: Prisma.TransfertScalarWhereInput | Prisma.TransfertScalarWhereInput[]
+}
+
+export type TransfertCreateNestedManyWithoutAncienLitInput = {
+  create?: Prisma.XOR<Prisma.TransfertCreateWithoutAncienLitInput, Prisma.TransfertUncheckedCreateWithoutAncienLitInput> | Prisma.TransfertCreateWithoutAncienLitInput[] | Prisma.TransfertUncheckedCreateWithoutAncienLitInput[]
+  connectOrCreate?: Prisma.TransfertCreateOrConnectWithoutAncienLitInput | Prisma.TransfertCreateOrConnectWithoutAncienLitInput[]
+  createMany?: Prisma.TransfertCreateManyAncienLitInputEnvelope
+  connect?: Prisma.TransfertWhereUniqueInput | Prisma.TransfertWhereUniqueInput[]
+}
+
+export type TransfertCreateNestedManyWithoutNouveauLitInput = {
+  create?: Prisma.XOR<Prisma.TransfertCreateWithoutNouveauLitInput, Prisma.TransfertUncheckedCreateWithoutNouveauLitInput> | Prisma.TransfertCreateWithoutNouveauLitInput[] | Prisma.TransfertUncheckedCreateWithoutNouveauLitInput[]
+  connectOrCreate?: Prisma.TransfertCreateOrConnectWithoutNouveauLitInput | Prisma.TransfertCreateOrConnectWithoutNouveauLitInput[]
+  createMany?: Prisma.TransfertCreateManyNouveauLitInputEnvelope
+  connect?: Prisma.TransfertWhereUniqueInput | Prisma.TransfertWhereUniqueInput[]
+}
+
+export type TransfertUncheckedCreateNestedManyWithoutAncienLitInput = {
+  create?: Prisma.XOR<Prisma.TransfertCreateWithoutAncienLitInput, Prisma.TransfertUncheckedCreateWithoutAncienLitInput> | Prisma.TransfertCreateWithoutAncienLitInput[] | Prisma.TransfertUncheckedCreateWithoutAncienLitInput[]
+  connectOrCreate?: Prisma.TransfertCreateOrConnectWithoutAncienLitInput | Prisma.TransfertCreateOrConnectWithoutAncienLitInput[]
+  createMany?: Prisma.TransfertCreateManyAncienLitInputEnvelope
+  connect?: Prisma.TransfertWhereUniqueInput | Prisma.TransfertWhereUniqueInput[]
+}
+
+export type TransfertUncheckedCreateNestedManyWithoutNouveauLitInput = {
+  create?: Prisma.XOR<Prisma.TransfertCreateWithoutNouveauLitInput, Prisma.TransfertUncheckedCreateWithoutNouveauLitInput> | Prisma.TransfertCreateWithoutNouveauLitInput[] | Prisma.TransfertUncheckedCreateWithoutNouveauLitInput[]
+  connectOrCreate?: Prisma.TransfertCreateOrConnectWithoutNouveauLitInput | Prisma.TransfertCreateOrConnectWithoutNouveauLitInput[]
+  createMany?: Prisma.TransfertCreateManyNouveauLitInputEnvelope
+  connect?: Prisma.TransfertWhereUniqueInput | Prisma.TransfertWhereUniqueInput[]
+}
+
+export type TransfertUpdateManyWithoutAncienLitNestedInput = {
+  create?: Prisma.XOR<Prisma.TransfertCreateWithoutAncienLitInput, Prisma.TransfertUncheckedCreateWithoutAncienLitInput> | Prisma.TransfertCreateWithoutAncienLitInput[] | Prisma.TransfertUncheckedCreateWithoutAncienLitInput[]
+  connectOrCreate?: Prisma.TransfertCreateOrConnectWithoutAncienLitInput | Prisma.TransfertCreateOrConnectWithoutAncienLitInput[]
+  upsert?: Prisma.TransfertUpsertWithWhereUniqueWithoutAncienLitInput | Prisma.TransfertUpsertWithWhereUniqueWithoutAncienLitInput[]
+  createMany?: Prisma.TransfertCreateManyAncienLitInputEnvelope
+  set?: Prisma.TransfertWhereUniqueInput | Prisma.TransfertWhereUniqueInput[]
+  disconnect?: Prisma.TransfertWhereUniqueInput | Prisma.TransfertWhereUniqueInput[]
+  delete?: Prisma.TransfertWhereUniqueInput | Prisma.TransfertWhereUniqueInput[]
+  connect?: Prisma.TransfertWhereUniqueInput | Prisma.TransfertWhereUniqueInput[]
+  update?: Prisma.TransfertUpdateWithWhereUniqueWithoutAncienLitInput | Prisma.TransfertUpdateWithWhereUniqueWithoutAncienLitInput[]
+  updateMany?: Prisma.TransfertUpdateManyWithWhereWithoutAncienLitInput | Prisma.TransfertUpdateManyWithWhereWithoutAncienLitInput[]
+  deleteMany?: Prisma.TransfertScalarWhereInput | Prisma.TransfertScalarWhereInput[]
+}
+
+export type TransfertUpdateManyWithoutNouveauLitNestedInput = {
+  create?: Prisma.XOR<Prisma.TransfertCreateWithoutNouveauLitInput, Prisma.TransfertUncheckedCreateWithoutNouveauLitInput> | Prisma.TransfertCreateWithoutNouveauLitInput[] | Prisma.TransfertUncheckedCreateWithoutNouveauLitInput[]
+  connectOrCreate?: Prisma.TransfertCreateOrConnectWithoutNouveauLitInput | Prisma.TransfertCreateOrConnectWithoutNouveauLitInput[]
+  upsert?: Prisma.TransfertUpsertWithWhereUniqueWithoutNouveauLitInput | Prisma.TransfertUpsertWithWhereUniqueWithoutNouveauLitInput[]
+  createMany?: Prisma.TransfertCreateManyNouveauLitInputEnvelope
+  set?: Prisma.TransfertWhereUniqueInput | Prisma.TransfertWhereUniqueInput[]
+  disconnect?: Prisma.TransfertWhereUniqueInput | Prisma.TransfertWhereUniqueInput[]
+  delete?: Prisma.TransfertWhereUniqueInput | Prisma.TransfertWhereUniqueInput[]
+  connect?: Prisma.TransfertWhereUniqueInput | Prisma.TransfertWhereUniqueInput[]
+  update?: Prisma.TransfertUpdateWithWhereUniqueWithoutNouveauLitInput | Prisma.TransfertUpdateWithWhereUniqueWithoutNouveauLitInput[]
+  updateMany?: Prisma.TransfertUpdateManyWithWhereWithoutNouveauLitInput | Prisma.TransfertUpdateManyWithWhereWithoutNouveauLitInput[]
+  deleteMany?: Prisma.TransfertScalarWhereInput | Prisma.TransfertScalarWhereInput[]
+}
+
+export type TransfertUncheckedUpdateManyWithoutAncienLitNestedInput = {
+  create?: Prisma.XOR<Prisma.TransfertCreateWithoutAncienLitInput, Prisma.TransfertUncheckedCreateWithoutAncienLitInput> | Prisma.TransfertCreateWithoutAncienLitInput[] | Prisma.TransfertUncheckedCreateWithoutAncienLitInput[]
+  connectOrCreate?: Prisma.TransfertCreateOrConnectWithoutAncienLitInput | Prisma.TransfertCreateOrConnectWithoutAncienLitInput[]
+  upsert?: Prisma.TransfertUpsertWithWhereUniqueWithoutAncienLitInput | Prisma.TransfertUpsertWithWhereUniqueWithoutAncienLitInput[]
+  createMany?: Prisma.TransfertCreateManyAncienLitInputEnvelope
+  set?: Prisma.TransfertWhereUniqueInput | Prisma.TransfertWhereUniqueInput[]
+  disconnect?: Prisma.TransfertWhereUniqueInput | Prisma.TransfertWhereUniqueInput[]
+  delete?: Prisma.TransfertWhereUniqueInput | Prisma.TransfertWhereUniqueInput[]
+  connect?: Prisma.TransfertWhereUniqueInput | Prisma.TransfertWhereUniqueInput[]
+  update?: Prisma.TransfertUpdateWithWhereUniqueWithoutAncienLitInput | Prisma.TransfertUpdateWithWhereUniqueWithoutAncienLitInput[]
+  updateMany?: Prisma.TransfertUpdateManyWithWhereWithoutAncienLitInput | Prisma.TransfertUpdateManyWithWhereWithoutAncienLitInput[]
+  deleteMany?: Prisma.TransfertScalarWhereInput | Prisma.TransfertScalarWhereInput[]
+}
+
+export type TransfertUncheckedUpdateManyWithoutNouveauLitNestedInput = {
+  create?: Prisma.XOR<Prisma.TransfertCreateWithoutNouveauLitInput, Prisma.TransfertUncheckedCreateWithoutNouveauLitInput> | Prisma.TransfertCreateWithoutNouveauLitInput[] | Prisma.TransfertUncheckedCreateWithoutNouveauLitInput[]
+  connectOrCreate?: Prisma.TransfertCreateOrConnectWithoutNouveauLitInput | Prisma.TransfertCreateOrConnectWithoutNouveauLitInput[]
+  upsert?: Prisma.TransfertUpsertWithWhereUniqueWithoutNouveauLitInput | Prisma.TransfertUpsertWithWhereUniqueWithoutNouveauLitInput[]
+  createMany?: Prisma.TransfertCreateManyNouveauLitInputEnvelope
+  set?: Prisma.TransfertWhereUniqueInput | Prisma.TransfertWhereUniqueInput[]
+  disconnect?: Prisma.TransfertWhereUniqueInput | Prisma.TransfertWhereUniqueInput[]
+  delete?: Prisma.TransfertWhereUniqueInput | Prisma.TransfertWhereUniqueInput[]
+  connect?: Prisma.TransfertWhereUniqueInput | Prisma.TransfertWhereUniqueInput[]
+  update?: Prisma.TransfertUpdateWithWhereUniqueWithoutNouveauLitInput | Prisma.TransfertUpdateWithWhereUniqueWithoutNouveauLitInput[]
+  updateMany?: Prisma.TransfertUpdateManyWithWhereWithoutNouveauLitInput | Prisma.TransfertUpdateManyWithWhereWithoutNouveauLitInput[]
+  deleteMany?: Prisma.TransfertScalarWhereInput | Prisma.TransfertScalarWhereInput[]
+}
+
 export type TransfertCreateNestedManyWithoutHospitalisationInput = {
   create?: Prisma.XOR<Prisma.TransfertCreateWithoutHospitalisationInput, Prisma.TransfertUncheckedCreateWithoutHospitalisationInput> | Prisma.TransfertCreateWithoutHospitalisationInput[] | Prisma.TransfertUncheckedCreateWithoutHospitalisationInput[]
   connectOrCreate?: Prisma.TransfertCreateOrConnectWithoutHospitalisationInput | Prisma.TransfertCreateOrConnectWithoutHospitalisationInput[]
@@ -496,13 +672,203 @@ export type TransfertUncheckedUpdateManyWithoutHospitalisationNestedInput = {
   deleteMany?: Prisma.TransfertScalarWhereInput | Prisma.TransfertScalarWhereInput[]
 }
 
-export type TransfertCreateWithoutHospitalisationInput = {
-  ancienServiceId?: number | null
+export type TransfertCreateWithoutAncienServiceInput = {
+  motif?: string | null
+  dateTransfert?: Date | string
+  hospitalisation: Prisma.HospitalisationCreateNestedOneWithoutTransfertsInput
+  nouveauService?: Prisma.ServiceCreateNestedOneWithoutTransfertsNouveauxInput
+  ancienLit?: Prisma.LitCreateNestedOneWithoutAnciensTransfertsInput
+  nouveauLit?: Prisma.LitCreateNestedOneWithoutNouveauxTransfertsInput
+}
+
+export type TransfertUncheckedCreateWithoutAncienServiceInput = {
+  id?: number
+  hospitalisationId: number
   nouveauServiceId?: number | null
   ancienLitId?: number | null
   nouveauLitId?: number | null
   motif?: string | null
   dateTransfert?: Date | string
+}
+
+export type TransfertCreateOrConnectWithoutAncienServiceInput = {
+  where: Prisma.TransfertWhereUniqueInput
+  create: Prisma.XOR<Prisma.TransfertCreateWithoutAncienServiceInput, Prisma.TransfertUncheckedCreateWithoutAncienServiceInput>
+}
+
+export type TransfertCreateManyAncienServiceInputEnvelope = {
+  data: Prisma.TransfertCreateManyAncienServiceInput | Prisma.TransfertCreateManyAncienServiceInput[]
+}
+
+export type TransfertCreateWithoutNouveauServiceInput = {
+  motif?: string | null
+  dateTransfert?: Date | string
+  hospitalisation: Prisma.HospitalisationCreateNestedOneWithoutTransfertsInput
+  ancienService?: Prisma.ServiceCreateNestedOneWithoutTransfertsAnciensInput
+  ancienLit?: Prisma.LitCreateNestedOneWithoutAnciensTransfertsInput
+  nouveauLit?: Prisma.LitCreateNestedOneWithoutNouveauxTransfertsInput
+}
+
+export type TransfertUncheckedCreateWithoutNouveauServiceInput = {
+  id?: number
+  hospitalisationId: number
+  ancienServiceId?: number | null
+  ancienLitId?: number | null
+  nouveauLitId?: number | null
+  motif?: string | null
+  dateTransfert?: Date | string
+}
+
+export type TransfertCreateOrConnectWithoutNouveauServiceInput = {
+  where: Prisma.TransfertWhereUniqueInput
+  create: Prisma.XOR<Prisma.TransfertCreateWithoutNouveauServiceInput, Prisma.TransfertUncheckedCreateWithoutNouveauServiceInput>
+}
+
+export type TransfertCreateManyNouveauServiceInputEnvelope = {
+  data: Prisma.TransfertCreateManyNouveauServiceInput | Prisma.TransfertCreateManyNouveauServiceInput[]
+}
+
+export type TransfertUpsertWithWhereUniqueWithoutAncienServiceInput = {
+  where: Prisma.TransfertWhereUniqueInput
+  update: Prisma.XOR<Prisma.TransfertUpdateWithoutAncienServiceInput, Prisma.TransfertUncheckedUpdateWithoutAncienServiceInput>
+  create: Prisma.XOR<Prisma.TransfertCreateWithoutAncienServiceInput, Prisma.TransfertUncheckedCreateWithoutAncienServiceInput>
+}
+
+export type TransfertUpdateWithWhereUniqueWithoutAncienServiceInput = {
+  where: Prisma.TransfertWhereUniqueInput
+  data: Prisma.XOR<Prisma.TransfertUpdateWithoutAncienServiceInput, Prisma.TransfertUncheckedUpdateWithoutAncienServiceInput>
+}
+
+export type TransfertUpdateManyWithWhereWithoutAncienServiceInput = {
+  where: Prisma.TransfertScalarWhereInput
+  data: Prisma.XOR<Prisma.TransfertUpdateManyMutationInput, Prisma.TransfertUncheckedUpdateManyWithoutAncienServiceInput>
+}
+
+export type TransfertScalarWhereInput = {
+  AND?: Prisma.TransfertScalarWhereInput | Prisma.TransfertScalarWhereInput[]
+  OR?: Prisma.TransfertScalarWhereInput[]
+  NOT?: Prisma.TransfertScalarWhereInput | Prisma.TransfertScalarWhereInput[]
+  id?: Prisma.IntFilter<"Transfert"> | number
+  hospitalisationId?: Prisma.IntFilter<"Transfert"> | number
+  ancienServiceId?: Prisma.IntNullableFilter<"Transfert"> | number | null
+  nouveauServiceId?: Prisma.IntNullableFilter<"Transfert"> | number | null
+  ancienLitId?: Prisma.IntNullableFilter<"Transfert"> | number | null
+  nouveauLitId?: Prisma.IntNullableFilter<"Transfert"> | number | null
+  motif?: Prisma.StringNullableFilter<"Transfert"> | string | null
+  dateTransfert?: Prisma.DateTimeFilter<"Transfert"> | Date | string
+}
+
+export type TransfertUpsertWithWhereUniqueWithoutNouveauServiceInput = {
+  where: Prisma.TransfertWhereUniqueInput
+  update: Prisma.XOR<Prisma.TransfertUpdateWithoutNouveauServiceInput, Prisma.TransfertUncheckedUpdateWithoutNouveauServiceInput>
+  create: Prisma.XOR<Prisma.TransfertCreateWithoutNouveauServiceInput, Prisma.TransfertUncheckedCreateWithoutNouveauServiceInput>
+}
+
+export type TransfertUpdateWithWhereUniqueWithoutNouveauServiceInput = {
+  where: Prisma.TransfertWhereUniqueInput
+  data: Prisma.XOR<Prisma.TransfertUpdateWithoutNouveauServiceInput, Prisma.TransfertUncheckedUpdateWithoutNouveauServiceInput>
+}
+
+export type TransfertUpdateManyWithWhereWithoutNouveauServiceInput = {
+  where: Prisma.TransfertScalarWhereInput
+  data: Prisma.XOR<Prisma.TransfertUpdateManyMutationInput, Prisma.TransfertUncheckedUpdateManyWithoutNouveauServiceInput>
+}
+
+export type TransfertCreateWithoutAncienLitInput = {
+  motif?: string | null
+  dateTransfert?: Date | string
+  hospitalisation: Prisma.HospitalisationCreateNestedOneWithoutTransfertsInput
+  ancienService?: Prisma.ServiceCreateNestedOneWithoutTransfertsAnciensInput
+  nouveauService?: Prisma.ServiceCreateNestedOneWithoutTransfertsNouveauxInput
+  nouveauLit?: Prisma.LitCreateNestedOneWithoutNouveauxTransfertsInput
+}
+
+export type TransfertUncheckedCreateWithoutAncienLitInput = {
+  id?: number
+  hospitalisationId: number
+  ancienServiceId?: number | null
+  nouveauServiceId?: number | null
+  nouveauLitId?: number | null
+  motif?: string | null
+  dateTransfert?: Date | string
+}
+
+export type TransfertCreateOrConnectWithoutAncienLitInput = {
+  where: Prisma.TransfertWhereUniqueInput
+  create: Prisma.XOR<Prisma.TransfertCreateWithoutAncienLitInput, Prisma.TransfertUncheckedCreateWithoutAncienLitInput>
+}
+
+export type TransfertCreateManyAncienLitInputEnvelope = {
+  data: Prisma.TransfertCreateManyAncienLitInput | Prisma.TransfertCreateManyAncienLitInput[]
+}
+
+export type TransfertCreateWithoutNouveauLitInput = {
+  motif?: string | null
+  dateTransfert?: Date | string
+  hospitalisation: Prisma.HospitalisationCreateNestedOneWithoutTransfertsInput
+  ancienService?: Prisma.ServiceCreateNestedOneWithoutTransfertsAnciensInput
+  nouveauService?: Prisma.ServiceCreateNestedOneWithoutTransfertsNouveauxInput
+  ancienLit?: Prisma.LitCreateNestedOneWithoutAnciensTransfertsInput
+}
+
+export type TransfertUncheckedCreateWithoutNouveauLitInput = {
+  id?: number
+  hospitalisationId: number
+  ancienServiceId?: number | null
+  nouveauServiceId?: number | null
+  ancienLitId?: number | null
+  motif?: string | null
+  dateTransfert?: Date | string
+}
+
+export type TransfertCreateOrConnectWithoutNouveauLitInput = {
+  where: Prisma.TransfertWhereUniqueInput
+  create: Prisma.XOR<Prisma.TransfertCreateWithoutNouveauLitInput, Prisma.TransfertUncheckedCreateWithoutNouveauLitInput>
+}
+
+export type TransfertCreateManyNouveauLitInputEnvelope = {
+  data: Prisma.TransfertCreateManyNouveauLitInput | Prisma.TransfertCreateManyNouveauLitInput[]
+}
+
+export type TransfertUpsertWithWhereUniqueWithoutAncienLitInput = {
+  where: Prisma.TransfertWhereUniqueInput
+  update: Prisma.XOR<Prisma.TransfertUpdateWithoutAncienLitInput, Prisma.TransfertUncheckedUpdateWithoutAncienLitInput>
+  create: Prisma.XOR<Prisma.TransfertCreateWithoutAncienLitInput, Prisma.TransfertUncheckedCreateWithoutAncienLitInput>
+}
+
+export type TransfertUpdateWithWhereUniqueWithoutAncienLitInput = {
+  where: Prisma.TransfertWhereUniqueInput
+  data: Prisma.XOR<Prisma.TransfertUpdateWithoutAncienLitInput, Prisma.TransfertUncheckedUpdateWithoutAncienLitInput>
+}
+
+export type TransfertUpdateManyWithWhereWithoutAncienLitInput = {
+  where: Prisma.TransfertScalarWhereInput
+  data: Prisma.XOR<Prisma.TransfertUpdateManyMutationInput, Prisma.TransfertUncheckedUpdateManyWithoutAncienLitInput>
+}
+
+export type TransfertUpsertWithWhereUniqueWithoutNouveauLitInput = {
+  where: Prisma.TransfertWhereUniqueInput
+  update: Prisma.XOR<Prisma.TransfertUpdateWithoutNouveauLitInput, Prisma.TransfertUncheckedUpdateWithoutNouveauLitInput>
+  create: Prisma.XOR<Prisma.TransfertCreateWithoutNouveauLitInput, Prisma.TransfertUncheckedCreateWithoutNouveauLitInput>
+}
+
+export type TransfertUpdateWithWhereUniqueWithoutNouveauLitInput = {
+  where: Prisma.TransfertWhereUniqueInput
+  data: Prisma.XOR<Prisma.TransfertUpdateWithoutNouveauLitInput, Prisma.TransfertUncheckedUpdateWithoutNouveauLitInput>
+}
+
+export type TransfertUpdateManyWithWhereWithoutNouveauLitInput = {
+  where: Prisma.TransfertScalarWhereInput
+  data: Prisma.XOR<Prisma.TransfertUpdateManyMutationInput, Prisma.TransfertUncheckedUpdateManyWithoutNouveauLitInput>
+}
+
+export type TransfertCreateWithoutHospitalisationInput = {
+  motif?: string | null
+  dateTransfert?: Date | string
+  ancienService?: Prisma.ServiceCreateNestedOneWithoutTransfertsAnciensInput
+  nouveauService?: Prisma.ServiceCreateNestedOneWithoutTransfertsNouveauxInput
+  ancienLit?: Prisma.LitCreateNestedOneWithoutAnciensTransfertsInput
+  nouveauLit?: Prisma.LitCreateNestedOneWithoutNouveauxTransfertsInput
 }
 
 export type TransfertUncheckedCreateWithoutHospitalisationInput = {
@@ -540,18 +906,160 @@ export type TransfertUpdateManyWithWhereWithoutHospitalisationInput = {
   data: Prisma.XOR<Prisma.TransfertUpdateManyMutationInput, Prisma.TransfertUncheckedUpdateManyWithoutHospitalisationInput>
 }
 
-export type TransfertScalarWhereInput = {
-  AND?: Prisma.TransfertScalarWhereInput | Prisma.TransfertScalarWhereInput[]
-  OR?: Prisma.TransfertScalarWhereInput[]
-  NOT?: Prisma.TransfertScalarWhereInput | Prisma.TransfertScalarWhereInput[]
-  id?: Prisma.IntFilter<"Transfert"> | number
-  hospitalisationId?: Prisma.IntFilter<"Transfert"> | number
-  ancienServiceId?: Prisma.IntNullableFilter<"Transfert"> | number | null
-  nouveauServiceId?: Prisma.IntNullableFilter<"Transfert"> | number | null
-  ancienLitId?: Prisma.IntNullableFilter<"Transfert"> | number | null
-  nouveauLitId?: Prisma.IntNullableFilter<"Transfert"> | number | null
-  motif?: Prisma.StringNullableFilter<"Transfert"> | string | null
-  dateTransfert?: Prisma.DateTimeFilter<"Transfert"> | Date | string
+export type TransfertCreateManyAncienServiceInput = {
+  id?: number
+  hospitalisationId: number
+  nouveauServiceId?: number | null
+  ancienLitId?: number | null
+  nouveauLitId?: number | null
+  motif?: string | null
+  dateTransfert?: Date | string
+}
+
+export type TransfertCreateManyNouveauServiceInput = {
+  id?: number
+  hospitalisationId: number
+  ancienServiceId?: number | null
+  ancienLitId?: number | null
+  nouveauLitId?: number | null
+  motif?: string | null
+  dateTransfert?: Date | string
+}
+
+export type TransfertUpdateWithoutAncienServiceInput = {
+  motif?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  dateTransfert?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  hospitalisation?: Prisma.HospitalisationUpdateOneRequiredWithoutTransfertsNestedInput
+  nouveauService?: Prisma.ServiceUpdateOneWithoutTransfertsNouveauxNestedInput
+  ancienLit?: Prisma.LitUpdateOneWithoutAnciensTransfertsNestedInput
+  nouveauLit?: Prisma.LitUpdateOneWithoutNouveauxTransfertsNestedInput
+}
+
+export type TransfertUncheckedUpdateWithoutAncienServiceInput = {
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  hospitalisationId?: Prisma.IntFieldUpdateOperationsInput | number
+  nouveauServiceId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  ancienLitId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  nouveauLitId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  motif?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  dateTransfert?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
+export type TransfertUncheckedUpdateManyWithoutAncienServiceInput = {
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  hospitalisationId?: Prisma.IntFieldUpdateOperationsInput | number
+  nouveauServiceId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  ancienLitId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  nouveauLitId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  motif?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  dateTransfert?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
+export type TransfertUpdateWithoutNouveauServiceInput = {
+  motif?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  dateTransfert?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  hospitalisation?: Prisma.HospitalisationUpdateOneRequiredWithoutTransfertsNestedInput
+  ancienService?: Prisma.ServiceUpdateOneWithoutTransfertsAnciensNestedInput
+  ancienLit?: Prisma.LitUpdateOneWithoutAnciensTransfertsNestedInput
+  nouveauLit?: Prisma.LitUpdateOneWithoutNouveauxTransfertsNestedInput
+}
+
+export type TransfertUncheckedUpdateWithoutNouveauServiceInput = {
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  hospitalisationId?: Prisma.IntFieldUpdateOperationsInput | number
+  ancienServiceId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  ancienLitId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  nouveauLitId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  motif?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  dateTransfert?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
+export type TransfertUncheckedUpdateManyWithoutNouveauServiceInput = {
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  hospitalisationId?: Prisma.IntFieldUpdateOperationsInput | number
+  ancienServiceId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  ancienLitId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  nouveauLitId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  motif?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  dateTransfert?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
+export type TransfertCreateManyAncienLitInput = {
+  id?: number
+  hospitalisationId: number
+  ancienServiceId?: number | null
+  nouveauServiceId?: number | null
+  nouveauLitId?: number | null
+  motif?: string | null
+  dateTransfert?: Date | string
+}
+
+export type TransfertCreateManyNouveauLitInput = {
+  id?: number
+  hospitalisationId: number
+  ancienServiceId?: number | null
+  nouveauServiceId?: number | null
+  ancienLitId?: number | null
+  motif?: string | null
+  dateTransfert?: Date | string
+}
+
+export type TransfertUpdateWithoutAncienLitInput = {
+  motif?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  dateTransfert?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  hospitalisation?: Prisma.HospitalisationUpdateOneRequiredWithoutTransfertsNestedInput
+  ancienService?: Prisma.ServiceUpdateOneWithoutTransfertsAnciensNestedInput
+  nouveauService?: Prisma.ServiceUpdateOneWithoutTransfertsNouveauxNestedInput
+  nouveauLit?: Prisma.LitUpdateOneWithoutNouveauxTransfertsNestedInput
+}
+
+export type TransfertUncheckedUpdateWithoutAncienLitInput = {
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  hospitalisationId?: Prisma.IntFieldUpdateOperationsInput | number
+  ancienServiceId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  nouveauServiceId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  nouveauLitId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  motif?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  dateTransfert?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
+export type TransfertUncheckedUpdateManyWithoutAncienLitInput = {
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  hospitalisationId?: Prisma.IntFieldUpdateOperationsInput | number
+  ancienServiceId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  nouveauServiceId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  nouveauLitId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  motif?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  dateTransfert?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
+export type TransfertUpdateWithoutNouveauLitInput = {
+  motif?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  dateTransfert?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  hospitalisation?: Prisma.HospitalisationUpdateOneRequiredWithoutTransfertsNestedInput
+  ancienService?: Prisma.ServiceUpdateOneWithoutTransfertsAnciensNestedInput
+  nouveauService?: Prisma.ServiceUpdateOneWithoutTransfertsNouveauxNestedInput
+  ancienLit?: Prisma.LitUpdateOneWithoutAnciensTransfertsNestedInput
+}
+
+export type TransfertUncheckedUpdateWithoutNouveauLitInput = {
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  hospitalisationId?: Prisma.IntFieldUpdateOperationsInput | number
+  ancienServiceId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  nouveauServiceId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  ancienLitId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  motif?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  dateTransfert?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
+export type TransfertUncheckedUpdateManyWithoutNouveauLitInput = {
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  hospitalisationId?: Prisma.IntFieldUpdateOperationsInput | number
+  ancienServiceId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  nouveauServiceId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  ancienLitId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  motif?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  dateTransfert?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type TransfertCreateManyHospitalisationInput = {
@@ -565,12 +1073,12 @@ export type TransfertCreateManyHospitalisationInput = {
 }
 
 export type TransfertUpdateWithoutHospitalisationInput = {
-  ancienServiceId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
-  nouveauServiceId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
-  ancienLitId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
-  nouveauLitId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   motif?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   dateTransfert?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  ancienService?: Prisma.ServiceUpdateOneWithoutTransfertsAnciensNestedInput
+  nouveauService?: Prisma.ServiceUpdateOneWithoutTransfertsNouveauxNestedInput
+  ancienLit?: Prisma.LitUpdateOneWithoutAnciensTransfertsNestedInput
+  nouveauLit?: Prisma.LitUpdateOneWithoutNouveauxTransfertsNestedInput
 }
 
 export type TransfertUncheckedUpdateWithoutHospitalisationInput = {
@@ -605,6 +1113,10 @@ export type TransfertSelect<ExtArgs extends runtime.Types.Extensions.InternalArg
   motif?: boolean
   dateTransfert?: boolean
   hospitalisation?: boolean | Prisma.HospitalisationDefaultArgs<ExtArgs>
+  ancienService?: boolean | Prisma.Transfert$ancienServiceArgs<ExtArgs>
+  nouveauService?: boolean | Prisma.Transfert$nouveauServiceArgs<ExtArgs>
+  ancienLit?: boolean | Prisma.Transfert$ancienLitArgs<ExtArgs>
+  nouveauLit?: boolean | Prisma.Transfert$nouveauLitArgs<ExtArgs>
 }, ExtArgs["result"]["transfert"]>
 
 export type TransfertSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -617,6 +1129,10 @@ export type TransfertSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Ext
   motif?: boolean
   dateTransfert?: boolean
   hospitalisation?: boolean | Prisma.HospitalisationDefaultArgs<ExtArgs>
+  ancienService?: boolean | Prisma.Transfert$ancienServiceArgs<ExtArgs>
+  nouveauService?: boolean | Prisma.Transfert$nouveauServiceArgs<ExtArgs>
+  ancienLit?: boolean | Prisma.Transfert$ancienLitArgs<ExtArgs>
+  nouveauLit?: boolean | Prisma.Transfert$nouveauLitArgs<ExtArgs>
 }, ExtArgs["result"]["transfert"]>
 
 export type TransfertSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -629,6 +1145,10 @@ export type TransfertSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Ext
   motif?: boolean
   dateTransfert?: boolean
   hospitalisation?: boolean | Prisma.HospitalisationDefaultArgs<ExtArgs>
+  ancienService?: boolean | Prisma.Transfert$ancienServiceArgs<ExtArgs>
+  nouveauService?: boolean | Prisma.Transfert$nouveauServiceArgs<ExtArgs>
+  ancienLit?: boolean | Prisma.Transfert$ancienLitArgs<ExtArgs>
+  nouveauLit?: boolean | Prisma.Transfert$nouveauLitArgs<ExtArgs>
 }, ExtArgs["result"]["transfert"]>
 
 export type TransfertSelectScalar = {
@@ -645,18 +1165,34 @@ export type TransfertSelectScalar = {
 export type TransfertOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "hospitalisationId" | "ancienServiceId" | "nouveauServiceId" | "ancienLitId" | "nouveauLitId" | "motif" | "dateTransfert", ExtArgs["result"]["transfert"]>
 export type TransfertInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   hospitalisation?: boolean | Prisma.HospitalisationDefaultArgs<ExtArgs>
+  ancienService?: boolean | Prisma.Transfert$ancienServiceArgs<ExtArgs>
+  nouveauService?: boolean | Prisma.Transfert$nouveauServiceArgs<ExtArgs>
+  ancienLit?: boolean | Prisma.Transfert$ancienLitArgs<ExtArgs>
+  nouveauLit?: boolean | Prisma.Transfert$nouveauLitArgs<ExtArgs>
 }
 export type TransfertIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   hospitalisation?: boolean | Prisma.HospitalisationDefaultArgs<ExtArgs>
+  ancienService?: boolean | Prisma.Transfert$ancienServiceArgs<ExtArgs>
+  nouveauService?: boolean | Prisma.Transfert$nouveauServiceArgs<ExtArgs>
+  ancienLit?: boolean | Prisma.Transfert$ancienLitArgs<ExtArgs>
+  nouveauLit?: boolean | Prisma.Transfert$nouveauLitArgs<ExtArgs>
 }
 export type TransfertIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   hospitalisation?: boolean | Prisma.HospitalisationDefaultArgs<ExtArgs>
+  ancienService?: boolean | Prisma.Transfert$ancienServiceArgs<ExtArgs>
+  nouveauService?: boolean | Prisma.Transfert$nouveauServiceArgs<ExtArgs>
+  ancienLit?: boolean | Prisma.Transfert$ancienLitArgs<ExtArgs>
+  nouveauLit?: boolean | Prisma.Transfert$nouveauLitArgs<ExtArgs>
 }
 
 export type $TransfertPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "Transfert"
   objects: {
     hospitalisation: Prisma.$HospitalisationPayload<ExtArgs>
+    ancienService: Prisma.$ServicePayload<ExtArgs> | null
+    nouveauService: Prisma.$ServicePayload<ExtArgs> | null
+    ancienLit: Prisma.$LitPayload<ExtArgs> | null
+    nouveauLit: Prisma.$LitPayload<ExtArgs> | null
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: number
@@ -1062,6 +1598,10 @@ readonly fields: TransfertFieldRefs;
 export interface Prisma__TransfertClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
   hospitalisation<T extends Prisma.HospitalisationDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.HospitalisationDefaultArgs<ExtArgs>>): Prisma.Prisma__HospitalisationClient<runtime.Types.Result.GetResult<Prisma.$HospitalisationPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+  ancienService<T extends Prisma.Transfert$ancienServiceArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Transfert$ancienServiceArgs<ExtArgs>>): Prisma.Prisma__ServiceClient<runtime.Types.Result.GetResult<Prisma.$ServicePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+  nouveauService<T extends Prisma.Transfert$nouveauServiceArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Transfert$nouveauServiceArgs<ExtArgs>>): Prisma.Prisma__ServiceClient<runtime.Types.Result.GetResult<Prisma.$ServicePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+  ancienLit<T extends Prisma.Transfert$ancienLitArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Transfert$ancienLitArgs<ExtArgs>>): Prisma.Prisma__LitClient<runtime.Types.Result.GetResult<Prisma.$LitPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+  nouveauLit<T extends Prisma.Transfert$nouveauLitArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Transfert$nouveauLitArgs<ExtArgs>>): Prisma.Prisma__LitClient<runtime.Types.Result.GetResult<Prisma.$LitPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1495,6 +2035,82 @@ export type TransfertDeleteManyArgs<ExtArgs extends runtime.Types.Extensions.Int
    * Limit how many Transferts to delete.
    */
   limit?: number
+}
+
+/**
+ * Transfert.ancienService
+ */
+export type Transfert$ancienServiceArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Service
+   */
+  select?: Prisma.ServiceSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Service
+   */
+  omit?: Prisma.ServiceOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.ServiceInclude<ExtArgs> | null
+  where?: Prisma.ServiceWhereInput
+}
+
+/**
+ * Transfert.nouveauService
+ */
+export type Transfert$nouveauServiceArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Service
+   */
+  select?: Prisma.ServiceSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Service
+   */
+  omit?: Prisma.ServiceOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.ServiceInclude<ExtArgs> | null
+  where?: Prisma.ServiceWhereInput
+}
+
+/**
+ * Transfert.ancienLit
+ */
+export type Transfert$ancienLitArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Lit
+   */
+  select?: Prisma.LitSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Lit
+   */
+  omit?: Prisma.LitOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.LitInclude<ExtArgs> | null
+  where?: Prisma.LitWhereInput
+}
+
+/**
+ * Transfert.nouveauLit
+ */
+export type Transfert$nouveauLitArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Lit
+   */
+  select?: Prisma.LitSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Lit
+   */
+  omit?: Prisma.LitOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.LitInclude<ExtArgs> | null
+  where?: Prisma.LitWhereInput
 }
 
 /**

@@ -322,6 +322,9 @@ export type ConsultationWhereInput = {
   prescriptions?: Prisma.PrescriptionListRelationFilter
   demandesLabo?: Prisma.DemandeLaboratoireListRelationFilter
   demandesImagerie?: Prisma.DemandeImagerieListRelationFilter
+  proformas?: Prisma.ProformaListRelationFilter
+  factures?: Prisma.FactureListRelationFilter
+  actes?: Prisma.ConsultationActeListRelationFilter
 }
 
 export type ConsultationOrderByWithRelationInput = {
@@ -349,6 +352,9 @@ export type ConsultationOrderByWithRelationInput = {
   prescriptions?: Prisma.PrescriptionOrderByRelationAggregateInput
   demandesLabo?: Prisma.DemandeLaboratoireOrderByRelationAggregateInput
   demandesImagerie?: Prisma.DemandeImagerieOrderByRelationAggregateInput
+  proformas?: Prisma.ProformaOrderByRelationAggregateInput
+  factures?: Prisma.FactureOrderByRelationAggregateInput
+  actes?: Prisma.ConsultationActeOrderByRelationAggregateInput
 }
 
 export type ConsultationWhereUniqueInput = Prisma.AtLeast<{
@@ -379,6 +385,9 @@ export type ConsultationWhereUniqueInput = Prisma.AtLeast<{
   prescriptions?: Prisma.PrescriptionListRelationFilter
   demandesLabo?: Prisma.DemandeLaboratoireListRelationFilter
   demandesImagerie?: Prisma.DemandeImagerieListRelationFilter
+  proformas?: Prisma.ProformaListRelationFilter
+  factures?: Prisma.FactureListRelationFilter
+  actes?: Prisma.ConsultationActeListRelationFilter
 }, "idConsultation" | "admissionId">
 
 export type ConsultationOrderByWithAggregationInput = {
@@ -441,6 +450,9 @@ export type ConsultationCreateInput = {
   prescriptions?: Prisma.PrescriptionCreateNestedManyWithoutConsultationInput
   demandesLabo?: Prisma.DemandeLaboratoireCreateNestedManyWithoutConsultationInput
   demandesImagerie?: Prisma.DemandeImagerieCreateNestedManyWithoutConsultationInput
+  proformas?: Prisma.ProformaCreateNestedManyWithoutConsultationInput
+  factures?: Prisma.FactureCreateNestedManyWithoutConsultationInput
+  actes?: Prisma.ConsultationActeCreateNestedManyWithoutConsultationInput
 }
 
 export type ConsultationUncheckedCreateInput = {
@@ -462,6 +474,9 @@ export type ConsultationUncheckedCreateInput = {
   prescriptions?: Prisma.PrescriptionUncheckedCreateNestedManyWithoutConsultationInput
   demandesLabo?: Prisma.DemandeLaboratoireUncheckedCreateNestedManyWithoutConsultationInput
   demandesImagerie?: Prisma.DemandeImagerieUncheckedCreateNestedManyWithoutConsultationInput
+  proformas?: Prisma.ProformaUncheckedCreateNestedManyWithoutConsultationInput
+  factures?: Prisma.FactureUncheckedCreateNestedManyWithoutConsultationInput
+  actes?: Prisma.ConsultationActeUncheckedCreateNestedManyWithoutConsultationInput
 }
 
 export type ConsultationUpdateInput = {
@@ -482,6 +497,9 @@ export type ConsultationUpdateInput = {
   prescriptions?: Prisma.PrescriptionUpdateManyWithoutConsultationNestedInput
   demandesLabo?: Prisma.DemandeLaboratoireUpdateManyWithoutConsultationNestedInput
   demandesImagerie?: Prisma.DemandeImagerieUpdateManyWithoutConsultationNestedInput
+  proformas?: Prisma.ProformaUpdateManyWithoutConsultationNestedInput
+  factures?: Prisma.FactureUpdateManyWithoutConsultationNestedInput
+  actes?: Prisma.ConsultationActeUpdateManyWithoutConsultationNestedInput
 }
 
 export type ConsultationUncheckedUpdateInput = {
@@ -503,6 +521,9 @@ export type ConsultationUncheckedUpdateInput = {
   prescriptions?: Prisma.PrescriptionUncheckedUpdateManyWithoutConsultationNestedInput
   demandesLabo?: Prisma.DemandeLaboratoireUncheckedUpdateManyWithoutConsultationNestedInput
   demandesImagerie?: Prisma.DemandeImagerieUncheckedUpdateManyWithoutConsultationNestedInput
+  proformas?: Prisma.ProformaUncheckedUpdateManyWithoutConsultationNestedInput
+  factures?: Prisma.FactureUncheckedUpdateManyWithoutConsultationNestedInput
+  actes?: Prisma.ConsultationActeUncheckedUpdateManyWithoutConsultationNestedInput
 }
 
 export type ConsultationCreateManyInput = {
@@ -633,6 +654,11 @@ export type ConsultationSumOrderByAggregateInput = {
   serviceId?: Prisma.SortOrder
   specialiteId?: Prisma.SortOrder
   admissionId?: Prisma.SortOrder
+}
+
+export type ConsultationScalarRelationFilter = {
+  is?: Prisma.ConsultationWhereInput
+  isNot?: Prisma.ConsultationWhereInput
 }
 
 export type ConsultationCreateNestedManyWithoutUserMedecinInput = {
@@ -941,6 +967,52 @@ export type ConsultationUpdateOneWithoutDemandesImagerieNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.ConsultationUpdateToOneWithWhereWithoutDemandesImagerieInput, Prisma.ConsultationUpdateWithoutDemandesImagerieInput>, Prisma.ConsultationUncheckedUpdateWithoutDemandesImagerieInput>
 }
 
+export type ConsultationCreateNestedOneWithoutFacturesInput = {
+  create?: Prisma.XOR<Prisma.ConsultationCreateWithoutFacturesInput, Prisma.ConsultationUncheckedCreateWithoutFacturesInput>
+  connectOrCreate?: Prisma.ConsultationCreateOrConnectWithoutFacturesInput
+  connect?: Prisma.ConsultationWhereUniqueInput
+}
+
+export type ConsultationUpdateOneWithoutFacturesNestedInput = {
+  create?: Prisma.XOR<Prisma.ConsultationCreateWithoutFacturesInput, Prisma.ConsultationUncheckedCreateWithoutFacturesInput>
+  connectOrCreate?: Prisma.ConsultationCreateOrConnectWithoutFacturesInput
+  upsert?: Prisma.ConsultationUpsertWithoutFacturesInput
+  disconnect?: Prisma.ConsultationWhereInput | boolean
+  delete?: Prisma.ConsultationWhereInput | boolean
+  connect?: Prisma.ConsultationWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.ConsultationUpdateToOneWithWhereWithoutFacturesInput, Prisma.ConsultationUpdateWithoutFacturesInput>, Prisma.ConsultationUncheckedUpdateWithoutFacturesInput>
+}
+
+export type ConsultationCreateNestedOneWithoutProformasInput = {
+  create?: Prisma.XOR<Prisma.ConsultationCreateWithoutProformasInput, Prisma.ConsultationUncheckedCreateWithoutProformasInput>
+  connectOrCreate?: Prisma.ConsultationCreateOrConnectWithoutProformasInput
+  connect?: Prisma.ConsultationWhereUniqueInput
+}
+
+export type ConsultationUpdateOneWithoutProformasNestedInput = {
+  create?: Prisma.XOR<Prisma.ConsultationCreateWithoutProformasInput, Prisma.ConsultationUncheckedCreateWithoutProformasInput>
+  connectOrCreate?: Prisma.ConsultationCreateOrConnectWithoutProformasInput
+  upsert?: Prisma.ConsultationUpsertWithoutProformasInput
+  disconnect?: Prisma.ConsultationWhereInput | boolean
+  delete?: Prisma.ConsultationWhereInput | boolean
+  connect?: Prisma.ConsultationWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.ConsultationUpdateToOneWithWhereWithoutProformasInput, Prisma.ConsultationUpdateWithoutProformasInput>, Prisma.ConsultationUncheckedUpdateWithoutProformasInput>
+}
+
+export type ConsultationCreateNestedOneWithoutActesInput = {
+  create?: Prisma.XOR<Prisma.ConsultationCreateWithoutActesInput, Prisma.ConsultationUncheckedCreateWithoutActesInput>
+  connectOrCreate?: Prisma.ConsultationCreateOrConnectWithoutActesInput
+  connect?: Prisma.ConsultationWhereUniqueInput
+}
+
+export type ConsultationUpdateOneRequiredWithoutActesNestedInput = {
+  create?: Prisma.XOR<Prisma.ConsultationCreateWithoutActesInput, Prisma.ConsultationUncheckedCreateWithoutActesInput>
+  connectOrCreate?: Prisma.ConsultationCreateOrConnectWithoutActesInput
+  upsert?: Prisma.ConsultationUpsertWithoutActesInput
+  connect?: Prisma.ConsultationWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.ConsultationUpdateToOneWithWhereWithoutActesInput, Prisma.ConsultationUpdateWithoutActesInput>, Prisma.ConsultationUncheckedUpdateWithoutActesInput>
+}
+
 export type ConsultationCreateWithoutUserMedecinInput = {
   dateConsultation?: Date | string
   motif?: string | null
@@ -958,6 +1030,9 @@ export type ConsultationCreateWithoutUserMedecinInput = {
   prescriptions?: Prisma.PrescriptionCreateNestedManyWithoutConsultationInput
   demandesLabo?: Prisma.DemandeLaboratoireCreateNestedManyWithoutConsultationInput
   demandesImagerie?: Prisma.DemandeImagerieCreateNestedManyWithoutConsultationInput
+  proformas?: Prisma.ProformaCreateNestedManyWithoutConsultationInput
+  factures?: Prisma.FactureCreateNestedManyWithoutConsultationInput
+  actes?: Prisma.ConsultationActeCreateNestedManyWithoutConsultationInput
 }
 
 export type ConsultationUncheckedCreateWithoutUserMedecinInput = {
@@ -978,6 +1053,9 @@ export type ConsultationUncheckedCreateWithoutUserMedecinInput = {
   prescriptions?: Prisma.PrescriptionUncheckedCreateNestedManyWithoutConsultationInput
   demandesLabo?: Prisma.DemandeLaboratoireUncheckedCreateNestedManyWithoutConsultationInput
   demandesImagerie?: Prisma.DemandeImagerieUncheckedCreateNestedManyWithoutConsultationInput
+  proformas?: Prisma.ProformaUncheckedCreateNestedManyWithoutConsultationInput
+  factures?: Prisma.FactureUncheckedCreateNestedManyWithoutConsultationInput
+  actes?: Prisma.ConsultationActeUncheckedCreateNestedManyWithoutConsultationInput
 }
 
 export type ConsultationCreateOrConnectWithoutUserMedecinInput = {
@@ -1042,6 +1120,9 @@ export type ConsultationCreateWithoutServiceInput = {
   prescriptions?: Prisma.PrescriptionCreateNestedManyWithoutConsultationInput
   demandesLabo?: Prisma.DemandeLaboratoireCreateNestedManyWithoutConsultationInput
   demandesImagerie?: Prisma.DemandeImagerieCreateNestedManyWithoutConsultationInput
+  proformas?: Prisma.ProformaCreateNestedManyWithoutConsultationInput
+  factures?: Prisma.FactureCreateNestedManyWithoutConsultationInput
+  actes?: Prisma.ConsultationActeCreateNestedManyWithoutConsultationInput
 }
 
 export type ConsultationUncheckedCreateWithoutServiceInput = {
@@ -1062,6 +1143,9 @@ export type ConsultationUncheckedCreateWithoutServiceInput = {
   prescriptions?: Prisma.PrescriptionUncheckedCreateNestedManyWithoutConsultationInput
   demandesLabo?: Prisma.DemandeLaboratoireUncheckedCreateNestedManyWithoutConsultationInput
   demandesImagerie?: Prisma.DemandeImagerieUncheckedCreateNestedManyWithoutConsultationInput
+  proformas?: Prisma.ProformaUncheckedCreateNestedManyWithoutConsultationInput
+  factures?: Prisma.FactureUncheckedCreateNestedManyWithoutConsultationInput
+  actes?: Prisma.ConsultationActeUncheckedCreateNestedManyWithoutConsultationInput
 }
 
 export type ConsultationCreateOrConnectWithoutServiceInput = {
@@ -1106,6 +1190,9 @@ export type ConsultationCreateWithoutSpecialiteInput = {
   prescriptions?: Prisma.PrescriptionCreateNestedManyWithoutConsultationInput
   demandesLabo?: Prisma.DemandeLaboratoireCreateNestedManyWithoutConsultationInput
   demandesImagerie?: Prisma.DemandeImagerieCreateNestedManyWithoutConsultationInput
+  proformas?: Prisma.ProformaCreateNestedManyWithoutConsultationInput
+  factures?: Prisma.FactureCreateNestedManyWithoutConsultationInput
+  actes?: Prisma.ConsultationActeCreateNestedManyWithoutConsultationInput
 }
 
 export type ConsultationUncheckedCreateWithoutSpecialiteInput = {
@@ -1126,6 +1213,9 @@ export type ConsultationUncheckedCreateWithoutSpecialiteInput = {
   prescriptions?: Prisma.PrescriptionUncheckedCreateNestedManyWithoutConsultationInput
   demandesLabo?: Prisma.DemandeLaboratoireUncheckedCreateNestedManyWithoutConsultationInput
   demandesImagerie?: Prisma.DemandeImagerieUncheckedCreateNestedManyWithoutConsultationInput
+  proformas?: Prisma.ProformaUncheckedCreateNestedManyWithoutConsultationInput
+  factures?: Prisma.FactureUncheckedCreateNestedManyWithoutConsultationInput
+  actes?: Prisma.ConsultationActeUncheckedCreateNestedManyWithoutConsultationInput
 }
 
 export type ConsultationCreateOrConnectWithoutSpecialiteInput = {
@@ -1170,6 +1260,9 @@ export type ConsultationCreateWithoutMedecinInput = {
   prescriptions?: Prisma.PrescriptionCreateNestedManyWithoutConsultationInput
   demandesLabo?: Prisma.DemandeLaboratoireCreateNestedManyWithoutConsultationInput
   demandesImagerie?: Prisma.DemandeImagerieCreateNestedManyWithoutConsultationInput
+  proformas?: Prisma.ProformaCreateNestedManyWithoutConsultationInput
+  factures?: Prisma.FactureCreateNestedManyWithoutConsultationInput
+  actes?: Prisma.ConsultationActeCreateNestedManyWithoutConsultationInput
 }
 
 export type ConsultationUncheckedCreateWithoutMedecinInput = {
@@ -1190,6 +1283,9 @@ export type ConsultationUncheckedCreateWithoutMedecinInput = {
   prescriptions?: Prisma.PrescriptionUncheckedCreateNestedManyWithoutConsultationInput
   demandesLabo?: Prisma.DemandeLaboratoireUncheckedCreateNestedManyWithoutConsultationInput
   demandesImagerie?: Prisma.DemandeImagerieUncheckedCreateNestedManyWithoutConsultationInput
+  proformas?: Prisma.ProformaUncheckedCreateNestedManyWithoutConsultationInput
+  factures?: Prisma.FactureUncheckedCreateNestedManyWithoutConsultationInput
+  actes?: Prisma.ConsultationActeUncheckedCreateNestedManyWithoutConsultationInput
 }
 
 export type ConsultationCreateOrConnectWithoutMedecinInput = {
@@ -1234,6 +1330,9 @@ export type ConsultationCreateWithoutPatientInput = {
   prescriptions?: Prisma.PrescriptionCreateNestedManyWithoutConsultationInput
   demandesLabo?: Prisma.DemandeLaboratoireCreateNestedManyWithoutConsultationInput
   demandesImagerie?: Prisma.DemandeImagerieCreateNestedManyWithoutConsultationInput
+  proformas?: Prisma.ProformaCreateNestedManyWithoutConsultationInput
+  factures?: Prisma.FactureCreateNestedManyWithoutConsultationInput
+  actes?: Prisma.ConsultationActeCreateNestedManyWithoutConsultationInput
 }
 
 export type ConsultationUncheckedCreateWithoutPatientInput = {
@@ -1254,6 +1353,9 @@ export type ConsultationUncheckedCreateWithoutPatientInput = {
   prescriptions?: Prisma.PrescriptionUncheckedCreateNestedManyWithoutConsultationInput
   demandesLabo?: Prisma.DemandeLaboratoireUncheckedCreateNestedManyWithoutConsultationInput
   demandesImagerie?: Prisma.DemandeImagerieUncheckedCreateNestedManyWithoutConsultationInput
+  proformas?: Prisma.ProformaUncheckedCreateNestedManyWithoutConsultationInput
+  factures?: Prisma.FactureUncheckedCreateNestedManyWithoutConsultationInput
+  actes?: Prisma.ConsultationActeUncheckedCreateNestedManyWithoutConsultationInput
 }
 
 export type ConsultationCreateOrConnectWithoutPatientInput = {
@@ -1298,6 +1400,9 @@ export type ConsultationCreateWithoutAdmissionInput = {
   prescriptions?: Prisma.PrescriptionCreateNestedManyWithoutConsultationInput
   demandesLabo?: Prisma.DemandeLaboratoireCreateNestedManyWithoutConsultationInput
   demandesImagerie?: Prisma.DemandeImagerieCreateNestedManyWithoutConsultationInput
+  proformas?: Prisma.ProformaCreateNestedManyWithoutConsultationInput
+  factures?: Prisma.FactureCreateNestedManyWithoutConsultationInput
+  actes?: Prisma.ConsultationActeCreateNestedManyWithoutConsultationInput
 }
 
 export type ConsultationUncheckedCreateWithoutAdmissionInput = {
@@ -1318,6 +1423,9 @@ export type ConsultationUncheckedCreateWithoutAdmissionInput = {
   prescriptions?: Prisma.PrescriptionUncheckedCreateNestedManyWithoutConsultationInput
   demandesLabo?: Prisma.DemandeLaboratoireUncheckedCreateNestedManyWithoutConsultationInput
   demandesImagerie?: Prisma.DemandeImagerieUncheckedCreateNestedManyWithoutConsultationInput
+  proformas?: Prisma.ProformaUncheckedCreateNestedManyWithoutConsultationInput
+  factures?: Prisma.FactureUncheckedCreateNestedManyWithoutConsultationInput
+  actes?: Prisma.ConsultationActeUncheckedCreateNestedManyWithoutConsultationInput
 }
 
 export type ConsultationCreateOrConnectWithoutAdmissionInput = {
@@ -1353,6 +1461,9 @@ export type ConsultationUpdateWithoutAdmissionInput = {
   prescriptions?: Prisma.PrescriptionUpdateManyWithoutConsultationNestedInput
   demandesLabo?: Prisma.DemandeLaboratoireUpdateManyWithoutConsultationNestedInput
   demandesImagerie?: Prisma.DemandeImagerieUpdateManyWithoutConsultationNestedInput
+  proformas?: Prisma.ProformaUpdateManyWithoutConsultationNestedInput
+  factures?: Prisma.FactureUpdateManyWithoutConsultationNestedInput
+  actes?: Prisma.ConsultationActeUpdateManyWithoutConsultationNestedInput
 }
 
 export type ConsultationUncheckedUpdateWithoutAdmissionInput = {
@@ -1373,6 +1484,9 @@ export type ConsultationUncheckedUpdateWithoutAdmissionInput = {
   prescriptions?: Prisma.PrescriptionUncheckedUpdateManyWithoutConsultationNestedInput
   demandesLabo?: Prisma.DemandeLaboratoireUncheckedUpdateManyWithoutConsultationNestedInput
   demandesImagerie?: Prisma.DemandeImagerieUncheckedUpdateManyWithoutConsultationNestedInput
+  proformas?: Prisma.ProformaUncheckedUpdateManyWithoutConsultationNestedInput
+  factures?: Prisma.FactureUncheckedUpdateManyWithoutConsultationNestedInput
+  actes?: Prisma.ConsultationActeUncheckedUpdateManyWithoutConsultationNestedInput
 }
 
 export type ConsultationCreateWithoutConstantesInput = {
@@ -1392,6 +1506,9 @@ export type ConsultationCreateWithoutConstantesInput = {
   prescriptions?: Prisma.PrescriptionCreateNestedManyWithoutConsultationInput
   demandesLabo?: Prisma.DemandeLaboratoireCreateNestedManyWithoutConsultationInput
   demandesImagerie?: Prisma.DemandeImagerieCreateNestedManyWithoutConsultationInput
+  proformas?: Prisma.ProformaCreateNestedManyWithoutConsultationInput
+  factures?: Prisma.FactureCreateNestedManyWithoutConsultationInput
+  actes?: Prisma.ConsultationActeCreateNestedManyWithoutConsultationInput
 }
 
 export type ConsultationUncheckedCreateWithoutConstantesInput = {
@@ -1412,6 +1529,9 @@ export type ConsultationUncheckedCreateWithoutConstantesInput = {
   prescriptions?: Prisma.PrescriptionUncheckedCreateNestedManyWithoutConsultationInput
   demandesLabo?: Prisma.DemandeLaboratoireUncheckedCreateNestedManyWithoutConsultationInput
   demandesImagerie?: Prisma.DemandeImagerieUncheckedCreateNestedManyWithoutConsultationInput
+  proformas?: Prisma.ProformaUncheckedCreateNestedManyWithoutConsultationInput
+  factures?: Prisma.FactureUncheckedCreateNestedManyWithoutConsultationInput
+  actes?: Prisma.ConsultationActeUncheckedCreateNestedManyWithoutConsultationInput
 }
 
 export type ConsultationCreateOrConnectWithoutConstantesInput = {
@@ -1447,6 +1567,9 @@ export type ConsultationUpdateWithoutConstantesInput = {
   prescriptions?: Prisma.PrescriptionUpdateManyWithoutConsultationNestedInput
   demandesLabo?: Prisma.DemandeLaboratoireUpdateManyWithoutConsultationNestedInput
   demandesImagerie?: Prisma.DemandeImagerieUpdateManyWithoutConsultationNestedInput
+  proformas?: Prisma.ProformaUpdateManyWithoutConsultationNestedInput
+  factures?: Prisma.FactureUpdateManyWithoutConsultationNestedInput
+  actes?: Prisma.ConsultationActeUpdateManyWithoutConsultationNestedInput
 }
 
 export type ConsultationUncheckedUpdateWithoutConstantesInput = {
@@ -1467,6 +1590,9 @@ export type ConsultationUncheckedUpdateWithoutConstantesInput = {
   prescriptions?: Prisma.PrescriptionUncheckedUpdateManyWithoutConsultationNestedInput
   demandesLabo?: Prisma.DemandeLaboratoireUncheckedUpdateManyWithoutConsultationNestedInput
   demandesImagerie?: Prisma.DemandeImagerieUncheckedUpdateManyWithoutConsultationNestedInput
+  proformas?: Prisma.ProformaUncheckedUpdateManyWithoutConsultationNestedInput
+  factures?: Prisma.FactureUncheckedUpdateManyWithoutConsultationNestedInput
+  actes?: Prisma.ConsultationActeUncheckedUpdateManyWithoutConsultationNestedInput
 }
 
 export type ConsultationCreateWithoutPrescriptionsInput = {
@@ -1486,6 +1612,9 @@ export type ConsultationCreateWithoutPrescriptionsInput = {
   constantes?: Prisma.ConstanteCreateNestedManyWithoutConsultationInput
   demandesLabo?: Prisma.DemandeLaboratoireCreateNestedManyWithoutConsultationInput
   demandesImagerie?: Prisma.DemandeImagerieCreateNestedManyWithoutConsultationInput
+  proformas?: Prisma.ProformaCreateNestedManyWithoutConsultationInput
+  factures?: Prisma.FactureCreateNestedManyWithoutConsultationInput
+  actes?: Prisma.ConsultationActeCreateNestedManyWithoutConsultationInput
 }
 
 export type ConsultationUncheckedCreateWithoutPrescriptionsInput = {
@@ -1506,6 +1635,9 @@ export type ConsultationUncheckedCreateWithoutPrescriptionsInput = {
   constantes?: Prisma.ConstanteUncheckedCreateNestedManyWithoutConsultationInput
   demandesLabo?: Prisma.DemandeLaboratoireUncheckedCreateNestedManyWithoutConsultationInput
   demandesImagerie?: Prisma.DemandeImagerieUncheckedCreateNestedManyWithoutConsultationInput
+  proformas?: Prisma.ProformaUncheckedCreateNestedManyWithoutConsultationInput
+  factures?: Prisma.FactureUncheckedCreateNestedManyWithoutConsultationInput
+  actes?: Prisma.ConsultationActeUncheckedCreateNestedManyWithoutConsultationInput
 }
 
 export type ConsultationCreateOrConnectWithoutPrescriptionsInput = {
@@ -1541,6 +1673,9 @@ export type ConsultationUpdateWithoutPrescriptionsInput = {
   constantes?: Prisma.ConstanteUpdateManyWithoutConsultationNestedInput
   demandesLabo?: Prisma.DemandeLaboratoireUpdateManyWithoutConsultationNestedInput
   demandesImagerie?: Prisma.DemandeImagerieUpdateManyWithoutConsultationNestedInput
+  proformas?: Prisma.ProformaUpdateManyWithoutConsultationNestedInput
+  factures?: Prisma.FactureUpdateManyWithoutConsultationNestedInput
+  actes?: Prisma.ConsultationActeUpdateManyWithoutConsultationNestedInput
 }
 
 export type ConsultationUncheckedUpdateWithoutPrescriptionsInput = {
@@ -1561,6 +1696,9 @@ export type ConsultationUncheckedUpdateWithoutPrescriptionsInput = {
   constantes?: Prisma.ConstanteUncheckedUpdateManyWithoutConsultationNestedInput
   demandesLabo?: Prisma.DemandeLaboratoireUncheckedUpdateManyWithoutConsultationNestedInput
   demandesImagerie?: Prisma.DemandeImagerieUncheckedUpdateManyWithoutConsultationNestedInput
+  proformas?: Prisma.ProformaUncheckedUpdateManyWithoutConsultationNestedInput
+  factures?: Prisma.FactureUncheckedUpdateManyWithoutConsultationNestedInput
+  actes?: Prisma.ConsultationActeUncheckedUpdateManyWithoutConsultationNestedInput
 }
 
 export type ConsultationCreateWithoutDemandesLaboInput = {
@@ -1580,6 +1718,9 @@ export type ConsultationCreateWithoutDemandesLaboInput = {
   constantes?: Prisma.ConstanteCreateNestedManyWithoutConsultationInput
   prescriptions?: Prisma.PrescriptionCreateNestedManyWithoutConsultationInput
   demandesImagerie?: Prisma.DemandeImagerieCreateNestedManyWithoutConsultationInput
+  proformas?: Prisma.ProformaCreateNestedManyWithoutConsultationInput
+  factures?: Prisma.FactureCreateNestedManyWithoutConsultationInput
+  actes?: Prisma.ConsultationActeCreateNestedManyWithoutConsultationInput
 }
 
 export type ConsultationUncheckedCreateWithoutDemandesLaboInput = {
@@ -1600,6 +1741,9 @@ export type ConsultationUncheckedCreateWithoutDemandesLaboInput = {
   constantes?: Prisma.ConstanteUncheckedCreateNestedManyWithoutConsultationInput
   prescriptions?: Prisma.PrescriptionUncheckedCreateNestedManyWithoutConsultationInput
   demandesImagerie?: Prisma.DemandeImagerieUncheckedCreateNestedManyWithoutConsultationInput
+  proformas?: Prisma.ProformaUncheckedCreateNestedManyWithoutConsultationInput
+  factures?: Prisma.FactureUncheckedCreateNestedManyWithoutConsultationInput
+  actes?: Prisma.ConsultationActeUncheckedCreateNestedManyWithoutConsultationInput
 }
 
 export type ConsultationCreateOrConnectWithoutDemandesLaboInput = {
@@ -1635,6 +1779,9 @@ export type ConsultationUpdateWithoutDemandesLaboInput = {
   constantes?: Prisma.ConstanteUpdateManyWithoutConsultationNestedInput
   prescriptions?: Prisma.PrescriptionUpdateManyWithoutConsultationNestedInput
   demandesImagerie?: Prisma.DemandeImagerieUpdateManyWithoutConsultationNestedInput
+  proformas?: Prisma.ProformaUpdateManyWithoutConsultationNestedInput
+  factures?: Prisma.FactureUpdateManyWithoutConsultationNestedInput
+  actes?: Prisma.ConsultationActeUpdateManyWithoutConsultationNestedInput
 }
 
 export type ConsultationUncheckedUpdateWithoutDemandesLaboInput = {
@@ -1655,6 +1802,9 @@ export type ConsultationUncheckedUpdateWithoutDemandesLaboInput = {
   constantes?: Prisma.ConstanteUncheckedUpdateManyWithoutConsultationNestedInput
   prescriptions?: Prisma.PrescriptionUncheckedUpdateManyWithoutConsultationNestedInput
   demandesImagerie?: Prisma.DemandeImagerieUncheckedUpdateManyWithoutConsultationNestedInput
+  proformas?: Prisma.ProformaUncheckedUpdateManyWithoutConsultationNestedInput
+  factures?: Prisma.FactureUncheckedUpdateManyWithoutConsultationNestedInput
+  actes?: Prisma.ConsultationActeUncheckedUpdateManyWithoutConsultationNestedInput
 }
 
 export type ConsultationCreateWithoutDemandesImagerieInput = {
@@ -1674,6 +1824,9 @@ export type ConsultationCreateWithoutDemandesImagerieInput = {
   constantes?: Prisma.ConstanteCreateNestedManyWithoutConsultationInput
   prescriptions?: Prisma.PrescriptionCreateNestedManyWithoutConsultationInput
   demandesLabo?: Prisma.DemandeLaboratoireCreateNestedManyWithoutConsultationInput
+  proformas?: Prisma.ProformaCreateNestedManyWithoutConsultationInput
+  factures?: Prisma.FactureCreateNestedManyWithoutConsultationInput
+  actes?: Prisma.ConsultationActeCreateNestedManyWithoutConsultationInput
 }
 
 export type ConsultationUncheckedCreateWithoutDemandesImagerieInput = {
@@ -1694,6 +1847,9 @@ export type ConsultationUncheckedCreateWithoutDemandesImagerieInput = {
   constantes?: Prisma.ConstanteUncheckedCreateNestedManyWithoutConsultationInput
   prescriptions?: Prisma.PrescriptionUncheckedCreateNestedManyWithoutConsultationInput
   demandesLabo?: Prisma.DemandeLaboratoireUncheckedCreateNestedManyWithoutConsultationInput
+  proformas?: Prisma.ProformaUncheckedCreateNestedManyWithoutConsultationInput
+  factures?: Prisma.FactureUncheckedCreateNestedManyWithoutConsultationInput
+  actes?: Prisma.ConsultationActeUncheckedCreateNestedManyWithoutConsultationInput
 }
 
 export type ConsultationCreateOrConnectWithoutDemandesImagerieInput = {
@@ -1729,6 +1885,9 @@ export type ConsultationUpdateWithoutDemandesImagerieInput = {
   constantes?: Prisma.ConstanteUpdateManyWithoutConsultationNestedInput
   prescriptions?: Prisma.PrescriptionUpdateManyWithoutConsultationNestedInput
   demandesLabo?: Prisma.DemandeLaboratoireUpdateManyWithoutConsultationNestedInput
+  proformas?: Prisma.ProformaUpdateManyWithoutConsultationNestedInput
+  factures?: Prisma.FactureUpdateManyWithoutConsultationNestedInput
+  actes?: Prisma.ConsultationActeUpdateManyWithoutConsultationNestedInput
 }
 
 export type ConsultationUncheckedUpdateWithoutDemandesImagerieInput = {
@@ -1749,6 +1908,327 @@ export type ConsultationUncheckedUpdateWithoutDemandesImagerieInput = {
   constantes?: Prisma.ConstanteUncheckedUpdateManyWithoutConsultationNestedInput
   prescriptions?: Prisma.PrescriptionUncheckedUpdateManyWithoutConsultationNestedInput
   demandesLabo?: Prisma.DemandeLaboratoireUncheckedUpdateManyWithoutConsultationNestedInput
+  proformas?: Prisma.ProformaUncheckedUpdateManyWithoutConsultationNestedInput
+  factures?: Prisma.FactureUncheckedUpdateManyWithoutConsultationNestedInput
+  actes?: Prisma.ConsultationActeUncheckedUpdateManyWithoutConsultationNestedInput
+}
+
+export type ConsultationCreateWithoutFacturesInput = {
+  dateConsultation?: Date | string
+  motif?: string | null
+  diagnostic?: string | null
+  observation?: string | null
+  conclusion?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  patient: Prisma.PatientCreateNestedOneWithoutConsultationsInput
+  medecin: Prisma.MedecinCreateNestedOneWithoutConsultationsInput
+  userMedecin?: Prisma.UserCreateNestedOneWithoutConsultationsMedecinInput
+  service?: Prisma.ServiceCreateNestedOneWithoutConsultationsInput
+  specialite?: Prisma.SpecialiteCreateNestedOneWithoutConsultationsInput
+  admission?: Prisma.AdmissionCreateNestedOneWithoutConsultationInput
+  constantes?: Prisma.ConstanteCreateNestedManyWithoutConsultationInput
+  prescriptions?: Prisma.PrescriptionCreateNestedManyWithoutConsultationInput
+  demandesLabo?: Prisma.DemandeLaboratoireCreateNestedManyWithoutConsultationInput
+  demandesImagerie?: Prisma.DemandeImagerieCreateNestedManyWithoutConsultationInput
+  proformas?: Prisma.ProformaCreateNestedManyWithoutConsultationInput
+  actes?: Prisma.ConsultationActeCreateNestedManyWithoutConsultationInput
+}
+
+export type ConsultationUncheckedCreateWithoutFacturesInput = {
+  idConsultation?: number
+  dateConsultation?: Date | string
+  motif?: string | null
+  diagnostic?: string | null
+  observation?: string | null
+  conclusion?: string | null
+  patientId: number
+  medecinId: number
+  userMedecinId?: number | null
+  serviceId?: number | null
+  specialiteId?: number | null
+  admissionId?: number | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  constantes?: Prisma.ConstanteUncheckedCreateNestedManyWithoutConsultationInput
+  prescriptions?: Prisma.PrescriptionUncheckedCreateNestedManyWithoutConsultationInput
+  demandesLabo?: Prisma.DemandeLaboratoireUncheckedCreateNestedManyWithoutConsultationInput
+  demandesImagerie?: Prisma.DemandeImagerieUncheckedCreateNestedManyWithoutConsultationInput
+  proformas?: Prisma.ProformaUncheckedCreateNestedManyWithoutConsultationInput
+  actes?: Prisma.ConsultationActeUncheckedCreateNestedManyWithoutConsultationInput
+}
+
+export type ConsultationCreateOrConnectWithoutFacturesInput = {
+  where: Prisma.ConsultationWhereUniqueInput
+  create: Prisma.XOR<Prisma.ConsultationCreateWithoutFacturesInput, Prisma.ConsultationUncheckedCreateWithoutFacturesInput>
+}
+
+export type ConsultationUpsertWithoutFacturesInput = {
+  update: Prisma.XOR<Prisma.ConsultationUpdateWithoutFacturesInput, Prisma.ConsultationUncheckedUpdateWithoutFacturesInput>
+  create: Prisma.XOR<Prisma.ConsultationCreateWithoutFacturesInput, Prisma.ConsultationUncheckedCreateWithoutFacturesInput>
+  where?: Prisma.ConsultationWhereInput
+}
+
+export type ConsultationUpdateToOneWithWhereWithoutFacturesInput = {
+  where?: Prisma.ConsultationWhereInput
+  data: Prisma.XOR<Prisma.ConsultationUpdateWithoutFacturesInput, Prisma.ConsultationUncheckedUpdateWithoutFacturesInput>
+}
+
+export type ConsultationUpdateWithoutFacturesInput = {
+  dateConsultation?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  motif?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  diagnostic?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  observation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  conclusion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  patient?: Prisma.PatientUpdateOneRequiredWithoutConsultationsNestedInput
+  medecin?: Prisma.MedecinUpdateOneRequiredWithoutConsultationsNestedInput
+  userMedecin?: Prisma.UserUpdateOneWithoutConsultationsMedecinNestedInput
+  service?: Prisma.ServiceUpdateOneWithoutConsultationsNestedInput
+  specialite?: Prisma.SpecialiteUpdateOneWithoutConsultationsNestedInput
+  admission?: Prisma.AdmissionUpdateOneWithoutConsultationNestedInput
+  constantes?: Prisma.ConstanteUpdateManyWithoutConsultationNestedInput
+  prescriptions?: Prisma.PrescriptionUpdateManyWithoutConsultationNestedInput
+  demandesLabo?: Prisma.DemandeLaboratoireUpdateManyWithoutConsultationNestedInput
+  demandesImagerie?: Prisma.DemandeImagerieUpdateManyWithoutConsultationNestedInput
+  proformas?: Prisma.ProformaUpdateManyWithoutConsultationNestedInput
+  actes?: Prisma.ConsultationActeUpdateManyWithoutConsultationNestedInput
+}
+
+export type ConsultationUncheckedUpdateWithoutFacturesInput = {
+  idConsultation?: Prisma.IntFieldUpdateOperationsInput | number
+  dateConsultation?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  motif?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  diagnostic?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  observation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  conclusion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  patientId?: Prisma.IntFieldUpdateOperationsInput | number
+  medecinId?: Prisma.IntFieldUpdateOperationsInput | number
+  userMedecinId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  serviceId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  specialiteId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  admissionId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  constantes?: Prisma.ConstanteUncheckedUpdateManyWithoutConsultationNestedInput
+  prescriptions?: Prisma.PrescriptionUncheckedUpdateManyWithoutConsultationNestedInput
+  demandesLabo?: Prisma.DemandeLaboratoireUncheckedUpdateManyWithoutConsultationNestedInput
+  demandesImagerie?: Prisma.DemandeImagerieUncheckedUpdateManyWithoutConsultationNestedInput
+  proformas?: Prisma.ProformaUncheckedUpdateManyWithoutConsultationNestedInput
+  actes?: Prisma.ConsultationActeUncheckedUpdateManyWithoutConsultationNestedInput
+}
+
+export type ConsultationCreateWithoutProformasInput = {
+  dateConsultation?: Date | string
+  motif?: string | null
+  diagnostic?: string | null
+  observation?: string | null
+  conclusion?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  patient: Prisma.PatientCreateNestedOneWithoutConsultationsInput
+  medecin: Prisma.MedecinCreateNestedOneWithoutConsultationsInput
+  userMedecin?: Prisma.UserCreateNestedOneWithoutConsultationsMedecinInput
+  service?: Prisma.ServiceCreateNestedOneWithoutConsultationsInput
+  specialite?: Prisma.SpecialiteCreateNestedOneWithoutConsultationsInput
+  admission?: Prisma.AdmissionCreateNestedOneWithoutConsultationInput
+  constantes?: Prisma.ConstanteCreateNestedManyWithoutConsultationInput
+  prescriptions?: Prisma.PrescriptionCreateNestedManyWithoutConsultationInput
+  demandesLabo?: Prisma.DemandeLaboratoireCreateNestedManyWithoutConsultationInput
+  demandesImagerie?: Prisma.DemandeImagerieCreateNestedManyWithoutConsultationInput
+  factures?: Prisma.FactureCreateNestedManyWithoutConsultationInput
+  actes?: Prisma.ConsultationActeCreateNestedManyWithoutConsultationInput
+}
+
+export type ConsultationUncheckedCreateWithoutProformasInput = {
+  idConsultation?: number
+  dateConsultation?: Date | string
+  motif?: string | null
+  diagnostic?: string | null
+  observation?: string | null
+  conclusion?: string | null
+  patientId: number
+  medecinId: number
+  userMedecinId?: number | null
+  serviceId?: number | null
+  specialiteId?: number | null
+  admissionId?: number | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  constantes?: Prisma.ConstanteUncheckedCreateNestedManyWithoutConsultationInput
+  prescriptions?: Prisma.PrescriptionUncheckedCreateNestedManyWithoutConsultationInput
+  demandesLabo?: Prisma.DemandeLaboratoireUncheckedCreateNestedManyWithoutConsultationInput
+  demandesImagerie?: Prisma.DemandeImagerieUncheckedCreateNestedManyWithoutConsultationInput
+  factures?: Prisma.FactureUncheckedCreateNestedManyWithoutConsultationInput
+  actes?: Prisma.ConsultationActeUncheckedCreateNestedManyWithoutConsultationInput
+}
+
+export type ConsultationCreateOrConnectWithoutProformasInput = {
+  where: Prisma.ConsultationWhereUniqueInput
+  create: Prisma.XOR<Prisma.ConsultationCreateWithoutProformasInput, Prisma.ConsultationUncheckedCreateWithoutProformasInput>
+}
+
+export type ConsultationUpsertWithoutProformasInput = {
+  update: Prisma.XOR<Prisma.ConsultationUpdateWithoutProformasInput, Prisma.ConsultationUncheckedUpdateWithoutProformasInput>
+  create: Prisma.XOR<Prisma.ConsultationCreateWithoutProformasInput, Prisma.ConsultationUncheckedCreateWithoutProformasInput>
+  where?: Prisma.ConsultationWhereInput
+}
+
+export type ConsultationUpdateToOneWithWhereWithoutProformasInput = {
+  where?: Prisma.ConsultationWhereInput
+  data: Prisma.XOR<Prisma.ConsultationUpdateWithoutProformasInput, Prisma.ConsultationUncheckedUpdateWithoutProformasInput>
+}
+
+export type ConsultationUpdateWithoutProformasInput = {
+  dateConsultation?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  motif?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  diagnostic?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  observation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  conclusion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  patient?: Prisma.PatientUpdateOneRequiredWithoutConsultationsNestedInput
+  medecin?: Prisma.MedecinUpdateOneRequiredWithoutConsultationsNestedInput
+  userMedecin?: Prisma.UserUpdateOneWithoutConsultationsMedecinNestedInput
+  service?: Prisma.ServiceUpdateOneWithoutConsultationsNestedInput
+  specialite?: Prisma.SpecialiteUpdateOneWithoutConsultationsNestedInput
+  admission?: Prisma.AdmissionUpdateOneWithoutConsultationNestedInput
+  constantes?: Prisma.ConstanteUpdateManyWithoutConsultationNestedInput
+  prescriptions?: Prisma.PrescriptionUpdateManyWithoutConsultationNestedInput
+  demandesLabo?: Prisma.DemandeLaboratoireUpdateManyWithoutConsultationNestedInput
+  demandesImagerie?: Prisma.DemandeImagerieUpdateManyWithoutConsultationNestedInput
+  factures?: Prisma.FactureUpdateManyWithoutConsultationNestedInput
+  actes?: Prisma.ConsultationActeUpdateManyWithoutConsultationNestedInput
+}
+
+export type ConsultationUncheckedUpdateWithoutProformasInput = {
+  idConsultation?: Prisma.IntFieldUpdateOperationsInput | number
+  dateConsultation?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  motif?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  diagnostic?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  observation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  conclusion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  patientId?: Prisma.IntFieldUpdateOperationsInput | number
+  medecinId?: Prisma.IntFieldUpdateOperationsInput | number
+  userMedecinId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  serviceId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  specialiteId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  admissionId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  constantes?: Prisma.ConstanteUncheckedUpdateManyWithoutConsultationNestedInput
+  prescriptions?: Prisma.PrescriptionUncheckedUpdateManyWithoutConsultationNestedInput
+  demandesLabo?: Prisma.DemandeLaboratoireUncheckedUpdateManyWithoutConsultationNestedInput
+  demandesImagerie?: Prisma.DemandeImagerieUncheckedUpdateManyWithoutConsultationNestedInput
+  factures?: Prisma.FactureUncheckedUpdateManyWithoutConsultationNestedInput
+  actes?: Prisma.ConsultationActeUncheckedUpdateManyWithoutConsultationNestedInput
+}
+
+export type ConsultationCreateWithoutActesInput = {
+  dateConsultation?: Date | string
+  motif?: string | null
+  diagnostic?: string | null
+  observation?: string | null
+  conclusion?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  patient: Prisma.PatientCreateNestedOneWithoutConsultationsInput
+  medecin: Prisma.MedecinCreateNestedOneWithoutConsultationsInput
+  userMedecin?: Prisma.UserCreateNestedOneWithoutConsultationsMedecinInput
+  service?: Prisma.ServiceCreateNestedOneWithoutConsultationsInput
+  specialite?: Prisma.SpecialiteCreateNestedOneWithoutConsultationsInput
+  admission?: Prisma.AdmissionCreateNestedOneWithoutConsultationInput
+  constantes?: Prisma.ConstanteCreateNestedManyWithoutConsultationInput
+  prescriptions?: Prisma.PrescriptionCreateNestedManyWithoutConsultationInput
+  demandesLabo?: Prisma.DemandeLaboratoireCreateNestedManyWithoutConsultationInput
+  demandesImagerie?: Prisma.DemandeImagerieCreateNestedManyWithoutConsultationInput
+  proformas?: Prisma.ProformaCreateNestedManyWithoutConsultationInput
+  factures?: Prisma.FactureCreateNestedManyWithoutConsultationInput
+}
+
+export type ConsultationUncheckedCreateWithoutActesInput = {
+  idConsultation?: number
+  dateConsultation?: Date | string
+  motif?: string | null
+  diagnostic?: string | null
+  observation?: string | null
+  conclusion?: string | null
+  patientId: number
+  medecinId: number
+  userMedecinId?: number | null
+  serviceId?: number | null
+  specialiteId?: number | null
+  admissionId?: number | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  constantes?: Prisma.ConstanteUncheckedCreateNestedManyWithoutConsultationInput
+  prescriptions?: Prisma.PrescriptionUncheckedCreateNestedManyWithoutConsultationInput
+  demandesLabo?: Prisma.DemandeLaboratoireUncheckedCreateNestedManyWithoutConsultationInput
+  demandesImagerie?: Prisma.DemandeImagerieUncheckedCreateNestedManyWithoutConsultationInput
+  proformas?: Prisma.ProformaUncheckedCreateNestedManyWithoutConsultationInput
+  factures?: Prisma.FactureUncheckedCreateNestedManyWithoutConsultationInput
+}
+
+export type ConsultationCreateOrConnectWithoutActesInput = {
+  where: Prisma.ConsultationWhereUniqueInput
+  create: Prisma.XOR<Prisma.ConsultationCreateWithoutActesInput, Prisma.ConsultationUncheckedCreateWithoutActesInput>
+}
+
+export type ConsultationUpsertWithoutActesInput = {
+  update: Prisma.XOR<Prisma.ConsultationUpdateWithoutActesInput, Prisma.ConsultationUncheckedUpdateWithoutActesInput>
+  create: Prisma.XOR<Prisma.ConsultationCreateWithoutActesInput, Prisma.ConsultationUncheckedCreateWithoutActesInput>
+  where?: Prisma.ConsultationWhereInput
+}
+
+export type ConsultationUpdateToOneWithWhereWithoutActesInput = {
+  where?: Prisma.ConsultationWhereInput
+  data: Prisma.XOR<Prisma.ConsultationUpdateWithoutActesInput, Prisma.ConsultationUncheckedUpdateWithoutActesInput>
+}
+
+export type ConsultationUpdateWithoutActesInput = {
+  dateConsultation?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  motif?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  diagnostic?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  observation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  conclusion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  patient?: Prisma.PatientUpdateOneRequiredWithoutConsultationsNestedInput
+  medecin?: Prisma.MedecinUpdateOneRequiredWithoutConsultationsNestedInput
+  userMedecin?: Prisma.UserUpdateOneWithoutConsultationsMedecinNestedInput
+  service?: Prisma.ServiceUpdateOneWithoutConsultationsNestedInput
+  specialite?: Prisma.SpecialiteUpdateOneWithoutConsultationsNestedInput
+  admission?: Prisma.AdmissionUpdateOneWithoutConsultationNestedInput
+  constantes?: Prisma.ConstanteUpdateManyWithoutConsultationNestedInput
+  prescriptions?: Prisma.PrescriptionUpdateManyWithoutConsultationNestedInput
+  demandesLabo?: Prisma.DemandeLaboratoireUpdateManyWithoutConsultationNestedInput
+  demandesImagerie?: Prisma.DemandeImagerieUpdateManyWithoutConsultationNestedInput
+  proformas?: Prisma.ProformaUpdateManyWithoutConsultationNestedInput
+  factures?: Prisma.FactureUpdateManyWithoutConsultationNestedInput
+}
+
+export type ConsultationUncheckedUpdateWithoutActesInput = {
+  idConsultation?: Prisma.IntFieldUpdateOperationsInput | number
+  dateConsultation?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  motif?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  diagnostic?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  observation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  conclusion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  patientId?: Prisma.IntFieldUpdateOperationsInput | number
+  medecinId?: Prisma.IntFieldUpdateOperationsInput | number
+  userMedecinId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  serviceId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  specialiteId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  admissionId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  constantes?: Prisma.ConstanteUncheckedUpdateManyWithoutConsultationNestedInput
+  prescriptions?: Prisma.PrescriptionUncheckedUpdateManyWithoutConsultationNestedInput
+  demandesLabo?: Prisma.DemandeLaboratoireUncheckedUpdateManyWithoutConsultationNestedInput
+  demandesImagerie?: Prisma.DemandeImagerieUncheckedUpdateManyWithoutConsultationNestedInput
+  proformas?: Prisma.ProformaUncheckedUpdateManyWithoutConsultationNestedInput
+  factures?: Prisma.FactureUncheckedUpdateManyWithoutConsultationNestedInput
 }
 
 export type ConsultationCreateManyUserMedecinInput = {
@@ -1784,6 +2264,9 @@ export type ConsultationUpdateWithoutUserMedecinInput = {
   prescriptions?: Prisma.PrescriptionUpdateManyWithoutConsultationNestedInput
   demandesLabo?: Prisma.DemandeLaboratoireUpdateManyWithoutConsultationNestedInput
   demandesImagerie?: Prisma.DemandeImagerieUpdateManyWithoutConsultationNestedInput
+  proformas?: Prisma.ProformaUpdateManyWithoutConsultationNestedInput
+  factures?: Prisma.FactureUpdateManyWithoutConsultationNestedInput
+  actes?: Prisma.ConsultationActeUpdateManyWithoutConsultationNestedInput
 }
 
 export type ConsultationUncheckedUpdateWithoutUserMedecinInput = {
@@ -1804,6 +2287,9 @@ export type ConsultationUncheckedUpdateWithoutUserMedecinInput = {
   prescriptions?: Prisma.PrescriptionUncheckedUpdateManyWithoutConsultationNestedInput
   demandesLabo?: Prisma.DemandeLaboratoireUncheckedUpdateManyWithoutConsultationNestedInput
   demandesImagerie?: Prisma.DemandeImagerieUncheckedUpdateManyWithoutConsultationNestedInput
+  proformas?: Prisma.ProformaUncheckedUpdateManyWithoutConsultationNestedInput
+  factures?: Prisma.FactureUncheckedUpdateManyWithoutConsultationNestedInput
+  actes?: Prisma.ConsultationActeUncheckedUpdateManyWithoutConsultationNestedInput
 }
 
 export type ConsultationUncheckedUpdateManyWithoutUserMedecinInput = {
@@ -1855,6 +2341,9 @@ export type ConsultationUpdateWithoutServiceInput = {
   prescriptions?: Prisma.PrescriptionUpdateManyWithoutConsultationNestedInput
   demandesLabo?: Prisma.DemandeLaboratoireUpdateManyWithoutConsultationNestedInput
   demandesImagerie?: Prisma.DemandeImagerieUpdateManyWithoutConsultationNestedInput
+  proformas?: Prisma.ProformaUpdateManyWithoutConsultationNestedInput
+  factures?: Prisma.FactureUpdateManyWithoutConsultationNestedInput
+  actes?: Prisma.ConsultationActeUpdateManyWithoutConsultationNestedInput
 }
 
 export type ConsultationUncheckedUpdateWithoutServiceInput = {
@@ -1875,6 +2364,9 @@ export type ConsultationUncheckedUpdateWithoutServiceInput = {
   prescriptions?: Prisma.PrescriptionUncheckedUpdateManyWithoutConsultationNestedInput
   demandesLabo?: Prisma.DemandeLaboratoireUncheckedUpdateManyWithoutConsultationNestedInput
   demandesImagerie?: Prisma.DemandeImagerieUncheckedUpdateManyWithoutConsultationNestedInput
+  proformas?: Prisma.ProformaUncheckedUpdateManyWithoutConsultationNestedInput
+  factures?: Prisma.FactureUncheckedUpdateManyWithoutConsultationNestedInput
+  actes?: Prisma.ConsultationActeUncheckedUpdateManyWithoutConsultationNestedInput
 }
 
 export type ConsultationUncheckedUpdateManyWithoutServiceInput = {
@@ -1926,6 +2418,9 @@ export type ConsultationUpdateWithoutSpecialiteInput = {
   prescriptions?: Prisma.PrescriptionUpdateManyWithoutConsultationNestedInput
   demandesLabo?: Prisma.DemandeLaboratoireUpdateManyWithoutConsultationNestedInput
   demandesImagerie?: Prisma.DemandeImagerieUpdateManyWithoutConsultationNestedInput
+  proformas?: Prisma.ProformaUpdateManyWithoutConsultationNestedInput
+  factures?: Prisma.FactureUpdateManyWithoutConsultationNestedInput
+  actes?: Prisma.ConsultationActeUpdateManyWithoutConsultationNestedInput
 }
 
 export type ConsultationUncheckedUpdateWithoutSpecialiteInput = {
@@ -1946,6 +2441,9 @@ export type ConsultationUncheckedUpdateWithoutSpecialiteInput = {
   prescriptions?: Prisma.PrescriptionUncheckedUpdateManyWithoutConsultationNestedInput
   demandesLabo?: Prisma.DemandeLaboratoireUncheckedUpdateManyWithoutConsultationNestedInput
   demandesImagerie?: Prisma.DemandeImagerieUncheckedUpdateManyWithoutConsultationNestedInput
+  proformas?: Prisma.ProformaUncheckedUpdateManyWithoutConsultationNestedInput
+  factures?: Prisma.FactureUncheckedUpdateManyWithoutConsultationNestedInput
+  actes?: Prisma.ConsultationActeUncheckedUpdateManyWithoutConsultationNestedInput
 }
 
 export type ConsultationUncheckedUpdateManyWithoutSpecialiteInput = {
@@ -1997,6 +2495,9 @@ export type ConsultationUpdateWithoutMedecinInput = {
   prescriptions?: Prisma.PrescriptionUpdateManyWithoutConsultationNestedInput
   demandesLabo?: Prisma.DemandeLaboratoireUpdateManyWithoutConsultationNestedInput
   demandesImagerie?: Prisma.DemandeImagerieUpdateManyWithoutConsultationNestedInput
+  proformas?: Prisma.ProformaUpdateManyWithoutConsultationNestedInput
+  factures?: Prisma.FactureUpdateManyWithoutConsultationNestedInput
+  actes?: Prisma.ConsultationActeUpdateManyWithoutConsultationNestedInput
 }
 
 export type ConsultationUncheckedUpdateWithoutMedecinInput = {
@@ -2017,6 +2518,9 @@ export type ConsultationUncheckedUpdateWithoutMedecinInput = {
   prescriptions?: Prisma.PrescriptionUncheckedUpdateManyWithoutConsultationNestedInput
   demandesLabo?: Prisma.DemandeLaboratoireUncheckedUpdateManyWithoutConsultationNestedInput
   demandesImagerie?: Prisma.DemandeImagerieUncheckedUpdateManyWithoutConsultationNestedInput
+  proformas?: Prisma.ProformaUncheckedUpdateManyWithoutConsultationNestedInput
+  factures?: Prisma.FactureUncheckedUpdateManyWithoutConsultationNestedInput
+  actes?: Prisma.ConsultationActeUncheckedUpdateManyWithoutConsultationNestedInput
 }
 
 export type ConsultationUncheckedUpdateManyWithoutMedecinInput = {
@@ -2068,6 +2572,9 @@ export type ConsultationUpdateWithoutPatientInput = {
   prescriptions?: Prisma.PrescriptionUpdateManyWithoutConsultationNestedInput
   demandesLabo?: Prisma.DemandeLaboratoireUpdateManyWithoutConsultationNestedInput
   demandesImagerie?: Prisma.DemandeImagerieUpdateManyWithoutConsultationNestedInput
+  proformas?: Prisma.ProformaUpdateManyWithoutConsultationNestedInput
+  factures?: Prisma.FactureUpdateManyWithoutConsultationNestedInput
+  actes?: Prisma.ConsultationActeUpdateManyWithoutConsultationNestedInput
 }
 
 export type ConsultationUncheckedUpdateWithoutPatientInput = {
@@ -2088,6 +2595,9 @@ export type ConsultationUncheckedUpdateWithoutPatientInput = {
   prescriptions?: Prisma.PrescriptionUncheckedUpdateManyWithoutConsultationNestedInput
   demandesLabo?: Prisma.DemandeLaboratoireUncheckedUpdateManyWithoutConsultationNestedInput
   demandesImagerie?: Prisma.DemandeImagerieUncheckedUpdateManyWithoutConsultationNestedInput
+  proformas?: Prisma.ProformaUncheckedUpdateManyWithoutConsultationNestedInput
+  factures?: Prisma.FactureUncheckedUpdateManyWithoutConsultationNestedInput
+  actes?: Prisma.ConsultationActeUncheckedUpdateManyWithoutConsultationNestedInput
 }
 
 export type ConsultationUncheckedUpdateManyWithoutPatientInput = {
@@ -2116,6 +2626,9 @@ export type ConsultationCountOutputType = {
   prescriptions: number
   demandesLabo: number
   demandesImagerie: number
+  proformas: number
+  factures: number
+  actes: number
 }
 
 export type ConsultationCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -2123,6 +2636,9 @@ export type ConsultationCountOutputTypeSelect<ExtArgs extends runtime.Types.Exte
   prescriptions?: boolean | ConsultationCountOutputTypeCountPrescriptionsArgs
   demandesLabo?: boolean | ConsultationCountOutputTypeCountDemandesLaboArgs
   demandesImagerie?: boolean | ConsultationCountOutputTypeCountDemandesImagerieArgs
+  proformas?: boolean | ConsultationCountOutputTypeCountProformasArgs
+  factures?: boolean | ConsultationCountOutputTypeCountFacturesArgs
+  actes?: boolean | ConsultationCountOutputTypeCountActesArgs
 }
 
 /**
@@ -2163,6 +2679,27 @@ export type ConsultationCountOutputTypeCountDemandesImagerieArgs<ExtArgs extends
   where?: Prisma.DemandeImagerieWhereInput
 }
 
+/**
+ * ConsultationCountOutputType without action
+ */
+export type ConsultationCountOutputTypeCountProformasArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.ProformaWhereInput
+}
+
+/**
+ * ConsultationCountOutputType without action
+ */
+export type ConsultationCountOutputTypeCountFacturesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.FactureWhereInput
+}
+
+/**
+ * ConsultationCountOutputType without action
+ */
+export type ConsultationCountOutputTypeCountActesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.ConsultationActeWhereInput
+}
+
 
 export type ConsultationSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   idConsultation?: boolean
@@ -2189,6 +2726,9 @@ export type ConsultationSelect<ExtArgs extends runtime.Types.Extensions.Internal
   prescriptions?: boolean | Prisma.Consultation$prescriptionsArgs<ExtArgs>
   demandesLabo?: boolean | Prisma.Consultation$demandesLaboArgs<ExtArgs>
   demandesImagerie?: boolean | Prisma.Consultation$demandesImagerieArgs<ExtArgs>
+  proformas?: boolean | Prisma.Consultation$proformasArgs<ExtArgs>
+  factures?: boolean | Prisma.Consultation$facturesArgs<ExtArgs>
+  actes?: boolean | Prisma.Consultation$actesArgs<ExtArgs>
   _count?: boolean | Prisma.ConsultationCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["consultation"]>
 
@@ -2267,6 +2807,9 @@ export type ConsultationInclude<ExtArgs extends runtime.Types.Extensions.Interna
   prescriptions?: boolean | Prisma.Consultation$prescriptionsArgs<ExtArgs>
   demandesLabo?: boolean | Prisma.Consultation$demandesLaboArgs<ExtArgs>
   demandesImagerie?: boolean | Prisma.Consultation$demandesImagerieArgs<ExtArgs>
+  proformas?: boolean | Prisma.Consultation$proformasArgs<ExtArgs>
+  factures?: boolean | Prisma.Consultation$facturesArgs<ExtArgs>
+  actes?: boolean | Prisma.Consultation$actesArgs<ExtArgs>
   _count?: boolean | Prisma.ConsultationCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type ConsultationIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -2299,6 +2842,9 @@ export type $ConsultationPayload<ExtArgs extends runtime.Types.Extensions.Intern
     prescriptions: Prisma.$PrescriptionPayload<ExtArgs>[]
     demandesLabo: Prisma.$DemandeLaboratoirePayload<ExtArgs>[]
     demandesImagerie: Prisma.$DemandeImageriePayload<ExtArgs>[]
+    proformas: Prisma.$ProformaPayload<ExtArgs>[]
+    factures: Prisma.$FacturePayload<ExtArgs>[]
+    actes: Prisma.$ConsultationActePayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     idConsultation: number
@@ -2719,6 +3265,9 @@ export interface Prisma__ConsultationClient<T, Null = never, ExtArgs extends run
   prescriptions<T extends Prisma.Consultation$prescriptionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Consultation$prescriptionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$PrescriptionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   demandesLabo<T extends Prisma.Consultation$demandesLaboArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Consultation$demandesLaboArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$DemandeLaboratoirePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   demandesImagerie<T extends Prisma.Consultation$demandesImagerieArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Consultation$demandesImagerieArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$DemandeImageriePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  proformas<T extends Prisma.Consultation$proformasArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Consultation$proformasArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ProformaPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  factures<T extends Prisma.Consultation$facturesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Consultation$facturesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$FacturePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  actes<T extends Prisma.Consultation$actesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Consultation$actesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ConsultationActePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -3330,6 +3879,78 @@ export type Consultation$demandesImagerieArgs<ExtArgs extends runtime.Types.Exte
   take?: number
   skip?: number
   distinct?: Prisma.DemandeImagerieScalarFieldEnum | Prisma.DemandeImagerieScalarFieldEnum[]
+}
+
+/**
+ * Consultation.proformas
+ */
+export type Consultation$proformasArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Proforma
+   */
+  select?: Prisma.ProformaSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Proforma
+   */
+  omit?: Prisma.ProformaOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.ProformaInclude<ExtArgs> | null
+  where?: Prisma.ProformaWhereInput
+  orderBy?: Prisma.ProformaOrderByWithRelationInput | Prisma.ProformaOrderByWithRelationInput[]
+  cursor?: Prisma.ProformaWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.ProformaScalarFieldEnum | Prisma.ProformaScalarFieldEnum[]
+}
+
+/**
+ * Consultation.factures
+ */
+export type Consultation$facturesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Facture
+   */
+  select?: Prisma.FactureSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Facture
+   */
+  omit?: Prisma.FactureOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.FactureInclude<ExtArgs> | null
+  where?: Prisma.FactureWhereInput
+  orderBy?: Prisma.FactureOrderByWithRelationInput | Prisma.FactureOrderByWithRelationInput[]
+  cursor?: Prisma.FactureWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.FactureScalarFieldEnum | Prisma.FactureScalarFieldEnum[]
+}
+
+/**
+ * Consultation.actes
+ */
+export type Consultation$actesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the ConsultationActe
+   */
+  select?: Prisma.ConsultationActeSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the ConsultationActe
+   */
+  omit?: Prisma.ConsultationActeOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.ConsultationActeInclude<ExtArgs> | null
+  where?: Prisma.ConsultationActeWhereInput
+  orderBy?: Prisma.ConsultationActeOrderByWithRelationInput | Prisma.ConsultationActeOrderByWithRelationInput[]
+  cursor?: Prisma.ConsultationActeWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.ConsultationActeScalarFieldEnum | Prisma.ConsultationActeScalarFieldEnum[]
 }
 
 /**

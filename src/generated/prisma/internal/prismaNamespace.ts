@@ -441,7 +441,10 @@ export const ModelName = {
   Assurance: 'Assurance',
   PatientAssurance: 'PatientAssurance',
   DocumentPatient: 'DocumentPatient',
-  AuditLog: 'AuditLog'
+  AuditLog: 'AuditLog',
+  Proforma: 'Proforma',
+  ProformaLigne: 'ProformaLigne',
+  ConsultationActe: 'ConsultationActe'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -457,7 +460,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "role" | "permission" | "rolePermission" | "employe" | "departement" | "service" | "specialite" | "medecin" | "infirmier" | "patient" | "allergie" | "antecedent" | "rendezVous" | "admission" | "triage" | "constante" | "consultation" | "prescription" | "prescriptionLigne" | "examenLaboratoire" | "demandeLaboratoire" | "demandeLaboratoireLigne" | "resultatLaboratoire" | "examenImagerie" | "demandeImagerie" | "medicament" | "stockMedicament" | "mouvementStock" | "dispensation" | "dispensationLigne" | "chambre" | "lit" | "hospitalisation" | "transfert" | "soin" | "sortie" | "acteMedical" | "facture" | "ligneFacture" | "paiement" | "assurance" | "patientAssurance" | "documentPatient" | "auditLog"
+    modelProps: "user" | "role" | "permission" | "rolePermission" | "employe" | "departement" | "service" | "specialite" | "medecin" | "infirmier" | "patient" | "allergie" | "antecedent" | "rendezVous" | "admission" | "triage" | "constante" | "consultation" | "prescription" | "prescriptionLigne" | "examenLaboratoire" | "demandeLaboratoire" | "demandeLaboratoireLigne" | "resultatLaboratoire" | "examenImagerie" | "demandeImagerie" | "medicament" | "stockMedicament" | "mouvementStock" | "dispensation" | "dispensationLigne" | "chambre" | "lit" | "hospitalisation" | "transfert" | "soin" | "sortie" | "acteMedical" | "facture" | "ligneFacture" | "paiement" | "assurance" | "patientAssurance" | "documentPatient" | "auditLog" | "proforma" | "proformaLigne" | "consultationActe"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -3791,6 +3794,228 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    Proforma: {
+      payload: Prisma.$ProformaPayload<ExtArgs>
+      fields: Prisma.ProformaFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.ProformaFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProformaPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.ProformaFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProformaPayload>
+        }
+        findFirst: {
+          args: Prisma.ProformaFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProformaPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.ProformaFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProformaPayload>
+        }
+        findMany: {
+          args: Prisma.ProformaFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProformaPayload>[]
+        }
+        create: {
+          args: Prisma.ProformaCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProformaPayload>
+        }
+        createMany: {
+          args: Prisma.ProformaCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.ProformaCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProformaPayload>[]
+        }
+        delete: {
+          args: Prisma.ProformaDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProformaPayload>
+        }
+        update: {
+          args: Prisma.ProformaUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProformaPayload>
+        }
+        deleteMany: {
+          args: Prisma.ProformaDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.ProformaUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.ProformaUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProformaPayload>[]
+        }
+        upsert: {
+          args: Prisma.ProformaUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProformaPayload>
+        }
+        aggregate: {
+          args: Prisma.ProformaAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateProforma>
+        }
+        groupBy: {
+          args: Prisma.ProformaGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.ProformaGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.ProformaCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.ProformaCountAggregateOutputType> | number
+        }
+      }
+    }
+    ProformaLigne: {
+      payload: Prisma.$ProformaLignePayload<ExtArgs>
+      fields: Prisma.ProformaLigneFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.ProformaLigneFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProformaLignePayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.ProformaLigneFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProformaLignePayload>
+        }
+        findFirst: {
+          args: Prisma.ProformaLigneFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProformaLignePayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.ProformaLigneFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProformaLignePayload>
+        }
+        findMany: {
+          args: Prisma.ProformaLigneFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProformaLignePayload>[]
+        }
+        create: {
+          args: Prisma.ProformaLigneCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProformaLignePayload>
+        }
+        createMany: {
+          args: Prisma.ProformaLigneCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.ProformaLigneCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProformaLignePayload>[]
+        }
+        delete: {
+          args: Prisma.ProformaLigneDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProformaLignePayload>
+        }
+        update: {
+          args: Prisma.ProformaLigneUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProformaLignePayload>
+        }
+        deleteMany: {
+          args: Prisma.ProformaLigneDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.ProformaLigneUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.ProformaLigneUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProformaLignePayload>[]
+        }
+        upsert: {
+          args: Prisma.ProformaLigneUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProformaLignePayload>
+        }
+        aggregate: {
+          args: Prisma.ProformaLigneAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateProformaLigne>
+        }
+        groupBy: {
+          args: Prisma.ProformaLigneGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.ProformaLigneGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.ProformaLigneCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.ProformaLigneCountAggregateOutputType> | number
+        }
+      }
+    }
+    ConsultationActe: {
+      payload: Prisma.$ConsultationActePayload<ExtArgs>
+      fields: Prisma.ConsultationActeFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.ConsultationActeFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ConsultationActePayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.ConsultationActeFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ConsultationActePayload>
+        }
+        findFirst: {
+          args: Prisma.ConsultationActeFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ConsultationActePayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.ConsultationActeFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ConsultationActePayload>
+        }
+        findMany: {
+          args: Prisma.ConsultationActeFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ConsultationActePayload>[]
+        }
+        create: {
+          args: Prisma.ConsultationActeCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ConsultationActePayload>
+        }
+        createMany: {
+          args: Prisma.ConsultationActeCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.ConsultationActeCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ConsultationActePayload>[]
+        }
+        delete: {
+          args: Prisma.ConsultationActeDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ConsultationActePayload>
+        }
+        update: {
+          args: Prisma.ConsultationActeUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ConsultationActePayload>
+        }
+        deleteMany: {
+          args: Prisma.ConsultationActeDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.ConsultationActeUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.ConsultationActeUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ConsultationActePayload>[]
+        }
+        upsert: {
+          args: Prisma.ConsultationActeUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ConsultationActePayload>
+        }
+        aggregate: {
+          args: Prisma.ConsultationActeAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateConsultationActe>
+        }
+        groupBy: {
+          args: Prisma.ConsultationActeGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.ConsultationActeGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.ConsultationActeCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.ConsultationActeCountAggregateOutputType> | number
+        }
+      }
+    }
   }
 } & {
   other: {
@@ -4438,11 +4663,18 @@ export const FactureScalarFieldEnum = {
   id: 'id',
   numero: 'numero',
   patientId: 'patientId',
+  consultationId: 'consultationId',
+  admissionId: 'admissionId',
+  hospitalisationId: 'hospitalisationId',
+  proformaId: 'proformaId',
   dateFacture: 'dateFacture',
   dateEcheance: 'dateEcheance',
+  montantBrut: 'montantBrut',
+  reduction: 'reduction',
   montantTotal: 'montantTotal',
   montantPaye: 'montantPaye',
   reste: 'reste',
+  typeReduction: 'typeReduction',
   devise: 'devise',
   statut: 'statut',
   createdAt: 'createdAt',
@@ -4456,6 +4688,7 @@ export const LigneFactureScalarFieldEnum = {
   id: 'id',
   factureId: 'factureId',
   acteId: 'acteId',
+  serviceId: 'serviceId',
   designation: 'designation',
   quantite: 'quantite',
   prixUnitaire: 'prixUnitaire',
@@ -4543,6 +4776,65 @@ export const AuditLogScalarFieldEnum = {
 } as const
 
 export type AuditLogScalarFieldEnum = (typeof AuditLogScalarFieldEnum)[keyof typeof AuditLogScalarFieldEnum]
+
+
+export const ProformaScalarFieldEnum = {
+  id: 'id',
+  numero: 'numero',
+  patientId: 'patientId',
+  consultationId: 'consultationId',
+  admissionId: 'admissionId',
+  hospitalisationId: 'hospitalisationId',
+  montantBrut: 'montantBrut',
+  typeReduction: 'typeReduction',
+  reduction: 'reduction',
+  montantTotal: 'montantTotal',
+  devise: 'devise',
+  statut: 'statut',
+  dateEmission: 'dateEmission',
+  dateExpiration: 'dateExpiration',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type ProformaScalarFieldEnum = (typeof ProformaScalarFieldEnum)[keyof typeof ProformaScalarFieldEnum]
+
+
+export const ProformaLigneScalarFieldEnum = {
+  id: 'id',
+  proformaId: 'proformaId',
+  typeOrigine: 'typeOrigine',
+  acteId: 'acteId',
+  serviceId: 'serviceId',
+  consultationId: 'consultationId',
+  demandeLaboratoireId: 'demandeLaboratoireId',
+  demandeImagerieId: 'demandeImagerieId',
+  dispensationId: 'dispensationId',
+  hospitalisationId: 'hospitalisationId',
+  designation: 'designation',
+  quantite: 'quantite',
+  prixUnitaire: 'prixUnitaire',
+  montant: 'montant',
+  reference: 'reference',
+  createdAt: 'createdAt'
+} as const
+
+export type ProformaLigneScalarFieldEnum = (typeof ProformaLigneScalarFieldEnum)[keyof typeof ProformaLigneScalarFieldEnum]
+
+
+export const ConsultationActeScalarFieldEnum = {
+  id: 'id',
+  consultationId: 'consultationId',
+  acteId: 'acteId',
+  quantite: 'quantite',
+  prixUnitaire: 'prixUnitaire',
+  montant: 'montant',
+  observation: 'observation',
+  dateActe: 'dateActe',
+  createdAt: 'createdAt'
+} as const
+
+export type ConsultationActeScalarFieldEnum = (typeof ConsultationActeScalarFieldEnum)[keyof typeof ConsultationActeScalarFieldEnum]
 
 
 export const SortOrder = {
@@ -4797,6 +5089,9 @@ export type GlobalOmitConfig = {
   patientAssurance?: Prisma.PatientAssuranceOmit
   documentPatient?: Prisma.DocumentPatientOmit
   auditLog?: Prisma.AuditLogOmit
+  proforma?: Prisma.ProformaOmit
+  proformaLigne?: Prisma.ProformaLigneOmit
+  consultationActe?: Prisma.ConsultationActeOmit
 }
 
 /* Types for Logging */

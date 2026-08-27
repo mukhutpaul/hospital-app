@@ -1,772 +1,216 @@
 "use server";
 
 import { prisma } from "@/lib/prisma";
+import { revalidatePath } from "next/cache";
 
-/* ==========================================================
-   TYPES
-========================================================== */
+type ActionResult<T = unknown> = { success: boolean; message: string; data?: T };
 
-type ActionResult<T = unknown> = {
-  success: boolean;
-  message: string;
-  data?: T;
-};
-
-/* ==========================================================
-   LISTE DES HOSPITALISATIONS
-========================================================== */
+const PATH = "/hospitalisation/hospitalisations";
 
 export async function getHospitalisations(): Promise<ActionResult> {
   try {
-    const hospitalisations =
-      await prisma.hospitalisation.findMany({
-        orderBy: {
-          dateEntree: "desc",
-        },
-
-        include: {
-          patient: {
-            select: {
-              id: true,
-              numeroDossier: true,
-              nom: true,
-              postNom: true,
-              prenom: true,
-              sexe: true,
-              telephone: true,
-            },
-          },
-
-          admission: {
-            select: {
-              id: true,
-              numero: true,
-              type: true,
-              statut: true,
-              dateAdmission: true,
-            },
-          },
-
-          service: {
-            select: {
-              id: true,
-              nom: true,
-            },
-          },
-
-          medecin: {
-            select: {
-              id: true,
-              matricule: true,
-              nom: true,
-              postNom: true,
-              prenom: true,
-            },
-          },
-
-          lit: {
-            include: {
-              chambre: {
-                select: {
-                  id: true,
-                  numero: true,
-                  type: true,
-                  etage: true,
-                },
-              },
-            },
-          },
-        },
-      });
-
-    return {
-      success: true,
-      message: "Hospitalisations récupérées.",
-      data: hospitalisations,
-    };
+    const data = await prisma.hospitalisation.findMany({
+      orderBy: { dateEntree: "desc" },
+      include: {
+        patient: true,
+        admission: true,
+        service: true,
+        medecin: true,
+        lit: { include: { chambre: true } },
+      },
+    });
+    return { success: true, message: "Hospitalisations récupérées.", data };
   } catch (error) {
-    console.error(
-      "GET HOSPITALISATIONS:",
-      error
-    );
-
-    return {
-      success: false,
-      message:
-        "Impossible de récupérer les hospitalisations.",
-      data: [],
-    };
+    console.error(error);
+    return { success: false, message: "Impossible de récupérer les hospitalisations." };
   }
 }
 
-/* ==========================================================
-   HOSPITALISATION PAR ID
-========================================================== */
-
-export async function getHospitalisationById(
-  id: number
-): Promise<ActionResult> {
+export async function getHospitalisationById(id: number): Promise<ActionResult> {
   try {
-    if (!id || Number.isNaN(id)) {
-      return {
-        success: false,
-        message:
-          "Identifiant d'hospitalisation invalide.",
-      };
-    }
-
-    const hospitalisation =
-      await prisma.hospitalisation.findUnique({
-        where: {
-          id,
-        },
-
-        include: {
-          patient: true,
-
-          admission: {
-            include: {
-              triage: true,
-              service: true,
-            },
-          },
-
-          service: true,
-
-          medecin: {
-            include: {
-              service: true,
-              specialite: true,
-            },
-          },
-
-          lit: {
-            include: {
-              chambre: true,
-            },
-          },
-
-          transferts: {
-            orderBy: {
-              dateTransfert: "desc",
-            },
-          },
-
-          soins: {
-            orderBy: {
-              dateSoin: "desc",
-            },
-          },
-
-          sorties: {
-            orderBy: {
-              dateSortie: "desc",
-            },
-          },
-        },
-      });
-
-    if (!hospitalisation) {
-      return {
-        success: false,
-        message:
-          "Hospitalisation introuvable.",
-      };
-    }
-
-    return {
-      success: true,
-      message:
-        "Hospitalisation récupérée.",
-      data: hospitalisation,
-    };
+    const data = await prisma.hospitalisation.findUnique({
+      where: { id },
+      include: {
+        patient: true,
+        admission: true,
+        service: true,
+        medecin: true,
+        lit: { include: { chambre: true } },
+        soins: { orderBy: { dateSoin: "desc" } },
+        transferts: { orderBy: { dateTransfert: "desc" } },
+        sorties: { orderBy: { dateSortie: "desc" } },
+      },
+    });
+    if (!data) return { success: false, message: "Hospitalisation introuvable." };
+    return { success: true, message: "Hospitalisation récupérée.", data };
   } catch (error) {
-    console.error(
-      "GET HOSPITALISATION BY ID:",
-      error
-    );
-
-    return {
-      success: false,
-      message:
-        "Impossible de récupérer l'hospitalisation.",
-    };
+    console.error(error);
+    return { success: false, message: "Erreur lors de la récupération." };
   }
 }
 
-/* ==========================================================
-   CRÉER
-========================================================== */
+export async function getAdmissionsDisponiblesPourHospitalisation(): Promise<ActionResult> {
+  try {
+    const data = await prisma.admission.findMany({
+      where: { hospitalisation: null },
+      orderBy: { dateAdmission: "desc" },
+      include: { patient: true, service: true },
+    });
+    return { success: true, message: "Admissions disponibles récupérées.", data };
+  } catch (error) {
+    console.error(error);
+    return { success: false, message: "Impossible de récupérer les admissions disponibles." };
+  }
+}
 
-export async function createHospitalisation(data: {
-  patientId: number;
+export async function createHospitalisation(input: {
   admissionId: number;
+  serviceId?: number | null;
+  medecinId?: number | null;
+  litId?: number | null;
+  motif?: string | null;
+  diagnostic?: string | null;
+}): Promise<ActionResult> {
+  try {
+    if (!input.admissionId) return { success: false, message: "L'admission est obligatoire." };
 
-  serviceId?: number;
-  medecinId?: number;
-  litId?: number;
+    const admission = await prisma.admission.findUnique({
+      where: { id: input.admissionId },
+      include: { hospitalisation: true },
+    });
+    if (!admission) return { success: false, message: "Admission introuvable." };
+    if (admission.hospitalisation) return { success: false, message: "Cette admission possède déjà une hospitalisation." };
 
-  motif?: string;
-  diagnostic?: string;
+    if (input.litId) {
+      const lit = await prisma.lit.findUnique({ where: { id: input.litId } });
+      if (!lit) return { success: false, message: "Lit introuvable." };
+      if (lit.statut !== "LIBRE") return { success: false, message: "Le lit sélectionné n'est pas libre." };
+    }
 
-  dateEntree?: Date;
+    const numero = `HOSP-${new Date().getFullYear()}-${String(Date.now()).slice(-6)}`;
+
+    const data = await prisma.$transaction(async (tx) => {
+      const hospitalisation = await tx.hospitalisation.create({
+        data: {
+          numero,
+          patientId: admission.patientId,
+          admissionId: input.admissionId,
+          serviceId: input.serviceId ?? null,
+          medecinId: input.medecinId ?? null,
+          litId: input.litId ?? null,
+          motif: input.motif?.trim() || null,
+          diagnostic: input.diagnostic?.trim() || null,
+          statut: "EN_COURS",
+        },
+      });
+
+      if (input.litId) {
+        await tx.lit.update({ where: { id: input.litId }, data: { statut: "OCCUPE" } });
+      }
+
+      return hospitalisation;
+    });
+
+    revalidatePath(PATH);
+    revalidatePath("/hospitalisation");
+    revalidatePath("/hospitalisation/lits");
+    return { success: true, message: "Hospitalisation créée avec succès.", data };
+  } catch (error) {
+    console.error(error);
+    return { success: false, message: "Impossible de créer l'hospitalisation." };
+  }
+}
+
+export async function updateHospitalisation(id: number, input: {
+  serviceId?: number | null;
+  medecinId?: number | null;
+  litId?: number | null;
+  motif?: string | null;
+  diagnostic?: string | null;
   statut?: string;
 }): Promise<ActionResult> {
   try {
-    if (!data.patientId) {
-      return {
-        success: false,
-        message: "Le patient est obligatoire.",
-      };
+    const current = await prisma.hospitalisation.findUnique({ where: { id } });
+    if (!current) return { success: false, message: "Hospitalisation introuvable." };
+    if (current.statut !== "EN_COURS" && input.statut !== current.statut) {
+      return { success: false, message: "Cette hospitalisation n'est plus modifiable." };
     }
 
-    if (!data.admissionId) {
-      return {
-        success: false,
-        message:
-          "L'admission est obligatoire.",
-      };
+    const newLitId = input.litId ?? null;
+    if (newLitId && newLitId !== current.litId) {
+      const lit = await prisma.lit.findUnique({ where: { id: newLitId } });
+      if (!lit) return { success: false, message: "Nouveau lit introuvable." };
+      if (lit.statut !== "LIBRE") return { success: false, message: "Le nouveau lit n'est pas libre." };
     }
 
-    /* ------------------------------------------------------
-       Vérifier l'admission
-    ------------------------------------------------------ */
-
-    const admission =
-      await prisma.admission.findUnique({
-        where: {
-          id: data.admissionId,
+    await prisma.$transaction(async (tx) => {
+      await tx.hospitalisation.update({
+        where: { id },
+        data: {
+          serviceId: input.serviceId ?? null,
+          medecinId: input.medecinId ?? null,
+          litId: newLitId,
+          motif: input.motif?.trim() || null,
+          diagnostic: input.diagnostic?.trim() || null,
+          ...(input.statut ? { statut: input.statut } : {}),
         },
       });
 
-    if (!admission) {
-      return {
-        success: false,
-        message:
-          "L'admission sélectionnée est introuvable.",
-      };
-    }
-
-    /* ------------------------------------------------------
-       Vérifier si l'admission possède déjà
-       une hospitalisation
-    ------------------------------------------------------ */
-
-    const existing =
-      await prisma.hospitalisation.findUnique({
-        where: {
-          admissionId: data.admissionId,
-        },
-      });
-
-    if (existing) {
-      return {
-        success: false,
-        message:
-          "Cette admission possède déjà une hospitalisation.",
-      };
-    }
-
-    /* ------------------------------------------------------
-       Vérifier le lit
-    ------------------------------------------------------ */
-
-    if (data.litId) {
-      const lit =
-        await prisma.lit.findUnique({
-          where: {
-            id: data.litId,
-          },
-        });
-
-      if (!lit) {
-        return {
-          success: false,
-          message: "Lit introuvable.",
-        };
+      if (current.litId && current.litId !== newLitId) {
+        await tx.lit.update({ where: { id: current.litId }, data: { statut: "LIBRE" } });
       }
-
-      if (lit.statut !== "LIBRE") {
-        return {
-          success: false,
-          message:
-            "Le lit sélectionné n'est pas disponible.",
-        };
+      if (newLitId && current.litId !== newLitId) {
+        await tx.lit.update({ where: { id: newLitId }, data: { statut: "OCCUPE" } });
       }
-    }
+    });
 
-    /* ------------------------------------------------------
-       NUMÉRO
-    ------------------------------------------------------ */
-
-    const numero =
-      `HOSP-${Date.now()}`;
-
-    /* ------------------------------------------------------
-       TRANSACTION
-    ------------------------------------------------------ */
-
-    const hospitalisation =
-      await prisma.$transaction(
-        async (tx) => {
-          const created =
-            await tx.hospitalisation.create({
-              data: {
-                numero,
-
-                patientId:
-                  data.patientId,
-
-                admissionId:
-                  data.admissionId,
-
-                serviceId:
-                  data.serviceId ||
-                  undefined,
-
-                medecinId:
-                  data.medecinId ||
-                  undefined,
-
-                litId:
-                  data.litId ||
-                  undefined,
-
-                motif:
-                  data.motif?.trim() ||
-                  undefined,
-
-                diagnostic:
-                  data.diagnostic?.trim() ||
-                  undefined,
-
-                dateEntree:
-                  data.dateEntree ||
-                  new Date(),
-
-                statut:
-                  data.statut ||
-                  "EN_COURS",
-              },
-            });
-
-          /* ----------------------------------------------
-             OCCUPER LE LIT
-          ---------------------------------------------- */
-
-          if (data.litId) {
-            await tx.lit.update({
-              where: {
-                id: data.litId,
-              },
-
-              data: {
-                statut: "OCCUPE",
-              },
-            });
-          }
-
-          /* ----------------------------------------------
-             METTRE L'ADMISSION À JOUR
-          ---------------------------------------------- */
-
-          await tx.admission.update({
-            where: {
-              id: data.admissionId,
-            },
-
-            data: {
-              statut: "HOSPITALISE",
-            },
-          });
-
-          return created;
-        }
-      );
-
-    return {
-      success: true,
-      message:
-        "Hospitalisation créée avec succès.",
-      data: hospitalisation,
-    };
+    revalidatePath(PATH);
+    revalidatePath(`/hospitalisation/hospitalisations/${id}`);
+    revalidatePath("/hospitalisation/lits");
+    return { success: true, message: "Hospitalisation modifiée avec succès." };
   } catch (error) {
-    console.error(
-      "CREATE HOSPITALISATION:",
-      error
-    );
-
-    return {
-      success: false,
-      message:
-        "Impossible de créer l'hospitalisation.",
-    };
+    console.error(error);
+    return { success: false, message: "Impossible de modifier l'hospitalisation." };
   }
 }
 
-/* ==========================================================
-   MODIFIER
-========================================================== */
-
-export async function updateHospitalisation(
-  id: number,
-  data: {
-    serviceId?: number;
-    medecinId?: number;
-    litId?: number;
-
-    motif?: string;
-    diagnostic?: string;
-
-    statut?: string;
-  }
-): Promise<ActionResult> {
+export async function terminerHospitalisation(id: number): Promise<ActionResult> {
   try {
-    const existing =
-      await prisma.hospitalisation.findUnique({
-        where: {
-          id,
-        },
-      });
+    const current = await prisma.hospitalisation.findUnique({ where: { id } });
+    if (!current) return { success: false, message: "Hospitalisation introuvable." };
+    if (current.statut !== "EN_COURS") return { success: false, message: "Cette hospitalisation est déjà terminée." };
 
-    if (!existing) {
-      return {
-        success: false,
-        message:
-          "Hospitalisation introuvable.",
-      };
-    }
+    await prisma.$transaction(async (tx) => {
+      await tx.hospitalisation.update({ where: { id }, data: { statut: "TERMINEE", dateSortie: new Date() } });
+      if (current.litId) await tx.lit.update({ where: { id: current.litId }, data: { statut: "LIBRE" } });
+    });
 
-    /* ------------------------------------------------------
-       Si le lit change
-    ------------------------------------------------------ */
-
-    if (
-      data.litId &&
-      data.litId !== existing.litId
-    ) {
-      const newLit =
-        await prisma.lit.findUnique({
-          where: {
-            id: data.litId,
-          },
-        });
-
-      if (!newLit) {
-        return {
-          success: false,
-          message: "Nouveau lit introuvable.",
-        };
-      }
-
-      if (newLit.statut !== "LIBRE") {
-        return {
-          success: false,
-          message:
-            "Le nouveau lit n'est pas disponible.",
-        };
-      }
-    }
-
-    const hospitalisation =
-      await prisma.$transaction(
-        async (tx) => {
-          /* ----------------------------------------------
-             Libérer ancien lit
-          ---------------------------------------------- */
-
-          if (
-            existing.litId &&
-            data.litId &&
-            existing.litId !== data.litId
-          ) {
-            await tx.lit.update({
-              where: {
-                id: existing.litId,
-              },
-
-              data: {
-                statut: "LIBRE",
-              },
-            });
-          }
-
-          /* ----------------------------------------------
-             Occuper nouveau lit
-          ---------------------------------------------- */
-
-          if (
-            data.litId &&
-            data.litId !== existing.litId
-          ) {
-            await tx.lit.update({
-              where: {
-                id: data.litId,
-              },
-
-              data: {
-                statut: "OCCUPE",
-              },
-            });
-          }
-
-          /* ----------------------------------------------
-             Mise à jour
-          ---------------------------------------------- */
-
-          return await tx.hospitalisation.update({
-            where: {
-              id,
-            },
-
-            data: {
-              serviceId:
-                data.serviceId ||
-                null,
-
-              medecinId:
-                data.medecinId ||
-                null,
-
-              litId:
-                data.litId ||
-                null,
-
-              motif:
-                data.motif?.trim() ||
-                null,
-
-              diagnostic:
-                data.diagnostic?.trim() ||
-                null,
-
-              statut:
-                data.statut ||
-                undefined,
-            },
-          });
-        }
-      );
-
-    return {
-      success: true,
-      message:
-        "Hospitalisation modifiée avec succès.",
-      data: hospitalisation,
-    };
+    revalidatePath(PATH);
+    revalidatePath("/hospitalisation/lits");
+    revalidatePath(`/hospitalisation/hospitalisations/${id}`);
+    return { success: true, message: "Hospitalisation terminée." };
   } catch (error) {
-    console.error(
-      "UPDATE HOSPITALISATION:",
-      error
-    );
-
-    return {
-      success: false,
-      message:
-        "Impossible de modifier l'hospitalisation.",
-    };
+    console.error(error);
+    return { success: false, message: "Impossible de terminer l'hospitalisation." };
   }
 }
 
-/* ==========================================================
-   SUPPRIMER
-========================================================== */
-
-export async function deleteHospitalisation(
-  id: number
-): Promise<ActionResult> {
+export async function deleteHospitalisation(id: number): Promise<ActionResult> {
   try {
-    const hospitalisation =
-      await prisma.hospitalisation.findUnique({
-        where: {
-          id,
-        },
-      });
+    const current = await prisma.hospitalisation.findUnique({ where: { id } });
+    if (!current) return { success: false, message: "Hospitalisation introuvable." };
+    if (current.statut === "EN_COURS") return { success: false, message: "Impossible de supprimer une hospitalisation en cours. Faites d'abord une sortie." };
 
-    if (!hospitalisation) {
-      return {
-        success: false,
-        message:
-          "Hospitalisation introuvable.",
-      };
-    }
+    await prisma.$transaction(async (tx) => {
+      await tx.hospitalisation.delete({ where: { id } });
+      if (current.litId) await tx.lit.update({ where: { id: current.litId }, data: { statut: "LIBRE" } });
+    });
 
-    /* ------------------------------------------------------
-       On évite de supprimer une hospitalisation active
-    ------------------------------------------------------ */
-
-    if (
-      hospitalisation.statut ===
-      "EN_COURS"
-    ) {
-      return {
-        success: false,
-        message:
-          "Impossible de supprimer une hospitalisation en cours. Veuillez d'abord effectuer la sortie du patient.",
-      };
-    }
-
-    await prisma.$transaction(
-      async (tx) => {
-        /* Libérer le lit */
-
-        if (hospitalisation.litId) {
-          await tx.lit.update({
-            where: {
-              id: hospitalisation.litId,
-            },
-
-            data: {
-              statut: "LIBRE",
-            },
-          });
-        }
-
-        await tx.hospitalisation.delete({
-          where: {
-            id,
-          },
-        });
-      }
-    );
-
-    return {
-      success: true,
-      message:
-        "Hospitalisation supprimée avec succès.",
-    };
+    revalidatePath(PATH);
+    revalidatePath("/hospitalisation/lits");
+    return { success: true, message: "Hospitalisation supprimée." };
   } catch (error) {
-    console.error(
-      "DELETE HOSPITALISATION:",
-      error
-    );
-
-    return {
-      success: false,
-      message:
-        "Impossible de supprimer l'hospitalisation.",
-    };
-  }
-}
-
-/* ==========================================================
-   CHANGER LE STATUT
-========================================================== */
-
-export async function updateHospitalisationStatut(
-  id: number,
-  statut: string
-): Promise<ActionResult> {
-  try {
-    const hospitalisation =
-      await prisma.hospitalisation.findUnique({
-        where: {
-          id,
-        },
-      });
-
-    if (!hospitalisation) {
-      return {
-        success: false,
-        message:
-          "Hospitalisation introuvable.",
-      };
-    }
-
-    const allowedStatuses = [
-      "EN_COURS",
-      "TERMINEE",
-      "ANNULEE",
-    ];
-
-    if (
-      !allowedStatuses.includes(statut)
-    ) {
-      return {
-        success: false,
-        message:
-          "Statut d'hospitalisation invalide.",
-      };
-    }
-
-    const updated =
-      await prisma.$transaction(
-        async (tx) => {
-          const result =
-            await tx.hospitalisation.update({
-              where: {
-                id,
-              },
-
-              data: {
-                statut,
-
-                dateSortie:
-                  statut === "TERMINEE"
-                    ? new Date()
-                    : undefined,
-              },
-            });
-
-          /* ----------------------------------------------
-             Si hospitalisation terminée :
-             libérer le lit
-          ---------------------------------------------- */
-
-          if (
-            statut === "TERMINEE" &&
-            hospitalisation.litId
-          ) {
-            await tx.lit.update({
-              where: {
-                id: hospitalisation.litId,
-              },
-
-              data: {
-                statut: "LIBRE",
-              },
-            });
-          }
-
-          /* ----------------------------------------------
-             Admission
-          ---------------------------------------------- */
-
-          if (
-            statut === "TERMINEE"
-          ) {
-            await tx.admission.update({
-              where: {
-                id: hospitalisation.admissionId,
-              },
-
-              data: {
-                statut: "TERMINEE",
-                dateSortie: new Date(),
-              },
-            });
-          }
-
-          return result;
-        }
-      );
-
-    return {
-      success: true,
-      message:
-        "Statut de l'hospitalisation mis à jour.",
-      data: updated,
-    };
-  } catch (error) {
-    console.error(
-      "UPDATE HOSPITALISATION STATUT:",
-      error
-    );
-
-    return {
-      success: false,
-      message:
-        "Impossible de modifier le statut.",
-    };
+    console.error(error);
+    return { success: false, message: "Impossible de supprimer l'hospitalisation." };
   }
 }

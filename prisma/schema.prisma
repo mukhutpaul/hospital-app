@@ -162,6 +162,11 @@ model Service {
   chambres         Chambre[]
   demandesLabo     DemandeLaboratoire[]
   demandesImagerie DemandeImagerie[]
+  lignesFacture LigneFacture[]
+  proformaLignes ProformaLigne[]
+
+  transfertsAnciens  Transfert[] @relation("AncienService")
+  transfertsNouveaux Transfert[] @relation("NouveauService") 
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -290,6 +295,8 @@ model Patient {
   constantes       Constante[]
   sorties          Sortie[]
   dispensations    Dispensation[]
+  proformas Proforma[]
+  
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -402,6 +409,8 @@ model Admission {
   consultation Consultation? @relation("AdmissionConsultation")
 
   constantes Constante[]
+  proformas Proforma[]
+  factures  Facture[]
 
   hospitalisation Hospitalisation?
 
@@ -507,6 +516,11 @@ model Consultation {
   demandesLabo DemandeLaboratoire[]
 
   demandesImagerie DemandeImagerie[]
+
+  proformas  Proforma[]
+  factures  Facture[]
+  actes ConsultationActe[]
+
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -943,6 +957,8 @@ model Lit {
   statut String @default("LIBRE")
 
   hospitalisations Hospitalisation[]
+  anciensTransferts  Transfert[] @relation("AncienLit")
+  nouveauxTransferts Transfert[] @relation("NouveauLit")
 
   @@unique([chambreId, numero])
 }
@@ -977,6 +993,8 @@ model Hospitalisation {
   transferts Transfert[]
   soins      Soin[]
   sorties    Sortie[]
+  proformas Proforma[]
+  factures  Facture[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -988,11 +1006,17 @@ model Transfert {
   hospitalisationId Int
   hospitalisation   Hospitalisation @relation(fields: [hospitalisationId], references: [id], onDelete: Cascade)
 
-  ancienServiceId  Int?
-  nouveauServiceId Int?
+  ancienServiceId Int?
+  ancienService   Service? @relation("AncienService", fields: [ancienServiceId], references: [id])
 
-  ancienLitId  Int?
+  nouveauServiceId Int?
+  nouveauService   Service? @relation("NouveauService", fields: [nouveauServiceId], references: [id])
+
+  ancienLitId Int?
+  ancienLit   Lit? @relation("AncienLit", fields: [ancienLitId], references: [id])
+
   nouveauLitId Int?
+  nouveauLit   Lit? @relation("NouveauLit", fields: [nouveauLitId], references: [id])
 
   motif         String?
   dateTransfert DateTime @default(now())
@@ -1046,6 +1070,8 @@ model ActeMedical {
   actif   Boolean @default(true)
 
   lignesFacture LigneFacture[]
+  proformaLignes ProformaLigne[]
+  consultations ConsultationActe[]
 
   createdAt DateTime @default(now())
 }
@@ -1063,12 +1089,30 @@ model Facture {
   patientId Int
   patient   Patient @relation(fields: [patientId], references: [id])
 
+  // SOURCE MÉDICALE
+  consultationId Int?
+  consultation   Consultation? @relation(fields: [consultationId], references: [idConsultation])
+
+  admissionId Int?
+  admission   Admission? @relation(fields: [admissionId], references: [id])
+
+  hospitalisationId Int?
+  hospitalisation   Hospitalisation? @relation(fields: [hospitalisationId], references: [id])
+
+  // SOURCE COMMERCIALE
+  proformaId Int? @unique
+  proforma   Proforma? @relation(fields: [proformaId], references: [id])
+
   dateFacture  DateTime  @default(now())
   dateEcheance DateTime?
 
-  montantTotal Float @default(0)
-  montantPaye  Float @default(0)
-  reste        Float @default(0)
+  montantBrut   Float @default(0)
+  reduction     Float @default(0)
+  montantTotal  Float @default(0)
+  montantPaye   Float @default(0)
+  reste         Float @default(0)
+
+  typeReduction String?
 
   devise String @default("USD")
   statut String @default("IMPAYEE")
@@ -1078,6 +1122,12 @@ model Facture {
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  @@index([patientId])
+  @@index([consultationId])
+  @@index([admissionId])
+  @@index([hospitalisationId])
+  @@index([dateFacture])
 }
 
 model LigneFacture {
@@ -1088,6 +1138,8 @@ model LigneFacture {
 
   acteId Int?
   acte   ActeMedical? @relation(fields: [acteId], references: [id])
+  serviceId Int?
+  service   Service? @relation(fields: [serviceId], references: [id])
 
   designation String
   quantite    Float  @default(1)
@@ -1227,4 +1279,107 @@ model AuditLog {
   @@index([userId])
   @@index([module])
   @@index([createdAt])
+}
+
+// ==========================================================
+// AJOUTS AU SCHEMA PRISMA EXISTANT
+// Ces blocs sont à fusionner dans schema.prisma.
+// ==========================================================
+
+model Proforma {
+  id Int @id @default(autoincrement())
+  numero String @unique
+
+  patientId Int
+  patient Patient @relation(fields: [patientId], references: [id])
+
+  consultationId Int?
+  consultation Consultation? @relation(fields: [consultationId], references: [idConsultation])
+
+  admissionId Int?
+  admission Admission? @relation(fields: [admissionId], references: [id])
+
+  hospitalisationId Int?
+  hospitalisation Hospitalisation? @relation(fields: [hospitalisationId], references: [id])
+
+  montantBrut Float @default(0)
+  typeReduction String?
+  reduction Float @default(0)
+  montantTotal Float @default(0)
+  devise String @default("USD")
+  statut String @default("BROUILLON")
+
+  dateEmission DateTime @default(now())
+  dateExpiration DateTime?
+
+  lignes ProformaLigne[]
+  facture Facture?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([patientId])
+  @@index([consultationId])
+  @@index([admissionId])
+  @@index([hospitalisationId])
+  @@index([dateEmission])
+}
+
+model ProformaLigne {
+  id Int @id @default(autoincrement())
+
+  proformaId Int
+  proforma Proforma @relation(fields: [proformaId], references: [id], onDelete: Cascade)
+
+  typeOrigine String
+  acteId Int?
+  acte ActeMedical? @relation(fields: [acteId], references: [id])
+
+  serviceId Int?
+  service   Service? @relation(fields: [serviceId], references: [id])
+
+  consultationId Int?
+  demandeLaboratoireId Int?
+  demandeImagerieId Int?
+  dispensationId Int?
+  hospitalisationId Int?
+
+  designation String
+  quantite Float @default(1)
+  prixUnitaire Float
+  montant Float
+  reference String?
+
+  createdAt DateTime @default(now())
+
+  @@index([proformaId])
+  @@index([consultationId])
+  @@index([demandeLaboratoireId])
+  @@index([demandeImagerieId])
+  @@index([dispensationId])
+  @@index([hospitalisationId])
+}
+
+model ConsultationActe {
+  id Int @id @default(autoincrement())
+
+  consultationId Int
+  consultation Consultation @relation(fields: [consultationId],references: [idConsultation],onDelete: Cascade)
+
+  acteId Int
+  acte ActeMedical @relation(fields: [acteId],references: [id])
+
+  quantite Float @default(1)
+
+  prixUnitaire Float
+  montant Float
+
+  observation String?
+
+  dateActe DateTime @default(now())
+
+  createdAt DateTime @default(now())
+
+  @@index([consultationId])
+  @@index([acteId])
 }

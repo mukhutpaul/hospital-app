@@ -245,6 +245,8 @@ export type ActeMedicalWhereInput = {
   actif?: Prisma.BoolFilter<"ActeMedical"> | boolean
   createdAt?: Prisma.DateTimeFilter<"ActeMedical"> | Date | string
   lignesFacture?: Prisma.LigneFactureListRelationFilter
+  proformaLignes?: Prisma.ProformaLigneListRelationFilter
+  consultations?: Prisma.ConsultationActeListRelationFilter
 }
 
 export type ActeMedicalOrderByWithRelationInput = {
@@ -257,6 +259,8 @@ export type ActeMedicalOrderByWithRelationInput = {
   actif?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   lignesFacture?: Prisma.LigneFactureOrderByRelationAggregateInput
+  proformaLignes?: Prisma.ProformaLigneOrderByRelationAggregateInput
+  consultations?: Prisma.ConsultationActeOrderByRelationAggregateInput
 }
 
 export type ActeMedicalWhereUniqueInput = Prisma.AtLeast<{
@@ -272,6 +276,8 @@ export type ActeMedicalWhereUniqueInput = Prisma.AtLeast<{
   actif?: Prisma.BoolFilter<"ActeMedical"> | boolean
   createdAt?: Prisma.DateTimeFilter<"ActeMedical"> | Date | string
   lignesFacture?: Prisma.LigneFactureListRelationFilter
+  proformaLignes?: Prisma.ProformaLigneListRelationFilter
+  consultations?: Prisma.ConsultationActeListRelationFilter
 }, "id" | "code">
 
 export type ActeMedicalOrderByWithAggregationInput = {
@@ -313,6 +319,8 @@ export type ActeMedicalCreateInput = {
   actif?: boolean
   createdAt?: Date | string
   lignesFacture?: Prisma.LigneFactureCreateNestedManyWithoutActeInput
+  proformaLignes?: Prisma.ProformaLigneCreateNestedManyWithoutActeInput
+  consultations?: Prisma.ConsultationActeCreateNestedManyWithoutActeInput
 }
 
 export type ActeMedicalUncheckedCreateInput = {
@@ -325,6 +333,8 @@ export type ActeMedicalUncheckedCreateInput = {
   actif?: boolean
   createdAt?: Date | string
   lignesFacture?: Prisma.LigneFactureUncheckedCreateNestedManyWithoutActeInput
+  proformaLignes?: Prisma.ProformaLigneUncheckedCreateNestedManyWithoutActeInput
+  consultations?: Prisma.ConsultationActeUncheckedCreateNestedManyWithoutActeInput
 }
 
 export type ActeMedicalUpdateInput = {
@@ -336,6 +346,8 @@ export type ActeMedicalUpdateInput = {
   actif?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   lignesFacture?: Prisma.LigneFactureUpdateManyWithoutActeNestedInput
+  proformaLignes?: Prisma.ProformaLigneUpdateManyWithoutActeNestedInput
+  consultations?: Prisma.ConsultationActeUpdateManyWithoutActeNestedInput
 }
 
 export type ActeMedicalUncheckedUpdateInput = {
@@ -348,6 +360,8 @@ export type ActeMedicalUncheckedUpdateInput = {
   actif?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   lignesFacture?: Prisma.LigneFactureUncheckedUpdateManyWithoutActeNestedInput
+  proformaLignes?: Prisma.ProformaLigneUncheckedUpdateManyWithoutActeNestedInput
+  consultations?: Prisma.ConsultationActeUncheckedUpdateManyWithoutActeNestedInput
 }
 
 export type ActeMedicalCreateManyInput = {
@@ -430,6 +444,11 @@ export type ActeMedicalNullableScalarRelationFilter = {
   isNot?: Prisma.ActeMedicalWhereInput | null
 }
 
+export type ActeMedicalScalarRelationFilter = {
+  is?: Prisma.ActeMedicalWhereInput
+  isNot?: Prisma.ActeMedicalWhereInput
+}
+
 export type ActeMedicalCreateNestedOneWithoutLignesFactureInput = {
   create?: Prisma.XOR<Prisma.ActeMedicalCreateWithoutLignesFactureInput, Prisma.ActeMedicalUncheckedCreateWithoutLignesFactureInput>
   connectOrCreate?: Prisma.ActeMedicalCreateOrConnectWithoutLignesFactureInput
@@ -446,6 +465,36 @@ export type ActeMedicalUpdateOneWithoutLignesFactureNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.ActeMedicalUpdateToOneWithWhereWithoutLignesFactureInput, Prisma.ActeMedicalUpdateWithoutLignesFactureInput>, Prisma.ActeMedicalUncheckedUpdateWithoutLignesFactureInput>
 }
 
+export type ActeMedicalCreateNestedOneWithoutProformaLignesInput = {
+  create?: Prisma.XOR<Prisma.ActeMedicalCreateWithoutProformaLignesInput, Prisma.ActeMedicalUncheckedCreateWithoutProformaLignesInput>
+  connectOrCreate?: Prisma.ActeMedicalCreateOrConnectWithoutProformaLignesInput
+  connect?: Prisma.ActeMedicalWhereUniqueInput
+}
+
+export type ActeMedicalUpdateOneWithoutProformaLignesNestedInput = {
+  create?: Prisma.XOR<Prisma.ActeMedicalCreateWithoutProformaLignesInput, Prisma.ActeMedicalUncheckedCreateWithoutProformaLignesInput>
+  connectOrCreate?: Prisma.ActeMedicalCreateOrConnectWithoutProformaLignesInput
+  upsert?: Prisma.ActeMedicalUpsertWithoutProformaLignesInput
+  disconnect?: Prisma.ActeMedicalWhereInput | boolean
+  delete?: Prisma.ActeMedicalWhereInput | boolean
+  connect?: Prisma.ActeMedicalWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.ActeMedicalUpdateToOneWithWhereWithoutProformaLignesInput, Prisma.ActeMedicalUpdateWithoutProformaLignesInput>, Prisma.ActeMedicalUncheckedUpdateWithoutProformaLignesInput>
+}
+
+export type ActeMedicalCreateNestedOneWithoutConsultationsInput = {
+  create?: Prisma.XOR<Prisma.ActeMedicalCreateWithoutConsultationsInput, Prisma.ActeMedicalUncheckedCreateWithoutConsultationsInput>
+  connectOrCreate?: Prisma.ActeMedicalCreateOrConnectWithoutConsultationsInput
+  connect?: Prisma.ActeMedicalWhereUniqueInput
+}
+
+export type ActeMedicalUpdateOneRequiredWithoutConsultationsNestedInput = {
+  create?: Prisma.XOR<Prisma.ActeMedicalCreateWithoutConsultationsInput, Prisma.ActeMedicalUncheckedCreateWithoutConsultationsInput>
+  connectOrCreate?: Prisma.ActeMedicalCreateOrConnectWithoutConsultationsInput
+  upsert?: Prisma.ActeMedicalUpsertWithoutConsultationsInput
+  connect?: Prisma.ActeMedicalWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.ActeMedicalUpdateToOneWithWhereWithoutConsultationsInput, Prisma.ActeMedicalUpdateWithoutConsultationsInput>, Prisma.ActeMedicalUncheckedUpdateWithoutConsultationsInput>
+}
+
 export type ActeMedicalCreateWithoutLignesFactureInput = {
   code: string
   libelle: string
@@ -454,6 +503,8 @@ export type ActeMedicalCreateWithoutLignesFactureInput = {
   devise?: string
   actif?: boolean
   createdAt?: Date | string
+  proformaLignes?: Prisma.ProformaLigneCreateNestedManyWithoutActeInput
+  consultations?: Prisma.ConsultationActeCreateNestedManyWithoutActeInput
 }
 
 export type ActeMedicalUncheckedCreateWithoutLignesFactureInput = {
@@ -465,6 +516,8 @@ export type ActeMedicalUncheckedCreateWithoutLignesFactureInput = {
   devise?: string
   actif?: boolean
   createdAt?: Date | string
+  proformaLignes?: Prisma.ProformaLigneUncheckedCreateNestedManyWithoutActeInput
+  consultations?: Prisma.ConsultationActeUncheckedCreateNestedManyWithoutActeInput
 }
 
 export type ActeMedicalCreateOrConnectWithoutLignesFactureInput = {
@@ -491,6 +544,8 @@ export type ActeMedicalUpdateWithoutLignesFactureInput = {
   devise?: Prisma.StringFieldUpdateOperationsInput | string
   actif?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  proformaLignes?: Prisma.ProformaLigneUpdateManyWithoutActeNestedInput
+  consultations?: Prisma.ConsultationActeUpdateManyWithoutActeNestedInput
 }
 
 export type ActeMedicalUncheckedUpdateWithoutLignesFactureInput = {
@@ -502,6 +557,140 @@ export type ActeMedicalUncheckedUpdateWithoutLignesFactureInput = {
   devise?: Prisma.StringFieldUpdateOperationsInput | string
   actif?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  proformaLignes?: Prisma.ProformaLigneUncheckedUpdateManyWithoutActeNestedInput
+  consultations?: Prisma.ConsultationActeUncheckedUpdateManyWithoutActeNestedInput
+}
+
+export type ActeMedicalCreateWithoutProformaLignesInput = {
+  code: string
+  libelle: string
+  categorie?: string | null
+  montant: number
+  devise?: string
+  actif?: boolean
+  createdAt?: Date | string
+  lignesFacture?: Prisma.LigneFactureCreateNestedManyWithoutActeInput
+  consultations?: Prisma.ConsultationActeCreateNestedManyWithoutActeInput
+}
+
+export type ActeMedicalUncheckedCreateWithoutProformaLignesInput = {
+  id?: number
+  code: string
+  libelle: string
+  categorie?: string | null
+  montant: number
+  devise?: string
+  actif?: boolean
+  createdAt?: Date | string
+  lignesFacture?: Prisma.LigneFactureUncheckedCreateNestedManyWithoutActeInput
+  consultations?: Prisma.ConsultationActeUncheckedCreateNestedManyWithoutActeInput
+}
+
+export type ActeMedicalCreateOrConnectWithoutProformaLignesInput = {
+  where: Prisma.ActeMedicalWhereUniqueInput
+  create: Prisma.XOR<Prisma.ActeMedicalCreateWithoutProformaLignesInput, Prisma.ActeMedicalUncheckedCreateWithoutProformaLignesInput>
+}
+
+export type ActeMedicalUpsertWithoutProformaLignesInput = {
+  update: Prisma.XOR<Prisma.ActeMedicalUpdateWithoutProformaLignesInput, Prisma.ActeMedicalUncheckedUpdateWithoutProformaLignesInput>
+  create: Prisma.XOR<Prisma.ActeMedicalCreateWithoutProformaLignesInput, Prisma.ActeMedicalUncheckedCreateWithoutProformaLignesInput>
+  where?: Prisma.ActeMedicalWhereInput
+}
+
+export type ActeMedicalUpdateToOneWithWhereWithoutProformaLignesInput = {
+  where?: Prisma.ActeMedicalWhereInput
+  data: Prisma.XOR<Prisma.ActeMedicalUpdateWithoutProformaLignesInput, Prisma.ActeMedicalUncheckedUpdateWithoutProformaLignesInput>
+}
+
+export type ActeMedicalUpdateWithoutProformaLignesInput = {
+  code?: Prisma.StringFieldUpdateOperationsInput | string
+  libelle?: Prisma.StringFieldUpdateOperationsInput | string
+  categorie?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  montant?: Prisma.FloatFieldUpdateOperationsInput | number
+  devise?: Prisma.StringFieldUpdateOperationsInput | string
+  actif?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  lignesFacture?: Prisma.LigneFactureUpdateManyWithoutActeNestedInput
+  consultations?: Prisma.ConsultationActeUpdateManyWithoutActeNestedInput
+}
+
+export type ActeMedicalUncheckedUpdateWithoutProformaLignesInput = {
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  code?: Prisma.StringFieldUpdateOperationsInput | string
+  libelle?: Prisma.StringFieldUpdateOperationsInput | string
+  categorie?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  montant?: Prisma.FloatFieldUpdateOperationsInput | number
+  devise?: Prisma.StringFieldUpdateOperationsInput | string
+  actif?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  lignesFacture?: Prisma.LigneFactureUncheckedUpdateManyWithoutActeNestedInput
+  consultations?: Prisma.ConsultationActeUncheckedUpdateManyWithoutActeNestedInput
+}
+
+export type ActeMedicalCreateWithoutConsultationsInput = {
+  code: string
+  libelle: string
+  categorie?: string | null
+  montant: number
+  devise?: string
+  actif?: boolean
+  createdAt?: Date | string
+  lignesFacture?: Prisma.LigneFactureCreateNestedManyWithoutActeInput
+  proformaLignes?: Prisma.ProformaLigneCreateNestedManyWithoutActeInput
+}
+
+export type ActeMedicalUncheckedCreateWithoutConsultationsInput = {
+  id?: number
+  code: string
+  libelle: string
+  categorie?: string | null
+  montant: number
+  devise?: string
+  actif?: boolean
+  createdAt?: Date | string
+  lignesFacture?: Prisma.LigneFactureUncheckedCreateNestedManyWithoutActeInput
+  proformaLignes?: Prisma.ProformaLigneUncheckedCreateNestedManyWithoutActeInput
+}
+
+export type ActeMedicalCreateOrConnectWithoutConsultationsInput = {
+  where: Prisma.ActeMedicalWhereUniqueInput
+  create: Prisma.XOR<Prisma.ActeMedicalCreateWithoutConsultationsInput, Prisma.ActeMedicalUncheckedCreateWithoutConsultationsInput>
+}
+
+export type ActeMedicalUpsertWithoutConsultationsInput = {
+  update: Prisma.XOR<Prisma.ActeMedicalUpdateWithoutConsultationsInput, Prisma.ActeMedicalUncheckedUpdateWithoutConsultationsInput>
+  create: Prisma.XOR<Prisma.ActeMedicalCreateWithoutConsultationsInput, Prisma.ActeMedicalUncheckedCreateWithoutConsultationsInput>
+  where?: Prisma.ActeMedicalWhereInput
+}
+
+export type ActeMedicalUpdateToOneWithWhereWithoutConsultationsInput = {
+  where?: Prisma.ActeMedicalWhereInput
+  data: Prisma.XOR<Prisma.ActeMedicalUpdateWithoutConsultationsInput, Prisma.ActeMedicalUncheckedUpdateWithoutConsultationsInput>
+}
+
+export type ActeMedicalUpdateWithoutConsultationsInput = {
+  code?: Prisma.StringFieldUpdateOperationsInput | string
+  libelle?: Prisma.StringFieldUpdateOperationsInput | string
+  categorie?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  montant?: Prisma.FloatFieldUpdateOperationsInput | number
+  devise?: Prisma.StringFieldUpdateOperationsInput | string
+  actif?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  lignesFacture?: Prisma.LigneFactureUpdateManyWithoutActeNestedInput
+  proformaLignes?: Prisma.ProformaLigneUpdateManyWithoutActeNestedInput
+}
+
+export type ActeMedicalUncheckedUpdateWithoutConsultationsInput = {
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  code?: Prisma.StringFieldUpdateOperationsInput | string
+  libelle?: Prisma.StringFieldUpdateOperationsInput | string
+  categorie?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  montant?: Prisma.FloatFieldUpdateOperationsInput | number
+  devise?: Prisma.StringFieldUpdateOperationsInput | string
+  actif?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  lignesFacture?: Prisma.LigneFactureUncheckedUpdateManyWithoutActeNestedInput
+  proformaLignes?: Prisma.ProformaLigneUncheckedUpdateManyWithoutActeNestedInput
 }
 
 
@@ -511,10 +700,14 @@ export type ActeMedicalUncheckedUpdateWithoutLignesFactureInput = {
 
 export type ActeMedicalCountOutputType = {
   lignesFacture: number
+  proformaLignes: number
+  consultations: number
 }
 
 export type ActeMedicalCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   lignesFacture?: boolean | ActeMedicalCountOutputTypeCountLignesFactureArgs
+  proformaLignes?: boolean | ActeMedicalCountOutputTypeCountProformaLignesArgs
+  consultations?: boolean | ActeMedicalCountOutputTypeCountConsultationsArgs
 }
 
 /**
@@ -534,6 +727,20 @@ export type ActeMedicalCountOutputTypeCountLignesFactureArgs<ExtArgs extends run
   where?: Prisma.LigneFactureWhereInput
 }
 
+/**
+ * ActeMedicalCountOutputType without action
+ */
+export type ActeMedicalCountOutputTypeCountProformaLignesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.ProformaLigneWhereInput
+}
+
+/**
+ * ActeMedicalCountOutputType without action
+ */
+export type ActeMedicalCountOutputTypeCountConsultationsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.ConsultationActeWhereInput
+}
+
 
 export type ActeMedicalSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -545,6 +752,8 @@ export type ActeMedicalSelect<ExtArgs extends runtime.Types.Extensions.InternalA
   actif?: boolean
   createdAt?: boolean
   lignesFacture?: boolean | Prisma.ActeMedical$lignesFactureArgs<ExtArgs>
+  proformaLignes?: boolean | Prisma.ActeMedical$proformaLignesArgs<ExtArgs>
+  consultations?: boolean | Prisma.ActeMedical$consultationsArgs<ExtArgs>
   _count?: boolean | Prisma.ActeMedicalCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["acteMedical"]>
 
@@ -584,6 +793,8 @@ export type ActeMedicalSelectScalar = {
 export type ActeMedicalOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "code" | "libelle" | "categorie" | "montant" | "devise" | "actif" | "createdAt", ExtArgs["result"]["acteMedical"]>
 export type ActeMedicalInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   lignesFacture?: boolean | Prisma.ActeMedical$lignesFactureArgs<ExtArgs>
+  proformaLignes?: boolean | Prisma.ActeMedical$proformaLignesArgs<ExtArgs>
+  consultations?: boolean | Prisma.ActeMedical$consultationsArgs<ExtArgs>
   _count?: boolean | Prisma.ActeMedicalCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type ActeMedicalIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
@@ -593,6 +804,8 @@ export type $ActeMedicalPayload<ExtArgs extends runtime.Types.Extensions.Interna
   name: "ActeMedical"
   objects: {
     lignesFacture: Prisma.$LigneFacturePayload<ExtArgs>[]
+    proformaLignes: Prisma.$ProformaLignePayload<ExtArgs>[]
+    consultations: Prisma.$ConsultationActePayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: number
@@ -998,6 +1211,8 @@ readonly fields: ActeMedicalFieldRefs;
 export interface Prisma__ActeMedicalClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
   lignesFacture<T extends Prisma.ActeMedical$lignesFactureArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.ActeMedical$lignesFactureArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$LigneFacturePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  proformaLignes<T extends Prisma.ActeMedical$proformaLignesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.ActeMedical$proformaLignesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ProformaLignePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  consultations<T extends Prisma.ActeMedical$consultationsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.ActeMedical$consultationsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ConsultationActePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1447,6 +1662,54 @@ export type ActeMedical$lignesFactureArgs<ExtArgs extends runtime.Types.Extensio
   take?: number
   skip?: number
   distinct?: Prisma.LigneFactureScalarFieldEnum | Prisma.LigneFactureScalarFieldEnum[]
+}
+
+/**
+ * ActeMedical.proformaLignes
+ */
+export type ActeMedical$proformaLignesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the ProformaLigne
+   */
+  select?: Prisma.ProformaLigneSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the ProformaLigne
+   */
+  omit?: Prisma.ProformaLigneOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.ProformaLigneInclude<ExtArgs> | null
+  where?: Prisma.ProformaLigneWhereInput
+  orderBy?: Prisma.ProformaLigneOrderByWithRelationInput | Prisma.ProformaLigneOrderByWithRelationInput[]
+  cursor?: Prisma.ProformaLigneWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.ProformaLigneScalarFieldEnum | Prisma.ProformaLigneScalarFieldEnum[]
+}
+
+/**
+ * ActeMedical.consultations
+ */
+export type ActeMedical$consultationsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the ConsultationActe
+   */
+  select?: Prisma.ConsultationActeSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the ConsultationActe
+   */
+  omit?: Prisma.ConsultationActeOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.ConsultationActeInclude<ExtArgs> | null
+  where?: Prisma.ConsultationActeWhereInput
+  orderBy?: Prisma.ConsultationActeOrderByWithRelationInput | Prisma.ConsultationActeOrderByWithRelationInput[]
+  cursor?: Prisma.ConsultationActeWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.ConsultationActeScalarFieldEnum | Prisma.ConsultationActeScalarFieldEnum[]
 }
 
 /**

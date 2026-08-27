@@ -1,0 +1,2 @@
+L'API /api/facturation/actes doit appeler getActesMedicaux() si votre projet utilise une Route Handler.
+Dans un Server Component, vous pouvez appeler directement l'action côté serveur.
