@@ -222,6 +222,7 @@ export type DemandeLaboratoireLigneWhereInput = {
   prix?: Prisma.FloatFilter<"DemandeLaboratoireLigne"> | number
   demande?: Prisma.XOR<Prisma.DemandeLaboratoireScalarRelationFilter, Prisma.DemandeLaboratoireWhereInput>
   examen?: Prisma.XOR<Prisma.ExamenLaboratoireScalarRelationFilter, Prisma.ExamenLaboratoireWhereInput>
+  lignesFacture?: Prisma.LigneFactureListRelationFilter
 }
 
 export type DemandeLaboratoireLigneOrderByWithRelationInput = {
@@ -231,6 +232,7 @@ export type DemandeLaboratoireLigneOrderByWithRelationInput = {
   prix?: Prisma.SortOrder
   demande?: Prisma.DemandeLaboratoireOrderByWithRelationInput
   examen?: Prisma.ExamenLaboratoireOrderByWithRelationInput
+  lignesFacture?: Prisma.LigneFactureOrderByRelationAggregateInput
 }
 
 export type DemandeLaboratoireLigneWhereUniqueInput = Prisma.AtLeast<{
@@ -243,6 +245,7 @@ export type DemandeLaboratoireLigneWhereUniqueInput = Prisma.AtLeast<{
   prix?: Prisma.FloatFilter<"DemandeLaboratoireLigne"> | number
   demande?: Prisma.XOR<Prisma.DemandeLaboratoireScalarRelationFilter, Prisma.DemandeLaboratoireWhereInput>
   examen?: Prisma.XOR<Prisma.ExamenLaboratoireScalarRelationFilter, Prisma.ExamenLaboratoireWhereInput>
+  lignesFacture?: Prisma.LigneFactureListRelationFilter
 }, "id">
 
 export type DemandeLaboratoireLigneOrderByWithAggregationInput = {
@@ -271,6 +274,7 @@ export type DemandeLaboratoireLigneCreateInput = {
   prix: number
   demande: Prisma.DemandeLaboratoireCreateNestedOneWithoutLignesInput
   examen: Prisma.ExamenLaboratoireCreateNestedOneWithoutLignesInput
+  lignesFacture?: Prisma.LigneFactureCreateNestedManyWithoutDemandeLaboratoireLigneInput
 }
 
 export type DemandeLaboratoireLigneUncheckedCreateInput = {
@@ -278,12 +282,14 @@ export type DemandeLaboratoireLigneUncheckedCreateInput = {
   demandeId: number
   examenId: number
   prix: number
+  lignesFacture?: Prisma.LigneFactureUncheckedCreateNestedManyWithoutDemandeLaboratoireLigneInput
 }
 
 export type DemandeLaboratoireLigneUpdateInput = {
   prix?: Prisma.FloatFieldUpdateOperationsInput | number
   demande?: Prisma.DemandeLaboratoireUpdateOneRequiredWithoutLignesNestedInput
   examen?: Prisma.ExamenLaboratoireUpdateOneRequiredWithoutLignesNestedInput
+  lignesFacture?: Prisma.LigneFactureUpdateManyWithoutDemandeLaboratoireLigneNestedInput
 }
 
 export type DemandeLaboratoireLigneUncheckedUpdateInput = {
@@ -291,6 +297,7 @@ export type DemandeLaboratoireLigneUncheckedUpdateInput = {
   demandeId?: Prisma.IntFieldUpdateOperationsInput | number
   examenId?: Prisma.IntFieldUpdateOperationsInput | number
   prix?: Prisma.FloatFieldUpdateOperationsInput | number
+  lignesFacture?: Prisma.LigneFactureUncheckedUpdateManyWithoutDemandeLaboratoireLigneNestedInput
 }
 
 export type DemandeLaboratoireLigneCreateManyInput = {
@@ -354,6 +361,11 @@ export type DemandeLaboratoireLigneSumOrderByAggregateInput = {
   demandeId?: Prisma.SortOrder
   examenId?: Prisma.SortOrder
   prix?: Prisma.SortOrder
+}
+
+export type DemandeLaboratoireLigneNullableScalarRelationFilter = {
+  is?: Prisma.DemandeLaboratoireLigneWhereInput | null
+  isNot?: Prisma.DemandeLaboratoireLigneWhereInput | null
 }
 
 export type DemandeLaboratoireLigneCreateNestedManyWithoutExamenInput = {
@@ -440,15 +452,33 @@ export type DemandeLaboratoireLigneUncheckedUpdateManyWithoutDemandeNestedInput 
   deleteMany?: Prisma.DemandeLaboratoireLigneScalarWhereInput | Prisma.DemandeLaboratoireLigneScalarWhereInput[]
 }
 
+export type DemandeLaboratoireLigneCreateNestedOneWithoutLignesFactureInput = {
+  create?: Prisma.XOR<Prisma.DemandeLaboratoireLigneCreateWithoutLignesFactureInput, Prisma.DemandeLaboratoireLigneUncheckedCreateWithoutLignesFactureInput>
+  connectOrCreate?: Prisma.DemandeLaboratoireLigneCreateOrConnectWithoutLignesFactureInput
+  connect?: Prisma.DemandeLaboratoireLigneWhereUniqueInput
+}
+
+export type DemandeLaboratoireLigneUpdateOneWithoutLignesFactureNestedInput = {
+  create?: Prisma.XOR<Prisma.DemandeLaboratoireLigneCreateWithoutLignesFactureInput, Prisma.DemandeLaboratoireLigneUncheckedCreateWithoutLignesFactureInput>
+  connectOrCreate?: Prisma.DemandeLaboratoireLigneCreateOrConnectWithoutLignesFactureInput
+  upsert?: Prisma.DemandeLaboratoireLigneUpsertWithoutLignesFactureInput
+  disconnect?: Prisma.DemandeLaboratoireLigneWhereInput | boolean
+  delete?: Prisma.DemandeLaboratoireLigneWhereInput | boolean
+  connect?: Prisma.DemandeLaboratoireLigneWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.DemandeLaboratoireLigneUpdateToOneWithWhereWithoutLignesFactureInput, Prisma.DemandeLaboratoireLigneUpdateWithoutLignesFactureInput>, Prisma.DemandeLaboratoireLigneUncheckedUpdateWithoutLignesFactureInput>
+}
+
 export type DemandeLaboratoireLigneCreateWithoutExamenInput = {
   prix: number
   demande: Prisma.DemandeLaboratoireCreateNestedOneWithoutLignesInput
+  lignesFacture?: Prisma.LigneFactureCreateNestedManyWithoutDemandeLaboratoireLigneInput
 }
 
 export type DemandeLaboratoireLigneUncheckedCreateWithoutExamenInput = {
   id?: number
   demandeId: number
   prix: number
+  lignesFacture?: Prisma.LigneFactureUncheckedCreateNestedManyWithoutDemandeLaboratoireLigneInput
 }
 
 export type DemandeLaboratoireLigneCreateOrConnectWithoutExamenInput = {
@@ -489,12 +519,14 @@ export type DemandeLaboratoireLigneScalarWhereInput = {
 export type DemandeLaboratoireLigneCreateWithoutDemandeInput = {
   prix: number
   examen: Prisma.ExamenLaboratoireCreateNestedOneWithoutLignesInput
+  lignesFacture?: Prisma.LigneFactureCreateNestedManyWithoutDemandeLaboratoireLigneInput
 }
 
 export type DemandeLaboratoireLigneUncheckedCreateWithoutDemandeInput = {
   id?: number
   examenId: number
   prix: number
+  lignesFacture?: Prisma.LigneFactureUncheckedCreateNestedManyWithoutDemandeLaboratoireLigneInput
 }
 
 export type DemandeLaboratoireLigneCreateOrConnectWithoutDemandeInput = {
@@ -522,6 +554,48 @@ export type DemandeLaboratoireLigneUpdateManyWithWhereWithoutDemandeInput = {
   data: Prisma.XOR<Prisma.DemandeLaboratoireLigneUpdateManyMutationInput, Prisma.DemandeLaboratoireLigneUncheckedUpdateManyWithoutDemandeInput>
 }
 
+export type DemandeLaboratoireLigneCreateWithoutLignesFactureInput = {
+  prix: number
+  demande: Prisma.DemandeLaboratoireCreateNestedOneWithoutLignesInput
+  examen: Prisma.ExamenLaboratoireCreateNestedOneWithoutLignesInput
+}
+
+export type DemandeLaboratoireLigneUncheckedCreateWithoutLignesFactureInput = {
+  id?: number
+  demandeId: number
+  examenId: number
+  prix: number
+}
+
+export type DemandeLaboratoireLigneCreateOrConnectWithoutLignesFactureInput = {
+  where: Prisma.DemandeLaboratoireLigneWhereUniqueInput
+  create: Prisma.XOR<Prisma.DemandeLaboratoireLigneCreateWithoutLignesFactureInput, Prisma.DemandeLaboratoireLigneUncheckedCreateWithoutLignesFactureInput>
+}
+
+export type DemandeLaboratoireLigneUpsertWithoutLignesFactureInput = {
+  update: Prisma.XOR<Prisma.DemandeLaboratoireLigneUpdateWithoutLignesFactureInput, Prisma.DemandeLaboratoireLigneUncheckedUpdateWithoutLignesFactureInput>
+  create: Prisma.XOR<Prisma.DemandeLaboratoireLigneCreateWithoutLignesFactureInput, Prisma.DemandeLaboratoireLigneUncheckedCreateWithoutLignesFactureInput>
+  where?: Prisma.DemandeLaboratoireLigneWhereInput
+}
+
+export type DemandeLaboratoireLigneUpdateToOneWithWhereWithoutLignesFactureInput = {
+  where?: Prisma.DemandeLaboratoireLigneWhereInput
+  data: Prisma.XOR<Prisma.DemandeLaboratoireLigneUpdateWithoutLignesFactureInput, Prisma.DemandeLaboratoireLigneUncheckedUpdateWithoutLignesFactureInput>
+}
+
+export type DemandeLaboratoireLigneUpdateWithoutLignesFactureInput = {
+  prix?: Prisma.FloatFieldUpdateOperationsInput | number
+  demande?: Prisma.DemandeLaboratoireUpdateOneRequiredWithoutLignesNestedInput
+  examen?: Prisma.ExamenLaboratoireUpdateOneRequiredWithoutLignesNestedInput
+}
+
+export type DemandeLaboratoireLigneUncheckedUpdateWithoutLignesFactureInput = {
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  demandeId?: Prisma.IntFieldUpdateOperationsInput | number
+  examenId?: Prisma.IntFieldUpdateOperationsInput | number
+  prix?: Prisma.FloatFieldUpdateOperationsInput | number
+}
+
 export type DemandeLaboratoireLigneCreateManyExamenInput = {
   id?: number
   demandeId: number
@@ -531,12 +605,14 @@ export type DemandeLaboratoireLigneCreateManyExamenInput = {
 export type DemandeLaboratoireLigneUpdateWithoutExamenInput = {
   prix?: Prisma.FloatFieldUpdateOperationsInput | number
   demande?: Prisma.DemandeLaboratoireUpdateOneRequiredWithoutLignesNestedInput
+  lignesFacture?: Prisma.LigneFactureUpdateManyWithoutDemandeLaboratoireLigneNestedInput
 }
 
 export type DemandeLaboratoireLigneUncheckedUpdateWithoutExamenInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   demandeId?: Prisma.IntFieldUpdateOperationsInput | number
   prix?: Prisma.FloatFieldUpdateOperationsInput | number
+  lignesFacture?: Prisma.LigneFactureUncheckedUpdateManyWithoutDemandeLaboratoireLigneNestedInput
 }
 
 export type DemandeLaboratoireLigneUncheckedUpdateManyWithoutExamenInput = {
@@ -554,12 +630,14 @@ export type DemandeLaboratoireLigneCreateManyDemandeInput = {
 export type DemandeLaboratoireLigneUpdateWithoutDemandeInput = {
   prix?: Prisma.FloatFieldUpdateOperationsInput | number
   examen?: Prisma.ExamenLaboratoireUpdateOneRequiredWithoutLignesNestedInput
+  lignesFacture?: Prisma.LigneFactureUpdateManyWithoutDemandeLaboratoireLigneNestedInput
 }
 
 export type DemandeLaboratoireLigneUncheckedUpdateWithoutDemandeInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   examenId?: Prisma.IntFieldUpdateOperationsInput | number
   prix?: Prisma.FloatFieldUpdateOperationsInput | number
+  lignesFacture?: Prisma.LigneFactureUncheckedUpdateManyWithoutDemandeLaboratoireLigneNestedInput
 }
 
 export type DemandeLaboratoireLigneUncheckedUpdateManyWithoutDemandeInput = {
@@ -569,6 +647,35 @@ export type DemandeLaboratoireLigneUncheckedUpdateManyWithoutDemandeInput = {
 }
 
 
+/**
+ * Count Type DemandeLaboratoireLigneCountOutputType
+ */
+
+export type DemandeLaboratoireLigneCountOutputType = {
+  lignesFacture: number
+}
+
+export type DemandeLaboratoireLigneCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  lignesFacture?: boolean | DemandeLaboratoireLigneCountOutputTypeCountLignesFactureArgs
+}
+
+/**
+ * DemandeLaboratoireLigneCountOutputType without action
+ */
+export type DemandeLaboratoireLigneCountOutputTypeDefaultArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the DemandeLaboratoireLigneCountOutputType
+   */
+  select?: Prisma.DemandeLaboratoireLigneCountOutputTypeSelect<ExtArgs> | null
+}
+
+/**
+ * DemandeLaboratoireLigneCountOutputType without action
+ */
+export type DemandeLaboratoireLigneCountOutputTypeCountLignesFactureArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.LigneFactureWhereInput
+}
+
 
 export type DemandeLaboratoireLigneSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -577,6 +684,8 @@ export type DemandeLaboratoireLigneSelect<ExtArgs extends runtime.Types.Extensio
   prix?: boolean
   demande?: boolean | Prisma.DemandeLaboratoireDefaultArgs<ExtArgs>
   examen?: boolean | Prisma.ExamenLaboratoireDefaultArgs<ExtArgs>
+  lignesFacture?: boolean | Prisma.DemandeLaboratoireLigne$lignesFactureArgs<ExtArgs>
+  _count?: boolean | Prisma.DemandeLaboratoireLigneCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["demandeLaboratoireLigne"]>
 
 export type DemandeLaboratoireLigneSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -608,6 +717,8 @@ export type DemandeLaboratoireLigneOmit<ExtArgs extends runtime.Types.Extensions
 export type DemandeLaboratoireLigneInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   demande?: boolean | Prisma.DemandeLaboratoireDefaultArgs<ExtArgs>
   examen?: boolean | Prisma.ExamenLaboratoireDefaultArgs<ExtArgs>
+  lignesFacture?: boolean | Prisma.DemandeLaboratoireLigne$lignesFactureArgs<ExtArgs>
+  _count?: boolean | Prisma.DemandeLaboratoireLigneCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type DemandeLaboratoireLigneIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   demande?: boolean | Prisma.DemandeLaboratoireDefaultArgs<ExtArgs>
@@ -623,6 +734,7 @@ export type $DemandeLaboratoireLignePayload<ExtArgs extends runtime.Types.Extens
   objects: {
     demande: Prisma.$DemandeLaboratoirePayload<ExtArgs>
     examen: Prisma.$ExamenLaboratoirePayload<ExtArgs>
+    lignesFacture: Prisma.$LigneFacturePayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: number
@@ -1025,6 +1137,7 @@ export interface Prisma__DemandeLaboratoireLigneClient<T, Null = never, ExtArgs 
   readonly [Symbol.toStringTag]: "PrismaPromise"
   demande<T extends Prisma.DemandeLaboratoireDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.DemandeLaboratoireDefaultArgs<ExtArgs>>): Prisma.Prisma__DemandeLaboratoireClient<runtime.Types.Result.GetResult<Prisma.$DemandeLaboratoirePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   examen<T extends Prisma.ExamenLaboratoireDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.ExamenLaboratoireDefaultArgs<ExtArgs>>): Prisma.Prisma__ExamenLaboratoireClient<runtime.Types.Result.GetResult<Prisma.$ExamenLaboratoirePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+  lignesFacture<T extends Prisma.DemandeLaboratoireLigne$lignesFactureArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.DemandeLaboratoireLigne$lignesFactureArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$LigneFacturePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1454,6 +1567,30 @@ export type DemandeLaboratoireLigneDeleteManyArgs<ExtArgs extends runtime.Types.
    * Limit how many DemandeLaboratoireLignes to delete.
    */
   limit?: number
+}
+
+/**
+ * DemandeLaboratoireLigne.lignesFacture
+ */
+export type DemandeLaboratoireLigne$lignesFactureArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the LigneFacture
+   */
+  select?: Prisma.LigneFactureSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the LigneFacture
+   */
+  omit?: Prisma.LigneFactureOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.LigneFactureInclude<ExtArgs> | null
+  where?: Prisma.LigneFactureWhereInput
+  orderBy?: Prisma.LigneFactureOrderByWithRelationInput | Prisma.LigneFactureOrderByWithRelationInput[]
+  cursor?: Prisma.LigneFactureWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.LigneFactureScalarFieldEnum | Prisma.LigneFactureScalarFieldEnum[]
 }
 
 /**

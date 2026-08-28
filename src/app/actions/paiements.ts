@@ -978,7 +978,7 @@ return {
 }
 
 /* ==========================================================
-   ANNULER UN PAIEMENT
+   ANNULER PAIEMENT
 ========================================================== */
 
 export async function annulerPaiement(
@@ -987,6 +987,10 @@ export async function annulerPaiement(
   try {
     const id = Number(paiementId);
 
+    /* ------------------------------------------------------
+       VALIDATION
+    ------------------------------------------------------ */
+
     if (!Number.isInteger(id) || id <= 0) {
       return {
         success: false,
@@ -994,13 +998,23 @@ export async function annulerPaiement(
       };
     }
 
+    /* ======================================================
+       TRANSACTION
+    ====================================================== */
+
     const resultat = await prisma.$transaction(async (tx) => {
+      /* --------------------------------------------------
+         RECHERCHER LE PAIEMENT
+      -------------------------------------------------- */
+
       const paiement = await tx.paiement.findUnique({
         where: {
           id,
         },
+
         select: {
           id: true,
+          reference: true,
           factureId: true,
           montant: true,
           statut: true,
@@ -1011,35 +1025,53 @@ export async function annulerPaiement(
         throw new Error("PAIEMENT_INTROUVABLE");
       }
 
+      /* --------------------------------------------------
+         DÉJÀ ANNULÉ
+      -------------------------------------------------- */
+
       if (paiement.statut === "ANNULE") {
         throw new Error("PAIEMENT_DEJA_ANNULE");
       }
+
+      /* --------------------------------------------------
+         VÉRIFIER LE STATUT
+      -------------------------------------------------- */
 
       if (paiement.statut !== "PAYE") {
         throw new Error("PAIEMENT_NON_PAYE");
       }
 
+      /* --------------------------------------------------
+         ANNULER LE PAIEMENT
+
+         On conserve le paiement dans la base
+         pour garder la traçabilité comptable.
+      -------------------------------------------------- */
+
       const paiementAnnule = await tx.paiement.update({
         where: {
           id,
         },
+
         data: {
           statut: "ANNULE",
         },
+
         select: {
           id: true,
+          reference: true,
           factureId: true,
           montant: true,
           statut: true,
         },
       });
 
-      /*
-       * Recalculer la facture après annulation.
-       * Le paiement annulé n'est plus comptabilisé
-       * car recalculerFactureDansTransaction()
-       * ne prend en compte que les paiements PAYE.
-       */
+      /* --------------------------------------------------
+         RECALCULER LA FACTURE
+
+         Seuls les paiements PAYE sont comptabilisés.
+      -------------------------------------------------- */
+
       const facture = await recalculerFactureDansTransaction(
         tx,
         paiement.factureId,
@@ -1051,37 +1083,67 @@ export async function annulerPaiement(
       };
     });
 
-    revalidatePath("/facturation/paiements");
-    revalidatePath("/paiements");
+    /* ======================================================
+       REVALIDATION
+    ====================================================== */
 
+    revalidatePath("/facturation");
+    revalidatePath("/facturation/paiements");
     revalidatePath("/facturation/factures");
+
     revalidatePath(
       `/facturation/factures/${resultat.paiement.factureId}`,
     );
 
+    revalidatePath(
+      `/facturation/paiements/${resultat.paiement.id}`,
+    );
+
+    /* ======================================================
+       RETOUR
+    ====================================================== */
+
     return {
       success: true,
-      message: "Paiement annulé avec succès.",
+
+      message: `Le paiement ${resultat.paiement.reference} a été annulé avec succès.`,
+
       data: {
         paiement: {
           id: resultat.paiement.id,
+          reference: resultat.paiement.reference,
           factureId: resultat.paiement.factureId,
           montant: Number(resultat.paiement.montant),
           statut: resultat.paiement.statut,
         },
+
         facture: {
-          montantTotal: Number(resultat.facture.montantTotal),
-          montantPaye: Number(resultat.facture.montantPaye),
-          reste: Number(resultat.facture.reste),
+          montantTotal: Number(
+            resultat.facture.montantTotal,
+          ),
+
+          montantPaye: Number(
+            resultat.facture.montantPaye,
+          ),
+
+          reste: Number(
+            resultat.facture.reste,
+          ),
+
           statut: resultat.facture.statut,
         },
       },
     };
   } catch (error) {
-    console.error("❌ annulerPaiement:", error);
+    console.error(
+      "❌ annulerPaiement:",
+      error,
+    );
 
     const message =
-      error instanceof Error ? error.message : "";
+      error instanceof Error
+        ? error.message
+        : "";
 
     if (message === "PAIEMENT_INTROUVABLE") {
       return {
@@ -1101,7 +1163,15 @@ export async function annulerPaiement(
       return {
         success: false,
         message:
-          "Seul un paiement payé peut être annulé.",
+          "Seul un paiement valide peut être annulé.",
+      };
+    }
+
+    if (message === "FACTURE_INTROUVABLE") {
+      return {
+        success: false,
+        message:
+          "La facture associée est introuvable.",
       };
     }
 
@@ -1113,9 +1183,7 @@ export async function annulerPaiement(
   }
 }
 
-
 /* ==========================================================
-   SUPPRIMER UN PAIEMENT
+   COMPATIBILITÉ AVEC L'ANCIEN NOM
 ========================================================== */
-
 

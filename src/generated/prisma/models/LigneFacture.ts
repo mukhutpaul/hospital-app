@@ -30,7 +30,10 @@ export type LigneFactureAvgAggregateOutputType = {
   id: number | null
   factureId: number | null
   acteId: number | null
+  consultationActeId: number | null
   serviceId: number | null
+  demandeLaboratoireLigneId: number | null
+  demandeImagerieId: number | null
   quantite: number | null
   prixUnitaire: number | null
   montant: number | null
@@ -40,7 +43,10 @@ export type LigneFactureSumAggregateOutputType = {
   id: number | null
   factureId: number | null
   acteId: number | null
+  consultationActeId: number | null
   serviceId: number | null
+  demandeLaboratoireLigneId: number | null
+  demandeImagerieId: number | null
   quantite: number | null
   prixUnitaire: number | null
   montant: number | null
@@ -50,36 +56,48 @@ export type LigneFactureMinAggregateOutputType = {
   id: number | null
   factureId: number | null
   acteId: number | null
+  consultationActeId: number | null
   serviceId: number | null
+  demandeLaboratoireLigneId: number | null
+  demandeImagerieId: number | null
   designation: string | null
   quantite: number | null
   prixUnitaire: number | null
   montant: number | null
   reference: string | null
+  createdAt: Date | null
 }
 
 export type LigneFactureMaxAggregateOutputType = {
   id: number | null
   factureId: number | null
   acteId: number | null
+  consultationActeId: number | null
   serviceId: number | null
+  demandeLaboratoireLigneId: number | null
+  demandeImagerieId: number | null
   designation: string | null
   quantite: number | null
   prixUnitaire: number | null
   montant: number | null
   reference: string | null
+  createdAt: Date | null
 }
 
 export type LigneFactureCountAggregateOutputType = {
   id: number
   factureId: number
   acteId: number
+  consultationActeId: number
   serviceId: number
+  demandeLaboratoireLigneId: number
+  demandeImagerieId: number
   designation: number
   quantite: number
   prixUnitaire: number
   montant: number
   reference: number
+  createdAt: number
   _all: number
 }
 
@@ -88,7 +106,10 @@ export type LigneFactureAvgAggregateInputType = {
   id?: true
   factureId?: true
   acteId?: true
+  consultationActeId?: true
   serviceId?: true
+  demandeLaboratoireLigneId?: true
+  demandeImagerieId?: true
   quantite?: true
   prixUnitaire?: true
   montant?: true
@@ -98,7 +119,10 @@ export type LigneFactureSumAggregateInputType = {
   id?: true
   factureId?: true
   acteId?: true
+  consultationActeId?: true
   serviceId?: true
+  demandeLaboratoireLigneId?: true
+  demandeImagerieId?: true
   quantite?: true
   prixUnitaire?: true
   montant?: true
@@ -108,36 +132,48 @@ export type LigneFactureMinAggregateInputType = {
   id?: true
   factureId?: true
   acteId?: true
+  consultationActeId?: true
   serviceId?: true
+  demandeLaboratoireLigneId?: true
+  demandeImagerieId?: true
   designation?: true
   quantite?: true
   prixUnitaire?: true
   montant?: true
   reference?: true
+  createdAt?: true
 }
 
 export type LigneFactureMaxAggregateInputType = {
   id?: true
   factureId?: true
   acteId?: true
+  consultationActeId?: true
   serviceId?: true
+  demandeLaboratoireLigneId?: true
+  demandeImagerieId?: true
   designation?: true
   quantite?: true
   prixUnitaire?: true
   montant?: true
   reference?: true
+  createdAt?: true
 }
 
 export type LigneFactureCountAggregateInputType = {
   id?: true
   factureId?: true
   acteId?: true
+  consultationActeId?: true
   serviceId?: true
+  demandeLaboratoireLigneId?: true
+  demandeImagerieId?: true
   designation?: true
   quantite?: true
   prixUnitaire?: true
   montant?: true
   reference?: true
+  createdAt?: true
   _all?: true
 }
 
@@ -231,12 +267,16 @@ export type LigneFactureGroupByOutputType = {
   id: number
   factureId: number
   acteId: number | null
+  consultationActeId: number | null
   serviceId: number | null
+  demandeLaboratoireLigneId: number | null
+  demandeImagerieId: number | null
   designation: string
   quantite: number
   prixUnitaire: number
   montant: number
   reference: string | null
+  createdAt: Date
   _count: LigneFactureCountAggregateOutputType | null
   _avg: LigneFactureAvgAggregateOutputType | null
   _sum: LigneFactureSumAggregateOutputType | null
@@ -266,30 +306,44 @@ export type LigneFactureWhereInput = {
   id?: Prisma.IntFilter<"LigneFacture"> | number
   factureId?: Prisma.IntFilter<"LigneFacture"> | number
   acteId?: Prisma.IntNullableFilter<"LigneFacture"> | number | null
+  consultationActeId?: Prisma.IntNullableFilter<"LigneFacture"> | number | null
   serviceId?: Prisma.IntNullableFilter<"LigneFacture"> | number | null
+  demandeLaboratoireLigneId?: Prisma.IntNullableFilter<"LigneFacture"> | number | null
+  demandeImagerieId?: Prisma.IntNullableFilter<"LigneFacture"> | number | null
   designation?: Prisma.StringFilter<"LigneFacture"> | string
   quantite?: Prisma.FloatFilter<"LigneFacture"> | number
   prixUnitaire?: Prisma.FloatFilter<"LigneFacture"> | number
   montant?: Prisma.FloatFilter<"LigneFacture"> | number
   reference?: Prisma.StringNullableFilter<"LigneFacture"> | string | null
+  createdAt?: Prisma.DateTimeFilter<"LigneFacture"> | Date | string
   facture?: Prisma.XOR<Prisma.FactureScalarRelationFilter, Prisma.FactureWhereInput>
   acte?: Prisma.XOR<Prisma.ActeMedicalNullableScalarRelationFilter, Prisma.ActeMedicalWhereInput> | null
+  consultationActe?: Prisma.XOR<Prisma.ConsultationActeNullableScalarRelationFilter, Prisma.ConsultationActeWhereInput> | null
   service?: Prisma.XOR<Prisma.ServiceNullableScalarRelationFilter, Prisma.ServiceWhereInput> | null
+  demandeLaboratoireLigne?: Prisma.XOR<Prisma.DemandeLaboratoireLigneNullableScalarRelationFilter, Prisma.DemandeLaboratoireLigneWhereInput> | null
+  demandeImagerie?: Prisma.XOR<Prisma.DemandeImagerieNullableScalarRelationFilter, Prisma.DemandeImagerieWhereInput> | null
 }
 
 export type LigneFactureOrderByWithRelationInput = {
   id?: Prisma.SortOrder
   factureId?: Prisma.SortOrder
   acteId?: Prisma.SortOrderInput | Prisma.SortOrder
+  consultationActeId?: Prisma.SortOrderInput | Prisma.SortOrder
   serviceId?: Prisma.SortOrderInput | Prisma.SortOrder
+  demandeLaboratoireLigneId?: Prisma.SortOrderInput | Prisma.SortOrder
+  demandeImagerieId?: Prisma.SortOrderInput | Prisma.SortOrder
   designation?: Prisma.SortOrder
   quantite?: Prisma.SortOrder
   prixUnitaire?: Prisma.SortOrder
   montant?: Prisma.SortOrder
   reference?: Prisma.SortOrderInput | Prisma.SortOrder
+  createdAt?: Prisma.SortOrder
   facture?: Prisma.FactureOrderByWithRelationInput
   acte?: Prisma.ActeMedicalOrderByWithRelationInput
+  consultationActe?: Prisma.ConsultationActeOrderByWithRelationInput
   service?: Prisma.ServiceOrderByWithRelationInput
+  demandeLaboratoireLigne?: Prisma.DemandeLaboratoireLigneOrderByWithRelationInput
+  demandeImagerie?: Prisma.DemandeImagerieOrderByWithRelationInput
 }
 
 export type LigneFactureWhereUniqueInput = Prisma.AtLeast<{
@@ -299,27 +353,38 @@ export type LigneFactureWhereUniqueInput = Prisma.AtLeast<{
   NOT?: Prisma.LigneFactureWhereInput | Prisma.LigneFactureWhereInput[]
   factureId?: Prisma.IntFilter<"LigneFacture"> | number
   acteId?: Prisma.IntNullableFilter<"LigneFacture"> | number | null
+  consultationActeId?: Prisma.IntNullableFilter<"LigneFacture"> | number | null
   serviceId?: Prisma.IntNullableFilter<"LigneFacture"> | number | null
+  demandeLaboratoireLigneId?: Prisma.IntNullableFilter<"LigneFacture"> | number | null
+  demandeImagerieId?: Prisma.IntNullableFilter<"LigneFacture"> | number | null
   designation?: Prisma.StringFilter<"LigneFacture"> | string
   quantite?: Prisma.FloatFilter<"LigneFacture"> | number
   prixUnitaire?: Prisma.FloatFilter<"LigneFacture"> | number
   montant?: Prisma.FloatFilter<"LigneFacture"> | number
   reference?: Prisma.StringNullableFilter<"LigneFacture"> | string | null
+  createdAt?: Prisma.DateTimeFilter<"LigneFacture"> | Date | string
   facture?: Prisma.XOR<Prisma.FactureScalarRelationFilter, Prisma.FactureWhereInput>
   acte?: Prisma.XOR<Prisma.ActeMedicalNullableScalarRelationFilter, Prisma.ActeMedicalWhereInput> | null
+  consultationActe?: Prisma.XOR<Prisma.ConsultationActeNullableScalarRelationFilter, Prisma.ConsultationActeWhereInput> | null
   service?: Prisma.XOR<Prisma.ServiceNullableScalarRelationFilter, Prisma.ServiceWhereInput> | null
+  demandeLaboratoireLigne?: Prisma.XOR<Prisma.DemandeLaboratoireLigneNullableScalarRelationFilter, Prisma.DemandeLaboratoireLigneWhereInput> | null
+  demandeImagerie?: Prisma.XOR<Prisma.DemandeImagerieNullableScalarRelationFilter, Prisma.DemandeImagerieWhereInput> | null
 }, "id">
 
 export type LigneFactureOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   factureId?: Prisma.SortOrder
   acteId?: Prisma.SortOrderInput | Prisma.SortOrder
+  consultationActeId?: Prisma.SortOrderInput | Prisma.SortOrder
   serviceId?: Prisma.SortOrderInput | Prisma.SortOrder
+  demandeLaboratoireLigneId?: Prisma.SortOrderInput | Prisma.SortOrder
+  demandeImagerieId?: Prisma.SortOrderInput | Prisma.SortOrder
   designation?: Prisma.SortOrder
   quantite?: Prisma.SortOrder
   prixUnitaire?: Prisma.SortOrder
   montant?: Prisma.SortOrder
   reference?: Prisma.SortOrderInput | Prisma.SortOrder
+  createdAt?: Prisma.SortOrder
   _count?: Prisma.LigneFactureCountOrderByAggregateInput
   _avg?: Prisma.LigneFactureAvgOrderByAggregateInput
   _max?: Prisma.LigneFactureMaxOrderByAggregateInput
@@ -334,12 +399,16 @@ export type LigneFactureScalarWhereWithAggregatesInput = {
   id?: Prisma.IntWithAggregatesFilter<"LigneFacture"> | number
   factureId?: Prisma.IntWithAggregatesFilter<"LigneFacture"> | number
   acteId?: Prisma.IntNullableWithAggregatesFilter<"LigneFacture"> | number | null
+  consultationActeId?: Prisma.IntNullableWithAggregatesFilter<"LigneFacture"> | number | null
   serviceId?: Prisma.IntNullableWithAggregatesFilter<"LigneFacture"> | number | null
+  demandeLaboratoireLigneId?: Prisma.IntNullableWithAggregatesFilter<"LigneFacture"> | number | null
+  demandeImagerieId?: Prisma.IntNullableWithAggregatesFilter<"LigneFacture"> | number | null
   designation?: Prisma.StringWithAggregatesFilter<"LigneFacture"> | string
   quantite?: Prisma.FloatWithAggregatesFilter<"LigneFacture"> | number
   prixUnitaire?: Prisma.FloatWithAggregatesFilter<"LigneFacture"> | number
   montant?: Prisma.FloatWithAggregatesFilter<"LigneFacture"> | number
   reference?: Prisma.StringNullableWithAggregatesFilter<"LigneFacture"> | string | null
+  createdAt?: Prisma.DateTimeWithAggregatesFilter<"LigneFacture"> | Date | string
 }
 
 export type LigneFactureCreateInput = {
@@ -348,21 +417,29 @@ export type LigneFactureCreateInput = {
   prixUnitaire: number
   montant: number
   reference?: string | null
+  createdAt?: Date | string
   facture: Prisma.FactureCreateNestedOneWithoutLignesInput
   acte?: Prisma.ActeMedicalCreateNestedOneWithoutLignesFactureInput
+  consultationActe?: Prisma.ConsultationActeCreateNestedOneWithoutLignesFactureInput
   service?: Prisma.ServiceCreateNestedOneWithoutLignesFactureInput
+  demandeLaboratoireLigne?: Prisma.DemandeLaboratoireLigneCreateNestedOneWithoutLignesFactureInput
+  demandeImagerie?: Prisma.DemandeImagerieCreateNestedOneWithoutLigneFacturesInput
 }
 
 export type LigneFactureUncheckedCreateInput = {
   id?: number
   factureId: number
   acteId?: number | null
+  consultationActeId?: number | null
   serviceId?: number | null
+  demandeLaboratoireLigneId?: number | null
+  demandeImagerieId?: number | null
   designation: string
   quantite?: number
   prixUnitaire: number
   montant: number
   reference?: string | null
+  createdAt?: Date | string
 }
 
 export type LigneFactureUpdateInput = {
@@ -371,33 +448,45 @@ export type LigneFactureUpdateInput = {
   prixUnitaire?: Prisma.FloatFieldUpdateOperationsInput | number
   montant?: Prisma.FloatFieldUpdateOperationsInput | number
   reference?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   facture?: Prisma.FactureUpdateOneRequiredWithoutLignesNestedInput
   acte?: Prisma.ActeMedicalUpdateOneWithoutLignesFactureNestedInput
+  consultationActe?: Prisma.ConsultationActeUpdateOneWithoutLignesFactureNestedInput
   service?: Prisma.ServiceUpdateOneWithoutLignesFactureNestedInput
+  demandeLaboratoireLigne?: Prisma.DemandeLaboratoireLigneUpdateOneWithoutLignesFactureNestedInput
+  demandeImagerie?: Prisma.DemandeImagerieUpdateOneWithoutLigneFacturesNestedInput
 }
 
 export type LigneFactureUncheckedUpdateInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   factureId?: Prisma.IntFieldUpdateOperationsInput | number
   acteId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  consultationActeId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   serviceId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  demandeLaboratoireLigneId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  demandeImagerieId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   designation?: Prisma.StringFieldUpdateOperationsInput | string
   quantite?: Prisma.FloatFieldUpdateOperationsInput | number
   prixUnitaire?: Prisma.FloatFieldUpdateOperationsInput | number
   montant?: Prisma.FloatFieldUpdateOperationsInput | number
   reference?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type LigneFactureCreateManyInput = {
   id?: number
   factureId: number
   acteId?: number | null
+  consultationActeId?: number | null
   serviceId?: number | null
+  demandeLaboratoireLigneId?: number | null
+  demandeImagerieId?: number | null
   designation: string
   quantite?: number
   prixUnitaire: number
   montant: number
   reference?: string | null
+  createdAt?: Date | string
 }
 
 export type LigneFactureUpdateManyMutationInput = {
@@ -406,18 +495,23 @@ export type LigneFactureUpdateManyMutationInput = {
   prixUnitaire?: Prisma.FloatFieldUpdateOperationsInput | number
   montant?: Prisma.FloatFieldUpdateOperationsInput | number
   reference?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type LigneFactureUncheckedUpdateManyInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   factureId?: Prisma.IntFieldUpdateOperationsInput | number
   acteId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  consultationActeId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   serviceId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  demandeLaboratoireLigneId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  demandeImagerieId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   designation?: Prisma.StringFieldUpdateOperationsInput | string
   quantite?: Prisma.FloatFieldUpdateOperationsInput | number
   prixUnitaire?: Prisma.FloatFieldUpdateOperationsInput | number
   montant?: Prisma.FloatFieldUpdateOperationsInput | number
   reference?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type LigneFactureListRelationFilter = {
@@ -434,19 +528,26 @@ export type LigneFactureCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   factureId?: Prisma.SortOrder
   acteId?: Prisma.SortOrder
+  consultationActeId?: Prisma.SortOrder
   serviceId?: Prisma.SortOrder
+  demandeLaboratoireLigneId?: Prisma.SortOrder
+  demandeImagerieId?: Prisma.SortOrder
   designation?: Prisma.SortOrder
   quantite?: Prisma.SortOrder
   prixUnitaire?: Prisma.SortOrder
   montant?: Prisma.SortOrder
   reference?: Prisma.SortOrder
+  createdAt?: Prisma.SortOrder
 }
 
 export type LigneFactureAvgOrderByAggregateInput = {
   id?: Prisma.SortOrder
   factureId?: Prisma.SortOrder
   acteId?: Prisma.SortOrder
+  consultationActeId?: Prisma.SortOrder
   serviceId?: Prisma.SortOrder
+  demandeLaboratoireLigneId?: Prisma.SortOrder
+  demandeImagerieId?: Prisma.SortOrder
   quantite?: Prisma.SortOrder
   prixUnitaire?: Prisma.SortOrder
   montant?: Prisma.SortOrder
@@ -456,31 +557,42 @@ export type LigneFactureMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
   factureId?: Prisma.SortOrder
   acteId?: Prisma.SortOrder
+  consultationActeId?: Prisma.SortOrder
   serviceId?: Prisma.SortOrder
+  demandeLaboratoireLigneId?: Prisma.SortOrder
+  demandeImagerieId?: Prisma.SortOrder
   designation?: Prisma.SortOrder
   quantite?: Prisma.SortOrder
   prixUnitaire?: Prisma.SortOrder
   montant?: Prisma.SortOrder
   reference?: Prisma.SortOrder
+  createdAt?: Prisma.SortOrder
 }
 
 export type LigneFactureMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
   factureId?: Prisma.SortOrder
   acteId?: Prisma.SortOrder
+  consultationActeId?: Prisma.SortOrder
   serviceId?: Prisma.SortOrder
+  demandeLaboratoireLigneId?: Prisma.SortOrder
+  demandeImagerieId?: Prisma.SortOrder
   designation?: Prisma.SortOrder
   quantite?: Prisma.SortOrder
   prixUnitaire?: Prisma.SortOrder
   montant?: Prisma.SortOrder
   reference?: Prisma.SortOrder
+  createdAt?: Prisma.SortOrder
 }
 
 export type LigneFactureSumOrderByAggregateInput = {
   id?: Prisma.SortOrder
   factureId?: Prisma.SortOrder
   acteId?: Prisma.SortOrder
+  consultationActeId?: Prisma.SortOrder
   serviceId?: Prisma.SortOrder
+  demandeLaboratoireLigneId?: Prisma.SortOrder
+  demandeImagerieId?: Prisma.SortOrder
   quantite?: Prisma.SortOrder
   prixUnitaire?: Prisma.SortOrder
   montant?: Prisma.SortOrder
@@ -525,6 +637,90 @@ export type LigneFactureUncheckedUpdateManyWithoutServiceNestedInput = {
   connect?: Prisma.LigneFactureWhereUniqueInput | Prisma.LigneFactureWhereUniqueInput[]
   update?: Prisma.LigneFactureUpdateWithWhereUniqueWithoutServiceInput | Prisma.LigneFactureUpdateWithWhereUniqueWithoutServiceInput[]
   updateMany?: Prisma.LigneFactureUpdateManyWithWhereWithoutServiceInput | Prisma.LigneFactureUpdateManyWithWhereWithoutServiceInput[]
+  deleteMany?: Prisma.LigneFactureScalarWhereInput | Prisma.LigneFactureScalarWhereInput[]
+}
+
+export type LigneFactureCreateNestedManyWithoutDemandeLaboratoireLigneInput = {
+  create?: Prisma.XOR<Prisma.LigneFactureCreateWithoutDemandeLaboratoireLigneInput, Prisma.LigneFactureUncheckedCreateWithoutDemandeLaboratoireLigneInput> | Prisma.LigneFactureCreateWithoutDemandeLaboratoireLigneInput[] | Prisma.LigneFactureUncheckedCreateWithoutDemandeLaboratoireLigneInput[]
+  connectOrCreate?: Prisma.LigneFactureCreateOrConnectWithoutDemandeLaboratoireLigneInput | Prisma.LigneFactureCreateOrConnectWithoutDemandeLaboratoireLigneInput[]
+  createMany?: Prisma.LigneFactureCreateManyDemandeLaboratoireLigneInputEnvelope
+  connect?: Prisma.LigneFactureWhereUniqueInput | Prisma.LigneFactureWhereUniqueInput[]
+}
+
+export type LigneFactureUncheckedCreateNestedManyWithoutDemandeLaboratoireLigneInput = {
+  create?: Prisma.XOR<Prisma.LigneFactureCreateWithoutDemandeLaboratoireLigneInput, Prisma.LigneFactureUncheckedCreateWithoutDemandeLaboratoireLigneInput> | Prisma.LigneFactureCreateWithoutDemandeLaboratoireLigneInput[] | Prisma.LigneFactureUncheckedCreateWithoutDemandeLaboratoireLigneInput[]
+  connectOrCreate?: Prisma.LigneFactureCreateOrConnectWithoutDemandeLaboratoireLigneInput | Prisma.LigneFactureCreateOrConnectWithoutDemandeLaboratoireLigneInput[]
+  createMany?: Prisma.LigneFactureCreateManyDemandeLaboratoireLigneInputEnvelope
+  connect?: Prisma.LigneFactureWhereUniqueInput | Prisma.LigneFactureWhereUniqueInput[]
+}
+
+export type LigneFactureUpdateManyWithoutDemandeLaboratoireLigneNestedInput = {
+  create?: Prisma.XOR<Prisma.LigneFactureCreateWithoutDemandeLaboratoireLigneInput, Prisma.LigneFactureUncheckedCreateWithoutDemandeLaboratoireLigneInput> | Prisma.LigneFactureCreateWithoutDemandeLaboratoireLigneInput[] | Prisma.LigneFactureUncheckedCreateWithoutDemandeLaboratoireLigneInput[]
+  connectOrCreate?: Prisma.LigneFactureCreateOrConnectWithoutDemandeLaboratoireLigneInput | Prisma.LigneFactureCreateOrConnectWithoutDemandeLaboratoireLigneInput[]
+  upsert?: Prisma.LigneFactureUpsertWithWhereUniqueWithoutDemandeLaboratoireLigneInput | Prisma.LigneFactureUpsertWithWhereUniqueWithoutDemandeLaboratoireLigneInput[]
+  createMany?: Prisma.LigneFactureCreateManyDemandeLaboratoireLigneInputEnvelope
+  set?: Prisma.LigneFactureWhereUniqueInput | Prisma.LigneFactureWhereUniqueInput[]
+  disconnect?: Prisma.LigneFactureWhereUniqueInput | Prisma.LigneFactureWhereUniqueInput[]
+  delete?: Prisma.LigneFactureWhereUniqueInput | Prisma.LigneFactureWhereUniqueInput[]
+  connect?: Prisma.LigneFactureWhereUniqueInput | Prisma.LigneFactureWhereUniqueInput[]
+  update?: Prisma.LigneFactureUpdateWithWhereUniqueWithoutDemandeLaboratoireLigneInput | Prisma.LigneFactureUpdateWithWhereUniqueWithoutDemandeLaboratoireLigneInput[]
+  updateMany?: Prisma.LigneFactureUpdateManyWithWhereWithoutDemandeLaboratoireLigneInput | Prisma.LigneFactureUpdateManyWithWhereWithoutDemandeLaboratoireLigneInput[]
+  deleteMany?: Prisma.LigneFactureScalarWhereInput | Prisma.LigneFactureScalarWhereInput[]
+}
+
+export type LigneFactureUncheckedUpdateManyWithoutDemandeLaboratoireLigneNestedInput = {
+  create?: Prisma.XOR<Prisma.LigneFactureCreateWithoutDemandeLaboratoireLigneInput, Prisma.LigneFactureUncheckedCreateWithoutDemandeLaboratoireLigneInput> | Prisma.LigneFactureCreateWithoutDemandeLaboratoireLigneInput[] | Prisma.LigneFactureUncheckedCreateWithoutDemandeLaboratoireLigneInput[]
+  connectOrCreate?: Prisma.LigneFactureCreateOrConnectWithoutDemandeLaboratoireLigneInput | Prisma.LigneFactureCreateOrConnectWithoutDemandeLaboratoireLigneInput[]
+  upsert?: Prisma.LigneFactureUpsertWithWhereUniqueWithoutDemandeLaboratoireLigneInput | Prisma.LigneFactureUpsertWithWhereUniqueWithoutDemandeLaboratoireLigneInput[]
+  createMany?: Prisma.LigneFactureCreateManyDemandeLaboratoireLigneInputEnvelope
+  set?: Prisma.LigneFactureWhereUniqueInput | Prisma.LigneFactureWhereUniqueInput[]
+  disconnect?: Prisma.LigneFactureWhereUniqueInput | Prisma.LigneFactureWhereUniqueInput[]
+  delete?: Prisma.LigneFactureWhereUniqueInput | Prisma.LigneFactureWhereUniqueInput[]
+  connect?: Prisma.LigneFactureWhereUniqueInput | Prisma.LigneFactureWhereUniqueInput[]
+  update?: Prisma.LigneFactureUpdateWithWhereUniqueWithoutDemandeLaboratoireLigneInput | Prisma.LigneFactureUpdateWithWhereUniqueWithoutDemandeLaboratoireLigneInput[]
+  updateMany?: Prisma.LigneFactureUpdateManyWithWhereWithoutDemandeLaboratoireLigneInput | Prisma.LigneFactureUpdateManyWithWhereWithoutDemandeLaboratoireLigneInput[]
+  deleteMany?: Prisma.LigneFactureScalarWhereInput | Prisma.LigneFactureScalarWhereInput[]
+}
+
+export type LigneFactureCreateNestedManyWithoutDemandeImagerieInput = {
+  create?: Prisma.XOR<Prisma.LigneFactureCreateWithoutDemandeImagerieInput, Prisma.LigneFactureUncheckedCreateWithoutDemandeImagerieInput> | Prisma.LigneFactureCreateWithoutDemandeImagerieInput[] | Prisma.LigneFactureUncheckedCreateWithoutDemandeImagerieInput[]
+  connectOrCreate?: Prisma.LigneFactureCreateOrConnectWithoutDemandeImagerieInput | Prisma.LigneFactureCreateOrConnectWithoutDemandeImagerieInput[]
+  createMany?: Prisma.LigneFactureCreateManyDemandeImagerieInputEnvelope
+  connect?: Prisma.LigneFactureWhereUniqueInput | Prisma.LigneFactureWhereUniqueInput[]
+}
+
+export type LigneFactureUncheckedCreateNestedManyWithoutDemandeImagerieInput = {
+  create?: Prisma.XOR<Prisma.LigneFactureCreateWithoutDemandeImagerieInput, Prisma.LigneFactureUncheckedCreateWithoutDemandeImagerieInput> | Prisma.LigneFactureCreateWithoutDemandeImagerieInput[] | Prisma.LigneFactureUncheckedCreateWithoutDemandeImagerieInput[]
+  connectOrCreate?: Prisma.LigneFactureCreateOrConnectWithoutDemandeImagerieInput | Prisma.LigneFactureCreateOrConnectWithoutDemandeImagerieInput[]
+  createMany?: Prisma.LigneFactureCreateManyDemandeImagerieInputEnvelope
+  connect?: Prisma.LigneFactureWhereUniqueInput | Prisma.LigneFactureWhereUniqueInput[]
+}
+
+export type LigneFactureUpdateManyWithoutDemandeImagerieNestedInput = {
+  create?: Prisma.XOR<Prisma.LigneFactureCreateWithoutDemandeImagerieInput, Prisma.LigneFactureUncheckedCreateWithoutDemandeImagerieInput> | Prisma.LigneFactureCreateWithoutDemandeImagerieInput[] | Prisma.LigneFactureUncheckedCreateWithoutDemandeImagerieInput[]
+  connectOrCreate?: Prisma.LigneFactureCreateOrConnectWithoutDemandeImagerieInput | Prisma.LigneFactureCreateOrConnectWithoutDemandeImagerieInput[]
+  upsert?: Prisma.LigneFactureUpsertWithWhereUniqueWithoutDemandeImagerieInput | Prisma.LigneFactureUpsertWithWhereUniqueWithoutDemandeImagerieInput[]
+  createMany?: Prisma.LigneFactureCreateManyDemandeImagerieInputEnvelope
+  set?: Prisma.LigneFactureWhereUniqueInput | Prisma.LigneFactureWhereUniqueInput[]
+  disconnect?: Prisma.LigneFactureWhereUniqueInput | Prisma.LigneFactureWhereUniqueInput[]
+  delete?: Prisma.LigneFactureWhereUniqueInput | Prisma.LigneFactureWhereUniqueInput[]
+  connect?: Prisma.LigneFactureWhereUniqueInput | Prisma.LigneFactureWhereUniqueInput[]
+  update?: Prisma.LigneFactureUpdateWithWhereUniqueWithoutDemandeImagerieInput | Prisma.LigneFactureUpdateWithWhereUniqueWithoutDemandeImagerieInput[]
+  updateMany?: Prisma.LigneFactureUpdateManyWithWhereWithoutDemandeImagerieInput | Prisma.LigneFactureUpdateManyWithWhereWithoutDemandeImagerieInput[]
+  deleteMany?: Prisma.LigneFactureScalarWhereInput | Prisma.LigneFactureScalarWhereInput[]
+}
+
+export type LigneFactureUncheckedUpdateManyWithoutDemandeImagerieNestedInput = {
+  create?: Prisma.XOR<Prisma.LigneFactureCreateWithoutDemandeImagerieInput, Prisma.LigneFactureUncheckedCreateWithoutDemandeImagerieInput> | Prisma.LigneFactureCreateWithoutDemandeImagerieInput[] | Prisma.LigneFactureUncheckedCreateWithoutDemandeImagerieInput[]
+  connectOrCreate?: Prisma.LigneFactureCreateOrConnectWithoutDemandeImagerieInput | Prisma.LigneFactureCreateOrConnectWithoutDemandeImagerieInput[]
+  upsert?: Prisma.LigneFactureUpsertWithWhereUniqueWithoutDemandeImagerieInput | Prisma.LigneFactureUpsertWithWhereUniqueWithoutDemandeImagerieInput[]
+  createMany?: Prisma.LigneFactureCreateManyDemandeImagerieInputEnvelope
+  set?: Prisma.LigneFactureWhereUniqueInput | Prisma.LigneFactureWhereUniqueInput[]
+  disconnect?: Prisma.LigneFactureWhereUniqueInput | Prisma.LigneFactureWhereUniqueInput[]
+  delete?: Prisma.LigneFactureWhereUniqueInput | Prisma.LigneFactureWhereUniqueInput[]
+  connect?: Prisma.LigneFactureWhereUniqueInput | Prisma.LigneFactureWhereUniqueInput[]
+  update?: Prisma.LigneFactureUpdateWithWhereUniqueWithoutDemandeImagerieInput | Prisma.LigneFactureUpdateWithWhereUniqueWithoutDemandeImagerieInput[]
+  updateMany?: Prisma.LigneFactureUpdateManyWithWhereWithoutDemandeImagerieInput | Prisma.LigneFactureUpdateManyWithWhereWithoutDemandeImagerieInput[]
   deleteMany?: Prisma.LigneFactureScalarWhereInput | Prisma.LigneFactureScalarWhereInput[]
 }
 
@@ -612,25 +808,75 @@ export type LigneFactureUncheckedUpdateManyWithoutFactureNestedInput = {
   deleteMany?: Prisma.LigneFactureScalarWhereInput | Prisma.LigneFactureScalarWhereInput[]
 }
 
+export type LigneFactureCreateNestedManyWithoutConsultationActeInput = {
+  create?: Prisma.XOR<Prisma.LigneFactureCreateWithoutConsultationActeInput, Prisma.LigneFactureUncheckedCreateWithoutConsultationActeInput> | Prisma.LigneFactureCreateWithoutConsultationActeInput[] | Prisma.LigneFactureUncheckedCreateWithoutConsultationActeInput[]
+  connectOrCreate?: Prisma.LigneFactureCreateOrConnectWithoutConsultationActeInput | Prisma.LigneFactureCreateOrConnectWithoutConsultationActeInput[]
+  createMany?: Prisma.LigneFactureCreateManyConsultationActeInputEnvelope
+  connect?: Prisma.LigneFactureWhereUniqueInput | Prisma.LigneFactureWhereUniqueInput[]
+}
+
+export type LigneFactureUncheckedCreateNestedManyWithoutConsultationActeInput = {
+  create?: Prisma.XOR<Prisma.LigneFactureCreateWithoutConsultationActeInput, Prisma.LigneFactureUncheckedCreateWithoutConsultationActeInput> | Prisma.LigneFactureCreateWithoutConsultationActeInput[] | Prisma.LigneFactureUncheckedCreateWithoutConsultationActeInput[]
+  connectOrCreate?: Prisma.LigneFactureCreateOrConnectWithoutConsultationActeInput | Prisma.LigneFactureCreateOrConnectWithoutConsultationActeInput[]
+  createMany?: Prisma.LigneFactureCreateManyConsultationActeInputEnvelope
+  connect?: Prisma.LigneFactureWhereUniqueInput | Prisma.LigneFactureWhereUniqueInput[]
+}
+
+export type LigneFactureUpdateManyWithoutConsultationActeNestedInput = {
+  create?: Prisma.XOR<Prisma.LigneFactureCreateWithoutConsultationActeInput, Prisma.LigneFactureUncheckedCreateWithoutConsultationActeInput> | Prisma.LigneFactureCreateWithoutConsultationActeInput[] | Prisma.LigneFactureUncheckedCreateWithoutConsultationActeInput[]
+  connectOrCreate?: Prisma.LigneFactureCreateOrConnectWithoutConsultationActeInput | Prisma.LigneFactureCreateOrConnectWithoutConsultationActeInput[]
+  upsert?: Prisma.LigneFactureUpsertWithWhereUniqueWithoutConsultationActeInput | Prisma.LigneFactureUpsertWithWhereUniqueWithoutConsultationActeInput[]
+  createMany?: Prisma.LigneFactureCreateManyConsultationActeInputEnvelope
+  set?: Prisma.LigneFactureWhereUniqueInput | Prisma.LigneFactureWhereUniqueInput[]
+  disconnect?: Prisma.LigneFactureWhereUniqueInput | Prisma.LigneFactureWhereUniqueInput[]
+  delete?: Prisma.LigneFactureWhereUniqueInput | Prisma.LigneFactureWhereUniqueInput[]
+  connect?: Prisma.LigneFactureWhereUniqueInput | Prisma.LigneFactureWhereUniqueInput[]
+  update?: Prisma.LigneFactureUpdateWithWhereUniqueWithoutConsultationActeInput | Prisma.LigneFactureUpdateWithWhereUniqueWithoutConsultationActeInput[]
+  updateMany?: Prisma.LigneFactureUpdateManyWithWhereWithoutConsultationActeInput | Prisma.LigneFactureUpdateManyWithWhereWithoutConsultationActeInput[]
+  deleteMany?: Prisma.LigneFactureScalarWhereInput | Prisma.LigneFactureScalarWhereInput[]
+}
+
+export type LigneFactureUncheckedUpdateManyWithoutConsultationActeNestedInput = {
+  create?: Prisma.XOR<Prisma.LigneFactureCreateWithoutConsultationActeInput, Prisma.LigneFactureUncheckedCreateWithoutConsultationActeInput> | Prisma.LigneFactureCreateWithoutConsultationActeInput[] | Prisma.LigneFactureUncheckedCreateWithoutConsultationActeInput[]
+  connectOrCreate?: Prisma.LigneFactureCreateOrConnectWithoutConsultationActeInput | Prisma.LigneFactureCreateOrConnectWithoutConsultationActeInput[]
+  upsert?: Prisma.LigneFactureUpsertWithWhereUniqueWithoutConsultationActeInput | Prisma.LigneFactureUpsertWithWhereUniqueWithoutConsultationActeInput[]
+  createMany?: Prisma.LigneFactureCreateManyConsultationActeInputEnvelope
+  set?: Prisma.LigneFactureWhereUniqueInput | Prisma.LigneFactureWhereUniqueInput[]
+  disconnect?: Prisma.LigneFactureWhereUniqueInput | Prisma.LigneFactureWhereUniqueInput[]
+  delete?: Prisma.LigneFactureWhereUniqueInput | Prisma.LigneFactureWhereUniqueInput[]
+  connect?: Prisma.LigneFactureWhereUniqueInput | Prisma.LigneFactureWhereUniqueInput[]
+  update?: Prisma.LigneFactureUpdateWithWhereUniqueWithoutConsultationActeInput | Prisma.LigneFactureUpdateWithWhereUniqueWithoutConsultationActeInput[]
+  updateMany?: Prisma.LigneFactureUpdateManyWithWhereWithoutConsultationActeInput | Prisma.LigneFactureUpdateManyWithWhereWithoutConsultationActeInput[]
+  deleteMany?: Prisma.LigneFactureScalarWhereInput | Prisma.LigneFactureScalarWhereInput[]
+}
+
 export type LigneFactureCreateWithoutServiceInput = {
   designation: string
   quantite?: number
   prixUnitaire: number
   montant: number
   reference?: string | null
+  createdAt?: Date | string
   facture: Prisma.FactureCreateNestedOneWithoutLignesInput
   acte?: Prisma.ActeMedicalCreateNestedOneWithoutLignesFactureInput
+  consultationActe?: Prisma.ConsultationActeCreateNestedOneWithoutLignesFactureInput
+  demandeLaboratoireLigne?: Prisma.DemandeLaboratoireLigneCreateNestedOneWithoutLignesFactureInput
+  demandeImagerie?: Prisma.DemandeImagerieCreateNestedOneWithoutLigneFacturesInput
 }
 
 export type LigneFactureUncheckedCreateWithoutServiceInput = {
   id?: number
   factureId: number
   acteId?: number | null
+  consultationActeId?: number | null
+  demandeLaboratoireLigneId?: number | null
+  demandeImagerieId?: number | null
   designation: string
   quantite?: number
   prixUnitaire: number
   montant: number
   reference?: string | null
+  createdAt?: Date | string
 }
 
 export type LigneFactureCreateOrConnectWithoutServiceInput = {
@@ -665,12 +911,124 @@ export type LigneFactureScalarWhereInput = {
   id?: Prisma.IntFilter<"LigneFacture"> | number
   factureId?: Prisma.IntFilter<"LigneFacture"> | number
   acteId?: Prisma.IntNullableFilter<"LigneFacture"> | number | null
+  consultationActeId?: Prisma.IntNullableFilter<"LigneFacture"> | number | null
   serviceId?: Prisma.IntNullableFilter<"LigneFacture"> | number | null
+  demandeLaboratoireLigneId?: Prisma.IntNullableFilter<"LigneFacture"> | number | null
+  demandeImagerieId?: Prisma.IntNullableFilter<"LigneFacture"> | number | null
   designation?: Prisma.StringFilter<"LigneFacture"> | string
   quantite?: Prisma.FloatFilter<"LigneFacture"> | number
   prixUnitaire?: Prisma.FloatFilter<"LigneFacture"> | number
   montant?: Prisma.FloatFilter<"LigneFacture"> | number
   reference?: Prisma.StringNullableFilter<"LigneFacture"> | string | null
+  createdAt?: Prisma.DateTimeFilter<"LigneFacture"> | Date | string
+}
+
+export type LigneFactureCreateWithoutDemandeLaboratoireLigneInput = {
+  designation: string
+  quantite?: number
+  prixUnitaire: number
+  montant: number
+  reference?: string | null
+  createdAt?: Date | string
+  facture: Prisma.FactureCreateNestedOneWithoutLignesInput
+  acte?: Prisma.ActeMedicalCreateNestedOneWithoutLignesFactureInput
+  consultationActe?: Prisma.ConsultationActeCreateNestedOneWithoutLignesFactureInput
+  service?: Prisma.ServiceCreateNestedOneWithoutLignesFactureInput
+  demandeImagerie?: Prisma.DemandeImagerieCreateNestedOneWithoutLigneFacturesInput
+}
+
+export type LigneFactureUncheckedCreateWithoutDemandeLaboratoireLigneInput = {
+  id?: number
+  factureId: number
+  acteId?: number | null
+  consultationActeId?: number | null
+  serviceId?: number | null
+  demandeImagerieId?: number | null
+  designation: string
+  quantite?: number
+  prixUnitaire: number
+  montant: number
+  reference?: string | null
+  createdAt?: Date | string
+}
+
+export type LigneFactureCreateOrConnectWithoutDemandeLaboratoireLigneInput = {
+  where: Prisma.LigneFactureWhereUniqueInput
+  create: Prisma.XOR<Prisma.LigneFactureCreateWithoutDemandeLaboratoireLigneInput, Prisma.LigneFactureUncheckedCreateWithoutDemandeLaboratoireLigneInput>
+}
+
+export type LigneFactureCreateManyDemandeLaboratoireLigneInputEnvelope = {
+  data: Prisma.LigneFactureCreateManyDemandeLaboratoireLigneInput | Prisma.LigneFactureCreateManyDemandeLaboratoireLigneInput[]
+}
+
+export type LigneFactureUpsertWithWhereUniqueWithoutDemandeLaboratoireLigneInput = {
+  where: Prisma.LigneFactureWhereUniqueInput
+  update: Prisma.XOR<Prisma.LigneFactureUpdateWithoutDemandeLaboratoireLigneInput, Prisma.LigneFactureUncheckedUpdateWithoutDemandeLaboratoireLigneInput>
+  create: Prisma.XOR<Prisma.LigneFactureCreateWithoutDemandeLaboratoireLigneInput, Prisma.LigneFactureUncheckedCreateWithoutDemandeLaboratoireLigneInput>
+}
+
+export type LigneFactureUpdateWithWhereUniqueWithoutDemandeLaboratoireLigneInput = {
+  where: Prisma.LigneFactureWhereUniqueInput
+  data: Prisma.XOR<Prisma.LigneFactureUpdateWithoutDemandeLaboratoireLigneInput, Prisma.LigneFactureUncheckedUpdateWithoutDemandeLaboratoireLigneInput>
+}
+
+export type LigneFactureUpdateManyWithWhereWithoutDemandeLaboratoireLigneInput = {
+  where: Prisma.LigneFactureScalarWhereInput
+  data: Prisma.XOR<Prisma.LigneFactureUpdateManyMutationInput, Prisma.LigneFactureUncheckedUpdateManyWithoutDemandeLaboratoireLigneInput>
+}
+
+export type LigneFactureCreateWithoutDemandeImagerieInput = {
+  designation: string
+  quantite?: number
+  prixUnitaire: number
+  montant: number
+  reference?: string | null
+  createdAt?: Date | string
+  facture: Prisma.FactureCreateNestedOneWithoutLignesInput
+  acte?: Prisma.ActeMedicalCreateNestedOneWithoutLignesFactureInput
+  consultationActe?: Prisma.ConsultationActeCreateNestedOneWithoutLignesFactureInput
+  service?: Prisma.ServiceCreateNestedOneWithoutLignesFactureInput
+  demandeLaboratoireLigne?: Prisma.DemandeLaboratoireLigneCreateNestedOneWithoutLignesFactureInput
+}
+
+export type LigneFactureUncheckedCreateWithoutDemandeImagerieInput = {
+  id?: number
+  factureId: number
+  acteId?: number | null
+  consultationActeId?: number | null
+  serviceId?: number | null
+  demandeLaboratoireLigneId?: number | null
+  designation: string
+  quantite?: number
+  prixUnitaire: number
+  montant: number
+  reference?: string | null
+  createdAt?: Date | string
+}
+
+export type LigneFactureCreateOrConnectWithoutDemandeImagerieInput = {
+  where: Prisma.LigneFactureWhereUniqueInput
+  create: Prisma.XOR<Prisma.LigneFactureCreateWithoutDemandeImagerieInput, Prisma.LigneFactureUncheckedCreateWithoutDemandeImagerieInput>
+}
+
+export type LigneFactureCreateManyDemandeImagerieInputEnvelope = {
+  data: Prisma.LigneFactureCreateManyDemandeImagerieInput | Prisma.LigneFactureCreateManyDemandeImagerieInput[]
+}
+
+export type LigneFactureUpsertWithWhereUniqueWithoutDemandeImagerieInput = {
+  where: Prisma.LigneFactureWhereUniqueInput
+  update: Prisma.XOR<Prisma.LigneFactureUpdateWithoutDemandeImagerieInput, Prisma.LigneFactureUncheckedUpdateWithoutDemandeImagerieInput>
+  create: Prisma.XOR<Prisma.LigneFactureCreateWithoutDemandeImagerieInput, Prisma.LigneFactureUncheckedCreateWithoutDemandeImagerieInput>
+}
+
+export type LigneFactureUpdateWithWhereUniqueWithoutDemandeImagerieInput = {
+  where: Prisma.LigneFactureWhereUniqueInput
+  data: Prisma.XOR<Prisma.LigneFactureUpdateWithoutDemandeImagerieInput, Prisma.LigneFactureUncheckedUpdateWithoutDemandeImagerieInput>
+}
+
+export type LigneFactureUpdateManyWithWhereWithoutDemandeImagerieInput = {
+  where: Prisma.LigneFactureScalarWhereInput
+  data: Prisma.XOR<Prisma.LigneFactureUpdateManyMutationInput, Prisma.LigneFactureUncheckedUpdateManyWithoutDemandeImagerieInput>
 }
 
 export type LigneFactureCreateWithoutActeInput = {
@@ -679,19 +1037,27 @@ export type LigneFactureCreateWithoutActeInput = {
   prixUnitaire: number
   montant: number
   reference?: string | null
+  createdAt?: Date | string
   facture: Prisma.FactureCreateNestedOneWithoutLignesInput
+  consultationActe?: Prisma.ConsultationActeCreateNestedOneWithoutLignesFactureInput
   service?: Prisma.ServiceCreateNestedOneWithoutLignesFactureInput
+  demandeLaboratoireLigne?: Prisma.DemandeLaboratoireLigneCreateNestedOneWithoutLignesFactureInput
+  demandeImagerie?: Prisma.DemandeImagerieCreateNestedOneWithoutLigneFacturesInput
 }
 
 export type LigneFactureUncheckedCreateWithoutActeInput = {
   id?: number
   factureId: number
+  consultationActeId?: number | null
   serviceId?: number | null
+  demandeLaboratoireLigneId?: number | null
+  demandeImagerieId?: number | null
   designation: string
   quantite?: number
   prixUnitaire: number
   montant: number
   reference?: string | null
+  createdAt?: Date | string
 }
 
 export type LigneFactureCreateOrConnectWithoutActeInput = {
@@ -725,19 +1091,27 @@ export type LigneFactureCreateWithoutFactureInput = {
   prixUnitaire: number
   montant: number
   reference?: string | null
+  createdAt?: Date | string
   acte?: Prisma.ActeMedicalCreateNestedOneWithoutLignesFactureInput
+  consultationActe?: Prisma.ConsultationActeCreateNestedOneWithoutLignesFactureInput
   service?: Prisma.ServiceCreateNestedOneWithoutLignesFactureInput
+  demandeLaboratoireLigne?: Prisma.DemandeLaboratoireLigneCreateNestedOneWithoutLignesFactureInput
+  demandeImagerie?: Prisma.DemandeImagerieCreateNestedOneWithoutLigneFacturesInput
 }
 
 export type LigneFactureUncheckedCreateWithoutFactureInput = {
   id?: number
   acteId?: number | null
+  consultationActeId?: number | null
   serviceId?: number | null
+  demandeLaboratoireLigneId?: number | null
+  demandeImagerieId?: number | null
   designation: string
   quantite?: number
   prixUnitaire: number
   montant: number
   reference?: string | null
+  createdAt?: Date | string
 }
 
 export type LigneFactureCreateOrConnectWithoutFactureInput = {
@@ -765,15 +1139,73 @@ export type LigneFactureUpdateManyWithWhereWithoutFactureInput = {
   data: Prisma.XOR<Prisma.LigneFactureUpdateManyMutationInput, Prisma.LigneFactureUncheckedUpdateManyWithoutFactureInput>
 }
 
-export type LigneFactureCreateManyServiceInput = {
-  id?: number
-  factureId: number
-  acteId?: number | null
+export type LigneFactureCreateWithoutConsultationActeInput = {
   designation: string
   quantite?: number
   prixUnitaire: number
   montant: number
   reference?: string | null
+  createdAt?: Date | string
+  facture: Prisma.FactureCreateNestedOneWithoutLignesInput
+  acte?: Prisma.ActeMedicalCreateNestedOneWithoutLignesFactureInput
+  service?: Prisma.ServiceCreateNestedOneWithoutLignesFactureInput
+  demandeLaboratoireLigne?: Prisma.DemandeLaboratoireLigneCreateNestedOneWithoutLignesFactureInput
+  demandeImagerie?: Prisma.DemandeImagerieCreateNestedOneWithoutLigneFacturesInput
+}
+
+export type LigneFactureUncheckedCreateWithoutConsultationActeInput = {
+  id?: number
+  factureId: number
+  acteId?: number | null
+  serviceId?: number | null
+  demandeLaboratoireLigneId?: number | null
+  demandeImagerieId?: number | null
+  designation: string
+  quantite?: number
+  prixUnitaire: number
+  montant: number
+  reference?: string | null
+  createdAt?: Date | string
+}
+
+export type LigneFactureCreateOrConnectWithoutConsultationActeInput = {
+  where: Prisma.LigneFactureWhereUniqueInput
+  create: Prisma.XOR<Prisma.LigneFactureCreateWithoutConsultationActeInput, Prisma.LigneFactureUncheckedCreateWithoutConsultationActeInput>
+}
+
+export type LigneFactureCreateManyConsultationActeInputEnvelope = {
+  data: Prisma.LigneFactureCreateManyConsultationActeInput | Prisma.LigneFactureCreateManyConsultationActeInput[]
+}
+
+export type LigneFactureUpsertWithWhereUniqueWithoutConsultationActeInput = {
+  where: Prisma.LigneFactureWhereUniqueInput
+  update: Prisma.XOR<Prisma.LigneFactureUpdateWithoutConsultationActeInput, Prisma.LigneFactureUncheckedUpdateWithoutConsultationActeInput>
+  create: Prisma.XOR<Prisma.LigneFactureCreateWithoutConsultationActeInput, Prisma.LigneFactureUncheckedCreateWithoutConsultationActeInput>
+}
+
+export type LigneFactureUpdateWithWhereUniqueWithoutConsultationActeInput = {
+  where: Prisma.LigneFactureWhereUniqueInput
+  data: Prisma.XOR<Prisma.LigneFactureUpdateWithoutConsultationActeInput, Prisma.LigneFactureUncheckedUpdateWithoutConsultationActeInput>
+}
+
+export type LigneFactureUpdateManyWithWhereWithoutConsultationActeInput = {
+  where: Prisma.LigneFactureScalarWhereInput
+  data: Prisma.XOR<Prisma.LigneFactureUpdateManyMutationInput, Prisma.LigneFactureUncheckedUpdateManyWithoutConsultationActeInput>
+}
+
+export type LigneFactureCreateManyServiceInput = {
+  id?: number
+  factureId: number
+  acteId?: number | null
+  consultationActeId?: number | null
+  demandeLaboratoireLigneId?: number | null
+  demandeImagerieId?: number | null
+  designation: string
+  quantite?: number
+  prixUnitaire: number
+  montant: number
+  reference?: string | null
+  createdAt?: Date | string
 }
 
 export type LigneFactureUpdateWithoutServiceInput = {
@@ -782,41 +1214,175 @@ export type LigneFactureUpdateWithoutServiceInput = {
   prixUnitaire?: Prisma.FloatFieldUpdateOperationsInput | number
   montant?: Prisma.FloatFieldUpdateOperationsInput | number
   reference?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   facture?: Prisma.FactureUpdateOneRequiredWithoutLignesNestedInput
   acte?: Prisma.ActeMedicalUpdateOneWithoutLignesFactureNestedInput
+  consultationActe?: Prisma.ConsultationActeUpdateOneWithoutLignesFactureNestedInput
+  demandeLaboratoireLigne?: Prisma.DemandeLaboratoireLigneUpdateOneWithoutLignesFactureNestedInput
+  demandeImagerie?: Prisma.DemandeImagerieUpdateOneWithoutLigneFacturesNestedInput
 }
 
 export type LigneFactureUncheckedUpdateWithoutServiceInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   factureId?: Prisma.IntFieldUpdateOperationsInput | number
   acteId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  consultationActeId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  demandeLaboratoireLigneId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  demandeImagerieId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   designation?: Prisma.StringFieldUpdateOperationsInput | string
   quantite?: Prisma.FloatFieldUpdateOperationsInput | number
   prixUnitaire?: Prisma.FloatFieldUpdateOperationsInput | number
   montant?: Prisma.FloatFieldUpdateOperationsInput | number
   reference?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type LigneFactureUncheckedUpdateManyWithoutServiceInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   factureId?: Prisma.IntFieldUpdateOperationsInput | number
   acteId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  consultationActeId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  demandeLaboratoireLigneId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  demandeImagerieId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   designation?: Prisma.StringFieldUpdateOperationsInput | string
   quantite?: Prisma.FloatFieldUpdateOperationsInput | number
   prixUnitaire?: Prisma.FloatFieldUpdateOperationsInput | number
   montant?: Prisma.FloatFieldUpdateOperationsInput | number
   reference?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
-export type LigneFactureCreateManyActeInput = {
+export type LigneFactureCreateManyDemandeLaboratoireLigneInput = {
   id?: number
   factureId: number
+  acteId?: number | null
+  consultationActeId?: number | null
   serviceId?: number | null
+  demandeImagerieId?: number | null
   designation: string
   quantite?: number
   prixUnitaire: number
   montant: number
   reference?: string | null
+  createdAt?: Date | string
+}
+
+export type LigneFactureUpdateWithoutDemandeLaboratoireLigneInput = {
+  designation?: Prisma.StringFieldUpdateOperationsInput | string
+  quantite?: Prisma.FloatFieldUpdateOperationsInput | number
+  prixUnitaire?: Prisma.FloatFieldUpdateOperationsInput | number
+  montant?: Prisma.FloatFieldUpdateOperationsInput | number
+  reference?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  facture?: Prisma.FactureUpdateOneRequiredWithoutLignesNestedInput
+  acte?: Prisma.ActeMedicalUpdateOneWithoutLignesFactureNestedInput
+  consultationActe?: Prisma.ConsultationActeUpdateOneWithoutLignesFactureNestedInput
+  service?: Prisma.ServiceUpdateOneWithoutLignesFactureNestedInput
+  demandeImagerie?: Prisma.DemandeImagerieUpdateOneWithoutLigneFacturesNestedInput
+}
+
+export type LigneFactureUncheckedUpdateWithoutDemandeLaboratoireLigneInput = {
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  factureId?: Prisma.IntFieldUpdateOperationsInput | number
+  acteId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  consultationActeId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  serviceId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  demandeImagerieId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  designation?: Prisma.StringFieldUpdateOperationsInput | string
+  quantite?: Prisma.FloatFieldUpdateOperationsInput | number
+  prixUnitaire?: Prisma.FloatFieldUpdateOperationsInput | number
+  montant?: Prisma.FloatFieldUpdateOperationsInput | number
+  reference?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
+export type LigneFactureUncheckedUpdateManyWithoutDemandeLaboratoireLigneInput = {
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  factureId?: Prisma.IntFieldUpdateOperationsInput | number
+  acteId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  consultationActeId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  serviceId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  demandeImagerieId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  designation?: Prisma.StringFieldUpdateOperationsInput | string
+  quantite?: Prisma.FloatFieldUpdateOperationsInput | number
+  prixUnitaire?: Prisma.FloatFieldUpdateOperationsInput | number
+  montant?: Prisma.FloatFieldUpdateOperationsInput | number
+  reference?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
+export type LigneFactureCreateManyDemandeImagerieInput = {
+  id?: number
+  factureId: number
+  acteId?: number | null
+  consultationActeId?: number | null
+  serviceId?: number | null
+  demandeLaboratoireLigneId?: number | null
+  designation: string
+  quantite?: number
+  prixUnitaire: number
+  montant: number
+  reference?: string | null
+  createdAt?: Date | string
+}
+
+export type LigneFactureUpdateWithoutDemandeImagerieInput = {
+  designation?: Prisma.StringFieldUpdateOperationsInput | string
+  quantite?: Prisma.FloatFieldUpdateOperationsInput | number
+  prixUnitaire?: Prisma.FloatFieldUpdateOperationsInput | number
+  montant?: Prisma.FloatFieldUpdateOperationsInput | number
+  reference?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  facture?: Prisma.FactureUpdateOneRequiredWithoutLignesNestedInput
+  acte?: Prisma.ActeMedicalUpdateOneWithoutLignesFactureNestedInput
+  consultationActe?: Prisma.ConsultationActeUpdateOneWithoutLignesFactureNestedInput
+  service?: Prisma.ServiceUpdateOneWithoutLignesFactureNestedInput
+  demandeLaboratoireLigne?: Prisma.DemandeLaboratoireLigneUpdateOneWithoutLignesFactureNestedInput
+}
+
+export type LigneFactureUncheckedUpdateWithoutDemandeImagerieInput = {
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  factureId?: Prisma.IntFieldUpdateOperationsInput | number
+  acteId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  consultationActeId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  serviceId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  demandeLaboratoireLigneId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  designation?: Prisma.StringFieldUpdateOperationsInput | string
+  quantite?: Prisma.FloatFieldUpdateOperationsInput | number
+  prixUnitaire?: Prisma.FloatFieldUpdateOperationsInput | number
+  montant?: Prisma.FloatFieldUpdateOperationsInput | number
+  reference?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
+export type LigneFactureUncheckedUpdateManyWithoutDemandeImagerieInput = {
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  factureId?: Prisma.IntFieldUpdateOperationsInput | number
+  acteId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  consultationActeId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  serviceId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  demandeLaboratoireLigneId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  designation?: Prisma.StringFieldUpdateOperationsInput | string
+  quantite?: Prisma.FloatFieldUpdateOperationsInput | number
+  prixUnitaire?: Prisma.FloatFieldUpdateOperationsInput | number
+  montant?: Prisma.FloatFieldUpdateOperationsInput | number
+  reference?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
+export type LigneFactureCreateManyActeInput = {
+  id?: number
+  factureId: number
+  consultationActeId?: number | null
+  serviceId?: number | null
+  demandeLaboratoireLigneId?: number | null
+  demandeImagerieId?: number | null
+  designation: string
+  quantite?: number
+  prixUnitaire: number
+  montant: number
+  reference?: string | null
+  createdAt?: Date | string
 }
 
 export type LigneFactureUpdateWithoutActeInput = {
@@ -825,41 +1391,57 @@ export type LigneFactureUpdateWithoutActeInput = {
   prixUnitaire?: Prisma.FloatFieldUpdateOperationsInput | number
   montant?: Prisma.FloatFieldUpdateOperationsInput | number
   reference?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   facture?: Prisma.FactureUpdateOneRequiredWithoutLignesNestedInput
+  consultationActe?: Prisma.ConsultationActeUpdateOneWithoutLignesFactureNestedInput
   service?: Prisma.ServiceUpdateOneWithoutLignesFactureNestedInput
+  demandeLaboratoireLigne?: Prisma.DemandeLaboratoireLigneUpdateOneWithoutLignesFactureNestedInput
+  demandeImagerie?: Prisma.DemandeImagerieUpdateOneWithoutLigneFacturesNestedInput
 }
 
 export type LigneFactureUncheckedUpdateWithoutActeInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   factureId?: Prisma.IntFieldUpdateOperationsInput | number
+  consultationActeId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   serviceId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  demandeLaboratoireLigneId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  demandeImagerieId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   designation?: Prisma.StringFieldUpdateOperationsInput | string
   quantite?: Prisma.FloatFieldUpdateOperationsInput | number
   prixUnitaire?: Prisma.FloatFieldUpdateOperationsInput | number
   montant?: Prisma.FloatFieldUpdateOperationsInput | number
   reference?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type LigneFactureUncheckedUpdateManyWithoutActeInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   factureId?: Prisma.IntFieldUpdateOperationsInput | number
+  consultationActeId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   serviceId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  demandeLaboratoireLigneId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  demandeImagerieId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   designation?: Prisma.StringFieldUpdateOperationsInput | string
   quantite?: Prisma.FloatFieldUpdateOperationsInput | number
   prixUnitaire?: Prisma.FloatFieldUpdateOperationsInput | number
   montant?: Prisma.FloatFieldUpdateOperationsInput | number
   reference?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type LigneFactureCreateManyFactureInput = {
   id?: number
   acteId?: number | null
+  consultationActeId?: number | null
   serviceId?: number | null
+  demandeLaboratoireLigneId?: number | null
+  demandeImagerieId?: number | null
   designation: string
   quantite?: number
   prixUnitaire: number
   montant: number
   reference?: string | null
+  createdAt?: Date | string
 }
 
 export type LigneFactureUpdateWithoutFactureInput = {
@@ -868,30 +1450,101 @@ export type LigneFactureUpdateWithoutFactureInput = {
   prixUnitaire?: Prisma.FloatFieldUpdateOperationsInput | number
   montant?: Prisma.FloatFieldUpdateOperationsInput | number
   reference?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   acte?: Prisma.ActeMedicalUpdateOneWithoutLignesFactureNestedInput
+  consultationActe?: Prisma.ConsultationActeUpdateOneWithoutLignesFactureNestedInput
   service?: Prisma.ServiceUpdateOneWithoutLignesFactureNestedInput
+  demandeLaboratoireLigne?: Prisma.DemandeLaboratoireLigneUpdateOneWithoutLignesFactureNestedInput
+  demandeImagerie?: Prisma.DemandeImagerieUpdateOneWithoutLigneFacturesNestedInput
 }
 
 export type LigneFactureUncheckedUpdateWithoutFactureInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   acteId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  consultationActeId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   serviceId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  demandeLaboratoireLigneId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  demandeImagerieId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   designation?: Prisma.StringFieldUpdateOperationsInput | string
   quantite?: Prisma.FloatFieldUpdateOperationsInput | number
   prixUnitaire?: Prisma.FloatFieldUpdateOperationsInput | number
   montant?: Prisma.FloatFieldUpdateOperationsInput | number
   reference?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type LigneFactureUncheckedUpdateManyWithoutFactureInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   acteId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  consultationActeId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   serviceId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  demandeLaboratoireLigneId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  demandeImagerieId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   designation?: Prisma.StringFieldUpdateOperationsInput | string
   quantite?: Prisma.FloatFieldUpdateOperationsInput | number
   prixUnitaire?: Prisma.FloatFieldUpdateOperationsInput | number
   montant?: Prisma.FloatFieldUpdateOperationsInput | number
   reference?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
+export type LigneFactureCreateManyConsultationActeInput = {
+  id?: number
+  factureId: number
+  acteId?: number | null
+  serviceId?: number | null
+  demandeLaboratoireLigneId?: number | null
+  demandeImagerieId?: number | null
+  designation: string
+  quantite?: number
+  prixUnitaire: number
+  montant: number
+  reference?: string | null
+  createdAt?: Date | string
+}
+
+export type LigneFactureUpdateWithoutConsultationActeInput = {
+  designation?: Prisma.StringFieldUpdateOperationsInput | string
+  quantite?: Prisma.FloatFieldUpdateOperationsInput | number
+  prixUnitaire?: Prisma.FloatFieldUpdateOperationsInput | number
+  montant?: Prisma.FloatFieldUpdateOperationsInput | number
+  reference?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  facture?: Prisma.FactureUpdateOneRequiredWithoutLignesNestedInput
+  acte?: Prisma.ActeMedicalUpdateOneWithoutLignesFactureNestedInput
+  service?: Prisma.ServiceUpdateOneWithoutLignesFactureNestedInput
+  demandeLaboratoireLigne?: Prisma.DemandeLaboratoireLigneUpdateOneWithoutLignesFactureNestedInput
+  demandeImagerie?: Prisma.DemandeImagerieUpdateOneWithoutLigneFacturesNestedInput
+}
+
+export type LigneFactureUncheckedUpdateWithoutConsultationActeInput = {
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  factureId?: Prisma.IntFieldUpdateOperationsInput | number
+  acteId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  serviceId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  demandeLaboratoireLigneId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  demandeImagerieId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  designation?: Prisma.StringFieldUpdateOperationsInput | string
+  quantite?: Prisma.FloatFieldUpdateOperationsInput | number
+  prixUnitaire?: Prisma.FloatFieldUpdateOperationsInput | number
+  montant?: Prisma.FloatFieldUpdateOperationsInput | number
+  reference?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
+export type LigneFactureUncheckedUpdateManyWithoutConsultationActeInput = {
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  factureId?: Prisma.IntFieldUpdateOperationsInput | number
+  acteId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  serviceId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  demandeLaboratoireLigneId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  demandeImagerieId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  designation?: Prisma.StringFieldUpdateOperationsInput | string
+  quantite?: Prisma.FloatFieldUpdateOperationsInput | number
+  prixUnitaire?: Prisma.FloatFieldUpdateOperationsInput | number
+  montant?: Prisma.FloatFieldUpdateOperationsInput | number
+  reference?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 
@@ -900,74 +1553,108 @@ export type LigneFactureSelect<ExtArgs extends runtime.Types.Extensions.Internal
   id?: boolean
   factureId?: boolean
   acteId?: boolean
+  consultationActeId?: boolean
   serviceId?: boolean
+  demandeLaboratoireLigneId?: boolean
+  demandeImagerieId?: boolean
   designation?: boolean
   quantite?: boolean
   prixUnitaire?: boolean
   montant?: boolean
   reference?: boolean
+  createdAt?: boolean
   facture?: boolean | Prisma.FactureDefaultArgs<ExtArgs>
   acte?: boolean | Prisma.LigneFacture$acteArgs<ExtArgs>
+  consultationActe?: boolean | Prisma.LigneFacture$consultationActeArgs<ExtArgs>
   service?: boolean | Prisma.LigneFacture$serviceArgs<ExtArgs>
+  demandeLaboratoireLigne?: boolean | Prisma.LigneFacture$demandeLaboratoireLigneArgs<ExtArgs>
+  demandeImagerie?: boolean | Prisma.LigneFacture$demandeImagerieArgs<ExtArgs>
 }, ExtArgs["result"]["ligneFacture"]>
 
 export type LigneFactureSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   factureId?: boolean
   acteId?: boolean
+  consultationActeId?: boolean
   serviceId?: boolean
+  demandeLaboratoireLigneId?: boolean
+  demandeImagerieId?: boolean
   designation?: boolean
   quantite?: boolean
   prixUnitaire?: boolean
   montant?: boolean
   reference?: boolean
+  createdAt?: boolean
   facture?: boolean | Prisma.FactureDefaultArgs<ExtArgs>
   acte?: boolean | Prisma.LigneFacture$acteArgs<ExtArgs>
+  consultationActe?: boolean | Prisma.LigneFacture$consultationActeArgs<ExtArgs>
   service?: boolean | Prisma.LigneFacture$serviceArgs<ExtArgs>
+  demandeLaboratoireLigne?: boolean | Prisma.LigneFacture$demandeLaboratoireLigneArgs<ExtArgs>
+  demandeImagerie?: boolean | Prisma.LigneFacture$demandeImagerieArgs<ExtArgs>
 }, ExtArgs["result"]["ligneFacture"]>
 
 export type LigneFactureSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   factureId?: boolean
   acteId?: boolean
+  consultationActeId?: boolean
   serviceId?: boolean
+  demandeLaboratoireLigneId?: boolean
+  demandeImagerieId?: boolean
   designation?: boolean
   quantite?: boolean
   prixUnitaire?: boolean
   montant?: boolean
   reference?: boolean
+  createdAt?: boolean
   facture?: boolean | Prisma.FactureDefaultArgs<ExtArgs>
   acte?: boolean | Prisma.LigneFacture$acteArgs<ExtArgs>
+  consultationActe?: boolean | Prisma.LigneFacture$consultationActeArgs<ExtArgs>
   service?: boolean | Prisma.LigneFacture$serviceArgs<ExtArgs>
+  demandeLaboratoireLigne?: boolean | Prisma.LigneFacture$demandeLaboratoireLigneArgs<ExtArgs>
+  demandeImagerie?: boolean | Prisma.LigneFacture$demandeImagerieArgs<ExtArgs>
 }, ExtArgs["result"]["ligneFacture"]>
 
 export type LigneFactureSelectScalar = {
   id?: boolean
   factureId?: boolean
   acteId?: boolean
+  consultationActeId?: boolean
   serviceId?: boolean
+  demandeLaboratoireLigneId?: boolean
+  demandeImagerieId?: boolean
   designation?: boolean
   quantite?: boolean
   prixUnitaire?: boolean
   montant?: boolean
   reference?: boolean
+  createdAt?: boolean
 }
 
-export type LigneFactureOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "factureId" | "acteId" | "serviceId" | "designation" | "quantite" | "prixUnitaire" | "montant" | "reference", ExtArgs["result"]["ligneFacture"]>
+export type LigneFactureOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "factureId" | "acteId" | "consultationActeId" | "serviceId" | "demandeLaboratoireLigneId" | "demandeImagerieId" | "designation" | "quantite" | "prixUnitaire" | "montant" | "reference" | "createdAt", ExtArgs["result"]["ligneFacture"]>
 export type LigneFactureInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   facture?: boolean | Prisma.FactureDefaultArgs<ExtArgs>
   acte?: boolean | Prisma.LigneFacture$acteArgs<ExtArgs>
+  consultationActe?: boolean | Prisma.LigneFacture$consultationActeArgs<ExtArgs>
   service?: boolean | Prisma.LigneFacture$serviceArgs<ExtArgs>
+  demandeLaboratoireLigne?: boolean | Prisma.LigneFacture$demandeLaboratoireLigneArgs<ExtArgs>
+  demandeImagerie?: boolean | Prisma.LigneFacture$demandeImagerieArgs<ExtArgs>
 }
 export type LigneFactureIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   facture?: boolean | Prisma.FactureDefaultArgs<ExtArgs>
   acte?: boolean | Prisma.LigneFacture$acteArgs<ExtArgs>
+  consultationActe?: boolean | Prisma.LigneFacture$consultationActeArgs<ExtArgs>
   service?: boolean | Prisma.LigneFacture$serviceArgs<ExtArgs>
+  demandeLaboratoireLigne?: boolean | Prisma.LigneFacture$demandeLaboratoireLigneArgs<ExtArgs>
+  demandeImagerie?: boolean | Prisma.LigneFacture$demandeImagerieArgs<ExtArgs>
 }
 export type LigneFactureIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   facture?: boolean | Prisma.FactureDefaultArgs<ExtArgs>
   acte?: boolean | Prisma.LigneFacture$acteArgs<ExtArgs>
+  consultationActe?: boolean | Prisma.LigneFacture$consultationActeArgs<ExtArgs>
   service?: boolean | Prisma.LigneFacture$serviceArgs<ExtArgs>
+  demandeLaboratoireLigne?: boolean | Prisma.LigneFacture$demandeLaboratoireLigneArgs<ExtArgs>
+  demandeImagerie?: boolean | Prisma.LigneFacture$demandeImagerieArgs<ExtArgs>
 }
 
 export type $LigneFacturePayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -975,18 +1662,25 @@ export type $LigneFacturePayload<ExtArgs extends runtime.Types.Extensions.Intern
   objects: {
     facture: Prisma.$FacturePayload<ExtArgs>
     acte: Prisma.$ActeMedicalPayload<ExtArgs> | null
+    consultationActe: Prisma.$ConsultationActePayload<ExtArgs> | null
     service: Prisma.$ServicePayload<ExtArgs> | null
+    demandeLaboratoireLigne: Prisma.$DemandeLaboratoireLignePayload<ExtArgs> | null
+    demandeImagerie: Prisma.$DemandeImageriePayload<ExtArgs> | null
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: number
     factureId: number
     acteId: number | null
+    consultationActeId: number | null
     serviceId: number | null
+    demandeLaboratoireLigneId: number | null
+    demandeImagerieId: number | null
     designation: string
     quantite: number
     prixUnitaire: number
     montant: number
     reference: string | null
+    createdAt: Date
   }, ExtArgs["result"]["ligneFacture"]>
   composites: {}
 }
@@ -1383,7 +2077,10 @@ export interface Prisma__LigneFactureClient<T, Null = never, ExtArgs extends run
   readonly [Symbol.toStringTag]: "PrismaPromise"
   facture<T extends Prisma.FactureDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.FactureDefaultArgs<ExtArgs>>): Prisma.Prisma__FactureClient<runtime.Types.Result.GetResult<Prisma.$FacturePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   acte<T extends Prisma.LigneFacture$acteArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.LigneFacture$acteArgs<ExtArgs>>): Prisma.Prisma__ActeMedicalClient<runtime.Types.Result.GetResult<Prisma.$ActeMedicalPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+  consultationActe<T extends Prisma.LigneFacture$consultationActeArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.LigneFacture$consultationActeArgs<ExtArgs>>): Prisma.Prisma__ConsultationActeClient<runtime.Types.Result.GetResult<Prisma.$ConsultationActePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   service<T extends Prisma.LigneFacture$serviceArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.LigneFacture$serviceArgs<ExtArgs>>): Prisma.Prisma__ServiceClient<runtime.Types.Result.GetResult<Prisma.$ServicePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+  demandeLaboratoireLigne<T extends Prisma.LigneFacture$demandeLaboratoireLigneArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.LigneFacture$demandeLaboratoireLigneArgs<ExtArgs>>): Prisma.Prisma__DemandeLaboratoireLigneClient<runtime.Types.Result.GetResult<Prisma.$DemandeLaboratoireLignePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+  demandeImagerie<T extends Prisma.LigneFacture$demandeImagerieArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.LigneFacture$demandeImagerieArgs<ExtArgs>>): Prisma.Prisma__DemandeImagerieClient<runtime.Types.Result.GetResult<Prisma.$DemandeImageriePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1416,12 +2113,16 @@ export interface LigneFactureFieldRefs {
   readonly id: Prisma.FieldRef<"LigneFacture", 'Int'>
   readonly factureId: Prisma.FieldRef<"LigneFacture", 'Int'>
   readonly acteId: Prisma.FieldRef<"LigneFacture", 'Int'>
+  readonly consultationActeId: Prisma.FieldRef<"LigneFacture", 'Int'>
   readonly serviceId: Prisma.FieldRef<"LigneFacture", 'Int'>
+  readonly demandeLaboratoireLigneId: Prisma.FieldRef<"LigneFacture", 'Int'>
+  readonly demandeImagerieId: Prisma.FieldRef<"LigneFacture", 'Int'>
   readonly designation: Prisma.FieldRef<"LigneFacture", 'String'>
   readonly quantite: Prisma.FieldRef<"LigneFacture", 'Float'>
   readonly prixUnitaire: Prisma.FieldRef<"LigneFacture", 'Float'>
   readonly montant: Prisma.FieldRef<"LigneFacture", 'Float'>
   readonly reference: Prisma.FieldRef<"LigneFacture", 'String'>
+  readonly createdAt: Prisma.FieldRef<"LigneFacture", 'DateTime'>
 }
     
 
@@ -1840,6 +2541,25 @@ export type LigneFacture$acteArgs<ExtArgs extends runtime.Types.Extensions.Inter
 }
 
 /**
+ * LigneFacture.consultationActe
+ */
+export type LigneFacture$consultationActeArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the ConsultationActe
+   */
+  select?: Prisma.ConsultationActeSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the ConsultationActe
+   */
+  omit?: Prisma.ConsultationActeOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.ConsultationActeInclude<ExtArgs> | null
+  where?: Prisma.ConsultationActeWhereInput
+}
+
+/**
  * LigneFacture.service
  */
 export type LigneFacture$serviceArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1856,6 +2576,44 @@ export type LigneFacture$serviceArgs<ExtArgs extends runtime.Types.Extensions.In
    */
   include?: Prisma.ServiceInclude<ExtArgs> | null
   where?: Prisma.ServiceWhereInput
+}
+
+/**
+ * LigneFacture.demandeLaboratoireLigne
+ */
+export type LigneFacture$demandeLaboratoireLigneArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the DemandeLaboratoireLigne
+   */
+  select?: Prisma.DemandeLaboratoireLigneSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the DemandeLaboratoireLigne
+   */
+  omit?: Prisma.DemandeLaboratoireLigneOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.DemandeLaboratoireLigneInclude<ExtArgs> | null
+  where?: Prisma.DemandeLaboratoireLigneWhereInput
+}
+
+/**
+ * LigneFacture.demandeImagerie
+ */
+export type LigneFacture$demandeImagerieArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the DemandeImagerie
+   */
+  select?: Prisma.DemandeImagerieSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the DemandeImagerie
+   */
+  omit?: Prisma.DemandeImagerieOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.DemandeImagerieInclude<ExtArgs> | null
+  where?: Prisma.DemandeImagerieWhereInput
 }
 
 /**

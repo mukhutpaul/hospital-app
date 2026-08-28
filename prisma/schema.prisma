@@ -162,11 +162,11 @@ model Service {
   chambres         Chambre[]
   demandesLabo     DemandeLaboratoire[]
   demandesImagerie DemandeImagerie[]
-  lignesFacture LigneFacture[]
-  proformaLignes ProformaLigne[]
+  lignesFacture    LigneFacture[]
+  proformaLignes   ProformaLigne[]
 
   transfertsAnciens  Transfert[] @relation("AncienService")
-  transfertsNouveaux Transfert[] @relation("NouveauService") 
+  transfertsNouveaux Transfert[] @relation("NouveauService")
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -295,8 +295,7 @@ model Patient {
   constantes       Constante[]
   sorties          Sortie[]
   dispensations    Dispensation[]
-  proformas Proforma[]
-  
+  proformas        Proforma[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -409,8 +408,8 @@ model Admission {
   consultation Consultation? @relation("AdmissionConsultation")
 
   constantes Constante[]
-  proformas Proforma[]
-  factures  Facture[]
+  proformas  Proforma[]
+  factures   Facture[]
 
   hospitalisation Hospitalisation?
 
@@ -517,10 +516,9 @@ model Consultation {
 
   demandesImagerie DemandeImagerie[]
 
-  proformas  Proforma[]
+  proformas Proforma[]
   factures  Facture[]
-  actes ConsultationActe[]
-
+  actes     ConsultationActe[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -656,12 +654,14 @@ model DemandeLaboratoireLigne {
   id Int @id @default(autoincrement())
 
   demandeId Int
-  demande   DemandeLaboratoire @relation(fields: [demandeId], references: [id], onDelete: Cascade)
+  demande DemandeLaboratoire @relation(fields: [demandeId],references: [id],onDelete: Cascade)
 
   examenId Int
-  examen   ExamenLaboratoire @relation(fields: [examenId], references: [id])
+  examen ExamenLaboratoire @relation(fields: [examenId],references: [id])
 
   prix Float
+
+  lignesFacture LigneFacture[]
 }
 
 model ResultatLaboratoire {
@@ -712,29 +712,30 @@ model DemandeImagerie {
   patient   Patient @relation(fields: [patientId], references: [id])
 
   consultationId Int?
-  consultation   Consultation? @relation(fields: [consultationId], references: [idConsultation])
+  consultation Consultation? @relation(fields: [consultationId],references: [idConsultation])
 
   serviceId Int?
-  service   Service? @relation(fields: [serviceId], references: [id])
+  service Service? @relation(fields: [serviceId], references: [id])
 
   examenId Int
-  examen   ExamenImagerie @relation(fields: [examenId], references: [id])
+  examen ExamenImagerie @relation(fields: [examenId],references: [id])
 
-  motif   String?
+  motif String?
   urgence Boolean @default(false)
-  statut  String  @default("DEMANDE")
+  statut String @default("DEMANDE")
 
-  dateDemande DateTime  @default(now())
-  dateExamen  DateTime?
+  dateDemande DateTime @default(now())
+  dateExamen DateTime?
 
   compteRendu String?
-  conclusion  String?
-  fichier     String?
+  conclusion String?
+  fichier String?
+
+  ligneFactures LigneFacture[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
-
 /**
  * ==========================================================
  * PHARMACIE
@@ -956,9 +957,9 @@ model Lit {
 
   statut String @default("LIBRE")
 
-  hospitalisations Hospitalisation[]
-  anciensTransferts  Transfert[] @relation("AncienLit")
-  nouveauxTransferts Transfert[] @relation("NouveauLit")
+  hospitalisations   Hospitalisation[]
+  anciensTransferts  Transfert[]       @relation("AncienLit")
+  nouveauxTransferts Transfert[]       @relation("NouveauLit")
 
   @@unique([chambreId, numero])
 }
@@ -993,8 +994,8 @@ model Hospitalisation {
   transferts Transfert[]
   soins      Soin[]
   sorties    Sortie[]
-  proformas Proforma[]
-  factures  Facture[]
+  proformas  Proforma[]
+  factures   Facture[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -1069,9 +1070,9 @@ model ActeMedical {
   devise  String  @default("USD")
   actif   Boolean @default(true)
 
-  lignesFacture LigneFacture[]
+  lignesFacture  LigneFacture[]
   proformaLignes ProformaLigne[]
-  consultations ConsultationActe[]
+  consultations  ConsultationActe[]
 
   createdAt DateTime @default(now())
 }
@@ -1100,17 +1101,17 @@ model Facture {
   hospitalisation   Hospitalisation? @relation(fields: [hospitalisationId], references: [id])
 
   // SOURCE COMMERCIALE
-  proformaId Int? @unique
+  proformaId Int?      @unique
   proforma   Proforma? @relation(fields: [proformaId], references: [id])
 
   dateFacture  DateTime  @default(now())
   dateEcheance DateTime?
 
-  montantBrut   Float @default(0)
-  reduction     Float @default(0)
-  montantTotal  Float @default(0)
-  montantPaye   Float @default(0)
-  reste         Float @default(0)
+  montantBrut  Float @default(0)
+  reduction    Float @default(0)
+  montantTotal Float @default(0)
+  montantPaye  Float @default(0)
+  reste        Float @default(0)
 
   typeReduction String?
 
@@ -1134,21 +1135,39 @@ model LigneFacture {
   id Int @id @default(autoincrement())
 
   factureId Int
-  facture   Facture @relation(fields: [factureId], references: [id], onDelete: Cascade)
+  facture Facture @relation(fields: [factureId],references: [id],onDelete: Cascade)
 
   acteId Int?
-  acte   ActeMedical? @relation(fields: [acteId], references: [id])
+  acte ActeMedical? @relation(fields: [acteId],references: [id])
+
+  consultationActeId Int?
+  consultationActe ConsultationActe? @relation(fields: [consultationActeId],references: [id])
 
   serviceId Int?
-  service   Service? @relation(fields: [serviceId], references: [id])
+  service Service? @relation(fields: [serviceId],references: [id])
+
+  demandeLaboratoireLigneId Int?
+
+  demandeLaboratoireLigne DemandeLaboratoireLigne? @relation(fields: [demandeLaboratoireLigneId],references: [id])
+
+  demandeImagerieId Int?
+
+  demandeImagerie DemandeImagerie? @relation(fields: [demandeImagerieId],references: [id])
 
   designation String
-  quantite    Float  @default(1)
+  quantite Float @default(1)
 
   prixUnitaire Float
-  montant      Float
+  montant Float
 
   reference String?
+
+  createdAt DateTime @default(now())
+
+  @@index([factureId])
+  @@index([acteId])
+  @@index([consultationActeId])
+  @@index([serviceId])
 }
 
 /**
@@ -1288,32 +1307,32 @@ model AuditLog {
 // ==========================================================
 
 model Proforma {
-  id Int @id @default(autoincrement())
+  id     Int    @id @default(autoincrement())
   numero String @unique
 
   patientId Int
-  patient Patient @relation(fields: [patientId], references: [id])
+  patient   Patient @relation(fields: [patientId], references: [id])
 
   consultationId Int?
-  consultation Consultation? @relation(fields: [consultationId], references: [idConsultation])
+  consultation   Consultation? @relation(fields: [consultationId], references: [idConsultation])
 
   admissionId Int?
-  admission Admission? @relation(fields: [admissionId], references: [id])
+  admission   Admission? @relation(fields: [admissionId], references: [id])
 
   hospitalisationId Int?
-  hospitalisation Hospitalisation? @relation(fields: [hospitalisationId], references: [id])
+  hospitalisation   Hospitalisation? @relation(fields: [hospitalisationId], references: [id])
 
-  montantBrut Float @default(0)
+  montantBrut   Float   @default(0)
   typeReduction String?
-  reduction Float @default(0)
-  montantTotal Float @default(0)
-  devise String @default("USD")
-  statut String @default("BROUILLON")
+  reduction     Float   @default(0)
+  montantTotal  Float   @default(0)
+  devise        String  @default("USD")
+  statut        String  @default("BROUILLON")
 
-  dateEmission DateTime @default(now())
+  dateEmission   DateTime  @default(now())
   dateExpiration DateTime?
 
-  lignes ProformaLigne[]
+  lignes  ProformaLigne[]
   facture Facture?
 
   createdAt DateTime @default(now())
@@ -1330,26 +1349,26 @@ model ProformaLigne {
   id Int @id @default(autoincrement())
 
   proformaId Int
-  proforma Proforma @relation(fields: [proformaId], references: [id], onDelete: Cascade)
+  proforma   Proforma @relation(fields: [proformaId], references: [id], onDelete: Cascade)
 
   typeOrigine String
-  acteId Int?
-  acte ActeMedical? @relation(fields: [acteId], references: [id])
+  acteId      Int?
+  acte        ActeMedical? @relation(fields: [acteId], references: [id])
 
   serviceId Int?
   service   Service? @relation(fields: [serviceId], references: [id])
 
-  consultationId Int?
+  consultationId       Int?
   demandeLaboratoireId Int?
-  demandeImagerieId Int?
-  dispensationId Int?
-  hospitalisationId Int?
+  demandeImagerieId    Int?
+  dispensationId       Int?
+  hospitalisationId    Int?
 
-  designation String
-  quantite Float @default(1)
+  designation  String
+  quantite     Float   @default(1)
   prixUnitaire Float
-  montant Float
-  reference String?
+  montant      Float
+  reference    String?
 
   createdAt DateTime @default(now())
 
@@ -1365,10 +1384,10 @@ model ConsultationActe {
   id Int @id @default(autoincrement())
 
   consultationId Int
-  consultation Consultation @relation(fields: [consultationId],references: [idConsultation],onDelete: Cascade)
+  consultation Consultation @relation(fields: [consultationId],references: [idConsultation], onDelete: Cascade)
 
   acteId Int
-  acte ActeMedical @relation(fields: [acteId],references: [id])
+  acte ActeMedical @relation(fields: [acteId],references: [id] )
 
   quantite Float @default(1)
 
@@ -1378,8 +1397,9 @@ model ConsultationActe {
   observation String?
 
   dateActe DateTime @default(now())
-
   createdAt DateTime @default(now())
+
+  lignesFacture LigneFacture[]
 
   @@index([consultationId])
   @@index([acteId])

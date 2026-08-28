@@ -270,6 +270,7 @@ export type ConsultationActeWhereInput = {
   createdAt?: Prisma.DateTimeFilter<"ConsultationActe"> | Date | string
   consultation?: Prisma.XOR<Prisma.ConsultationScalarRelationFilter, Prisma.ConsultationWhereInput>
   acte?: Prisma.XOR<Prisma.ActeMedicalScalarRelationFilter, Prisma.ActeMedicalWhereInput>
+  lignesFacture?: Prisma.LigneFactureListRelationFilter
 }
 
 export type ConsultationActeOrderByWithRelationInput = {
@@ -284,6 +285,7 @@ export type ConsultationActeOrderByWithRelationInput = {
   createdAt?: Prisma.SortOrder
   consultation?: Prisma.ConsultationOrderByWithRelationInput
   acte?: Prisma.ActeMedicalOrderByWithRelationInput
+  lignesFacture?: Prisma.LigneFactureOrderByRelationAggregateInput
 }
 
 export type ConsultationActeWhereUniqueInput = Prisma.AtLeast<{
@@ -301,6 +303,7 @@ export type ConsultationActeWhereUniqueInput = Prisma.AtLeast<{
   createdAt?: Prisma.DateTimeFilter<"ConsultationActe"> | Date | string
   consultation?: Prisma.XOR<Prisma.ConsultationScalarRelationFilter, Prisma.ConsultationWhereInput>
   acte?: Prisma.XOR<Prisma.ActeMedicalScalarRelationFilter, Prisma.ActeMedicalWhereInput>
+  lignesFacture?: Prisma.LigneFactureListRelationFilter
 }, "id">
 
 export type ConsultationActeOrderByWithAggregationInput = {
@@ -344,6 +347,7 @@ export type ConsultationActeCreateInput = {
   createdAt?: Date | string
   consultation: Prisma.ConsultationCreateNestedOneWithoutActesInput
   acte: Prisma.ActeMedicalCreateNestedOneWithoutConsultationsInput
+  lignesFacture?: Prisma.LigneFactureCreateNestedManyWithoutConsultationActeInput
 }
 
 export type ConsultationActeUncheckedCreateInput = {
@@ -356,6 +360,7 @@ export type ConsultationActeUncheckedCreateInput = {
   observation?: string | null
   dateActe?: Date | string
   createdAt?: Date | string
+  lignesFacture?: Prisma.LigneFactureUncheckedCreateNestedManyWithoutConsultationActeInput
 }
 
 export type ConsultationActeUpdateInput = {
@@ -367,6 +372,7 @@ export type ConsultationActeUpdateInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   consultation?: Prisma.ConsultationUpdateOneRequiredWithoutActesNestedInput
   acte?: Prisma.ActeMedicalUpdateOneRequiredWithoutConsultationsNestedInput
+  lignesFacture?: Prisma.LigneFactureUpdateManyWithoutConsultationActeNestedInput
 }
 
 export type ConsultationActeUncheckedUpdateInput = {
@@ -379,6 +385,7 @@ export type ConsultationActeUncheckedUpdateInput = {
   observation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   dateActe?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  lignesFacture?: Prisma.LigneFactureUncheckedUpdateManyWithoutConsultationActeNestedInput
 }
 
 export type ConsultationActeCreateManyInput = {
@@ -422,6 +429,11 @@ export type ConsultationActeListRelationFilter = {
 
 export type ConsultationActeOrderByRelationAggregateInput = {
   _count?: Prisma.SortOrder
+}
+
+export type ConsultationActeNullableScalarRelationFilter = {
+  is?: Prisma.ConsultationActeWhereInput | null
+  isNot?: Prisma.ConsultationActeWhereInput | null
 }
 
 export type ConsultationActeCountOrderByAggregateInput = {
@@ -562,6 +574,22 @@ export type ConsultationActeUncheckedUpdateManyWithoutActeNestedInput = {
   deleteMany?: Prisma.ConsultationActeScalarWhereInput | Prisma.ConsultationActeScalarWhereInput[]
 }
 
+export type ConsultationActeCreateNestedOneWithoutLignesFactureInput = {
+  create?: Prisma.XOR<Prisma.ConsultationActeCreateWithoutLignesFactureInput, Prisma.ConsultationActeUncheckedCreateWithoutLignesFactureInput>
+  connectOrCreate?: Prisma.ConsultationActeCreateOrConnectWithoutLignesFactureInput
+  connect?: Prisma.ConsultationActeWhereUniqueInput
+}
+
+export type ConsultationActeUpdateOneWithoutLignesFactureNestedInput = {
+  create?: Prisma.XOR<Prisma.ConsultationActeCreateWithoutLignesFactureInput, Prisma.ConsultationActeUncheckedCreateWithoutLignesFactureInput>
+  connectOrCreate?: Prisma.ConsultationActeCreateOrConnectWithoutLignesFactureInput
+  upsert?: Prisma.ConsultationActeUpsertWithoutLignesFactureInput
+  disconnect?: Prisma.ConsultationActeWhereInput | boolean
+  delete?: Prisma.ConsultationActeWhereInput | boolean
+  connect?: Prisma.ConsultationActeWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.ConsultationActeUpdateToOneWithWhereWithoutLignesFactureInput, Prisma.ConsultationActeUpdateWithoutLignesFactureInput>, Prisma.ConsultationActeUncheckedUpdateWithoutLignesFactureInput>
+}
+
 export type ConsultationActeCreateWithoutConsultationInput = {
   quantite?: number
   prixUnitaire: number
@@ -570,6 +598,7 @@ export type ConsultationActeCreateWithoutConsultationInput = {
   dateActe?: Date | string
   createdAt?: Date | string
   acte: Prisma.ActeMedicalCreateNestedOneWithoutConsultationsInput
+  lignesFacture?: Prisma.LigneFactureCreateNestedManyWithoutConsultationActeInput
 }
 
 export type ConsultationActeUncheckedCreateWithoutConsultationInput = {
@@ -581,6 +610,7 @@ export type ConsultationActeUncheckedCreateWithoutConsultationInput = {
   observation?: string | null
   dateActe?: Date | string
   createdAt?: Date | string
+  lignesFacture?: Prisma.LigneFactureUncheckedCreateNestedManyWithoutConsultationActeInput
 }
 
 export type ConsultationActeCreateOrConnectWithoutConsultationInput = {
@@ -631,6 +661,7 @@ export type ConsultationActeCreateWithoutActeInput = {
   dateActe?: Date | string
   createdAt?: Date | string
   consultation: Prisma.ConsultationCreateNestedOneWithoutActesInput
+  lignesFacture?: Prisma.LigneFactureCreateNestedManyWithoutConsultationActeInput
 }
 
 export type ConsultationActeUncheckedCreateWithoutActeInput = {
@@ -642,6 +673,7 @@ export type ConsultationActeUncheckedCreateWithoutActeInput = {
   observation?: string | null
   dateActe?: Date | string
   createdAt?: Date | string
+  lignesFacture?: Prisma.LigneFactureUncheckedCreateNestedManyWithoutConsultationActeInput
 }
 
 export type ConsultationActeCreateOrConnectWithoutActeInput = {
@@ -669,6 +701,68 @@ export type ConsultationActeUpdateManyWithWhereWithoutActeInput = {
   data: Prisma.XOR<Prisma.ConsultationActeUpdateManyMutationInput, Prisma.ConsultationActeUncheckedUpdateManyWithoutActeInput>
 }
 
+export type ConsultationActeCreateWithoutLignesFactureInput = {
+  quantite?: number
+  prixUnitaire: number
+  montant: number
+  observation?: string | null
+  dateActe?: Date | string
+  createdAt?: Date | string
+  consultation: Prisma.ConsultationCreateNestedOneWithoutActesInput
+  acte: Prisma.ActeMedicalCreateNestedOneWithoutConsultationsInput
+}
+
+export type ConsultationActeUncheckedCreateWithoutLignesFactureInput = {
+  id?: number
+  consultationId: number
+  acteId: number
+  quantite?: number
+  prixUnitaire: number
+  montant: number
+  observation?: string | null
+  dateActe?: Date | string
+  createdAt?: Date | string
+}
+
+export type ConsultationActeCreateOrConnectWithoutLignesFactureInput = {
+  where: Prisma.ConsultationActeWhereUniqueInput
+  create: Prisma.XOR<Prisma.ConsultationActeCreateWithoutLignesFactureInput, Prisma.ConsultationActeUncheckedCreateWithoutLignesFactureInput>
+}
+
+export type ConsultationActeUpsertWithoutLignesFactureInput = {
+  update: Prisma.XOR<Prisma.ConsultationActeUpdateWithoutLignesFactureInput, Prisma.ConsultationActeUncheckedUpdateWithoutLignesFactureInput>
+  create: Prisma.XOR<Prisma.ConsultationActeCreateWithoutLignesFactureInput, Prisma.ConsultationActeUncheckedCreateWithoutLignesFactureInput>
+  where?: Prisma.ConsultationActeWhereInput
+}
+
+export type ConsultationActeUpdateToOneWithWhereWithoutLignesFactureInput = {
+  where?: Prisma.ConsultationActeWhereInput
+  data: Prisma.XOR<Prisma.ConsultationActeUpdateWithoutLignesFactureInput, Prisma.ConsultationActeUncheckedUpdateWithoutLignesFactureInput>
+}
+
+export type ConsultationActeUpdateWithoutLignesFactureInput = {
+  quantite?: Prisma.FloatFieldUpdateOperationsInput | number
+  prixUnitaire?: Prisma.FloatFieldUpdateOperationsInput | number
+  montant?: Prisma.FloatFieldUpdateOperationsInput | number
+  observation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  dateActe?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  consultation?: Prisma.ConsultationUpdateOneRequiredWithoutActesNestedInput
+  acte?: Prisma.ActeMedicalUpdateOneRequiredWithoutConsultationsNestedInput
+}
+
+export type ConsultationActeUncheckedUpdateWithoutLignesFactureInput = {
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  consultationId?: Prisma.IntFieldUpdateOperationsInput | number
+  acteId?: Prisma.IntFieldUpdateOperationsInput | number
+  quantite?: Prisma.FloatFieldUpdateOperationsInput | number
+  prixUnitaire?: Prisma.FloatFieldUpdateOperationsInput | number
+  montant?: Prisma.FloatFieldUpdateOperationsInput | number
+  observation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  dateActe?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
 export type ConsultationActeCreateManyConsultationInput = {
   id?: number
   acteId: number
@@ -688,6 +782,7 @@ export type ConsultationActeUpdateWithoutConsultationInput = {
   dateActe?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   acte?: Prisma.ActeMedicalUpdateOneRequiredWithoutConsultationsNestedInput
+  lignesFacture?: Prisma.LigneFactureUpdateManyWithoutConsultationActeNestedInput
 }
 
 export type ConsultationActeUncheckedUpdateWithoutConsultationInput = {
@@ -699,6 +794,7 @@ export type ConsultationActeUncheckedUpdateWithoutConsultationInput = {
   observation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   dateActe?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  lignesFacture?: Prisma.LigneFactureUncheckedUpdateManyWithoutConsultationActeNestedInput
 }
 
 export type ConsultationActeUncheckedUpdateManyWithoutConsultationInput = {
@@ -731,6 +827,7 @@ export type ConsultationActeUpdateWithoutActeInput = {
   dateActe?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   consultation?: Prisma.ConsultationUpdateOneRequiredWithoutActesNestedInput
+  lignesFacture?: Prisma.LigneFactureUpdateManyWithoutConsultationActeNestedInput
 }
 
 export type ConsultationActeUncheckedUpdateWithoutActeInput = {
@@ -742,6 +839,7 @@ export type ConsultationActeUncheckedUpdateWithoutActeInput = {
   observation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   dateActe?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  lignesFacture?: Prisma.LigneFactureUncheckedUpdateManyWithoutConsultationActeNestedInput
 }
 
 export type ConsultationActeUncheckedUpdateManyWithoutActeInput = {
@@ -756,6 +854,35 @@ export type ConsultationActeUncheckedUpdateManyWithoutActeInput = {
 }
 
 
+/**
+ * Count Type ConsultationActeCountOutputType
+ */
+
+export type ConsultationActeCountOutputType = {
+  lignesFacture: number
+}
+
+export type ConsultationActeCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  lignesFacture?: boolean | ConsultationActeCountOutputTypeCountLignesFactureArgs
+}
+
+/**
+ * ConsultationActeCountOutputType without action
+ */
+export type ConsultationActeCountOutputTypeDefaultArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the ConsultationActeCountOutputType
+   */
+  select?: Prisma.ConsultationActeCountOutputTypeSelect<ExtArgs> | null
+}
+
+/**
+ * ConsultationActeCountOutputType without action
+ */
+export type ConsultationActeCountOutputTypeCountLignesFactureArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.LigneFactureWhereInput
+}
+
 
 export type ConsultationActeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -769,6 +896,8 @@ export type ConsultationActeSelect<ExtArgs extends runtime.Types.Extensions.Inte
   createdAt?: boolean
   consultation?: boolean | Prisma.ConsultationDefaultArgs<ExtArgs>
   acte?: boolean | Prisma.ActeMedicalDefaultArgs<ExtArgs>
+  lignesFacture?: boolean | Prisma.ConsultationActe$lignesFactureArgs<ExtArgs>
+  _count?: boolean | Prisma.ConsultationActeCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["consultationActe"]>
 
 export type ConsultationActeSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -815,6 +944,8 @@ export type ConsultationActeOmit<ExtArgs extends runtime.Types.Extensions.Intern
 export type ConsultationActeInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   consultation?: boolean | Prisma.ConsultationDefaultArgs<ExtArgs>
   acte?: boolean | Prisma.ActeMedicalDefaultArgs<ExtArgs>
+  lignesFacture?: boolean | Prisma.ConsultationActe$lignesFactureArgs<ExtArgs>
+  _count?: boolean | Prisma.ConsultationActeCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type ConsultationActeIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   consultation?: boolean | Prisma.ConsultationDefaultArgs<ExtArgs>
@@ -830,6 +961,7 @@ export type $ConsultationActePayload<ExtArgs extends runtime.Types.Extensions.In
   objects: {
     consultation: Prisma.$ConsultationPayload<ExtArgs>
     acte: Prisma.$ActeMedicalPayload<ExtArgs>
+    lignesFacture: Prisma.$LigneFacturePayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: number
@@ -1237,6 +1369,7 @@ export interface Prisma__ConsultationActeClient<T, Null = never, ExtArgs extends
   readonly [Symbol.toStringTag]: "PrismaPromise"
   consultation<T extends Prisma.ConsultationDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.ConsultationDefaultArgs<ExtArgs>>): Prisma.Prisma__ConsultationClient<runtime.Types.Result.GetResult<Prisma.$ConsultationPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   acte<T extends Prisma.ActeMedicalDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.ActeMedicalDefaultArgs<ExtArgs>>): Prisma.Prisma__ActeMedicalClient<runtime.Types.Result.GetResult<Prisma.$ActeMedicalPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+  lignesFacture<T extends Prisma.ConsultationActe$lignesFactureArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.ConsultationActe$lignesFactureArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$LigneFacturePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1671,6 +1804,30 @@ export type ConsultationActeDeleteManyArgs<ExtArgs extends runtime.Types.Extensi
    * Limit how many ConsultationActes to delete.
    */
   limit?: number
+}
+
+/**
+ * ConsultationActe.lignesFacture
+ */
+export type ConsultationActe$lignesFactureArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the LigneFacture
+   */
+  select?: Prisma.LigneFactureSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the LigneFacture
+   */
+  omit?: Prisma.LigneFactureOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.LigneFactureInclude<ExtArgs> | null
+  where?: Prisma.LigneFactureWhereInput
+  orderBy?: Prisma.LigneFactureOrderByWithRelationInput | Prisma.LigneFactureOrderByWithRelationInput[]
+  cursor?: Prisma.LigneFactureWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.LigneFactureScalarFieldEnum | Prisma.LigneFactureScalarFieldEnum[]
 }
 
 /**

@@ -324,6 +324,7 @@ export type DemandeImagerieWhereInput = {
   consultation?: Prisma.XOR<Prisma.ConsultationNullableScalarRelationFilter, Prisma.ConsultationWhereInput> | null
   service?: Prisma.XOR<Prisma.ServiceNullableScalarRelationFilter, Prisma.ServiceWhereInput> | null
   examen?: Prisma.XOR<Prisma.ExamenImagerieScalarRelationFilter, Prisma.ExamenImagerieWhereInput>
+  ligneFactures?: Prisma.LigneFactureListRelationFilter
 }
 
 export type DemandeImagerieOrderByWithRelationInput = {
@@ -347,6 +348,7 @@ export type DemandeImagerieOrderByWithRelationInput = {
   consultation?: Prisma.ConsultationOrderByWithRelationInput
   service?: Prisma.ServiceOrderByWithRelationInput
   examen?: Prisma.ExamenImagerieOrderByWithRelationInput
+  ligneFactures?: Prisma.LigneFactureOrderByRelationAggregateInput
 }
 
 export type DemandeImagerieWhereUniqueInput = Prisma.AtLeast<{
@@ -373,6 +375,7 @@ export type DemandeImagerieWhereUniqueInput = Prisma.AtLeast<{
   consultation?: Prisma.XOR<Prisma.ConsultationNullableScalarRelationFilter, Prisma.ConsultationWhereInput> | null
   service?: Prisma.XOR<Prisma.ServiceNullableScalarRelationFilter, Prisma.ServiceWhereInput> | null
   examen?: Prisma.XOR<Prisma.ExamenImagerieScalarRelationFilter, Prisma.ExamenImagerieWhereInput>
+  ligneFactures?: Prisma.LigneFactureListRelationFilter
 }, "id" | "numero">
 
 export type DemandeImagerieOrderByWithAggregationInput = {
@@ -437,6 +440,7 @@ export type DemandeImagerieCreateInput = {
   consultation?: Prisma.ConsultationCreateNestedOneWithoutDemandesImagerieInput
   service?: Prisma.ServiceCreateNestedOneWithoutDemandesImagerieInput
   examen: Prisma.ExamenImagerieCreateNestedOneWithoutDemandesInput
+  ligneFactures?: Prisma.LigneFactureCreateNestedManyWithoutDemandeImagerieInput
 }
 
 export type DemandeImagerieUncheckedCreateInput = {
@@ -456,6 +460,7 @@ export type DemandeImagerieUncheckedCreateInput = {
   fichier?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  ligneFactures?: Prisma.LigneFactureUncheckedCreateNestedManyWithoutDemandeImagerieInput
 }
 
 export type DemandeImagerieUpdateInput = {
@@ -474,6 +479,7 @@ export type DemandeImagerieUpdateInput = {
   consultation?: Prisma.ConsultationUpdateOneWithoutDemandesImagerieNestedInput
   service?: Prisma.ServiceUpdateOneWithoutDemandesImagerieNestedInput
   examen?: Prisma.ExamenImagerieUpdateOneRequiredWithoutDemandesNestedInput
+  ligneFactures?: Prisma.LigneFactureUpdateManyWithoutDemandeImagerieNestedInput
 }
 
 export type DemandeImagerieUncheckedUpdateInput = {
@@ -493,6 +499,7 @@ export type DemandeImagerieUncheckedUpdateInput = {
   fichier?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  ligneFactures?: Prisma.LigneFactureUncheckedUpdateManyWithoutDemandeImagerieNestedInput
 }
 
 export type DemandeImagerieCreateManyInput = {
@@ -628,6 +635,11 @@ export type DemandeImagerieSumOrderByAggregateInput = {
   consultationId?: Prisma.SortOrder
   serviceId?: Prisma.SortOrder
   examenId?: Prisma.SortOrder
+}
+
+export type DemandeImagerieNullableScalarRelationFilter = {
+  is?: Prisma.DemandeImagerieWhereInput | null
+  isNot?: Prisma.DemandeImagerieWhereInput | null
 }
 
 export type DemandeImagerieCreateNestedManyWithoutServiceInput = {
@@ -798,6 +810,22 @@ export type DemandeImagerieUncheckedUpdateManyWithoutExamenNestedInput = {
   deleteMany?: Prisma.DemandeImagerieScalarWhereInput | Prisma.DemandeImagerieScalarWhereInput[]
 }
 
+export type DemandeImagerieCreateNestedOneWithoutLigneFacturesInput = {
+  create?: Prisma.XOR<Prisma.DemandeImagerieCreateWithoutLigneFacturesInput, Prisma.DemandeImagerieUncheckedCreateWithoutLigneFacturesInput>
+  connectOrCreate?: Prisma.DemandeImagerieCreateOrConnectWithoutLigneFacturesInput
+  connect?: Prisma.DemandeImagerieWhereUniqueInput
+}
+
+export type DemandeImagerieUpdateOneWithoutLigneFacturesNestedInput = {
+  create?: Prisma.XOR<Prisma.DemandeImagerieCreateWithoutLigneFacturesInput, Prisma.DemandeImagerieUncheckedCreateWithoutLigneFacturesInput>
+  connectOrCreate?: Prisma.DemandeImagerieCreateOrConnectWithoutLigneFacturesInput
+  upsert?: Prisma.DemandeImagerieUpsertWithoutLigneFacturesInput
+  disconnect?: Prisma.DemandeImagerieWhereInput | boolean
+  delete?: Prisma.DemandeImagerieWhereInput | boolean
+  connect?: Prisma.DemandeImagerieWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.DemandeImagerieUpdateToOneWithWhereWithoutLigneFacturesInput, Prisma.DemandeImagerieUpdateWithoutLigneFacturesInput>, Prisma.DemandeImagerieUncheckedUpdateWithoutLigneFacturesInput>
+}
+
 export type DemandeImagerieCreateWithoutServiceInput = {
   numero: string
   motif?: string | null
@@ -813,6 +841,7 @@ export type DemandeImagerieCreateWithoutServiceInput = {
   patient: Prisma.PatientCreateNestedOneWithoutDemandesImagerieInput
   consultation?: Prisma.ConsultationCreateNestedOneWithoutDemandesImagerieInput
   examen: Prisma.ExamenImagerieCreateNestedOneWithoutDemandesInput
+  ligneFactures?: Prisma.LigneFactureCreateNestedManyWithoutDemandeImagerieInput
 }
 
 export type DemandeImagerieUncheckedCreateWithoutServiceInput = {
@@ -831,6 +860,7 @@ export type DemandeImagerieUncheckedCreateWithoutServiceInput = {
   fichier?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  ligneFactures?: Prisma.LigneFactureUncheckedCreateNestedManyWithoutDemandeImagerieInput
 }
 
 export type DemandeImagerieCreateOrConnectWithoutServiceInput = {
@@ -895,6 +925,7 @@ export type DemandeImagerieCreateWithoutPatientInput = {
   consultation?: Prisma.ConsultationCreateNestedOneWithoutDemandesImagerieInput
   service?: Prisma.ServiceCreateNestedOneWithoutDemandesImagerieInput
   examen: Prisma.ExamenImagerieCreateNestedOneWithoutDemandesInput
+  ligneFactures?: Prisma.LigneFactureCreateNestedManyWithoutDemandeImagerieInput
 }
 
 export type DemandeImagerieUncheckedCreateWithoutPatientInput = {
@@ -913,6 +944,7 @@ export type DemandeImagerieUncheckedCreateWithoutPatientInput = {
   fichier?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  ligneFactures?: Prisma.LigneFactureUncheckedCreateNestedManyWithoutDemandeImagerieInput
 }
 
 export type DemandeImagerieCreateOrConnectWithoutPatientInput = {
@@ -955,6 +987,7 @@ export type DemandeImagerieCreateWithoutConsultationInput = {
   patient: Prisma.PatientCreateNestedOneWithoutDemandesImagerieInput
   service?: Prisma.ServiceCreateNestedOneWithoutDemandesImagerieInput
   examen: Prisma.ExamenImagerieCreateNestedOneWithoutDemandesInput
+  ligneFactures?: Prisma.LigneFactureCreateNestedManyWithoutDemandeImagerieInput
 }
 
 export type DemandeImagerieUncheckedCreateWithoutConsultationInput = {
@@ -973,6 +1006,7 @@ export type DemandeImagerieUncheckedCreateWithoutConsultationInput = {
   fichier?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  ligneFactures?: Prisma.LigneFactureUncheckedCreateNestedManyWithoutDemandeImagerieInput
 }
 
 export type DemandeImagerieCreateOrConnectWithoutConsultationInput = {
@@ -1015,6 +1049,7 @@ export type DemandeImagerieCreateWithoutExamenInput = {
   patient: Prisma.PatientCreateNestedOneWithoutDemandesImagerieInput
   consultation?: Prisma.ConsultationCreateNestedOneWithoutDemandesImagerieInput
   service?: Prisma.ServiceCreateNestedOneWithoutDemandesImagerieInput
+  ligneFactures?: Prisma.LigneFactureCreateNestedManyWithoutDemandeImagerieInput
 }
 
 export type DemandeImagerieUncheckedCreateWithoutExamenInput = {
@@ -1033,6 +1068,7 @@ export type DemandeImagerieUncheckedCreateWithoutExamenInput = {
   fichier?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  ligneFactures?: Prisma.LigneFactureUncheckedCreateNestedManyWithoutDemandeImagerieInput
 }
 
 export type DemandeImagerieCreateOrConnectWithoutExamenInput = {
@@ -1058,6 +1094,96 @@ export type DemandeImagerieUpdateWithWhereUniqueWithoutExamenInput = {
 export type DemandeImagerieUpdateManyWithWhereWithoutExamenInput = {
   where: Prisma.DemandeImagerieScalarWhereInput
   data: Prisma.XOR<Prisma.DemandeImagerieUpdateManyMutationInput, Prisma.DemandeImagerieUncheckedUpdateManyWithoutExamenInput>
+}
+
+export type DemandeImagerieCreateWithoutLigneFacturesInput = {
+  numero: string
+  motif?: string | null
+  urgence?: boolean
+  statut?: string
+  dateDemande?: Date | string
+  dateExamen?: Date | string | null
+  compteRendu?: string | null
+  conclusion?: string | null
+  fichier?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  patient: Prisma.PatientCreateNestedOneWithoutDemandesImagerieInput
+  consultation?: Prisma.ConsultationCreateNestedOneWithoutDemandesImagerieInput
+  service?: Prisma.ServiceCreateNestedOneWithoutDemandesImagerieInput
+  examen: Prisma.ExamenImagerieCreateNestedOneWithoutDemandesInput
+}
+
+export type DemandeImagerieUncheckedCreateWithoutLigneFacturesInput = {
+  id?: number
+  numero: string
+  patientId: number
+  consultationId?: number | null
+  serviceId?: number | null
+  examenId: number
+  motif?: string | null
+  urgence?: boolean
+  statut?: string
+  dateDemande?: Date | string
+  dateExamen?: Date | string | null
+  compteRendu?: string | null
+  conclusion?: string | null
+  fichier?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+}
+
+export type DemandeImagerieCreateOrConnectWithoutLigneFacturesInput = {
+  where: Prisma.DemandeImagerieWhereUniqueInput
+  create: Prisma.XOR<Prisma.DemandeImagerieCreateWithoutLigneFacturesInput, Prisma.DemandeImagerieUncheckedCreateWithoutLigneFacturesInput>
+}
+
+export type DemandeImagerieUpsertWithoutLigneFacturesInput = {
+  update: Prisma.XOR<Prisma.DemandeImagerieUpdateWithoutLigneFacturesInput, Prisma.DemandeImagerieUncheckedUpdateWithoutLigneFacturesInput>
+  create: Prisma.XOR<Prisma.DemandeImagerieCreateWithoutLigneFacturesInput, Prisma.DemandeImagerieUncheckedCreateWithoutLigneFacturesInput>
+  where?: Prisma.DemandeImagerieWhereInput
+}
+
+export type DemandeImagerieUpdateToOneWithWhereWithoutLigneFacturesInput = {
+  where?: Prisma.DemandeImagerieWhereInput
+  data: Prisma.XOR<Prisma.DemandeImagerieUpdateWithoutLigneFacturesInput, Prisma.DemandeImagerieUncheckedUpdateWithoutLigneFacturesInput>
+}
+
+export type DemandeImagerieUpdateWithoutLigneFacturesInput = {
+  numero?: Prisma.StringFieldUpdateOperationsInput | string
+  motif?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  urgence?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  statut?: Prisma.StringFieldUpdateOperationsInput | string
+  dateDemande?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  dateExamen?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  compteRendu?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  conclusion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  fichier?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  patient?: Prisma.PatientUpdateOneRequiredWithoutDemandesImagerieNestedInput
+  consultation?: Prisma.ConsultationUpdateOneWithoutDemandesImagerieNestedInput
+  service?: Prisma.ServiceUpdateOneWithoutDemandesImagerieNestedInput
+  examen?: Prisma.ExamenImagerieUpdateOneRequiredWithoutDemandesNestedInput
+}
+
+export type DemandeImagerieUncheckedUpdateWithoutLigneFacturesInput = {
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  numero?: Prisma.StringFieldUpdateOperationsInput | string
+  patientId?: Prisma.IntFieldUpdateOperationsInput | number
+  consultationId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  serviceId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  examenId?: Prisma.IntFieldUpdateOperationsInput | number
+  motif?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  urgence?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  statut?: Prisma.StringFieldUpdateOperationsInput | string
+  dateDemande?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  dateExamen?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  compteRendu?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  conclusion?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  fichier?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type DemandeImagerieCreateManyServiceInput = {
@@ -1093,6 +1219,7 @@ export type DemandeImagerieUpdateWithoutServiceInput = {
   patient?: Prisma.PatientUpdateOneRequiredWithoutDemandesImagerieNestedInput
   consultation?: Prisma.ConsultationUpdateOneWithoutDemandesImagerieNestedInput
   examen?: Prisma.ExamenImagerieUpdateOneRequiredWithoutDemandesNestedInput
+  ligneFactures?: Prisma.LigneFactureUpdateManyWithoutDemandeImagerieNestedInput
 }
 
 export type DemandeImagerieUncheckedUpdateWithoutServiceInput = {
@@ -1111,6 +1238,7 @@ export type DemandeImagerieUncheckedUpdateWithoutServiceInput = {
   fichier?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  ligneFactures?: Prisma.LigneFactureUncheckedUpdateManyWithoutDemandeImagerieNestedInput
 }
 
 export type DemandeImagerieUncheckedUpdateManyWithoutServiceInput = {
@@ -1164,6 +1292,7 @@ export type DemandeImagerieUpdateWithoutPatientInput = {
   consultation?: Prisma.ConsultationUpdateOneWithoutDemandesImagerieNestedInput
   service?: Prisma.ServiceUpdateOneWithoutDemandesImagerieNestedInput
   examen?: Prisma.ExamenImagerieUpdateOneRequiredWithoutDemandesNestedInput
+  ligneFactures?: Prisma.LigneFactureUpdateManyWithoutDemandeImagerieNestedInput
 }
 
 export type DemandeImagerieUncheckedUpdateWithoutPatientInput = {
@@ -1182,6 +1311,7 @@ export type DemandeImagerieUncheckedUpdateWithoutPatientInput = {
   fichier?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  ligneFactures?: Prisma.LigneFactureUncheckedUpdateManyWithoutDemandeImagerieNestedInput
 }
 
 export type DemandeImagerieUncheckedUpdateManyWithoutPatientInput = {
@@ -1235,6 +1365,7 @@ export type DemandeImagerieUpdateWithoutConsultationInput = {
   patient?: Prisma.PatientUpdateOneRequiredWithoutDemandesImagerieNestedInput
   service?: Prisma.ServiceUpdateOneWithoutDemandesImagerieNestedInput
   examen?: Prisma.ExamenImagerieUpdateOneRequiredWithoutDemandesNestedInput
+  ligneFactures?: Prisma.LigneFactureUpdateManyWithoutDemandeImagerieNestedInput
 }
 
 export type DemandeImagerieUncheckedUpdateWithoutConsultationInput = {
@@ -1253,6 +1384,7 @@ export type DemandeImagerieUncheckedUpdateWithoutConsultationInput = {
   fichier?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  ligneFactures?: Prisma.LigneFactureUncheckedUpdateManyWithoutDemandeImagerieNestedInput
 }
 
 export type DemandeImagerieUncheckedUpdateManyWithoutConsultationInput = {
@@ -1306,6 +1438,7 @@ export type DemandeImagerieUpdateWithoutExamenInput = {
   patient?: Prisma.PatientUpdateOneRequiredWithoutDemandesImagerieNestedInput
   consultation?: Prisma.ConsultationUpdateOneWithoutDemandesImagerieNestedInput
   service?: Prisma.ServiceUpdateOneWithoutDemandesImagerieNestedInput
+  ligneFactures?: Prisma.LigneFactureUpdateManyWithoutDemandeImagerieNestedInput
 }
 
 export type DemandeImagerieUncheckedUpdateWithoutExamenInput = {
@@ -1324,6 +1457,7 @@ export type DemandeImagerieUncheckedUpdateWithoutExamenInput = {
   fichier?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  ligneFactures?: Prisma.LigneFactureUncheckedUpdateManyWithoutDemandeImagerieNestedInput
 }
 
 export type DemandeImagerieUncheckedUpdateManyWithoutExamenInput = {
@@ -1344,6 +1478,35 @@ export type DemandeImagerieUncheckedUpdateManyWithoutExamenInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
+
+/**
+ * Count Type DemandeImagerieCountOutputType
+ */
+
+export type DemandeImagerieCountOutputType = {
+  ligneFactures: number
+}
+
+export type DemandeImagerieCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  ligneFactures?: boolean | DemandeImagerieCountOutputTypeCountLigneFacturesArgs
+}
+
+/**
+ * DemandeImagerieCountOutputType without action
+ */
+export type DemandeImagerieCountOutputTypeDefaultArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the DemandeImagerieCountOutputType
+   */
+  select?: Prisma.DemandeImagerieCountOutputTypeSelect<ExtArgs> | null
+}
+
+/**
+ * DemandeImagerieCountOutputType without action
+ */
+export type DemandeImagerieCountOutputTypeCountLigneFacturesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.LigneFactureWhereInput
+}
 
 
 export type DemandeImagerieSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -1367,6 +1530,8 @@ export type DemandeImagerieSelect<ExtArgs extends runtime.Types.Extensions.Inter
   consultation?: boolean | Prisma.DemandeImagerie$consultationArgs<ExtArgs>
   service?: boolean | Prisma.DemandeImagerie$serviceArgs<ExtArgs>
   examen?: boolean | Prisma.ExamenImagerieDefaultArgs<ExtArgs>
+  ligneFactures?: boolean | Prisma.DemandeImagerie$ligneFacturesArgs<ExtArgs>
+  _count?: boolean | Prisma.DemandeImagerieCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["demandeImagerie"]>
 
 export type DemandeImagerieSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -1440,6 +1605,8 @@ export type DemandeImagerieInclude<ExtArgs extends runtime.Types.Extensions.Inte
   consultation?: boolean | Prisma.DemandeImagerie$consultationArgs<ExtArgs>
   service?: boolean | Prisma.DemandeImagerie$serviceArgs<ExtArgs>
   examen?: boolean | Prisma.ExamenImagerieDefaultArgs<ExtArgs>
+  ligneFactures?: boolean | Prisma.DemandeImagerie$ligneFacturesArgs<ExtArgs>
+  _count?: boolean | Prisma.DemandeImagerieCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type DemandeImagerieIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   patient?: boolean | Prisma.PatientDefaultArgs<ExtArgs>
@@ -1461,6 +1628,7 @@ export type $DemandeImageriePayload<ExtArgs extends runtime.Types.Extensions.Int
     consultation: Prisma.$ConsultationPayload<ExtArgs> | null
     service: Prisma.$ServicePayload<ExtArgs> | null
     examen: Prisma.$ExamenImageriePayload<ExtArgs>
+    ligneFactures: Prisma.$LigneFacturePayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: number
@@ -1877,6 +2045,7 @@ export interface Prisma__DemandeImagerieClient<T, Null = never, ExtArgs extends 
   consultation<T extends Prisma.DemandeImagerie$consultationArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.DemandeImagerie$consultationArgs<ExtArgs>>): Prisma.Prisma__ConsultationClient<runtime.Types.Result.GetResult<Prisma.$ConsultationPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   service<T extends Prisma.DemandeImagerie$serviceArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.DemandeImagerie$serviceArgs<ExtArgs>>): Prisma.Prisma__ServiceClient<runtime.Types.Result.GetResult<Prisma.$ServicePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   examen<T extends Prisma.ExamenImagerieDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.ExamenImagerieDefaultArgs<ExtArgs>>): Prisma.Prisma__ExamenImagerieClient<runtime.Types.Result.GetResult<Prisma.$ExamenImageriePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+  ligneFactures<T extends Prisma.DemandeImagerie$ligneFacturesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.DemandeImagerie$ligneFacturesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$LigneFacturePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -2356,6 +2525,30 @@ export type DemandeImagerie$serviceArgs<ExtArgs extends runtime.Types.Extensions
    */
   include?: Prisma.ServiceInclude<ExtArgs> | null
   where?: Prisma.ServiceWhereInput
+}
+
+/**
+ * DemandeImagerie.ligneFactures
+ */
+export type DemandeImagerie$ligneFacturesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the LigneFacture
+   */
+  select?: Prisma.LigneFactureSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the LigneFacture
+   */
+  omit?: Prisma.LigneFactureOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.LigneFactureInclude<ExtArgs> | null
+  where?: Prisma.LigneFactureWhereInput
+  orderBy?: Prisma.LigneFactureOrderByWithRelationInput | Prisma.LigneFactureOrderByWithRelationInput[]
+  cursor?: Prisma.LigneFactureWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.LigneFactureScalarFieldEnum | Prisma.LigneFactureScalarFieldEnum[]
 }
 
 /**

@@ -159,6 +159,11 @@ const menus = [
       href: "/services",
       icon: Building2,
     },
+       {
+      label: "Rapports",
+      href: "/rapports",
+      icon: Building2,
+    },
     {
       label: "Paramètres",
       href: "/administration/parametres",

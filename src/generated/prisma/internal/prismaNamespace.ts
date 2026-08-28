@@ -4688,12 +4688,16 @@ export const LigneFactureScalarFieldEnum = {
   id: 'id',
   factureId: 'factureId',
   acteId: 'acteId',
+  consultationActeId: 'consultationActeId',
   serviceId: 'serviceId',
+  demandeLaboratoireLigneId: 'demandeLaboratoireLigneId',
+  demandeImagerieId: 'demandeImagerieId',
   designation: 'designation',
   quantite: 'quantite',
   prixUnitaire: 'prixUnitaire',
   montant: 'montant',
-  reference: 'reference'
+  reference: 'reference',
+  createdAt: 'createdAt'
 } as const
 
 export type LigneFactureScalarFieldEnum = (typeof LigneFactureScalarFieldEnum)[keyof typeof LigneFactureScalarFieldEnum]

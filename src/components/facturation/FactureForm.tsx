@@ -1,3 +1,4 @@
+
 "use client";
 
 import {
@@ -122,9 +123,6 @@ type SelectGroup = GroupBase<SelectOption>;
 type Props = {
   patients: Patient[];
 
-  /**
-   * Contexte éventuel de création de la facture.
-   */
   admissionId?: number;
   hospitalisationId?: number;
   proformaId?: number;
@@ -233,9 +231,7 @@ function getPatientName(
     patient.prenom,
   ]
     .filter(
-      (
-        value
-      ): value is string =>
+      (value): value is string =>
         Boolean(value?.trim())
     )
     .join(" ");
@@ -254,17 +250,12 @@ function getMedecinName(
     consultation.medecin.prenom,
   ]
     .filter(
-      (
-        value
-      ): value is string =>
+      (value): value is string =>
         Boolean(value?.trim())
     )
     .join(" ");
 
-  return (
-    name ||
-    "Médecin non renseigné"
-  );
+  return name || "Médecin non renseigné";
 }
 
 function getCategoryLabel(
@@ -297,6 +288,26 @@ function getCategoryLabel(
   }
 }
 
+/**
+ * Recalcule toujours le montant à partir
+ * de la quantité et du prix unitaire.
+ */
+function calculatePrestationAmount(
+  prestation: Prestation
+): number {
+  const quantite = Math.max(
+    0,
+    toNumber(prestation.quantite)
+  );
+
+  const prixUnitaire = Math.max(
+    0,
+    toNumber(prestation.prixUnitaire)
+  );
+
+  return quantite * prixUnitaire;
+}
+
 /* ==========================================================
    COMPOSANT
 ========================================================== */
@@ -316,9 +327,7 @@ export default function FactureForm({
   const [
     selectedPatient,
     setSelectedPatient,
-  ] = useState<PatientOption | null>(
-    null
-  );
+  ] = useState<PatientOption | null>(null);
 
   /* ========================================================
      CONSULTATION
@@ -387,7 +396,7 @@ export default function FactureForm({
   const [
     devise,
     setDevise,
-  ] = useState("USD");
+  ] = useState<"USD" | "CDF">("USD");
 
   const [
     error,
@@ -400,22 +409,20 @@ export default function FactureForm({
 
   const patientOptions =
     useMemo<PatientOption[]>(() => {
-      return patients.map(
-        (patient) => {
-          const patientName =
-            getPatientName(patient);
+      return patients.map((patient) => {
+        const patientName =
+          getPatientName(patient);
 
-          return {
-            value: patient.id,
+        return {
+          value: patient.id,
 
-            label:
-              `${patientName || "Patient"} — ` +
-              `${patient.numeroDossier || "Sans dossier"}`,
+          label:
+            `${patientName || "Patient"} — ` +
+            `${patient.numeroDossier || "Sans dossier"}`,
 
-            patient,
-          };
-        }
-      );
+          patient,
+        };
+      });
     }, [patients]);
 
   /* ==========================================================
@@ -423,30 +430,31 @@ export default function FactureForm({
   ========================================================== */
 
   const consultationOptions =
-    useMemo<
-      ConsultationOption[]
-    >(() => {
-      return consultations.map(
-        (consultation) => ({
-          value:
-            consultation.idConsultation,
+    useMemo<ConsultationOption[]>(
+      () => {
+        return consultations.map(
+          (consultation) => ({
+            value:
+              consultation.idConsultation,
 
-          label:
-            `CONS-${consultation.idConsultation} — ` +
-            `${formatDate(
-              consultation.dateConsultation
-            )} — ` +
-            `${getMedecinName(
-              consultation
-            )}`,
+            label:
+              `CONS-${consultation.idConsultation} — ` +
+              `${formatDate(
+                consultation.dateConsultation
+              )} — ` +
+              `${getMedecinName(
+                consultation
+              )}`,
 
-          consultation,
-        })
-      );
-    }, [consultations]);
+            consultation,
+          })
+        );
+      },
+      [consultations]
+    );
 
   /* ==========================================================
-     CHARGEMENT DES CONSULTATIONS
+     CHARGEMENT CONSULTATIONS
   ========================================================== */
 
   useEffect(() => {
@@ -454,16 +462,13 @@ export default function FactureForm({
 
     async function loadConsultations() {
       if (!selectedPatient) {
-        if (mounted) {
-          setConsultations([]);
-          setSelectedConsultation(null);
-          setPrestations(
-            createEmptyPrestations()
-          );
-          setSelected([]);
-          setReduction(0);
-        }
-
+        setConsultations([]);
+        setSelectedConsultation(null);
+        setPrestations(
+          createEmptyPrestations()
+        );
+        setSelected([]);
+        setReduction(0);
         return;
       }
 
@@ -537,7 +542,7 @@ export default function FactureForm({
   }, [selectedPatient]);
 
   /* ==========================================================
-     CHARGEMENT AUTOMATIQUE DES PRESTATIONS
+     CHARGEMENT PRESTATIONS
   ========================================================== */
 
   useEffect(() => {
@@ -548,14 +553,12 @@ export default function FactureForm({
         !selectedPatient ||
         !selectedConsultation
       ) {
-        if (mounted) {
-          setPrestations(
-            createEmptyPrestations()
-          );
-          setSelected([]);
-          setReduction(0);
-          setLoadingPrestations(false);
-        }
+        setPrestations(
+          createEmptyPrestations()
+        );
+        setSelected([]);
+        setReduction(0);
+        setLoadingPrestations(false);
 
         return;
       }
@@ -668,7 +671,7 @@ export default function FactureForm({
     };
   }, [
     selectedPatient,
-    selectedConsultation,
+    selectedConsultation?.value,
   ]);
 
   /* ==========================================================
@@ -696,23 +699,18 @@ export default function FactureForm({
       return CATEGORY_CONFIG
         .map((category) => {
           const liste =
-            prestations[
-              category.key
-            ];
+            prestations[category.key];
 
           const options: SelectOption[] =
-            liste.map(
-              (prestation) => ({
-                ...prestation,
+            liste.map((prestation) => ({
+              ...prestation,
 
-                value:
-                  prestation.id,
+              value: prestation.id,
 
-                label:
-                  prestation.designation ||
-                  "Prestation sans désignation",
-              })
-            );
+              label:
+                prestation.designation ||
+                "Prestation sans désignation",
+            }));
 
           return {
             label:
@@ -735,25 +733,11 @@ export default function FactureForm({
     useMemo<number>(() => {
       return selected.reduce(
         (total, ligne) => {
-          const quantite =
-            Math.max(
-              0,
-              toNumber(
-                ligne.quantite
-              )
-            );
-
-          const prix =
-            Math.max(
-              0,
-              toNumber(
-                ligne.prixUnitaire
-              )
-            );
-
           return (
             total +
-            quantite * prix
+            calculatePrestationAmount(
+              ligne
+            )
           );
         },
         0
@@ -854,10 +838,16 @@ export default function FactureForm({
   function handlePrestationsChange(
     values: MultiValue<SelectOption>
   ) {
-    setSelected(
-      Array.from(values)
-    );
+    const uniques =
+      Array.from(values).filter(
+        (item, index, array) =>
+          array.findIndex(
+            (other) =>
+              other.id === item.id
+          ) === index
+      );
 
+    setSelected(uniques);
     setError("");
   }
 
@@ -867,18 +857,24 @@ export default function FactureForm({
 
   function selectAll() {
     const options: SelectOption[] =
-      toutesLesPrestations.map(
-        (prestation) => ({
+      toutesLesPrestations
+        .filter(
+          (prestation, index, array) =>
+            array.findIndex(
+              (other) =>
+                other.id ===
+                prestation.id
+            ) === index
+        )
+        .map((prestation) => ({
           ...prestation,
 
-          value:
-            prestation.id,
+          value: prestation.id,
 
           label:
             prestation.designation ||
             "Prestation sans désignation",
-        })
-      );
+        }));
 
     setSelected(options);
     setError("");
@@ -894,18 +890,16 @@ export default function FactureForm({
   }
 
   /* ==========================================================
-     RETIRER UNE PRESTATION
+     RETIRER
   ========================================================== */
 
   function removeSelected(
     id: string
   ) {
-    setSelected(
-      (current) =>
-        current.filter(
-          (item) =>
-            item.id !== id
-        )
+    setSelected((current) =>
+      current.filter(
+        (item) => item.id !== id
+      )
     );
 
     setError("");
@@ -922,7 +916,6 @@ export default function FactureForm({
       setError(
         "Veuillez sélectionner un patient."
       );
-
       return;
     }
 
@@ -930,7 +923,6 @@ export default function FactureForm({
       setError(
         "Veuillez sélectionner une consultation."
       );
-
       return;
     }
 
@@ -938,29 +930,24 @@ export default function FactureForm({
       setError(
         "Veuillez sélectionner au moins une prestation."
       );
-
       return;
     }
 
     const prestationInvalide =
-      selected.find(
-        (ligne) => {
-          const quantite =
-            toNumber(
-              ligne.quantite
-            );
+      selected.find((ligne) => {
+        const quantite =
+          toNumber(ligne.quantite);
 
-          const prix =
-            toNumber(
-              ligne.prixUnitaire
-            );
-
-          return (
-            quantite <= 0 ||
-            prix < 0
+        const prix =
+          toNumber(
+            ligne.prixUnitaire
           );
-        }
-      );
+
+        return (
+          quantite <= 0 ||
+          prix < 0
+        );
+      });
 
     if (prestationInvalide) {
       setError(
@@ -982,79 +969,97 @@ export default function FactureForm({
       return;
     }
 
+    if (
+      typeReduction === "MONTANT" &&
+      reductionSaisie > montantBrut
+    ) {
+      setError(
+        "La réduction ne peut pas dépasser le montant brut."
+      );
+
+      return;
+    }
+
+    if (montantBrut <= 0) {
+      setError(
+        "Le montant total des prestations doit être supérieur à zéro."
+      );
+
+      return;
+    }
+
     try {
       setLoading(true);
 
       /* ======================================================
-         LES PRESTATIONS SONT REPRISES AUTOMATIQUEMENT
+         PRÉPARATION DES LIGNES
       ====================================================== */
 
-      const lignes =
-        selected.map(
-          (ligne) => {
-            const quantite =
-              toNumber(
-                ligne.quantite
-              );
+      const lignes = selected.map(
+        (ligne) => {
+          const quantite =
+            toNumber(
+              ligne.quantite
+            );
 
-            const prixUnitaire =
-              toNumber(
-                ligne.prixUnitaire
-              );
+          const prixUnitaire =
+            toNumber(
+              ligne.prixUnitaire
+            );
 
-            const montant =
-              quantite *
-              prixUnitaire;
+          const montant =
+            quantite *
+            prixUnitaire;
 
-            return {
-              typeOrigine:
-                ligne.typeOrigine,
+          return {
+            typeOrigine:
+              ligne.typeOrigine,
 
-              acteId:
-                ligne.acteId ??
-                undefined,
+            acteId:
+              ligne.acteId ??
+              undefined,
 
-              serviceId:
-                ligne.serviceId ??
-                undefined,
+            serviceId:
+              ligne.serviceId ??
+              undefined,
 
-              consultationId:
-                selectedConsultation.value,
+            consultationId:
+              selectedConsultation.value,
 
-              demandeLaboratoireId:
-                ligne.demandeLaboratoireId ??
-                undefined,
+            demandeLaboratoireId:
+              ligne.demandeLaboratoireId ??
+              undefined,
 
-              demandeImagerieId:
-                ligne.demandeImagerieId ??
-                undefined,
+            demandeImagerieId:
+              ligne.demandeImagerieId ??
+              undefined,
 
-              dispensationId:
-                ligne.dispensationId ??
-                undefined,
+            dispensationId:
+              ligne.dispensationId ??
+              undefined,
 
-              hospitalisationId:
-                ligne.hospitalisationId ??
-                undefined,
+            hospitalisationId:
+              ligne.hospitalisationId ??
+              undefined,
 
-              designation:
-                ligne.designation,
+            designation:
+              ligne.designation,
 
-              quantite,
+            quantite,
 
-              prixUnitaire,
+            prixUnitaire,
 
-              montant,
+            montant,
 
-              reference:
-                ligne.reference ??
-                undefined,
-            };
-          }
-        );
+            reference:
+              ligne.reference ??
+              undefined,
+          };
+        }
+      );
 
       /* ======================================================
-         CRÉATION DE LA FACTURE
+         CRÉATION FACTURE
       ====================================================== */
 
       const result =
@@ -1094,7 +1099,7 @@ export default function FactureForm({
       }
 
       /* ======================================================
-         RÉCUPÉRATION ID FACTURE
+         ID FACTURE
       ====================================================== */
 
       const facture =
@@ -1179,9 +1184,8 @@ export default function FactureForm({
 
           <p className="text-sm opacity-60">
             Sélectionnez le patient,
-            sa consultation et les
-            prestations liées seront
-            récupérées automatiquement.
+            sa consultation puis les
+            prestations à facturer.
           </p>
 
         </div>
@@ -1481,11 +1485,64 @@ export default function FactureForm({
       ====================================================== */}
 
       {selectedConsultation && (
-        <>
-          {loadingPrestations ? (
-            <div className="card bg-base-100 shadow-xl">
+        <div className="card bg-base-100 shadow-xl">
 
-              <div className="card-body items-center py-12">
+          <div className="card-body">
+
+            <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
+
+              <div>
+
+                <h3 className="card-title">
+                  3. Prestations liées
+                </h3>
+
+                <p className="text-sm opacity-60">
+                  Sélectionnez les prestations
+                  qui doivent apparaître sur
+                  la facture.
+                </p>
+
+              </div>
+
+              <div className="flex gap-2">
+
+                <button
+                  type="button"
+                  className="btn btn-sm btn-outline"
+                  disabled={
+                    toutesLesPrestations.length ===
+                    0
+                  }
+                  onClick={
+                    selectAll
+                  }
+                >
+                  Tout sélectionner
+                </button>
+
+                <button
+                  type="button"
+                  className="btn btn-sm btn-ghost"
+                  disabled={
+                    selected.length ===
+                    0
+                  }
+                  onClick={
+                    clearAll
+                  }
+                >
+                  Tout effacer
+                </button>
+
+              </div>
+
+            </div>
+
+            <div className="divider" />
+
+            {loadingPrestations ? (
+              <div className="flex flex-col items-center py-12">
 
                 <span className="loading loading-spinner loading-lg" />
 
@@ -1495,191 +1552,137 @@ export default function FactureForm({
                 </p>
 
               </div>
+            ) : toutesLesPrestations.length ===
+              0 ? (
+              <div className="alert alert-info">
 
-            </div>
-          ) : (
-            <div className="card bg-base-100 shadow-xl">
+                <span>
+                  Cette consultation
+                  ne possède aucune
+                  prestation facturable.
+                </span>
 
-              <div className="card-body">
-
-                <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
-
-                  <div>
-
-                    <h3 className="card-title">
-                      3. Prestations liées
-                    </h3>
-
-                    <p className="text-sm opacity-60">
-                      Les prestations sont
-                      récupérées automatiquement
-                      depuis la consultation.
-                    </p>
-
-                  </div>
-
-                  <div className="flex gap-2">
-
-                    <button
-                      type="button"
-                      className="btn btn-sm btn-outline"
-                      disabled={
-                        toutesLesPrestations.length ===
-                        0
-                      }
-                      onClick={
-                        selectAll
-                      }
-                    >
-                      Tout sélectionner
-                    </button>
-
-                    <button
-                      type="button"
-                      className="btn btn-sm btn-ghost"
-                      disabled={
-                        selected.length ===
-                        0
-                      }
-                      onClick={
-                        clearAll
-                      }
-                    >
-                      Tout effacer
-                    </button>
-
-                  </div>
-
-                </div>
-
-                <div className="divider" />
-
-                {toutesLesPrestations.length ===
-                0 ? (
-                  <div className="alert alert-info">
+              </div>
+            ) : (
+              <Select<
+                SelectOption,
+                true,
+                SelectGroup
+              >
+                isMulti
+                isSearchable
+                closeMenuOnSelect={
+                  false
+                }
+                hideSelectedOptions={
+                  false
+                }
+                options={
+                  groupedOptions
+                }
+                value={selected}
+                onChange={
+                  handlePrestationsChange
+                }
+                placeholder="Sélectionner les prestations à facturer..."
+                noOptionsMessage={() =>
+                  "Aucune prestation trouvée"
+                }
+                formatGroupLabel={(
+                  group
+                ) => (
+                  <div className="flex justify-between font-bold">
 
                     <span>
-                      Cette consultation
-                      ne possède aucune
-                      prestation facturable.
+                      {group.label}
+                    </span>
+
+                    <span className="badge badge-sm">
+                      {
+                        group
+                          .options
+                          .length
+                      }
                     </span>
 
                   </div>
-                ) : (
-                  <Select<
-                    SelectOption,
-                    true,
-                    SelectGroup
-                  >
-                    isMulti
-                    isSearchable
-                    isClearable
-                    closeMenuOnSelect={
-                      false
-                    }
-                    hideSelectedOptions={
-                      false
-                    }
-                    options={
-                      groupedOptions
-                    }
-                    value={selected}
-                    onChange={
-                      handlePrestationsChange
-                    }
-                    placeholder="Sélectionner les prestations à facturer..."
-                    noOptionsMessage={() =>
-                      "Aucune prestation trouvée"
-                    }
-                    formatGroupLabel={(
-                      group
-                    ) => (
-                      <div className="flex justify-between font-bold">
+                )}
+                formatOptionLabel={(
+                  option
+                ) => {
 
-                        <span>
-                          {group.label}
-                        </span>
-
-                        <span className="badge badge-sm">
-                          {
-                            group
-                              .options
-                              .length
-                          }
-                        </span>
-
-                      </div>
-                    )}
-                    formatOptionLabel={(
+                  const montant =
+                    calculatePrestationAmount(
                       option
-                    ) => (
-                      <div className="flex justify-between gap-4">
+                    );
 
-                        <div className="min-w-0">
+                  return (
+                    <div className="flex justify-between gap-4">
 
-                          <div className="font-medium">
+                      <div className="min-w-0">
+
+                        <div className="font-medium">
+                          {
+                            option.designation
+                          }
+                        </div>
+
+                        <div className="text-xs opacity-60">
+                          {getCategoryLabel(
+                            option.typeOrigine
+                          )}
+                        </div>
+
+                        {option.reference && (
+                          <div className="text-xs opacity-50">
+                            Réf.{" "}
                             {
-                              option.designation
+                              option.reference
                             }
                           </div>
+                        )}
 
-                          <div className="text-xs opacity-60">
-                            {getCategoryLabel(
-                              option.typeOrigine
-                            )}
-                          </div>
+                      </div>
 
-                          {option.reference && (
-                            <div className="text-xs opacity-50">
-                              Réf.{" "}
-                              {
-                                option.reference
-                              }
-                            </div>
+                      <div className="whitespace-nowrap text-right">
+
+                        <div className="text-xs opacity-60">
+                          {
+                            option.quantite
+                          }{" "}
+                          ×{" "}
+                          {formatMoney(
+                            option.prixUnitaire
                           )}
-
                         </div>
 
-                        <div className="whitespace-nowrap text-right">
-
-                          <div className="text-xs opacity-60">
-                            {
-                              option.quantite
-                            }{" "}
-                            ×{" "}
-                            {formatMoney(
-                              option.prixUnitaire
-                            )}
-                          </div>
-
-                          <div className="font-bold">
-                            {formatMoney(
-                              option.montant
-                            )}{" "}
-                            USD
-                          </div>
-
+                        <div className="font-bold">
+                          {formatMoney(
+                            montant
+                          )}{" "}
+                          {devise}
                         </div>
 
                       </div>
-                    )}
-                    menuPortalTarget={
-                      typeof document !==
-                      "undefined"
-                        ? document.body
-                        : undefined
-                    }
-                    styles={
-                      selectStyles
-                    }
-                  />
-                )}
 
-              </div>
+                    </div>
+                  );
+                }}
+                menuPortalTarget={
+                  typeof document !==
+                  "undefined"
+                    ? document.body
+                    : undefined
+                }
+                styles={
+                  selectStyles
+                }
+              />
+            )}
 
-            </div>
-          )}
-        </>
+          </div>
+
+        </div>
       )}
 
       {/* ======================================================
@@ -1701,8 +1704,8 @@ export default function FactureForm({
                   </h3>
 
                   <p className="text-sm opacity-60">
-                    Ces prestations ont été
-                    récupérées automatiquement.
+                    Vérifiez les prestations
+                    avant de créer la facture.
                   </p>
 
                 </div>
@@ -1718,77 +1721,85 @@ export default function FactureForm({
               <div className="space-y-3">
 
                 {selected.map(
-                  (ligne) => (
-                    <div
-                      key={`${ligne.id}-${ligne.sourceId}`}
-                      className="rounded-xl border border-base-300 p-4"
-                    >
+                  (ligne) => {
 
-                      <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+                    const montant =
+                      calculatePrestationAmount(
+                        ligne
+                      );
 
-                        <div className="min-w-0">
+                    return (
+                      <div
+                        key={ligne.id}
+                        className="rounded-xl border border-base-300 p-4"
+                      >
 
-                          <div className="font-semibold">
-                            {
-                              ligne.designation
-                            }
-                          </div>
+                        <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
 
-                          <div className="mt-1 text-xs opacity-60">
-                            {getCategoryLabel(
-                              ligne.typeOrigine
-                            )}
-                          </div>
+                          <div className="min-w-0">
 
-                          <div className="mt-1 text-sm opacity-70">
-                            {
-                              ligne.quantite
-                            }{" "}
-                            ×{" "}
-                            {formatMoney(
-                              ligne.prixUnitaire
-                            )}{" "}
-                            {devise}
-                          </div>
-
-                          {ligne.reference && (
-                            <div className="mt-1 text-xs opacity-50">
-                              Référence :{" "}
+                            <div className="font-semibold">
                               {
-                                ligne.reference
+                                ligne.designation
                               }
                             </div>
-                          )}
 
-                        </div>
+                            <div className="mt-1 text-xs opacity-60">
+                              {getCategoryLabel(
+                                ligne.typeOrigine
+                              )}
+                            </div>
 
-                        <div className="flex items-center justify-between gap-4">
+                            <div className="mt-1 text-sm opacity-70">
+                              {
+                                ligne.quantite
+                              }{" "}
+                              ×{" "}
+                              {formatMoney(
+                                ligne.prixUnitaire
+                              )}{" "}
+                              {devise}
+                            </div>
 
-                          <strong className="text-lg">
-                            {formatMoney(
-                              ligne.montant
-                            )}{" "}
-                            {devise}
-                          </strong>
+                            {ligne.reference && (
+                              <div className="mt-1 text-xs opacity-50">
+                                Référence :{" "}
+                                {
+                                  ligne.reference
+                                }
+                              </div>
+                            )}
 
-                          <button
-                            type="button"
-                            className="btn btn-sm btn-error btn-outline"
-                            onClick={() =>
-                              removeSelected(
-                                ligne.id
-                              )
-                            }
-                          >
-                            Retirer
-                          </button>
+                          </div>
+
+                          <div className="flex items-center justify-between gap-4">
+
+                            <strong className="text-lg">
+                              {formatMoney(
+                                montant
+                              )}{" "}
+                              {devise}
+                            </strong>
+
+                            <button
+                              type="button"
+                              className="btn btn-sm btn-error btn-outline"
+                              onClick={() =>
+                                removeSelected(
+                                  ligne.id
+                                )
+                              }
+                            >
+                              Retirer
+                            </button>
+
+                          </div>
 
                         </div>
 
                       </div>
-
-                    </div>
-                  )
+                    );
+                  }
                 )}
 
               </div>
@@ -1813,7 +1824,7 @@ export default function FactureForm({
 
             <div className="divider" />
 
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
 
               {/* TYPE */}
 
@@ -1843,6 +1854,7 @@ export default function FactureForm({
                   }}
                   className="select select-bordered"
                 >
+
                   <option value="MONTANT">
                     Montant
                   </option>
@@ -1850,6 +1862,7 @@ export default function FactureForm({
                   <option value="POURCENTAGE">
                     Pourcentage
                   </option>
+
                 </select>
 
               </div>
@@ -1883,26 +1896,23 @@ export default function FactureForm({
                   }
                   onChange={(e) => {
                     const value =
-                      toNumber(
-                        e.target.value
+                      Math.max(
+                        0,
+                        toNumber(
+                          e.target.value
+                        )
                       );
 
                     setReduction(
                       typeReduction ===
-                        "POURCENTAGE"
+                      "POURCENTAGE"
                         ? Math.min(
                             100,
-                            Math.max(
-                              0,
-                              value
-                            )
+                            value
                           )
                         : Math.min(
                             montantBrut,
-                            Math.max(
-                              0,
-                              value
-                            )
+                            value
                           )
                     );
                   }}
@@ -1925,11 +1935,14 @@ export default function FactureForm({
                   value={devise}
                   onChange={(e) =>
                     setDevise(
-                      e.target.value
+                      e.target.value as
+                        | "USD"
+                        | "CDF"
                     )
                   }
                   className="select select-bordered"
                 >
+
                   <option value="USD">
                     USD
                   </option>
@@ -1937,6 +1950,7 @@ export default function FactureForm({
                   <option value="CDF">
                     CDF
                   </option>
+
                 </select>
 
               </div>
@@ -1949,7 +1963,7 @@ export default function FactureForm({
       )}
 
       {/* ======================================================
-          6 — TOTAL
+          6 — RÉCAPITULATIF
       ====================================================== */}
 
       {selectedPatient && (
@@ -1965,7 +1979,7 @@ export default function FactureForm({
 
             <div className="flex justify-end">
 
-              <div className="w-full md:w-96 space-y-4">
+              <div className="w-full space-y-4 md:w-96">
 
                 <div className="flex justify-between">
                   <span>
@@ -2056,12 +2070,14 @@ export default function FactureForm({
                   !selectedPatient ||
                   !selectedConsultation ||
                   selected.length ===
-                    0
+                    0 ||
+                  montantTotal <= 0
                 }
                 onClick={
                   submit
                 }
               >
+
                 {loading ? (
                   <>
                     <span className="loading loading-spinner loading-sm" />
@@ -2070,6 +2086,7 @@ export default function FactureForm({
                 ) : (
                   "Créer la facture"
                 )}
+
               </button>
 
             </div>
