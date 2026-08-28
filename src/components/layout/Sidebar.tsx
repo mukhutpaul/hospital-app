@@ -71,7 +71,7 @@ const menus = [
         href: "/consultations",
         icon: Stethoscope,
       },
-       {
+      {
         label: "Actes Médicaux",
         href: "/actes",
         icon: Stethoscope,
@@ -100,25 +100,25 @@ const menus = [
   },
 
   {
-  title: "PERSONNEL",
-  items: [
-    {
-      label: "Médecins",
-      href: "/personnel/medecins",
-      icon: Stethoscope,
-    },
-    {
-      label: "Infirmiers",
-      href: "/personnel/infirmiers",
-      icon: HeartPulse,
-    },
-    {
-      label: "Employés",
-      href: "/personnel/employes",
-      icon: BriefcaseBusiness,
-    },
-  ],
-},
+    title: "PERSONNEL",
+    items: [
+      {
+        label: "Médecins",
+        href: "/personnel/medecins",
+        icon: Stethoscope,
+      },
+      {
+        label: "Infirmiers",
+        href: "/personnel/infirmiers",
+        icon: HeartPulse,
+      },
+      {
+        label: "Employés",
+        href: "/personnel/employes",
+        icon: BriefcaseBusiness,
+      },
+    ],
+  },
 
   {
     title: "GESTION",
@@ -136,41 +136,51 @@ const menus = [
     ],
   },
 
-{
-  title: "ADMINISTRATION",
-  items: [
-    {
-      label: "Utilisateurs",
-      href: "/utilisateurs",
-      icon: UserCog,
-    },
-    {
-      label: "Rôles & permissions",
-      href: "/roles",
-      icon: ShieldCheck,
-    },
-    {
-      label: "Départements",
-      href: "/departements",
-      icon: Building,
-    },
-    {
-      label: "Services",
-      href: "/services",
-      icon: Building2,
-    },
+  {
+    title: "ADMINISTRATION",
+    items: [
+      {
+        label: "Utilisateurs",
+        href: "/utilisateurs",
+        icon: UserCog,
+      },
+      {
+        label: "Rôles & permissions",
+        href: "/roles",
+        icon: ShieldCheck,
+      },
+      {
+        label: "Départements",
+        href: "/departements",
+        icon: Building,
+      },
+      {
+        label: "Services",
+        href: "/services",
+        icon: Building2,
+      },
+      {
+        label: "Spécialités",
+        href: "/specialites",
+        icon: Building2,
+      },
+      {
+        label: "Rapports",
+        href: "/rapports",
+        icon: Building2,
+      },
+      {
+        label: "Paramètres",
+        href: "/parametres",
+        icon: Settings,
+      },
        {
-      label: "Rapports",
-      href: "/rapports",
-      icon: Building2,
-    },
-    {
-      label: "Paramètres",
-      href: "/administration/parametres",
-      icon: Settings,
-    },
-  ],
-},
+        label: "Journal d'activités",
+        href: "/audit-logs",
+        icon: Settings,
+      },
+    ],
+  },
 ];
 
 export default function Sidebar() {
@@ -241,9 +251,7 @@ export default function Sidebar() {
                 justify-center
               "
             >
-              <span className="text-lg font-bold">
-                H
-              </span>
+              <span className="text-lg font-bold">H</span>
             </div>
           </div>
 
@@ -276,10 +284,7 @@ export default function Sidebar() {
         "
       >
         {menus.map((section) => (
-          <div
-            key={section.title}
-            className="mb-7 last:mb-0"
-          >
+          <div key={section.title} className="mb-7 last:mb-0">
             {/* TITRE */}
 
             <p
@@ -336,9 +341,7 @@ export default function Sidebar() {
                         className="shrink-0"
                       />
 
-                      <span className="truncate">
-                        {item.label}
-                      </span>
+                      <span className="truncate">{item.label}</span>
                     </Link>
                   </li>
                 );
@@ -365,9 +368,7 @@ export default function Sidebar() {
         >
           <ClipboardList size={15} />
 
-          <span>
-            HMS v1.0.0
-          </span>
+          <span>HMS v1.0.0</span>
         </div>
       </div>
     </aside>
