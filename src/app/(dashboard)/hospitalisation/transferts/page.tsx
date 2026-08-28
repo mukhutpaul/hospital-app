@@ -1,1 +1,63 @@
-import Link from "next/link";import {getTransferts} from "@/app/actions/transferts";import ActionButton from "@/components/hospitalisation/ActionButton";export default async function Page(){const r=await getTransferts();const items=(r.data??[]) as any[];return <main className="space-y-5 p-6"><div className="flex justify-between"><h1 className="text-2xl font-bold">Transferts</h1><Link className="btn btn-primary" href="/hospitalisation/transferts/nouveau">+ Transfert</Link></div><div className="overflow-x-auto rounded-2xl border"><table className="table"><thead><tr><th>Date</th><th>Hospitalisation</th><th>Patient</th><th>Ancien service</th><th>Nouveau service</th><th>Motif</th><th></th></tr></thead><tbody>{items.map(t=><tr key={t.id}><td>{new Date(t.dateTransfert).toLocaleString("fr-FR")}</td><td>{t.hospitalisation?.numero}</td><td>{[t.hospitalisation?.patient?.nom,t.hospitalisation?.patient?.prenom].filter(Boolean).join(" ")}</td><td>#{t.ancienServiceId??"—"}</td><td>#{t.nouveauServiceId??"—"}</td><td>{t.motif||"—"}</td><td><ActionButton entity="transfert" id={t.id}/></td></tr>)}</tbody></table></div></main>}
+
+import Link from "next/link";
+import { getTransferts } from "@/app/actions/transferts";
+import TransfertsTable from "@/components/hospitalisation/TransfertsTable";
+
+
+export default async function Page() {
+  const r = await getTransferts();
+
+  const items = (r.data ?? []) as any[];
+
+  return (
+    <main className="min-h-screen bg-base-200/40">
+      <div className="mx-auto max-w-7xl space-y-6 p-4 sm:p-6 lg:p-8">
+
+        {/* =====================================================
+            EN-TÊTE
+        ====================================================== */}
+
+        <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+
+          <div>
+            <div className="breadcrumbs mb-1 text-sm">
+              <ul>
+                <li>
+                  <span className="text-base-content/50">
+                    Hospitalisation
+                  </span>
+                </li>
+
+                <li>
+                  <span className="font-medium">
+                    Transferts
+                  </span>
+                </li>
+              </ul>
+            </div>
+
+            <h1 className="text-2xl font-bold tracking-tight sm:text-3xl">
+              Transferts hospitaliers
+            </h1>
+
+            <p className="mt-1 text-sm text-base-content/60">
+              Suivez les déplacements des patients entre les différents services.
+            </p>
+          </div>
+
+          <Link
+            className="btn btn-primary"
+            href="/hospitalisation/transferts/nouveau"
+          >
+            <span className="text-lg">+</span>
+            Nouveau transfert
+          </Link>
+
+        </div>
+
+        <TransfertsTable items={items} />
+
+      </div>
+    </main>
+  );
+}

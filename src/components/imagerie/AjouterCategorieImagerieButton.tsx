@@ -221,15 +221,7 @@ export default function AjouterCategorieImagerieButton() {
           BOUTON
       ===================================================== */}
 
-      <button
-        type="button"
-        className="btn btn-primary"
-        onClick={() => setOpen(true)}
-      >
-        <Plus size={18} />
-
-        Ajouter un examen
-      </button>
+     
 
       {/* =====================================================
           MODAL

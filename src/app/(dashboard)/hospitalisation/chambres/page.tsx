@@ -1,2 +1,60 @@
-import Link from "next/link";import {getChambres} from "@/app/actions/chambres";import ActionButton from "@/components/hospitalisation/ActionButton";
-export default async function Page(){const r=await getChambres();const items=(r.data??[]) as any[];return <main className="space-y-5 p-6"><div className="flex justify-between"><h1 className="text-2xl font-bold">Chambres</h1><Link className="btn btn-primary" href="/hospitalisation/chambres/nouveau">+ Chambre</Link></div><div className="overflow-x-auto rounded-2xl border"><table className="table"><thead><tr><th>Numéro</th><th>Type</th><th>Étage</th><th>Service</th><th>Lits</th><th>Prix</th><th></th></tr></thead><tbody>{items.map(c=><tr key={c.id}><td className="font-bold">{c.numero}</td><td>{c.type||"—"}</td><td>{c.etage||"—"}</td><td>{c.service?.nom||"—"}</td><td>{c.lits.length}</td><td>{c.prixJournalier} {c.devise}</td><td className="text-right"><Link className="btn btn-outline btn-sm" href={`/hospitalisation/chambres/${c.id}`}>Voir</Link> <Link className="btn btn-ghost btn-sm" href={`/hospitalisation/chambres/${c.id}/modifier`}>Modifier</Link> <ActionButton entity="chambre" id={c.id}/></td></tr>)}</tbody></table></div></main>}
+import Link from "next/link";
+import { getChambres } from "@/app/actions/chambres";
+import ChambreTable from "@/components/hospitalisation/ChambreTable";
+
+
+
+export default async function Page() {
+  const result = await getChambres();
+
+  const items =
+    result.success && Array.isArray(result.data)
+      ? result.data
+      : [];
+
+  return (
+    <main className="space-y-6 p-4 md:p-6">
+      {/* =====================================================
+          EN-TÊTE
+      ===================================================== */}
+
+      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+        <div>
+          <h1 className="text-3xl font-bold">
+            Chambres
+          </h1>
+
+          <p className="mt-1 text-sm text-base-content/60">
+            Gestion des chambres, lits, services et tarifs
+            d'hospitalisation.
+          </p>
+        </div>
+
+        <Link
+          href="/hospitalisation/chambres/nouveau"
+          className="btn btn-primary"
+        >
+          + Nouvelle chambre
+        </Link>
+      </div>
+
+      {/* =====================================================
+          ERREUR SERVEUR
+      ===================================================== */}
+
+      {!result.success && (
+        <div className="alert alert-error shadow-sm">
+          <span>
+            {result.message}
+          </span>
+        </div>
+      )}
+
+      {/* =====================================================
+          TABLEAU
+      ===================================================== */}
+
+      <ChambreTable items={items} />
+    </main>
+  );
+}

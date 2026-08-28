@@ -1,1 +1,66 @@
-import Link from "next/link";import {getSoins} from "@/app/actions/soins";import ActionButton from "@/components/hospitalisation/ActionButton";export default async function Page(){const r=await getSoins();const items=(r.data??[]) as any[];return <main className="space-y-5 p-6"><div className="flex justify-between"><h1 className="text-2xl font-bold">Soins hospitaliers</h1><Link className="btn btn-primary" href="/hospitalisation/soins/nouveau">+ Soin</Link></div><div className="overflow-x-auto rounded-2xl border"><table className="table"><thead><tr><th>Date</th><th>Hospitalisation</th><th>Patient</th><th>Type</th><th>Description</th><th></th></tr></thead><tbody>{items.map(s=><tr key={s.id}><td>{new Date(s.dateSoin).toLocaleString("fr-FR")}</td><td>{s.hospitalisation?.numero}</td><td>{[s.hospitalisation?.patient?.nom,s.hospitalisation?.patient?.prenom].filter(Boolean).join(" ")}</td><td>{s.type}</td><td>{s.description||"—"}</td><td><Link className="btn btn-ghost btn-sm" href={`/hospitalisation/soins/${s.id}/modifier`}>Modifier</Link><ActionButton entity="soin" id={s.id}/></td></tr>)}</tbody></table></div></main>}
+import Link from "next/link";
+import { getSoins } from "@/app/actions/soins";
+import SoinsTable from "@/components/hospitalisation/SoinsTable";
+
+
+export default async function Page() {
+  const r = await getSoins();
+
+  const items = (r.data ?? []) as any[];
+
+  return (
+    <main className="min-h-screen bg-base-200/40">
+      <div className="mx-auto max-w-7xl space-y-6 p-4 sm:p-6 lg:p-8">
+
+        {/* =====================================================
+            EN-TÊTE
+        ====================================================== */}
+
+        <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+
+          <div>
+            <div className="breadcrumbs mb-1 text-sm">
+              <ul>
+                <li>
+                  <span className="text-base-content/50">
+                    Hospitalisation
+                  </span>
+                </li>
+
+                <li>
+                  <span className="font-medium">
+                    Soins
+                  </span>
+                </li>
+              </ul>
+            </div>
+
+            <h1 className="text-2xl font-bold tracking-tight sm:text-3xl">
+              Soins hospitaliers
+            </h1>
+
+            <p className="mt-1 text-sm text-base-content/60">
+              Consultez et gérez les soins administrés aux patients hospitalisés.
+            </p>
+          </div>
+
+          <Link
+            className="btn btn-primary"
+            href="/hospitalisation/soins/nouveau"
+          >
+            <span className="text-lg">+</span>
+            Nouveau soin
+          </Link>
+
+        </div>
+
+        {/* =====================================================
+            TABLE + FILTRES
+        ====================================================== */}
+
+        <SoinsTable items={items} />
+
+      </div>
+    </main>
+  );
+}

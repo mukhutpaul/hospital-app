@@ -1,6 +1,14 @@
+
 "use client";
 
-import { Eye, FileText } from "lucide-react";
+import {
+  Eye,
+  FileText,
+  Search,
+  X,
+} from "lucide-react";
+
+import { useMemo, useState } from "react";
 
 /* ==========================================================
    TYPES
@@ -62,23 +70,42 @@ export default function OrdonnanceTable({
   ordonnances,
 }: Props) {
   /* ========================================================
+     RECHERCHE
+  ======================================================== */
+
+  const [search, setSearch] = useState("");
+
+  /* ========================================================
      FORMAT DATE
   ======================================================== */
 
-  const formatDate = (date: Date | string) => {
-    if (!date) return "-";
-
-    const parsedDate = new Date(date);
-
-    if (Number.isNaN(parsedDate.getTime())) {
+  const formatDate = (
+    date: Date | string,
+  ) => {
+    if (!date) {
       return "-";
     }
 
-    return parsedDate.toLocaleDateString("fr-FR", {
-      day: "2-digit",
-      month: "2-digit",
-      year: "numeric",
-    });
+    const parsedDate = new Date(
+      date,
+    );
+
+    if (
+      Number.isNaN(
+        parsedDate.getTime(),
+      )
+    ) {
+      return "-";
+    }
+
+    return parsedDate.toLocaleDateString(
+      "fr-FR",
+      {
+        day: "2-digit",
+        month: "2-digit",
+        year: "numeric",
+      },
+    );
   };
 
   /* ========================================================
@@ -86,7 +113,7 @@ export default function OrdonnanceTable({
   ======================================================== */
 
   const nomPatient = (
-    patient?: Ordonnance["patient"]
+    patient?: Ordonnance["patient"],
   ) => {
     if (!patient) {
       return "Patient inconnu";
@@ -106,7 +133,7 @@ export default function OrdonnanceTable({
   ======================================================== */
 
   const nomMedecin = (
-    medecin?: Ordonnance["medecin"]
+    medecin?: Ordonnance["medecin"],
   ) => {
     if (!medecin) {
       return "Médecin inconnu";
@@ -125,7 +152,9 @@ export default function OrdonnanceTable({
      STATUT
   ======================================================== */
 
-  const getStatutClass = (statut: string) => {
+  const getStatutClass = (
+    statut: string,
+  ) => {
     switch (statut) {
       case "ACTIVE":
         return "badge-success";
@@ -146,21 +175,115 @@ export default function OrdonnanceTable({
   };
 
   /* ========================================================
+     RECHERCHE FILTRÉE
+  ======================================================== */
+
+  const ordonnancesFiltrees = useMemo(() => {
+    const terme =
+      search.trim().toLowerCase();
+
+    if (!terme) {
+      return ordonnances;
+    }
+
+    return ordonnances.filter(
+      (ordonnance) => {
+        const patient =
+          ordonnance.patient;
+
+        const medecin =
+          ordonnance.medecin;
+
+        const patientNom = patient
+          ? [
+              patient.nom,
+              patient.postNom,
+              patient.prenom,
+            ]
+              .filter(Boolean)
+              .join(" ")
+          : "";
+
+        const medecinNom = medecin
+          ? [
+              medecin.nom,
+              medecin.postNom,
+              medecin.prenom,
+            ]
+              .filter(Boolean)
+              .join(" ")
+          : "";
+
+        const numeroDossier =
+          patient?.numeroDossier ?? "";
+
+        const numeroOrdonnance =
+          ordonnance.numero ?? "";
+
+        const statut =
+          ordonnance.statut ?? "";
+
+        const medicaments =
+          (ordonnance.lignes ?? [])
+            .map(
+              (ligne) =>
+                [
+                  ligne.medicament?.code,
+                  ligne.medicament?.nom,
+                  ligne.medicament?.forme,
+                  ligne.medicament?.dosage,
+                ]
+                  .filter(Boolean)
+                  .join(" "),
+            )
+            .join(" ");
+
+        const date =
+          formatDate(
+            ordonnance.datePrescription,
+          );
+
+        return [
+          numeroOrdonnance,
+          patientNom,
+          numeroDossier,
+          medecinNom,
+          statut,
+          medicaments,
+          date,
+        ]
+          .join(" ")
+          .toLowerCase()
+          .includes(terme);
+      },
+    );
+  }, [
+    ordonnances,
+    search,
+  ]);
+
+  /* ========================================================
      NAVIGATION
   ======================================================== */
 
-  const voirOrdonnance = (id: number) => {
+  const voirOrdonnance = (
+    id: number,
+  ) => {
     window.location.href =
       `/pharmacie/ordonnances/${id}`;
   };
 
   /* ========================================================
-     AUCUNE DONNEE
+     AUCUNE DONNÉE
   ======================================================== */
 
-  if (!ordonnances || ordonnances.length === 0) {
+  if (
+    !ordonnances ||
+    ordonnances.length === 0
+  ) {
     return (
       <div className="rounded-xl border border-base-300 bg-base-100 p-8 text-center">
+
         <FileText
           className="mx-auto mb-3 h-10 w-10 opacity-40"
         />
@@ -170,151 +293,268 @@ export default function OrdonnanceTable({
         </h3>
 
         <p className="mt-1 text-sm opacity-60">
-          Les ordonnances médicales apparaîtront ici.
+          Les ordonnances médicales
+          apparaîtront ici.
         </p>
+
       </div>
     );
   }
 
   /* ========================================================
-     TABLEAU
+     RENDER
   ======================================================== */
 
   return (
-    <div className="overflow-x-auto rounded-xl border border-base-300 bg-base-100">
-      <table className="table">
-        {/* ==================================================
-            HEADER
-        ================================================== */}
+    <div className="space-y-4">
 
-        <thead>
-          <tr>
-            <th>N° Ordonnance</th>
-            <th>Date</th>
-            <th>Patient</th>
-            <th>Médecin</th>
-            <th>Médicaments</th>
-            <th>Statut</th>
-            <th className="text-right">
-              Actions
-            </th>
-          </tr>
-        </thead>
+      {/* ====================================================
+          BARRE DE RECHERCHE
+      ==================================================== */}
 
-        {/* ==================================================
-            BODY
-        ================================================== */}
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
 
-        <tbody>
-          {ordonnances.map((ordonnance) => (
-            <tr key={ordonnance.id}>
-              {/* ============================================
-                  NUMERO
-              ============================================ */}
+        <div className="relative w-full sm:max-w-xl">
 
-              <td>
-                <span className="font-semibold">
-                  {ordonnance.numero}
-                </span>
-              </td>
+          <Search
+            size={18}
+            className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-base-content/50"
+          />
 
-              {/* ============================================
-                  DATE
-              ============================================ */}
+          <input
+            type="text"
+            value={search}
+            onChange={(event) =>
+              setSearch(
+                event.target.value,
+              )
+            }
+            placeholder="Rechercher par ordonnance, patient, dossier, médecin, médicament ou statut..."
+            className="input input-bordered h-11 w-full pl-10 pr-10"
+          />
 
-              <td>
-                {formatDate(
-                  ordonnance.datePrescription
-                )}
-              </td>
+          {search && (
+            <button
+              type="button"
+              onClick={() =>
+                setSearch("")
+              }
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-base-content/50 hover:text-error"
+              title="Effacer la recherche"
+            >
+              <X size={17} />
+            </button>
+          )}
 
-              {/* ============================================
-                  PATIENT
-              ============================================ */}
+        </div>
 
-              <td>
-                <div className="font-medium">
-                  {nomPatient(
-                    ordonnance.patient
-                  )}
-                </div>
+        <div className="text-sm text-base-content/60">
+          {ordonnancesFiltrees.length}{" "}
+          ordonnance
+          {ordonnancesFiltrees.length !== 1
+            ? "s"
+            : ""}
+        </div>
 
-                {ordonnance.patient
-                  ?.numeroDossier && (
-                  <div className="text-xs opacity-60">
-                    Dossier :{" "}
-                    {
-                      ordonnance.patient
-                        .numeroDossier
-                    }
-                  </div>
-                )}
-              </td>
+      </div>
 
-              {/* ============================================
-                  MEDECIN
-              ============================================ */}
+      {/* ====================================================
+          AUCUN RÉSULTAT
+      ==================================================== */}
 
-              <td>
-                {nomMedecin(
-                  ordonnance.medecin
-                )}
-              </td>
+      {ordonnancesFiltrees.length ===
+      0 ? (
+        <div className="rounded-xl border border-base-300 bg-base-100 p-10 text-center">
 
-              {/* ============================================
-                  MEDICAMENTS
-              ============================================ */}
+          <Search
+            size={38}
+            className="mx-auto mb-3 opacity-30"
+          />
 
-              <td>
-                <span className="badge badge-outline">
-                  {ordonnance.lignes
-                    ?.length ?? 0}{" "}
-                  médicament
-                  {(ordonnance.lignes
-                    ?.length ?? 0) > 1
-                    ? "s"
-                    : ""}
-                </span>
-              </td>
+          <h3 className="font-semibold">
+            Aucun résultat
+          </h3>
 
-              {/* ============================================
-                  STATUT
-              ============================================ */}
+          <p className="mt-1 text-sm text-base-content/60">
+            Aucune ordonnance ne
+            correspond à votre recherche.
+          </p>
 
-              <td>
-                <span
-                  className={`badge ${getStatutClass(
-                    ordonnance.statut
-                  )}`}
-                >
-                  {ordonnance.statut}
-                </span>
-              </td>
+          <button
+            type="button"
+            className="btn btn-sm btn-ghost mt-4"
+            onClick={() =>
+              setSearch("")
+            }
+          >
+            Réinitialiser
+          </button>
 
-              {/* ============================================
-                  ACTIONS
-              ============================================ */}
+        </div>
+      ) : (
+        <div className="overflow-x-auto rounded-xl border border-base-300 bg-base-100">
 
-              <td>
-                <div className="flex justify-end gap-2">
-                  <button
-                    type="button"
-                    className="btn btn-sm btn-ghost"
-                    title="Voir l'ordonnance"
-                    onClick={() =>
-                      voirOrdonnance(
-                        ordonnance.id
-                      )
+          <table className="table">
+
+            {/* ==================================================
+                HEADER
+            ================================================== */}
+
+            <thead>
+              <tr>
+                <th>N° Ordonnance</th>
+                <th>Date</th>
+                <th>Patient</th>
+                <th>Médecin</th>
+                <th>Médicaments</th>
+                <th>Statut</th>
+                <th className="text-right">
+                  Actions
+                </th>
+              </tr>
+            </thead>
+
+            {/* ==================================================
+                BODY
+            ================================================== */}
+
+            <tbody>
+              {ordonnancesFiltrees.map(
+                (ordonnance) => (
+                  <tr
+                    key={
+                      ordonnance.id
                     }
                   >
-                    <Eye size={16} />
-                  </button>
-                </div>
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+
+                    {/* ========================================
+                        NUMERO
+                    ======================================== */}
+
+                    <td>
+                      <span className="font-semibold">
+                        {
+                          ordonnance.numero
+                        }
+                      </span>
+                    </td>
+
+                    {/* ========================================
+                        DATE
+                    ======================================== */}
+
+                    <td>
+                      {formatDate(
+                        ordonnance.datePrescription,
+                      )}
+                    </td>
+
+                    {/* ========================================
+                        PATIENT
+                    ======================================== */}
+
+                    <td>
+                      <div className="font-medium">
+                        {nomPatient(
+                          ordonnance.patient,
+                        )}
+                      </div>
+
+                      {ordonnance.patient
+                        ?.numeroDossier && (
+                        <div className="text-xs opacity-60">
+                          Dossier :{" "}
+                          {
+                            ordonnance.patient
+                              .numeroDossier
+                          }
+                        </div>
+                      )}
+                    </td>
+
+                    {/* ========================================
+                        MEDECIN
+                    ======================================== */}
+
+                    <td>
+                      {nomMedecin(
+                        ordonnance.medecin,
+                      )}
+                    </td>
+
+                    {/* ========================================
+                        MEDICAMENTS
+                    ======================================== */}
+
+                    <td>
+                      <span className="badge badge-outline">
+                        {
+                          ordonnance
+                            .lignes
+                            ?.length ?? 0
+                        }{" "}
+                        médicament
+                        {(
+                          ordonnance
+                            .lignes
+                            ?.length ?? 0
+                        ) > 1
+                          ? "s"
+                          : ""}
+                      </span>
+                    </td>
+
+                    {/* ========================================
+                        STATUT
+                    ======================================== */}
+
+                    <td>
+                      <span
+                        className={`badge ${getStatutClass(
+                          ordonnance.statut,
+                        )}`}
+                      >
+                        {
+                          ordonnance.statut
+                        }
+                      </span>
+                    </td>
+
+                    {/* ========================================
+                        ACTIONS
+                    ======================================== */}
+
+                    <td>
+                      <div className="flex justify-end gap-2">
+
+                        <button
+                          type="button"
+                          className="btn btn-sm btn-ghost"
+                          title="Voir l'ordonnance"
+                          onClick={() =>
+                            voirOrdonnance(
+                              ordonnance.id,
+                            )
+                          }
+                        >
+                          <Eye
+                            size={16}
+                          />
+                        </button>
+
+                      </div>
+                    </td>
+
+                  </tr>
+                ),
+              )}
+            </tbody>
+
+          </table>
+
+        </div>
+      )}
+
     </div>
   );
 }

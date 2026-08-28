@@ -55,6 +55,11 @@ const menus = [
         href: "/admissions",
         icon: UserPlus,
       },
+      {
+        label: "Triange",
+        href: "/triages",
+        icon: UserPlus,
+      },
     ],
   },
 

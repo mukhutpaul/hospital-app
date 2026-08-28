@@ -1,1 +1,63 @@
-import Link from "next/link";import {getSorties} from "@/app/actions/sorties";import ActionButton from "@/components/hospitalisation/ActionButton";export default async function Page(){const r=await getSorties();const items=(r.data??[]) as any[];return <main className="space-y-5 p-6"><div className="flex justify-between"><h1 className="text-2xl font-bold">Sorties</h1><Link className="btn btn-primary" href="/hospitalisation/sorties/nouveau">+ Sortie</Link></div><div className="overflow-x-auto rounded-2xl border"><table className="table"><thead><tr><th>Date</th><th>Patient</th><th>Hospitalisation</th><th>Type</th><th>Diagnostic final</th><th></th></tr></thead><tbody>{items.map(s=><tr key={s.id}><td>{new Date(s.dateSortie).toLocaleString("fr-FR")}</td><td>{[s.patient?.nom,s.patient?.postNom,s.patient?.prenom].filter(Boolean).join(" ")}</td><td>{s.hospitalisation?.numero||"—"}</td><td>{s.type}</td><td>{s.diagnosticFinal||"—"}</td><td><Link className="btn btn-ghost btn-sm" href={`/hospitalisation/sorties/${s.id}/modifier`}>Modifier</Link><ActionButton entity="sortie" id={s.id}/></td></tr>)}</tbody></table></div></main>}
+
+import Link from "next/link";
+import { getSorties } from "@/app/actions/sorties";
+import SortiesTable from "@/components/hospitalisation/SortiesTable";
+
+
+export default async function Page() {
+  const r = await getSorties();
+
+  const items = (r.data ?? []) as any[];
+
+  return (
+    <main className="min-h-screen bg-base-200/40">
+      <div className="mx-auto max-w-7xl space-y-6 p-4 sm:p-6 lg:p-8">
+
+        {/* =====================================================
+            EN-TÊTE
+        ====================================================== */}
+
+        <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+
+          <div>
+            <div className="breadcrumbs mb-1 text-sm">
+              <ul>
+                <li>
+                  <span className="text-base-content/50">
+                    Hospitalisation
+                  </span>
+                </li>
+
+                <li>
+                  <span className="font-medium">
+                    Sorties
+                  </span>
+                </li>
+              </ul>
+            </div>
+
+            <h1 className="text-2xl font-bold tracking-tight sm:text-3xl">
+              Sorties hospitalières
+            </h1>
+
+            <p className="mt-1 text-sm text-base-content/60">
+              Consultez et gérez les sorties des patients hospitalisés.
+            </p>
+          </div>
+
+          <Link
+            className="btn btn-primary"
+            href="/hospitalisation/sorties/nouveau"
+          >
+            <span className="text-lg">+</span>
+            Nouvelle sortie
+          </Link>
+
+        </div>
+
+        <SortiesTable items={items} />
+
+      </div>
+    </main>
+  );
+}

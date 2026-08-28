@@ -1138,6 +1138,7 @@ model LigneFacture {
 
   acteId Int?
   acte   ActeMedical? @relation(fields: [acteId], references: [id])
+
   serviceId Int?
   service   Service? @relation(fields: [serviceId], references: [id])
 

@@ -3,24 +3,28 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import {
   ArrowLeft,
-  Trash2,
-  Edit,
+  ClipboardList,
+  User,
+  Stethoscope,
+  CalendarDays,
+  FileText,
+  Wallet,
 } from "lucide-react";
 
 import {
   getActesConsultation,
   getActesMedicauxActifs,
-  deleteConsultationActe,
 } from "@/app/actions/actes-medicaux";
-import ConsultationActeForm from "@/components/actes/ConsultationActeForm";
 
+import ConsultationActeForm from "@/components/actes/ConsultationActeForm";
+import ConsultationActesTable from "@/components/actes/ConsultationActesTableDetails";
 
 
 function nomPatient(patient: any) {
   return [
-    patient.nom,
-    patient.postNom,
-    patient.prenom,
+    patient?.nom,
+    patient?.postNom,
+    patient?.prenom,
   ]
     .filter(Boolean)
     .join(" ");
@@ -28,8 +32,8 @@ function nomPatient(patient: any) {
 
 function nomMedecin(medecin: any) {
   return [
-    medecin.nom,
-    medecin.prenom,
+    medecin?.nom,
+    medecin?.prenom,
   ]
     .filter(Boolean)
     .join(" ");
@@ -42,16 +46,17 @@ export default async function ConsultationActesDetailsPage({
 }) {
   const { id } = await params;
 
-  const consultationId =
-    Number(id);
+  const consultationId = Number(id);
+
+  if (!Number.isFinite(consultationId)) {
+    notFound();
+  }
 
   const [
     consultationResult,
     actesResult,
   ] = await Promise.all([
-    getActesConsultation(
-      consultationId,
-    ),
+    getActesConsultation(consultationId),
     getActesMedicauxActifs(),
   ]);
 
@@ -62,106 +67,218 @@ export default async function ConsultationActesDetailsPage({
     notFound();
   }
 
-  const consultation =
-    consultationResult.data as any;
+  const consultation = consultationResult.data as any;
 
-  const actes =
-    actesResult.success
-      ? actesResult.data ?? []
-      : [];
+  const actes = actesResult.success
+    ? actesResult.data ?? []
+    : [];
 
-  const total =
-    consultation.actes.reduce(
-      (
-        somme: number,
-        item: any,
-      ) =>
-        somme +
-        Number(item.montant),
-      0,
-    );
+  const total = consultation.actes.reduce(
+    (somme: number, item: any) =>
+      somme + Number(item.montant || 0),
+    0,
+  );
 
   const devise =
-    consultation.actes[0]?.acte
-      ?.devise ?? "USD";
+    consultation.actes[0]?.acte?.devise ??
+    "USD";
 
   return (
-    <div className="space-y-6">
-      <div className="flex flex-col justify-between gap-4 sm:flex-row sm:items-center">
-        <div>
-          <h1 className="text-2xl font-bold">
-            Consultation CONS-
-            {consultation.idConsultation}
-          </h1>
+    <main className="w-full space-y-6 pb-10">
 
-          <p className="text-sm opacity-60">
-            Gestion des actes médicaux réalisés.
-          </p>
+      {/* =====================================================
+          EN-TÊTE
+      ====================================================== */}
+
+      <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
+
+        <div className="flex items-start gap-3">
+
+          <div className="flex size-12 shrink-0 items-center justify-center rounded-2xl bg-primary/10 text-primary">
+            <ClipboardList size={25} />
+          </div>
+
+          <div>
+            <div className="flex flex-wrap items-center gap-2">
+
+              <h1 className="text-2xl font-bold tracking-tight sm:text-3xl">
+                Consultation CONS-
+                {consultation.idConsultation}
+              </h1>
+
+              <span className="badge badge-primary badge-outline">
+                {consultation.actes.length} acte
+                {consultation.actes.length > 1
+                  ? "s"
+                  : ""}
+              </span>
+
+            </div>
+
+            <p className="mt-1 text-sm text-base-content/60">
+              Gestion des actes médicaux réalisés
+              pendant cette consultation.
+            </p>
+          </div>
+
         </div>
 
         <Link
           href="/facturation/actes-medicaux/consultations"
-          className="btn btn-ghost"
+          className="btn btn-outline gap-2"
         >
           <ArrowLeft size={18} />
-
-          Retour
+          Retour aux consultations
         </Link>
+
       </div>
 
-      <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-        <div className="card border border-base-300 bg-base-100 shadow-sm">
-          <div className="card-body">
-            <h2 className="card-title">
-              Patient
-            </h2>
 
-            <p className="text-lg font-bold">
-              {nomPatient(
-                consultation.patient,
-              )}
-            </p>
+      {/* =====================================================
+          INFORMATIONS CONSULTATION
+      ====================================================== */}
 
-            <p className="text-sm opacity-60">
-              Dossier :{" "}
-              {
-                consultation.patient
-                  .numeroDossier
-              }
-            </p>
-          </div>
-        </div>
+      <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
+
+        {/* PATIENT */}
 
         <div className="card border border-base-300 bg-base-100 shadow-sm">
           <div className="card-body">
-            <h2 className="card-title">
-              Consultation
-            </h2>
 
-            <p>
-              <strong>Médecin :</strong>{" "}
-              {nomMedecin(
-                consultation.medecin,
-              )}
-            </p>
+            <div className="flex items-center gap-3">
 
-            <p>
-              <strong>Date :</strong>{" "}
-              {new Intl.DateTimeFormat(
-                "fr-FR",
-                {
-                  dateStyle: "medium",
-                  timeStyle: "short",
-                },
-              ).format(
-                new Date(
-                  consultation.dateConsultation,
-                ),
-              )}
-            </p>
+              <div className="flex size-10 items-center justify-center rounded-xl bg-primary/10 text-primary">
+                <User size={20} />
+              </div>
+
+              <div>
+                <p className="text-xs font-medium uppercase tracking-wide text-base-content/50">
+                  Patient
+                </p>
+
+                <h2 className="font-bold">
+                  {nomPatient(
+                    consultation.patient,
+                  ) || "—"}
+                </h2>
+              </div>
+
+            </div>
+
+            <div className="mt-3 rounded-xl bg-base-200/60 p-3">
+              <p className="text-xs text-base-content/50">
+                Numéro de dossier
+              </p>
+
+              <p className="font-mono font-semibold">
+                {consultation.patient
+                  ?.numeroDossier || "—"}
+              </p>
+            </div>
+
           </div>
         </div>
+
+
+        {/* MÉDECIN */}
+
+        <div className="card border border-base-300 bg-base-100 shadow-sm">
+          <div className="card-body">
+
+            <div className="flex items-center gap-3">
+
+              <div className="flex size-10 items-center justify-center rounded-xl bg-info/10 text-info">
+                <Stethoscope size={20} />
+              </div>
+
+              <div>
+                <p className="text-xs font-medium uppercase tracking-wide text-base-content/50">
+                  Médecin
+                </p>
+
+                <h2 className="font-bold">
+                  {nomMedecin(
+                    consultation.medecin,
+                  ) || "—"}
+                </h2>
+              </div>
+
+            </div>
+
+            <div className="mt-3 rounded-xl bg-base-200/60 p-3">
+              <p className="text-xs text-base-content/50">
+                Professionnel responsable
+              </p>
+
+              <p className="font-medium">
+                Médecin
+              </p>
+            </div>
+
+          </div>
+        </div>
+
+
+        {/* DATE */}
+
+        <div className="card border border-base-300 bg-base-100 shadow-sm">
+          <div className="card-body">
+
+            <div className="flex items-center gap-3">
+
+              <div className="flex size-10 items-center justify-center rounded-xl bg-success/10 text-success">
+                <CalendarDays size={20} />
+              </div>
+
+              <div>
+                <p className="text-xs font-medium uppercase tracking-wide text-base-content/50">
+                  Date de consultation
+                </p>
+
+                <h2 className="font-bold">
+                  {new Intl.DateTimeFormat(
+                    "fr-FR",
+                    {
+                      dateStyle: "medium",
+                    },
+                  ).format(
+                    new Date(
+                      consultation.dateConsultation,
+                    ),
+                  )}
+                </h2>
+              </div>
+
+            </div>
+
+            <div className="mt-3 rounded-xl bg-base-200/60 p-3">
+              <p className="text-xs text-base-content/50">
+                Heure
+              </p>
+
+              <p className="font-semibold">
+                {new Intl.DateTimeFormat(
+                  "fr-FR",
+                  {
+                    timeStyle: "short",
+                  },
+                ).format(
+                  new Date(
+                    consultation.dateConsultation,
+                  ),
+                )}
+              </p>
+            </div>
+
+          </div>
+        </div>
+
       </div>
+
+
+      {/* =====================================================
+          FORMULAIRE AJOUT ACTE
+      ====================================================== */}
 
       <ConsultationActeForm
         consultationId={
@@ -170,126 +287,104 @@ export default async function ConsultationActesDetailsPage({
         actes={actes as any[]}
       />
 
-      <div className="card border border-base-300 bg-base-100 shadow-sm">
-        <div className="card-body">
-          <div className="flex items-center justify-between">
-            <div>
-              <h2 className="card-title">
-                Actes réalisés
-              </h2>
 
-              <p className="text-sm opacity-60">
-                {consultation.actes.length} acte(s)
+      {/* =====================================================
+          RÉSUMÉ FINANCIER
+      ====================================================== */}
+
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
+
+        <div className="rounded-2xl border border-base-300 bg-base-100 p-5 shadow-sm">
+
+          <div className="flex items-center justify-between">
+
+            <div>
+              <p className="text-sm text-base-content/60">
+                Nombre d'actes
+              </p>
+
+              <p className="mt-1 text-2xl font-bold">
+                {consultation.actes.length}
               </p>
             </div>
 
-            <div className="text-right">
-              <p className="text-xs opacity-60">
-                Total
+            <ClipboardList
+              className="text-primary"
+              size={26}
+            />
+
+          </div>
+
+        </div>
+
+
+        <div className="rounded-2xl border border-base-300 bg-base-100 p-5 shadow-sm">
+
+          <div className="flex items-center justify-between">
+
+            <div>
+              <p className="text-sm text-base-content/60">
+                Devise
               </p>
 
-              <p className="text-2xl font-bold text-primary">
-                {total.toFixed(2)}{" "}
+              <p className="mt-1 text-2xl font-bold">
                 {devise}
               </p>
             </div>
+
+            <Wallet
+              className="text-info"
+              size={26}
+            />
+
           </div>
 
-          <div className="divider" />
-
-          <div className="overflow-x-auto">
-            <table className="table">
-              <thead>
-                <tr>
-                  <th>Code</th>
-                  <th>Acte</th>
-                  <th>Quantité</th>
-                  <th>Prix unitaire</th>
-                  <th>Montant</th>
-                  <th>Observation</th>
-                  <th />
-                </tr>
-              </thead>
-
-              <tbody>
-                {consultation.actes.map(
-                  (item: any) => (
-                    <tr key={item.id}>
-                      <td className="font-mono">
-                        {item.acte.code}
-                      </td>
-
-                      <td className="font-semibold">
-                        {item.acte.libelle}
-                      </td>
-
-                      <td>
-                        {Number(
-                          item.quantite,
-                        ).toFixed(2)}
-                      </td>
-
-                      <td>
-                        {Number(
-                          item.prixUnitaire,
-                        ).toFixed(2)}{" "}
-                        {item.acte.devise}
-                      </td>
-
-                      <td className="font-bold">
-                        {Number(
-                          item.montant,
-                        ).toFixed(2)}{" "}
-                        {item.acte.devise}
-                      </td>
-
-                      <td>
-                        {item.observation ||
-                          "-"}
-                      </td>
-
-                      <td>
-                        <form
-                          action={async () => {
-                            "use server";
-
-                            await deleteConsultationActe(
-                              item.id,
-                            );
-                          }}
-                        >
-                          <button
-                            type="submit"
-                            className="btn btn-sm btn-error btn-outline btn-square"
-                            title="Supprimer"
-                          >
-                            <Trash2
-                              size={16}
-                            />
-                          </button>
-                        </form>
-                      </td>
-                    </tr>
-                  ),
-                )}
-
-                {consultation.actes
-                  .length === 0 && (
-                  <tr>
-                    <td
-                      colSpan={7}
-                      className="py-10 text-center opacity-60"
-                    >
-                      Aucun acte ajouté à cette
-                      consultation.
-                    </td>
-                  </tr>
-                )}
-              </tbody>
-            </table>
-          </div>
         </div>
+
+
+        <div className="rounded-2xl border border-primary/20 bg-primary/5 p-5 shadow-sm">
+
+          <div className="flex items-center justify-between">
+
+            <div>
+              <p className="text-sm text-base-content/60">
+                Total consultation
+              </p>
+
+              <p className="mt-1 text-2xl font-bold text-primary">
+                {total.toLocaleString(
+                  "fr-FR",
+                  {
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2,
+                  },
+                )}{" "}
+                {devise}
+              </p>
+            </div>
+
+            <FileText
+              className="text-primary"
+              size={26}
+            />
+
+          </div>
+
+        </div>
+
       </div>
-    </div>
+
+
+      {/* =====================================================
+          TABLEAU DES ACTES
+      ====================================================== */}
+
+      <ConsultationActesTable
+        actes={
+          consultation.actes as any[]
+        }
+      />
+
+    </main>
   );
 }

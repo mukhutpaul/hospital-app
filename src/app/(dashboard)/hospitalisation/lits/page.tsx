@@ -1,1 +1,66 @@
-import Link from "next/link";import {getLits} from "@/app/actions/lits";import ActionButton from "@/components/hospitalisation/ActionButton";export default async function Page(){const r=await getLits();const items=(r.data??[]) as any[];return <main className="space-y-5 p-6"><div className="flex justify-between"><h1 className="text-2xl font-bold">Lits</h1><Link className="btn btn-primary" href="/hospitalisation/lits/nouveau">+ Lit</Link></div><div className="overflow-x-auto rounded-2xl border"><table className="table"><thead><tr><th>Lit</th><th>Chambre</th><th>Service</th><th>Statut</th><th>Patient actuel</th><th></th></tr></thead><tbody>{items.map(l=><tr key={l.id}><td>{l.numero}</td><td>{l.chambre?.numero}</td><td>{l.chambre?.service?.nom||"—"}</td><td><span className={`badge ${l.statut==="LIBRE"?"badge-success":"badge-warning"}`}>{l.statut}</span></td><td>{l.hospitalisations?.[0]?[l.hospitalisations[0].patient?.nom,l.hospitalisations[0].patient?.prenom].filter(Boolean).join(" "):"—"}</td><td><Link className="btn btn-ghost btn-sm" href={`/hospitalisation/lits/${l.id}/modifier`}>Modifier</Link><ActionButton entity="lit" id={l.id}/></td></tr>)}</tbody></table></div></main>}
+import Link from "next/link";
+import { getLits } from "@/app/actions/lits";
+import LitsTable from "@/components/hospitalisation/LitsTable";
+
+
+export default async function Page() {
+  const r = await getLits();
+
+  const items = (r.data ?? []) as any[];
+
+  return (
+    <main className="min-h-screen bg-base-200/40">
+      <div className="mx-auto max-w-7xl space-y-6 p-4 sm:p-6 lg:p-8">
+
+        {/* =====================================================
+            EN-TÊTE
+        ====================================================== */}
+
+        <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+
+          <div>
+            <div className="breadcrumbs mb-1 text-sm">
+              <ul>
+                <li>
+                  <span className="text-base-content/50">
+                    Hospitalisation
+                  </span>
+                </li>
+
+                <li>
+                  <span className="font-medium">
+                    Lits
+                  </span>
+                </li>
+              </ul>
+            </div>
+
+            <h1 className="text-2xl font-bold tracking-tight sm:text-3xl">
+              Gestion des lits
+            </h1>
+
+            <p className="mt-1 text-sm text-base-content/60">
+              Consultez la disponibilité et l’occupation des lits.
+            </p>
+          </div>
+
+          <Link
+            className="btn btn-primary"
+            href="/hospitalisation/lits/nouveau"
+          >
+            <span className="text-lg">+</span>
+            Nouveau lit
+          </Link>
+
+        </div>
+
+        {/* =====================================================
+            CONTENU
+        ====================================================== */}
+
+        <LitsTable items={items} />
+
+      </div>
+    </main>
+  );
+}
