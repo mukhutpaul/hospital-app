@@ -66,6 +66,11 @@ const menus = [
         href: "/consultations",
         icon: Stethoscope,
       },
+       {
+        label: "Actes Médicaux",
+        href: "/actes",
+        icon: Stethoscope,
+      },
       {
         label: "Hospitalisations",
         href: "/hospitalisation",

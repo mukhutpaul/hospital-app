@@ -1,8 +1,11 @@
 "use server";
 
 import { prisma } from "@/lib/prisma";
-import { auth } from "@/lib/auth";
 import { revalidatePath } from "next/cache";
+
+/* ==========================================================
+   TYPES
+========================================================== */
 
 type ActionResult<T = unknown> = {
   success: boolean;
@@ -11,174 +14,356 @@ type ActionResult<T = unknown> = {
 };
 
 /* ==========================================================
-   NUMÉRO DE PAIEMENT
+   RÉFÉRENCE PAIEMENT
 ========================================================== */
 
-function generateReference() {
+function generateReference(): string {
   const now = new Date();
 
-  const date = now
-    .toISOString()
-    .replace(/[-:TZ.]/g, "")
-    .slice(0, 14);
+  const date = [
+    now.getFullYear(),
+    String(now.getMonth() + 1).padStart(2, "0"),
+    String(now.getDate()).padStart(2, "0"),
+  ].join("");
 
-  const random = Math.floor(1000 + Math.random() * 9000);
+  const random = Math.floor(100000 + Math.random() * 900000);
 
   return `PAY-${date}-${random}`;
 }
 
 /* ==========================================================
-   LISTE DES PAIEMENTS
+   PATIENTS
 ========================================================== */
 
-export async function getPaiements(): Promise<ActionResult<any[]>> {
+export async function getPatientsPourPaiement() {
   try {
-    const paiements = await prisma.paiement.findMany({
-      orderBy: {
-        datePaiement: "desc",
+    const patients = await prisma.patient.findMany({
+      select: {
+        id: true,
+        nom: true,
+        postNom: true,
+        prenom: true,
+        numeroDossier: true,
       },
-
-      include: {
-        patient: true,
-
-        facture: {
-          include: {
-            consultation: {
-              include: {
-                medecin: true,
-                service: true,
-                specialite: true,
-              },
-            },
-
-            lignes: {
-              include: {
-                acte: true,
-                service: true,
-              },
-            },
-          },
-        },
-
-        caissier: true,
+      orderBy: {
+        nom: "asc",
       },
     });
 
-    return {
-      success: true,
-      message: "Paiements chargés avec succès.",
-      data: paiements,
-    };
+    return patients;
   } catch (error) {
-    console.error("getPaiements:", error);
+    console.error("❌ getPatientsPourPaiement:", error);
 
-    return {
-      success: false,
-      message: "Impossible de charger les paiements.",
-      data: [],
-    };
+    return [];
   }
 }
 
 /* ==========================================================
-   UN PAIEMENT
+   FACTURES D'UN PATIENT
 ========================================================== */
 
-export async function getPaiementById(
-  id: number
-): Promise<ActionResult<any>> {
+/* ==========================================================
+   FACTURES D'UN PATIENT
+========================================================== */
+/* ==========================================================
+   FACTURES D'UN PATIENT
+========================================================== */
+
+export async function getFacturesPourPaiement(
+  patientId: number,
+): Promise<ActionResult> {
   try {
-    const paiement = await prisma.paiement.findUnique({
+    const id = Number(patientId);
+
+    /* ------------------------------------------------------
+       VALIDATION
+    ------------------------------------------------------ */
+
+    if (!Number.isInteger(id) || id <= 0) {
+      return {
+        success: false,
+        message: "Identifiant patient invalide.",
+        data: [],
+      };
+    }
+
+    /* ------------------------------------------------------
+       VÉRIFIER LE PATIENT
+    ------------------------------------------------------ */
+
+    const patient = await prisma.patient.findUnique({
       where: {
         id,
       },
 
-      include: {
-        patient: true,
-
-        facture: {
-          include: {
-            patient: true,
-
-            consultation: {
-              include: {
-                medecin: true,
-                service: true,
-                specialite: true,
-              },
-            },
-
-            lignes: {
-              include: {
-                acte: true,
-                service: true,
-              },
-            },
-          },
-        },
-
-        caissier: true,
+      select: {
+        id: true,
       },
     });
 
-    if (!paiement) {
+    if (!patient) {
       return {
         success: false,
-        message: "Paiement introuvable.",
+        message: "Patient introuvable.",
+        data: [],
       };
     }
+
+    /* ------------------------------------------------------
+       RÉCUPÉRER LES FACTURES
+    ------------------------------------------------------ */
+
+    const factures = await prisma.facture.findMany({
+      where: {
+        patientId: id,
+
+        NOT: {
+          statut: "ANNULEE",
+        },
+      },
+
+      select: {
+        id: true,
+        patientId: true,
+        numero: true,
+
+        montantTotal: true,
+        montantPaye: true,
+        reste: true,
+
+        devise: true,
+        statut: true,
+
+        dateFacture: true,
+      },
+
+      orderBy: {
+        id: "desc",
+      },
+    });
+
+    /* ------------------------------------------------------
+       TRANSFORMATION
+    ------------------------------------------------------ */
+
+    const data = factures
+      .map((facture) => {
+        const montantTotal = Number(
+          facture.montantTotal,
+        );
+
+        const montantPaye = Number(
+          facture.montantPaye,
+        );
+
+        const reste = Math.max(
+          0,
+          Math.round(
+            (montantTotal - montantPaye) * 100,
+          ) / 100,
+        );
+
+        return {
+          id: facture.id,
+
+          patientId: facture.patientId,
+
+          numero: facture.numero,
+
+          montantTotal,
+
+          montantPaye,
+
+          reste,
+
+          devise:
+            facture.devise || "USD",
+
+          statut: facture.statut,
+
+          dateFacture:
+            facture.dateFacture instanceof Date
+              ? facture.dateFacture.toISOString()
+              : null,
+
+          /*
+           * Pour l'instant, on ne charge pas
+           * la consultation car son identifiant
+           * n'est pas `id`.
+           */
+          consultation: null,
+        };
+      })
+
+      .filter(
+        (facture) =>
+          facture.reste > 0,
+      );
+
+    /* ------------------------------------------------------
+       RETOUR
+    ------------------------------------------------------ */
 
     return {
       success: true,
-      message: "Paiement trouvé.",
-      data: paiement,
+
+      message:
+        data.length > 0
+          ? `${data.length} facture(s) trouvée(s).`
+          : "Aucune facture non soldée pour ce patient.",
+
+      data,
     };
   } catch (error) {
-    console.error("getPaiementById:", error);
+    console.error(
+      "==================================================",
+    );
+
+    console.error(
+      "❌ getFacturesPourPaiement",
+    );
+
+    console.error(
+      "==================================================",
+    );
+
+    console.error(
+      error,
+    );
 
     return {
       success: false,
-      message: "Erreur lors de la récupération du paiement.",
+
+      message:
+        error instanceof Error
+          ? error.message
+          : "Erreur lors de la récupération des factures.",
+
+      data: [],
     };
   }
 }
+/* ==========================================================
+   RECALCUL FACTURE
+========================================================== */
+
+async function recalculerFactureDansTransaction(tx: any, factureId: number) {
+  const facture = await tx.facture.findUnique({
+    where: {
+      id: factureId,
+    },
+
+    include: {
+      paiements: {
+        where: {
+          statut: "PAYE",
+        },
+
+        select: {
+          montant: true,
+        },
+      },
+    },
+  });
+
+  if (!facture) {
+    throw new Error("FACTURE_INTROUVABLE");
+  }
+
+  const montantTotal = Number(facture.montantTotal);
+
+  const montantPaye = facture.paiements.reduce(
+    (total: number, paiement: { montant: unknown }) =>
+      total + Number(paiement.montant),
+    0,
+  );
+
+  const montantPayeFinal = Math.min(montantTotal, montantPaye);
+
+  const reste = Math.max(0, montantTotal - montantPayeFinal);
+
+  let statut: "IMPAYEE" | "PARTIELLE" | "PAYEE";
+
+  if (montantPayeFinal <= 0) {
+    statut = "IMPAYEE";
+  } else if (reste > 0) {
+    statut = "PARTIELLE";
+  } else {
+    statut = "PAYEE";
+  }
+
+  return tx.facture.update({
+    where: {
+      id: factureId,
+    },
+
+    data: {
+      montantPaye: montantPayeFinal,
+      reste,
+      statut,
+    },
+  });
+}
 
 /* ==========================================================
-   CREER UN PAIEMENT
+   CRÉER PAIEMENT
 ========================================================== */
 
 export async function createPaiement(data: {
+  patientId: number;
   factureId: number;
   montant: number;
+  devise?: string;
   modePaiement: string;
   type: string;
-  description?: string;
-}): Promise<ActionResult<any>> {
+  description?: string | null;
+  caissierId?: number | null;
+}): Promise<ActionResult> {
   try {
-    const session = await auth();
+    const patientId = Number(data.patientId);
+    const factureId = Number(data.factureId);
+    const montant = Number(data.montant);
 
-    if (!session?.user) {
+    /* ------------------------------------------------------
+       VALIDATION PATIENT
+    ------------------------------------------------------ */
+
+    if (!Number.isInteger(patientId) || patientId <= 0) {
       return {
         success: false,
-        message: "Vous devez être connecté.",
+        message: "Le patient sélectionné est invalide.",
       };
     }
 
-    if (!data.factureId) {
+    /* ------------------------------------------------------
+       VALIDATION FACTURE
+    ------------------------------------------------------ */
+
+    if (!Number.isInteger(factureId) || factureId <= 0) {
       return {
         success: false,
-        message: "La facture est obligatoire.",
+        message: "Veuillez sélectionner une facture.",
       };
     }
 
-    if (!data.montant || data.montant <= 0) {
+    /* ------------------------------------------------------
+       VALIDATION MONTANT
+    ------------------------------------------------------ */
+
+    if (!Number.isFinite(montant) || montant <= 0) {
       return {
         success: false,
-        message: "Le montant doit être supérieur à zéro.",
+        message: "Le montant doit être supérieur à 0.",
       };
     }
 
-    if (!data.modePaiement) {
+    const montantFinal = Math.round(montant * 100) / 100;
+
+    /* ------------------------------------------------------
+       MODE
+    ------------------------------------------------------ */
+
+    if (!data.modePaiement?.trim()) {
       return {
         success: false,
         message: "Le mode de paiement est obligatoire.",
@@ -186,427 +371,386 @@ export async function createPaiement(data: {
     }
 
     /* ------------------------------------------------------
-       FACTURE
+       TYPE
     ------------------------------------------------------ */
 
-    const facture = await prisma.facture.findUnique({
-      where: {
-        id: data.factureId,
-      },
-
-      include: {
-        patient: true,
-      },
-    });
-
-    if (!facture) {
+    if (!data.type?.trim()) {
       return {
         success: false,
-        message: "Facture introuvable.",
+        message: "Le type de paiement est obligatoire.",
       };
     }
 
-    const resteAvantPaiement =
-      facture.montantTotal - facture.montantPaye;
-
-    if (resteAvantPaiement <= 0) {
-      return {
-        success: false,
-        message: "Cette facture est déjà entièrement payée.",
-      };
-    }
-
-    if (data.montant > resteAvantPaiement) {
-      return {
-        success: false,
-        message: `Le montant dépasse le reste à payer (${resteAvantPaiement.toFixed(
-          2
-        )} ${facture.devise}).`,
-      };
-    }
-
-    /* ------------------------------------------------------
-       CAISSIER
-    ------------------------------------------------------ */
-
-    let caissierId: number | undefined;
-
-    if (session.user.id) {
-      const userId = Number(session.user.id);
-
-      if (!Number.isNaN(userId)) {
-        caissierId = userId;
-      }
-    }
-
-    /* ------------------------------------------------------
+    /* ======================================================
        TRANSACTION
-    ------------------------------------------------------ */
+    ====================================================== */
 
     const paiement = await prisma.$transaction(async (tx) => {
-      const reference = generateReference();
+      /* --------------------------------------------------
+           PATIENT
+        -------------------------------------------------- */
+
+      const patient = await tx.patient.findUnique({
+        where: {
+          id: patientId,
+        },
+
+        select: {
+          id: true,
+        },
+      });
+
+      if (!patient) {
+        throw new Error("PATIENT_INTROUVABLE");
+      }
+
+      /* --------------------------------------------------
+           FACTURE
+        -------------------------------------------------- */
+
+      const facture = await tx.facture.findUnique({
+        where: {
+          id: factureId,
+        },
+
+        select: {
+          id: true,
+          patientId: true,
+
+          montantTotal: true,
+          montantPaye: true,
+          reste: true,
+
+          devise: true,
+          statut: true,
+        },
+      });
+
+      if (!facture) {
+        throw new Error("FACTURE_INTROUVABLE");
+      }
+
+      /* --------------------------------------------------
+           VÉRIFIER PATIENT
+        -------------------------------------------------- */
+
+      if (facture.patientId !== patientId) {
+        throw new Error("FACTURE_PATIENT_INCORRECT");
+      }
+
+      /* --------------------------------------------------
+           FACTURE ANNULÉE
+        -------------------------------------------------- */
+
+      if (facture.statut === "ANNULEE") {
+        throw new Error("FACTURE_ANNULEE");
+      }
+
+      /* --------------------------------------------------
+           CALCUL DU VRAI RESTE
+        -------------------------------------------------- */
+
+      const montantTotal = Number(facture.montantTotal);
+
+      const montantPaye = Number(facture.montantPaye);
+
+      const resteReel = Math.max(0, montantTotal - montantPaye);
+
+      /* --------------------------------------------------
+           FACTURE DÉJÀ SOLDÉE
+        -------------------------------------------------- */
+
+      if (resteReel <= 0) {
+        throw new Error("FACTURE_SOLDEE");
+      }
+
+      /* --------------------------------------------------
+           DÉPASSEMENT
+        -------------------------------------------------- */
+
+      if (montantFinal > resteReel) {
+        throw new Error(
+          `MONTANT_SUPERIEUR:${resteReel}:${facture.devise || "USD"}`,
+        );
+      }
+
+      /* --------------------------------------------------
+           DEVISE DE LA FACTURE
+        -------------------------------------------------- */
+
+      const devise = facture.devise || "USD";
+
+      /* --------------------------------------------------
+           RÉFÉRENCE
+        -------------------------------------------------- */
+
+      let reference = generateReference();
+
+      /*
+       * Très faible risque de collision,
+       * mais on vérifie quand même.
+       */
+
+      while (
+        await tx.paiement.findUnique({
+          where: {
+            reference,
+          },
+          select: {
+            id: true,
+          },
+        })
+      ) {
+        reference = generateReference();
+      }
+
+      /* --------------------------------------------------
+           CAISSIER
+        -------------------------------------------------- */
+
+      let caissierConnect:
+        | {
+            connect: {
+              id: number;
+            };
+          }
+        | undefined;
+
+      if (data.caissierId !== null && data.caissierId !== undefined) {
+        const caissierId = Number(data.caissierId);
+
+        if (Number.isInteger(caissierId) && caissierId > 0) {
+          caissierConnect = {
+            connect: {
+              id: caissierId,
+            },
+          };
+        }
+      }
+
+      /* --------------------------------------------------
+           CRÉATION PAIEMENT
+        -------------------------------------------------- */
 
       const nouveauPaiement = await tx.paiement.create({
         data: {
           reference,
 
-          patientId: facture.patientId,
+          patient: {
+            connect: {
+              id: patientId,
+            },
+          },
 
-          factureId: facture.id,
+          facture: {
+            connect: {
+              id: factureId,
+            },
+          },
 
-          montant: data.montant,
+          montant: montantFinal,
 
-          devise: facture.devise,
+          devise,
 
-          modePaiement: data.modePaiement,
+          modePaiement: data.modePaiement.trim(),
 
-          type: data.type || "ENCAISSEMENT",
+          type: data.type.trim(),
 
           statut: "PAYE",
 
-          description: data.description || null,
+          description: data.description?.trim() || null,
 
-          caissierId,
+          caissier: caissierConnect,
         },
 
-        include: {
-          patient: true,
-
-          facture: {
-            include: {
-              consultation: {
-                include: {
-                  medecin: true,
-                  service: true,
-                  specialite: true,
-                },
-              },
-            },
-          },
-
-          caissier: true,
+        select: {
+          id: true,
+          reference: true,
+          patientId: true,
+          factureId: true,
+          montant: true,
+          devise: true,
+          modePaiement: true,
+          type: true,
+          statut: true,
         },
       });
 
-      /* ----------------------------------------------------
-         NOUVEAU MONTANT PAYE
-      ---------------------------------------------------- */
+      /* --------------------------------------------------
+           RECALCUL FACTURE
+        -------------------------------------------------- */
 
-      const nouveauMontantPaye =
-        facture.montantPaye + data.montant;
+      const factureMiseAJour = await recalculerFactureDansTransaction(
+        tx,
+        factureId,
+      );
 
-      const nouveauReste =
-        facture.montantTotal - nouveauMontantPaye;
+      return {
+        paiement: nouveauPaiement,
 
-      let statut = "PARTIELLEMENT_PAYEE";
-
-      if (nouveauReste <= 0) {
-        statut = "PAYEE";
-      } else if (nouveauMontantPaye <= 0) {
-        statut = "IMPAYEE";
-      }
-
-      await tx.facture.update({
-        where: {
-          id: facture.id,
-        },
-
-        data: {
-          montantPaye: nouveauMontantPaye,
-          reste: Math.max(0, nouveauReste),
-          statut,
-        },
-      });
-
-      return nouveauPaiement;
+        facture: factureMiseAJour,
+      };
     });
 
-    revalidatePath("/paiements");
-    revalidatePath("/factures");
-    revalidatePath(`/factures/${facture.id}`);
+    /* ======================================================
+       CACHE
+    ====================================================== */
+
+    revalidatePath("/facturation/paiements");
+
+    revalidatePath("/facturation/factures");
+
+    revalidatePath(`/facturation/factures/${factureId}`);
+
+    /* ======================================================
+       RETOUR
+    ====================================================== */
 
     return {
       success: true,
+
       message: "Paiement enregistré avec succès.",
-      data: paiement,
+
+      data: {
+        id: paiement.paiement.id,
+
+        reference: paiement.paiement.reference,
+
+        patientId: paiement.paiement.patientId,
+
+        factureId: paiement.paiement.factureId,
+
+        montant: Number(paiement.paiement.montant),
+
+        devise: paiement.paiement.devise,
+
+        modePaiement: paiement.paiement.modePaiement,
+
+        type: paiement.paiement.type,
+
+        statut: paiement.paiement.statut,
+
+        facture: {
+          montantTotal: Number(paiement.facture.montantTotal),
+
+          montantPaye: Number(paiement.facture.montantPaye),
+
+          reste: Number(paiement.facture.reste),
+
+          statut: paiement.facture.statut,
+        },
+      },
     };
   } catch (error) {
-    console.error("createPaiement:", error);
+    console.error("❌ createPaiement:", error);
+
+    const message = error instanceof Error ? error.message : "";
+
+    if (message === "PATIENT_INTROUVABLE") {
+      return {
+        success: false,
+        message: "Patient introuvable.",
+      };
+    }
+
+    if (message === "FACTURE_INTROUVABLE") {
+      return {
+        success: false,
+        message: "La facture sélectionnée est introuvable.",
+      };
+    }
+
+    if (message === "FACTURE_PATIENT_INCORRECT") {
+      return {
+        success: false,
+        message: "Cette facture n'appartient pas au patient sélectionné.",
+      };
+    }
+
+    if (message === "FACTURE_ANNULEE") {
+      return {
+        success: false,
+        message: "Impossible de payer une facture annulée.",
+      };
+    }
+
+    if (message === "FACTURE_SOLDEE") {
+      return {
+        success: false,
+        message: "Cette facture est déjà entièrement soldée.",
+      };
+    }
+
+    if (message.startsWith("MONTANT_SUPERIEUR:")) {
+      const [, reste, devise] = message.split(":");
+
+      return {
+        success: false,
+        message: `Le montant dépasse le reste à payer (${Number(reste).toFixed(
+          2,
+        )} ${devise}).`,
+      };
+    }
 
     return {
       success: false,
-      message: "Erreur lors de l'enregistrement du paiement.",
+      message: "Une erreur est survenue lors de l'enregistrement du paiement.",
     };
   }
 }
 
 /* ==========================================================
-   MODIFIER UN PAIEMENT
+   LISTE PAIEMENTS
 ========================================================== */
 
-export async function updatePaiement(
-  id: number,
-  data: {
-    montant: number;
-    modePaiement: string;
-    type: string;
-    description?: string;
-  }
-): Promise<ActionResult<any>> {
+export async function getPaiements() {
   try {
-    if (!data.montant || data.montant <= 0) {
-      return {
-        success: false,
-        message: "Montant invalide.",
-      };
-    }
-
-    const ancienPaiement = await prisma.paiement.findUnique({
-      where: {
-        id,
-      },
-    });
-
-    if (!ancienPaiement) {
-      return {
-        success: false,
-        message: "Paiement introuvable.",
-      };
-    }
-
-    if (!ancienPaiement.factureId) {
-      return {
-        success: false,
-        message: "Ce paiement n'est lié à aucune facture.",
-      };
-    }
-
-    const facture = await prisma.facture.findUnique({
-      where: {
-        id: ancienPaiement.factureId,
-      },
-    });
-
-    if (!facture) {
-      return {
-        success: false,
-        message: "Facture introuvable.",
-      };
-    }
-
-    const nouveauMontantPaye =
-      facture.montantPaye -
-      ancienPaiement.montant +
-      data.montant;
-
-    if (nouveauMontantPaye > facture.montantTotal) {
-      return {
-        success: false,
-        message: "Le nouveau montant dépasse le total de la facture.",
-      };
-    }
-
-    const nouveauReste =
-      facture.montantTotal - nouveauMontantPaye;
-
-    let statut = "IMPAYEE";
-
-    if (nouveauMontantPaye >= facture.montantTotal) {
-      statut = "PAYEE";
-    } else if (nouveauMontantPaye > 0) {
-      statut = "PARTIELLEMENT_PAYEE";
-    }
-
-    const paiement = await prisma.$transaction(async (tx) => {
-      const updated = await tx.paiement.update({
-        where: {
-          id,
-        },
-
-        data: {
-          montant: data.montant,
-          modePaiement: data.modePaiement,
-          type: data.type,
-          description: data.description || null,
-        },
-
-        include: {
-          patient: true,
-          facture: {
-            include: {
-              consultation: true,
-            },
-          },
-        },
-      });
-
-      await tx.facture.update({
-        where: {
-          id: facture.id,
-        },
-
-        data: {
-          montantPaye: nouveauMontantPaye,
-          reste: Math.max(0, nouveauReste),
-          statut,
-        },
-      });
-
-      return updated;
-    });
-
-    revalidatePath("/paiements");
-    revalidatePath("/factures");
-    revalidatePath(`/factures/${facture.id}`);
-
-    return {
-      success: true,
-      message: "Paiement modifié avec succès.",
-      data: paiement,
-    };
-  } catch (error) {
-    console.error("updatePaiement:", error);
-
-    return {
-      success: false,
-      message: "Impossible de modifier le paiement.",
-    };
-  }
-}
-
-/* ==========================================================
-   SUPPRIMER UN PAIEMENT
-========================================================== */
-
-export async function deletePaiement(
-  id: number
-): Promise<ActionResult> {
-  try {
-    const paiement = await prisma.paiement.findUnique({
-      where: {
-        id,
-      },
-    });
-
-    if (!paiement) {
-      return {
-        success: false,
-        message: "Paiement introuvable.",
-      };
-    }
-
-    await prisma.$transaction(async (tx) => {
-      if (paiement.factureId) {
-        const facture = await tx.facture.findUnique({
-          where: {
-            id: paiement.factureId,
-          },
-        });
-
-        if (facture) {
-          const nouveauMontantPaye =
-            Math.max(
-              0,
-              facture.montantPaye - paiement.montant
-            );
-
-          const nouveauReste =
-            facture.montantTotal - nouveauMontantPaye;
-
-          let statut = "IMPAYEE";
-
-          if (nouveauMontantPaye >= facture.montantTotal) {
-            statut = "PAYEE";
-          } else if (nouveauMontantPaye > 0) {
-            statut = "PARTIELLEMENT_PAYEE";
-          }
-
-          await tx.facture.update({
-            where: {
-              id: facture.id,
-            },
-
-            data: {
-              montantPaye: nouveauMontantPaye,
-              reste: Math.max(0, nouveauReste),
-              statut,
-            },
-          });
-        }
-      }
-
-      await tx.paiement.delete({
-        where: {
-          id,
-        },
-      });
-    });
-
-    revalidatePath("/paiements");
-    revalidatePath("/factures");
-
-    return {
-      success: true,
-      message: "Paiement supprimé avec succès.",
-    };
-  } catch (error) {
-    console.error("deletePaiement:", error);
-
-    return {
-      success: false,
-      message: "Impossible de supprimer le paiement.",
-    };
-  }
-}
-
-/* ==========================================================
-   FACTURES DISPONIBLES POUR PAIEMENT
-========================================================== */
-
-export async function getFacturesPourPaiement(): Promise<
-  ActionResult<any[]>
-> {
-  try {
-    const factures = await prisma.facture.findMany({
-      where: {
-        reste: {
-          gt: 0,
-        },
-
-        statut: {
-          not: "ANNULEE",
-        },
+    return await prisma.paiement.findMany({
+      include: {
+        patient: true,
+        facture: true,
+        caissier: true,
       },
 
       orderBy: {
-        dateFacture: "desc",
+        datePaiement: "desc",
+      },
+    });
+  } catch (error) {
+    console.error("❌ getPaiements:", error);
+
+    return [];
+  }
+}
+
+/* ==========================================================
+   DÉTAIL PAIEMENT
+========================================================== */
+
+export async function getPaiementById(id: number) {
+  try {
+    const paiement = await prisma.paiement.findUnique({
+      where: {
+        id: Number(id),
       },
 
       include: {
         patient: true,
 
-        consultation: {
+        facture: {
           include: {
-            medecin: true,
-            service: true,
-            specialite: true,
+            lignes: true,
           },
         },
+
+        caissier: true,
       },
     });
 
-    return {
-      success: true,
-      message: "Factures disponibles.",
-      data: factures,
-    };
+    return paiement;
   } catch (error) {
-    console.error(error);
+    console.error("❌ getPaiementById:", error);
 
-    return {
-      success: false,
-      message: "Impossible de récupérer les factures.",
-      data: [],
-    };
+    return null;
   }
 }

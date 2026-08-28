@@ -1,4 +1,5 @@
-import PaiementForm from "@/components/facturation/PaiementForm";
+import PaiementForm from "@/components/paiements/PaiementForm";
+
 
 export default function NouveauPaiementPage() {
   return (
