@@ -1,4 +1,4 @@
-import { auth } from "@/lib/auth";
+import Link from "next/link";
 import { redirect } from "next/navigation";
 
 import {
@@ -12,507 +12,434 @@ import {
   CreditCard,
   ArrowUpRight,
   Activity,
+  ScanLine,
+  Wallet,
 } from "lucide-react";
+
+import { auth } from "@/lib/auth";
+
+import { getDashboardData } from "@/app/actions/dashboard";
+import ActiviteMedicaleChart from "@/components/ActiviteMedicaleChart";
+
+/* =========================================================
+   PAGE DASHBOARD
+========================================================= */
 
 export default async function DashboardPage() {
   const session = await auth();
 
-  // Protection de la page
   if (!session?.user) {
     redirect("/login");
   }
 
+  const result = await getDashboardData();
+
+  if (!result.success) {
+    return (
+      <div className="p-6">
+        <div className="alert alert-error">{result.message}</div>
+      </div>
+    );
+  }
+
+  const dashboard = result.data;
+
   const userName = session.user.name || "Utilisateur";
+
+  const totalActivite =
+    dashboard.consultationsAujourdhui +
+    dashboard.examensLaboratoire +
+    dashboard.examensImagerie;
 
   return (
     <div className="space-y-6">
+      {/* =====================================================
+          HEADER
+      ===================================================== */}
 
-      {/* =========================================
-          EN-TÊTE
-      ========================================= */}
+      <div className="flex flex-col gap-2 md:flex-row md:items-center md:justify-between">
+        <div>
+          <h1 className="text-2xl md:text-3xl font-bold">Tableau de bord</h1>
 
-      <div>
-        <h1 className="text-2xl md:text-3xl font-bold">
-          Tableau de bord
-        </h1>
+          <p className="text-base-content/60">Bienvenue, {userName}</p>
+        </div>
 
-        <p className="text-base-content/60 mt-1">
-          Bienvenue, {userName}
-        </p>
+        <div className="badge badge-primary badge-lg">Aujourd'hui</div>
       </div>
 
-      {/* =========================================
+      {/* =====================================================
           STATISTIQUES PRINCIPALES
-      ========================================= */}
+      ===================================================== */}
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4">
-
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
         {/* PATIENTS */}
 
-        <div className="stat bg-base-100 rounded-xl shadow-sm border border-base-200">
-
-          <div className="stat-figure text-primary">
-            <div className="bg-primary/10 rounded-full p-3">
-              <Users size={24} />
-            </div>
-          </div>
-
-          <div className="stat-title">
-            Patients
-          </div>
-
-          <div className="stat-value text-primary">
-            0
-          </div>
-
-          <div className="stat-desc">
-            Patients enregistrés
-          </div>
-
-        </div>
+        <DashboardStat
+          title="Patients"
+          value={dashboard.patients}
+          description="Patients enregistrés"
+          icon={<Users size={24} />}
+          color="primary"
+        />
 
         {/* RENDEZ-VOUS */}
 
-        <div className="stat bg-base-100 rounded-xl shadow-sm border border-base-200">
-
-          <div className="stat-figure text-secondary">
-            <div className="bg-secondary/10 rounded-full p-3">
-              <CalendarDays size={24} />
-            </div>
-          </div>
-
-          <div className="stat-title">
-            Rendez-vous
-          </div>
-
-          <div className="stat-value text-secondary">
-            0
-          </div>
-
-          <div className="stat-desc">
-            Rendez-vous aujourd'hui
-          </div>
-
-        </div>
+        <DashboardStat
+          title="Rendez-vous"
+          value={dashboard.rendezVousAujourdhui}
+          description="Aujourd'hui"
+          icon={<CalendarDays size={24} />}
+          color="secondary"
+        />
 
         {/* HOSPITALISATIONS */}
 
-        <div className="stat bg-base-100 rounded-xl shadow-sm border border-base-200">
-
-          <div className="stat-figure text-accent">
-            <div className="bg-accent/10 rounded-full p-3">
-              <Bed size={24} />
-            </div>
-          </div>
-
-          <div className="stat-title">
-            Hospitalisés
-          </div>
-
-          <div className="stat-value text-accent">
-            0
-          </div>
-
-          <div className="stat-desc">
-            Patients actuellement hospitalisés
-          </div>
-
-        </div>
+        <DashboardStat
+          title="Hospitalisés"
+          value={dashboard.hospitalises}
+          description="Patients actuellement hospitalisés"
+          icon={<Bed size={24} />}
+          color="accent"
+        />
 
         {/* FACTURES */}
 
-        <div className="stat bg-base-100 rounded-xl shadow-sm border border-base-200">
-
-          <div className="stat-figure text-info">
-            <div className="bg-info/10 rounded-full p-3">
-              <Receipt size={24} />
-            </div>
-          </div>
-
-          <div className="stat-title">
-            Factures
-          </div>
-
-          <div className="stat-value text-info">
-            0
-          </div>
-
-          <div className="stat-desc">
-            Factures en attente
-          </div>
-
-        </div>
-
+        <DashboardStat
+          title="Factures"
+          value={dashboard.facturesImpayees}
+          description="Factures impayées ou partielles"
+          icon={<Receipt size={24} />}
+          color="info"
+        />
       </div>
 
-      {/* =========================================
+      {/* =====================================================
           ACCÈS RAPIDES
-      ========================================= */}
+      ===================================================== */}
 
-      <div>
+      <section>
+        <h2 className="mb-3 text-lg font-bold">Accès rapides</h2>
 
-        <div className="flex items-center justify-between mb-3">
-
-          <h2 className="text-lg font-bold">
-            Accès rapides
-          </h2>
-
-        </div>
-
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-
-          {/* NOUVEAU PATIENT */}
-
-          <a
+        <div className="grid grid-cols-2 gap-3 md:grid-cols-4">
+          <QuickLink
             href="/patients"
-            className="card bg-base-100 border border-base-200 hover:border-primary hover:shadow-md transition-all"
-          >
-            <div className="card-body p-4">
+            icon={<UserPlus size={22} />}
+            title="Nouveau patient"
+            description="Enregistrer un patient"
+            color="primary"
+          />
 
-              <UserPlus
-                size={22}
-                className="text-primary"
-              />
-
-              <h3 className="font-semibold">
-                Nouveau patient
-              </h3>
-
-              <p className="text-xs text-base-content/60">
-                Enregistrer un patient
-              </p>
-
-            </div>
-          </a>
-
-          {/* RENDEZ-VOUS */}
-
-          <a
+          <QuickLink
             href="/rendez-vous"
-            className="card bg-base-100 border border-base-200 hover:border-secondary hover:shadow-md transition-all"
-          >
-            <div className="card-body p-4">
+            icon={<CalendarDays size={22} />}
+            title="Rendez-vous"
+            description="Planifier un rendez-vous"
+            color="secondary"
+          />
 
-              <CalendarDays
-                size={22}
-                className="text-secondary"
-              />
-
-              <h3 className="font-semibold">
-                Rendez-vous
-              </h3>
-
-              <p className="text-xs text-base-content/60">
-                Planifier un rendez-vous
-              </p>
-
-            </div>
-          </a>
-
-          {/* CONSULTATION */}
-
-          <a
+          <QuickLink
             href="/consultations"
-            className="card bg-base-100 border border-base-200 hover:border-accent hover:shadow-md transition-all"
-          >
-            <div className="card-body p-4">
+            icon={<Stethoscope size={22} />}
+            title="Consultation"
+            description="Nouvelle consultation"
+            color="accent"
+          />
 
-              <Stethoscope
-                size={22}
-                className="text-accent"
-              />
-
-              <h3 className="font-semibold">
-                Consultation
-              </h3>
-
-              <p className="text-xs text-base-content/60">
-                Nouvelle consultation
-              </p>
-
-            </div>
-          </a>
-
-          {/* PAIEMENT */}
-
-          <a
+          <QuickLink
             href="/paiements"
-            className="card bg-base-100 border border-base-200 hover:border-info hover:shadow-md transition-all"
-          >
-            <div className="card-body p-4">
-
-              <CreditCard
-                size={22}
-                className="text-info"
-              />
-
-              <h3 className="font-semibold">
-                Paiement
-              </h3>
-
-              <p className="text-xs text-base-content/60">
-                Enregistrer un paiement
-              </p>
-
-            </div>
-          </a>
-
+            icon={<CreditCard size={22} />}
+            title="Paiement"
+            description="Enregistrer un paiement"
+            color="info"
+          />
         </div>
+      </section>
 
-      </div>
+      {/* =====================================================
+          ACTIVITÉ + FINANCES
+      ===================================================== */}
 
-      {/* =========================================
-          ACTIVITÉS
-      ========================================= */}
-
-      <div className="grid grid-cols-1 xl:grid-cols-3 gap-6">
-
-        {/* ACTIVITÉ MÉDICALE */}
-
-        <div className="xl:col-span-2 card bg-base-100 shadow-sm border border-base-200">
-
+      <div className="grid grid-cols-1 gap-6 xl:grid-cols-3">
+      
+        {/* =====================================================
+    ACTIVITÉ MÉDICALE
+===================================================== */}
+        <div className="card border border-base-200 bg-base-100 shadow-sm xl:col-span-2">
           <div className="card-body">
-
             <div className="flex items-center justify-between">
-
               <div>
-
-                <h2 className="card-title">
-                  Activité médicale
-                </h2>
+                <h2 className="card-title">Activité médicale</h2>
 
                 <p className="text-sm text-base-content/60">
-                  Vue globale de l'activité médicale
+                  Suivi et évolution de l'activité médicale
                 </p>
-
               </div>
 
-              <div className="bg-primary/10 text-primary rounded-full p-3">
+              <div className="rounded-full bg-primary/10 p-3 text-primary">
                 <Activity size={22} />
               </div>
-
             </div>
 
-            {/* PLACEHOLDER GRAPHIQUE */}
-
-            <div className="mt-6 h-64 rounded-xl bg-base-200 flex items-center justify-center">
-
-              <div className="text-center">
-
-                <Stethoscope
-                  size={40}
-                  className="mx-auto text-base-content/30"
-                />
-
-                <p className="mt-3 font-medium">
-                  Statistiques médicales
-                </p>
-
-                <p className="text-sm text-base-content/50">
-                  Les données apparaîtront ici
-                </p>
-
-              </div>
-
+            <div className="mt-6">
+              <ActiviteMedicaleChart data={dashboard.activiteMedicale} />
             </div>
-
           </div>
-
         </div>
-
+        
         {/* ACTIVITÉ FINANCIÈRE */}
-
-        <div className="card bg-base-100 shadow-sm border border-base-200">
-
+        <div className="card border border-base-200 bg-base-100 shadow-sm">
           <div className="card-body">
-
             <div className="flex items-center justify-between">
-
               <div>
-
-                <h2 className="card-title">
-                  Activité financière
-                </h2>
+                <h2 className="card-title">Activité financière</h2>
 
                 <p className="text-sm text-base-content/60">
                   Situation financière
                 </p>
-
               </div>
 
-              <div className="bg-info/10 text-info rounded-full p-3">
-                <Receipt size={22} />
+              <div className="rounded-full bg-info/10 p-3 text-info">
+                <Wallet size={22} />
               </div>
-
             </div>
 
-            {/* FINANCES */}
+            <div className="mt-6 space-y-5">
+              {/* CHIFFRE D'AFFAIRES */}
 
-            <div className="space-y-4 mt-5">
-
-              <div className="flex items-center justify-between">
-
-                <span className="text-sm">
-                  Chiffre d'affaires
-                </span>
-
-                <span className="font-bold">
-                  $0
-                </span>
-
-              </div>
-
-              <progress
-                className="progress progress-primary w-full"
-                value={0}
-                max={100}
+              <FinanceLine
+                label="Chiffre d'affaires"
+                value={dashboard.chiffreAffaires}
+                icon={<Receipt size={18} />}
               />
 
-              <div className="flex items-center justify-between">
+              {/* PAIEMENTS */}
 
-                <span className="text-sm">
-                  Paiements
-                </span>
-
-                <span className="font-bold">
-                  $0
-                </span>
-
-              </div>
-
-              <progress
-                className="progress progress-info w-full"
-                value={0}
-                max={100}
+              <FinanceLine
+                label="Paiements aujourd'hui"
+                value={dashboard.paiementsAujourdhui}
+                icon={<CreditCard size={18} />}
               />
 
-              <div className="flex items-center justify-between">
+              {/* IMPAYÉS */}
 
-                <span className="text-sm">
-                  Impayés
-                </span>
-
-                <span className="font-bold">
-                  $0
-                </span>
-
-              </div>
-
-              <progress
-                className="progress progress-error w-full"
-                value={0}
-                max={100}
+              <FinanceLine
+                label="Impayés"
+                value={dashboard.impayes}
+                icon={<Wallet size={18} />}
               />
-
             </div>
 
-            <div className="card-actions justify-end mt-4">
-
-              <a
-                href="/facturation"
-                className="btn btn-ghost btn-sm"
-              >
+            <div className="card-actions mt-6 justify-end">
+              <Link href="/facturation" className="btn btn-ghost btn-sm">
                 Voir les factures
                 <ArrowUpRight size={15} />
-              </a>
+              </Link>
+            </div>
+          </div>
+        </div>
+      </div>
 
+      {/* =====================================================
+          SERVICES
+      ===================================================== */}
+
+      <div className="card border border-base-200 bg-base-100 shadow-sm">
+        <div className="card-body">
+          <div className="flex items-center justify-between">
+            <div>
+              <h2 className="card-title">Services hospitaliers</h2>
+
+              <p className="text-sm text-base-content/60">
+                Activité des services
+              </p>
             </div>
 
+            <Stethoscope size={22} className="text-primary" />
           </div>
 
-        </div>
+          <div className="mt-4 grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-4">
+            {dashboard.services.map((service) => (
+              <div
+                key={service.id}
+                className="flex items-center justify-between rounded-xl bg-base-200 p-4"
+              >
+                <div>
+                  <p className="font-semibold">{service.nom}</p>
 
-      </div>
+                  <p className="text-xs text-base-content/50">
+                    {service.consultations} consultations
+                  </p>
+                </div>
 
-      {/* =========================================
-          ÉTAT DES SERVICES
-      ========================================= */}
-
-      <div className="card bg-base-100 shadow-sm border border-base-200">
-
-        <div className="card-body">
-
-          <h2 className="card-title">
-            État des services
-          </h2>
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mt-3">
-
-            <ServiceStatus
-              name="Consultations"
-              status="Opérationnel"
-              color="success"
-            />
-
-            <ServiceStatus
-              name="Laboratoire"
-              status="Opérationnel"
-              color="success"
-            />
-
-            <ServiceStatus
-              name="Imagerie"
-              status="Opérationnel"
-              color="success"
-            />
-
-            <ServiceStatus
-              name="Pharmacie"
-              status="Opérationnel"
-              color="success"
-            />
-
+                <span className="badge badge-success">Actif</span>
+              </div>
+            ))}
           </div>
-
         </div>
-
       </div>
-
     </div>
   );
 }
 
+/* =========================================================
+   DASHBOARD STAT
+========================================================= */
 
-/* =========================================
-   SERVICE STATUS
-========================================= */
-
-function ServiceStatus({
-  name,
-  status,
+function DashboardStat({
+  title,
+  value,
+  description,
+  icon,
   color,
 }: {
-  name: string;
-  status: string;
-  color: "success" | "warning" | "error";
+  title: string;
+  value: number;
+  description: string;
+  icon: React.ReactNode;
+  color: "primary" | "secondary" | "accent" | "info";
+}) {
+  const styles = {
+    primary: {
+      text: "text-primary",
+      bg: "bg-primary/10",
+    },
+
+    secondary: {
+      text: "text-secondary",
+      bg: "bg-secondary/10",
+    },
+
+    accent: {
+      text: "text-accent",
+      bg: "bg-accent/10",
+    },
+
+    info: {
+      text: "text-info",
+      bg: "bg-info/10",
+    },
+  };
+
+  const style = styles[color];
+
+  return (
+    <div className="stat rounded-xl border border-base-200 bg-base-100 shadow-sm">
+      <div className={`stat-figure ${style.text}`}>
+        <div className={`rounded-full p-3 ${style.bg}`}>{icon}</div>
+      </div>
+
+      <div className="stat-title">{title}</div>
+
+      <div className={`stat-value ${style.text}`}>
+        {value.toLocaleString("fr-FR")}
+      </div>
+
+      <div className="stat-desc">{description}</div>
+    </div>
+  );
+}
+
+/* =========================================================
+   QUICK LINK
+========================================================= */
+
+function QuickLink({
+  href,
+  icon,
+  title,
+  description,
+  color,
+}: {
+  href: string;
+  icon: React.ReactNode;
+  title: string;
+  description: string;
+  color: "primary" | "secondary" | "accent" | "info";
+}) {
+  const styles = {
+    primary: "hover:border-primary",
+    secondary: "hover:border-secondary",
+    accent: "hover:border-accent",
+    info: "hover:border-info",
+  };
+
+  const textStyles = {
+    primary: "text-primary",
+    secondary: "text-secondary",
+    accent: "text-accent",
+    info: "text-info",
+  };
+
+  return (
+    <Link
+      href={href}
+      className={`card border border-base-200 bg-base-100 transition-all hover:shadow-md ${styles[color]}`}
+    >
+      <div className="card-body p-4">
+        <div className={textStyles[color]}>{icon}</div>
+
+        <h3 className="font-semibold">{title}</h3>
+
+        <p className="text-xs text-base-content/60">{description}</p>
+      </div>
+    </Link>
+  );
+}
+
+/* =========================================================
+   MINI STAT
+========================================================= */
+
+function MiniStat({
+  icon,
+  label,
+  value,
+}: {
+  icon: React.ReactNode;
+  label: string;
+  value: number;
 }) {
   return (
-    <div className="flex items-center justify-between p-4 rounded-xl bg-base-200">
+    <div className="rounded-xl bg-base-200 p-3">
+      <div className="flex items-center gap-2 text-primary">
+        {icon}
 
-      <div>
-
-        <p className="font-medium">
-          {name}
-        </p>
-
-        <p className="text-xs text-base-content/50">
-          Service hospitalier
-        </p>
-
+        <span className="text-xs">{label}</span>
       </div>
 
-      <div className="flex items-center gap-2">
+      <p className="mt-1 text-xl font-bold">{value}</p>
+    </div>
+  );
+}
 
-        <span
-          className={`w-2.5 h-2.5 rounded-full bg-${color}`}
-        />
+/* =========================================================
+   FINANCE LINE
+========================================================= */
 
-        <span className="text-xs font-medium">
-          {status}
-        </span>
+function FinanceLine({
+  label,
+  value,
+  icon,
+}: {
+  label: string;
+  value: number;
+  icon: React.ReactNode;
+}) {
+  return (
+    <div className="flex items-center justify-between">
+      <div className="flex items-center gap-3">
+        <div className="rounded-lg bg-base-200 p-2">{icon}</div>
 
+        <span className="text-sm">{label}</span>
       </div>
 
+      <span className="font-bold">
+        $
+        {Number(value).toLocaleString("fr-FR", {
+          minimumFractionDigits: 2,
+          maximumFractionDigits: 2,
+        })}
+      </span>
     </div>
   );
 }
