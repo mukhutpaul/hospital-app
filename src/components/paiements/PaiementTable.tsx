@@ -1479,7 +1479,7 @@ export default function PaiementTable({
                             {/* REÇU */}
 
                             <Link
-                              href={`/facturation/paiements/${paiement.id}/print`}
+                              href={`/paiements/${paiement.id}/print`}
                               className="btn btn-sm btn-outline"
                               title="Imprimer le reçu"
                             >

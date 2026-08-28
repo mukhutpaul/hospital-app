@@ -1290,7 +1290,7 @@ return ( <div className="overflow-hidden rounded-2xl border border-base-300 bg-b
                     </Link>
 
                     <Link
-                      href={`/facturation/paiements/${p.id}/print`}
+                      href={`/paiements/${p.id}/print`}
                       className="btn btn-sm btn-outline"
                       title="Imprimer le reçu"
                     >

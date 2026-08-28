@@ -1096,7 +1096,7 @@ export async function annulerPaiement(
     );
 
     revalidatePath(
-      `/facturation/paiements/${resultat.paiement.id}`,
+      `/paiements/${resultat.paiement.id}`,
     );
 
     /* ======================================================
