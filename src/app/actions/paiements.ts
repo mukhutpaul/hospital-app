@@ -754,3 +754,368 @@ export async function getPaiementById(id: number) {
     return null;
   }
 }
+
+
+/* ==========================================================
+ANNULER PAIEMENT
+========================================================== */
+
+export async function deletePaiement(
+paiementId: number,
+): Promise<ActionResult> {
+try {
+const id = Number(paiementId);
+
+
+/* ------------------------------------------------------
+   VALIDATION
+------------------------------------------------------ */
+
+if (!Number.isInteger(id) || id <= 0) {
+  return {
+    success: false,
+    message: "Identifiant du paiement invalide.",
+  };
+}
+
+/* ======================================================
+   TRANSACTION
+====================================================== */
+
+const resultat = await prisma.$transaction(async (tx) => {
+  /* --------------------------------------------------
+     RECHERCHER LE PAIEMENT
+  -------------------------------------------------- */
+
+  const paiement = await tx.paiement.findUnique({
+    where: {
+      id,
+    },
+    select: {
+      id: true,
+      reference: true,
+      factureId: true,
+      montant: true,
+      statut: true,
+    },
+  });
+
+  if (!paiement) {
+    throw new Error("PAIEMENT_INTROUVABLE");
+  }
+
+  /* --------------------------------------------------
+     DÉJÀ ANNULÉ
+  -------------------------------------------------- */
+
+  if (paiement.statut === "ANNULE") {
+    throw new Error("PAIEMENT_DEJA_ANNULE");
+  }
+
+  /* --------------------------------------------------
+     SEUL UN PAIEMENT PAYÉ PEUT ÊTRE ANNULÉ
+  -------------------------------------------------- */
+
+  if (paiement.statut !== "PAYE") {
+    throw new Error("PAIEMENT_NON_PAYE");
+  }
+
+  /* --------------------------------------------------
+     ANNULATION
+     
+     IMPORTANT :
+     On ne supprime pas physiquement le paiement.
+     On conserve sa trace comptable.
+  -------------------------------------------------- */
+
+  const paiementAnnule = await tx.paiement.update({
+    where: {
+      id,
+    },
+
+    data: {
+      statut: "ANNULE",
+    },
+
+    select: {
+      id: true,
+      reference: true,
+      factureId: true,
+      montant: true,
+      statut: true,
+    },
+  });
+
+  /* --------------------------------------------------
+     RECALCUL DE LA FACTURE
+     
+     La fonction recalculerFactureDansTransaction()
+     ne prend en compte que les paiements PAYE.
+  -------------------------------------------------- */
+
+  const facture = await recalculerFactureDansTransaction(
+    tx,
+    paiement.factureId,
+  );
+
+  return {
+    paiement: paiementAnnule,
+    facture,
+  };
+});
+
+/* ======================================================
+   CACHE
+====================================================== */
+
+revalidatePath("/facturation/paiements");
+
+revalidatePath("/facturation/factures");
+
+revalidatePath(
+  `/facturation/factures/${resultat.paiement.factureId}`,
+);
+
+revalidatePath(
+  `/facturation/paiements/${resultat.paiement.id}`,
+);
+
+/* ======================================================
+   RETOUR
+====================================================== */
+
+return {
+  success: true,
+
+  message: `Le paiement ${resultat.paiement.reference} a été annulé avec succès.`,
+
+  data: {
+    paiement: {
+      id: resultat.paiement.id,
+      reference: resultat.paiement.reference,
+      factureId: resultat.paiement.factureId,
+      montant: Number(resultat.paiement.montant),
+      statut: resultat.paiement.statut,
+    },
+
+    facture: {
+      montantTotal: Number(
+        resultat.facture.montantTotal,
+      ),
+
+      montantPaye: Number(
+        resultat.facture.montantPaye,
+      ),
+
+      reste: Number(
+        resultat.facture.reste,
+      ),
+
+      statut: resultat.facture.statut,
+    },
+  },
+};
+
+
+} catch (error) {
+console.error(
+"❌ deletePaiement:",
+error,
+);
+
+
+const message =
+  error instanceof Error
+    ? error.message
+    : "";
+
+if (
+  message === "PAIEMENT_INTROUVABLE"
+) {
+  return {
+    success: false,
+    message: "Paiement introuvable.",
+  };
+}
+
+if (
+  message === "PAIEMENT_DEJA_ANNULE"
+) {
+  return {
+    success: false,
+    message: "Ce paiement est déjà annulé.",
+  };
+}
+
+if (
+  message === "PAIEMENT_NON_PAYE"
+) {
+  return {
+    success: false,
+    message:
+      "Seul un paiement valide peut être annulé.",
+  };
+}
+
+if (
+  message === "FACTURE_INTROUVABLE"
+) {
+  return {
+    success: false,
+    message:
+      "La facture associée est introuvable.",
+  };
+}
+
+return {
+  success: false,
+  message:
+    "Une erreur est survenue lors de l'annulation du paiement.",
+};
+
+
+}
+}
+
+/* ==========================================================
+   ANNULER UN PAIEMENT
+========================================================== */
+
+export async function annulerPaiement(
+  paiementId: number,
+): Promise<ActionResult> {
+  try {
+    const id = Number(paiementId);
+
+    if (!Number.isInteger(id) || id <= 0) {
+      return {
+        success: false,
+        message: "Identifiant du paiement invalide.",
+      };
+    }
+
+    const resultat = await prisma.$transaction(async (tx) => {
+      const paiement = await tx.paiement.findUnique({
+        where: {
+          id,
+        },
+        select: {
+          id: true,
+          factureId: true,
+          montant: true,
+          statut: true,
+        },
+      });
+
+      if (!paiement) {
+        throw new Error("PAIEMENT_INTROUVABLE");
+      }
+
+      if (paiement.statut === "ANNULE") {
+        throw new Error("PAIEMENT_DEJA_ANNULE");
+      }
+
+      if (paiement.statut !== "PAYE") {
+        throw new Error("PAIEMENT_NON_PAYE");
+      }
+
+      const paiementAnnule = await tx.paiement.update({
+        where: {
+          id,
+        },
+        data: {
+          statut: "ANNULE",
+        },
+        select: {
+          id: true,
+          factureId: true,
+          montant: true,
+          statut: true,
+        },
+      });
+
+      /*
+       * Recalculer la facture après annulation.
+       * Le paiement annulé n'est plus comptabilisé
+       * car recalculerFactureDansTransaction()
+       * ne prend en compte que les paiements PAYE.
+       */
+      const facture = await recalculerFactureDansTransaction(
+        tx,
+        paiement.factureId,
+      );
+
+      return {
+        paiement: paiementAnnule,
+        facture,
+      };
+    });
+
+    revalidatePath("/facturation/paiements");
+    revalidatePath("/paiements");
+
+    revalidatePath("/facturation/factures");
+    revalidatePath(
+      `/facturation/factures/${resultat.paiement.factureId}`,
+    );
+
+    return {
+      success: true,
+      message: "Paiement annulé avec succès.",
+      data: {
+        paiement: {
+          id: resultat.paiement.id,
+          factureId: resultat.paiement.factureId,
+          montant: Number(resultat.paiement.montant),
+          statut: resultat.paiement.statut,
+        },
+        facture: {
+          montantTotal: Number(resultat.facture.montantTotal),
+          montantPaye: Number(resultat.facture.montantPaye),
+          reste: Number(resultat.facture.reste),
+          statut: resultat.facture.statut,
+        },
+      },
+    };
+  } catch (error) {
+    console.error("❌ annulerPaiement:", error);
+
+    const message =
+      error instanceof Error ? error.message : "";
+
+    if (message === "PAIEMENT_INTROUVABLE") {
+      return {
+        success: false,
+        message: "Paiement introuvable.",
+      };
+    }
+
+    if (message === "PAIEMENT_DEJA_ANNULE") {
+      return {
+        success: false,
+        message: "Ce paiement est déjà annulé.",
+      };
+    }
+
+    if (message === "PAIEMENT_NON_PAYE") {
+      return {
+        success: false,
+        message:
+          "Seul un paiement payé peut être annulé.",
+      };
+    }
+
+    return {
+      success: false,
+      message:
+        "Une erreur est survenue lors de l'annulation du paiement.",
+    };
+  }
+}
+
+
+/* ==========================================================
+   SUPPRIMER UN PAIEMENT
+========================================================== */
+
+

@@ -225,7 +225,7 @@ export default function PaiementDetails({
           )}
 
           <Link
-            href="/facturation/paiements"
+            href="/paiements"
             className="btn btn-ghost"
           >
             ← Retour
