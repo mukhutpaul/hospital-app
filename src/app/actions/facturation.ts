@@ -382,33 +382,34 @@ export async function getFactureById(
    CRÉER FACTURE
 ========================================================== */
 
-export async function createFacture(input: {
-  patientId: number;
+export async function createFacture(
+  input: {
+    patientId: number;
 
-  consultationId?: number;
-  admissionId?: number;
-  hospitalisationId?: number;
-  proformaId?: number;
+    consultationId?: number;
+    admissionId?: number;
+    hospitalisationId?: number;
+    proformaId?: number;
 
-  serviceId?: number;
+    serviceId?: number;
 
-  reduction?: number;
-  typeReduction?: string;
+    reduction?: number;
+    typeReduction?: string;
 
-  devise?: string;
+    devise?: string;
 
-  lignes: FactureLigneInput[];
-}): Promise<ActionResult> {
+    lignes: FactureLigneInput[];
+  },
+): Promise<ActionResult> {
   try {
-    /* -------------------------------------------------------
-       VALIDATION INPUT
-    ------------------------------------------------------- */
+    /* =======================================================
+       VALIDATION GÉNÉRALE
+    ======================================================= */
 
     if (!input) {
       return {
         success: false,
-        message:
-          "Les données de facturation sont obligatoires.",
+        message: "Les données de facturation sont obligatoires.",
       };
     }
 
@@ -419,16 +420,16 @@ export async function createFacture(input: {
       };
     }
 
-    /* -------------------------------------------------------
-       PATIENT
-    ------------------------------------------------------- */
-
     if (!isValidId(input.patientId)) {
       return {
         success: false,
         message: "Patient invalide.",
       };
     }
+
+    /* =======================================================
+       PATIENT
+    ======================================================= */
 
     const patient = await prisma.patient.findUnique({
       where: {
@@ -455,28 +456,33 @@ export async function createFacture(input: {
       };
     }
 
-    /* -------------------------------------------------------
-       IDS OPTIONNELS
-    ------------------------------------------------------- */
+    /* =======================================================
+       NORMALISATION IDS
+    ======================================================= */
 
-    const consultationId =
-      normalizeOptionalId(input.consultationId);
+    const consultationId = normalizeOptionalId(
+      input.consultationId,
+    );
 
-    const admissionId =
-      normalizeOptionalId(input.admissionId);
+    const admissionId = normalizeOptionalId(
+      input.admissionId,
+    );
 
-    const hospitalisationId =
-      normalizeOptionalId(input.hospitalisationId);
+    const hospitalisationId = normalizeOptionalId(
+      input.hospitalisationId,
+    );
 
-    const proformaId =
-      normalizeOptionalId(input.proformaId);
+    const proformaId = normalizeOptionalId(
+      input.proformaId,
+    );
 
-    const serviceId =
-      normalizeOptionalId(input.serviceId);
+    const serviceId = normalizeOptionalId(
+      input.serviceId,
+    );
 
-    /* -------------------------------------------------------
+    /* =======================================================
        CONSULTATION
-    ------------------------------------------------------- */
+    ======================================================= */
 
     if (consultationId) {
       const consultation =
@@ -498,7 +504,10 @@ export async function createFacture(input: {
         };
       }
 
-      if (consultation.patientId !== input.patientId) {
+      if (
+        consultation.patientId !==
+        input.patientId
+      ) {
         return {
           success: false,
           message:
@@ -507,9 +516,9 @@ export async function createFacture(input: {
       }
     }
 
-    /* -------------------------------------------------------
+    /* =======================================================
        ADMISSION
-    ------------------------------------------------------- */
+    ======================================================= */
 
     if (admissionId) {
       const admission =
@@ -531,7 +540,10 @@ export async function createFacture(input: {
         };
       }
 
-      if (admission.patientId !== input.patientId) {
+      if (
+        admission.patientId !==
+        input.patientId
+      ) {
         return {
           success: false,
           message:
@@ -540,9 +552,9 @@ export async function createFacture(input: {
       }
     }
 
-    /* -------------------------------------------------------
+    /* =======================================================
        HOSPITALISATION
-    ------------------------------------------------------- */
+    ======================================================= */
 
     if (hospitalisationId) {
       const hospitalisation =
@@ -576,9 +588,9 @@ export async function createFacture(input: {
       }
     }
 
-    /* -------------------------------------------------------
+    /* =======================================================
        PROFORMA
-    ------------------------------------------------------- */
+    ======================================================= */
 
     if (proformaId) {
       const proforma =
@@ -601,7 +613,10 @@ export async function createFacture(input: {
         };
       }
 
-      if (proforma.patientId !== input.patientId) {
+      if (
+        proforma.patientId !==
+        input.patientId
+      ) {
         return {
           success: false,
           message:
@@ -609,7 +624,9 @@ export async function createFacture(input: {
         };
       }
 
-      if (proforma.statut === "FACTUREE") {
+      if (
+        proforma.statut === "FACTUREE"
+      ) {
         return {
           success: false,
           message:
@@ -618,9 +635,9 @@ export async function createFacture(input: {
       }
     }
 
-    /* -------------------------------------------------------
+    /* =======================================================
        SERVICE GLOBAL
-    ------------------------------------------------------- */
+    ======================================================= */
 
     if (serviceId) {
       const service =
@@ -651,9 +668,9 @@ export async function createFacture(input: {
       }
     }
 
-    /* -------------------------------------------------------
-       VALIDATION DES LIGNES
-    ------------------------------------------------------- */
+    /* =======================================================
+       LIGNES
+    ======================================================= */
 
     if (input.lignes.length === 0) {
       return {
@@ -666,17 +683,20 @@ export async function createFacture(input: {
     const lignes: FactureLigneInput[] = [];
 
     for (const ligne of input.lignes) {
-      const designation = cleanString(
-        ligne?.designation
-      );
+      /* =====================================================
+         DONNÉES DE BASE
+      ===================================================== */
 
-      const quantite = Number(
-        ligne?.quantite
-      );
+      const designation =
+        cleanString(
+          ligne?.designation,
+        );
 
-      const prixUnitaire = Number(
-        ligne?.prixUnitaire
-      );
+      const quantite =
+        Number(ligne?.quantite);
+
+      const prixUnitaire =
+        Number(ligne?.prixUnitaire);
 
       if (!designation) {
         return {
@@ -708,19 +728,211 @@ export async function createFacture(input: {
         };
       }
 
-      const acteId =
+      /* =====================================================
+         IDS DE LA LIGNE
+      ===================================================== */
+
+      let acteId =
         normalizeOptionalId(
-          ligne?.acteId
+          ligne?.acteId,
+        );
+
+      let consultationActeId =
+        normalizeOptionalId(
+          ligne?.consultationActeId,
         );
 
       const ligneServiceId =
         normalizeOptionalId(
-          ligne?.serviceId
+          ligne?.serviceId,
         ) ?? serviceId;
 
-      /* -----------------------------------------------------
-         ACTE
-      ----------------------------------------------------- */
+      const demandeLaboratoireLigneId =
+        normalizeOptionalId(
+          ligne?.demandeLaboratoireLigneId,
+        );
+
+      const demandeImagerieId =
+        normalizeOptionalId(
+          ligne?.demandeImagerieId,
+        );
+
+      const dispensationLigneId =
+        normalizeOptionalId(
+          ligne?.dispensationLigneId,
+        );
+
+      /* =====================================================
+         CONSULTATION ACTE
+         
+         IMPORTANT :
+         Si consultationActeId n'est pas envoyé mais que
+         consultationId + acteId existent, on recherche
+         automatiquement le ConsultationActe.
+      ===================================================== */
+
+      if (
+        !consultationActeId &&
+        consultationId &&
+        acteId
+      ) {
+        const consultationActe =
+          await prisma.consultationActe.findFirst({
+            where: {
+              consultationId: consultationId,
+              acteId: acteId,
+            },
+
+            select: {
+              id: true,
+              acteId: true,
+              consultationId: true,
+            },
+          });
+
+        if (consultationActe) {
+          consultationActeId =
+            consultationActe.id;
+        }
+      }
+
+      /* =====================================================
+         SI UN consultationActeId EXISTE
+         
+         ON RÉCUPÈRE L'ACTE RÉELLEMENT RÉALISÉ
+      ===================================================== */
+
+      if (consultationActeId) {
+        const consultationActe =
+          await prisma.consultationActe.findUnique({
+            where: {
+              id: consultationActeId,
+            },
+
+            select: {
+              id: true,
+              acteId: true,
+              consultationId: true,
+
+              acte: {
+                select: {
+                  id: true,
+                  libelle: true,
+                  montant: true,
+                  actif: true,
+                },
+              },
+
+              consultation: {
+                select: {
+                  idConsultation: true,
+                  patientId: true,
+                },
+              },
+            },
+          });
+
+        if (!consultationActe) {
+          return {
+            success: false,
+            message:
+              `L'acte de consultation #${consultationActeId} est introuvable.`,
+          };
+        }
+
+        /* ---------------------------------------------------
+           PATIENT
+        --------------------------------------------------- */
+
+        if (
+          consultationActe.consultation.patientId !==
+          input.patientId
+        ) {
+          return {
+            success: false,
+            message:
+              "L'acte de consultation sélectionné n'appartient pas à ce patient.",
+          };
+        }
+
+        /* ---------------------------------------------------
+           CONSULTATION
+        --------------------------------------------------- */
+
+        if (
+          consultationId &&
+          consultationActe.consultationId !==
+            consultationId
+        ) {
+          return {
+            success: false,
+            message:
+              "L'acte sélectionné n'appartient pas à la consultation indiquée.",
+          };
+        }
+
+        /* ---------------------------------------------------
+           ACTE
+           
+           On force acteId à correspondre à l'acte réalisé.
+        --------------------------------------------------- */
+
+        acteId =
+          consultationActe.acteId;
+
+        /* ---------------------------------------------------
+           ACTE ACTIF
+        --------------------------------------------------- */
+
+        if (
+          consultationActe.acte &&
+          !consultationActe.acte.actif
+        ) {
+          return {
+            success: false,
+            message:
+              `L'acte médical #${consultationActe.acteId} est désactivé.`,
+          };
+        }
+
+        /* ---------------------------------------------------
+           DOUBLE FACTURATION
+        --------------------------------------------------- */
+
+        const dejaFacture =
+          await prisma.ligneFacture.findFirst({
+            where: {
+              consultationActeId:
+                consultationActeId,
+            },
+
+            select: {
+              id: true,
+
+              facture: {
+                select: {
+                  numero: true,
+                  statut: true,
+                },
+              },
+            },
+          });
+
+        if (dejaFacture) {
+          return {
+            success: false,
+            message:
+              `L'acte de consultation #${consultationActeId} est déjà facturé dans la facture ${dejaFacture.facture.numero}.`,
+          };
+        }
+      }
+
+      /* =====================================================
+         ACTE DU CATALOGUE
+         
+         Seulement si l'acte existe directement sans
+         consultationActe.
+      ===================================================== */
 
       if (acteId) {
         const acte =
@@ -752,9 +964,9 @@ export async function createFacture(input: {
         }
       }
 
-      /* -----------------------------------------------------
+      /* =====================================================
          SERVICE DE LA LIGNE
-      ----------------------------------------------------- */
+      ===================================================== */
 
       if (ligneServiceId) {
         const ligneService =
@@ -786,24 +998,257 @@ export async function createFacture(input: {
         }
       }
 
-      const montant = roundMoney(
-        quantite * prixUnitaire
-      );
+      /* =====================================================
+         LABORATOIRE
+      ===================================================== */
+
+      if (demandeLaboratoireLigneId) {
+        const demandeLaboratoireLigne =
+          await prisma.demandeLaboratoireLigne.findUnique({
+            where: {
+              id:
+                demandeLaboratoireLigneId,
+            },
+
+            select: {
+              id: true,
+
+              demande: {
+                select: {
+                  patientId: true,
+                },
+              },
+            },
+          });
+
+        if (!demandeLaboratoireLigne) {
+          return {
+            success: false,
+            message:
+              `La ligne de laboratoire #${demandeLaboratoireLigneId} est introuvable.`,
+          };
+        }
+
+        if (
+          demandeLaboratoireLigne.demande
+            .patientId !== input.patientId
+        ) {
+          return {
+            success: false,
+            message:
+              "La ligne de laboratoire sélectionnée n'appartient pas à ce patient.",
+          };
+        }
+
+        const dejaFacture =
+          await prisma.ligneFacture.findFirst({
+            where: {
+              demandeLaboratoireLigneId,
+            },
+
+            select: {
+              id: true,
+
+              facture: {
+                select: {
+                  numero: true,
+                },
+              },
+            },
+          });
+
+        if (dejaFacture) {
+          return {
+            success: false,
+            message:
+              `La ligne de laboratoire #${demandeLaboratoireLigneId} est déjà facturée dans la facture ${dejaFacture.facture.numero}.`,
+          };
+        }
+      }
+
+      /* =====================================================
+         IMAGERIE
+      ===================================================== */
+
+      if (demandeImagerieId) {
+        const demandeImagerie =
+          await prisma.demandeImagerie.findUnique({
+            where: {
+              id: demandeImagerieId,
+            },
+
+            select: {
+              id: true,
+              patientId: true,
+            },
+          });
+
+        if (!demandeImagerie) {
+          return {
+            success: false,
+            message:
+              `La demande d'imagerie #${demandeImagerieId} est introuvable.`,
+          };
+        }
+
+        if (
+          demandeImagerie.patientId !==
+          input.patientId
+        ) {
+          return {
+            success: false,
+            message:
+              "La demande d'imagerie sélectionnée n'appartient pas à ce patient.",
+          };
+        }
+
+        const dejaFacture =
+          await prisma.ligneFacture.findFirst({
+            where: {
+              demandeImagerieId,
+            },
+
+            select: {
+              id: true,
+
+              facture: {
+                select: {
+                  numero: true,
+                },
+              },
+            },
+          });
+
+        if (dejaFacture) {
+          return {
+            success: false,
+            message:
+              `La demande d'imagerie #${demandeImagerieId} est déjà facturée dans la facture ${dejaFacture.facture.numero}.`,
+          };
+        }
+      }
+
+      /* =====================================================
+         PHARMACIE
+      ===================================================== */
+
+      if (dispensationLigneId) {
+        const dispensationLigne =
+          await prisma.dispensationLigne.findUnique({
+            where: {
+              id: dispensationLigneId,
+            },
+
+            select: {
+              id: true,
+
+              dispensation: {
+                select: {
+                  patientId: true,
+                },
+              },
+            },
+          });
+
+        if (!dispensationLigne) {
+          return {
+            success: false,
+            message:
+              `La ligne de dispensation #${dispensationLigneId} est introuvable.`,
+          };
+        }
+
+        if (
+          dispensationLigne.dispensation
+            .patientId !== input.patientId
+        ) {
+          return {
+            success: false,
+            message:
+              "La ligne de dispensation sélectionnée n'appartient pas à ce patient.",
+          };
+        }
+
+        const dejaFacture =
+          await prisma.ligneFacture.findFirst({
+            where: {
+              dispensationLigneId,
+            },
+
+            select: {
+              id: true,
+
+              facture: {
+                select: {
+                  numero: true,
+                },
+              },
+            },
+          });
+
+        if (dejaFacture) {
+          return {
+            success: false,
+            message:
+              `La ligne de dispensation #${dispensationLigneId} est déjà facturée dans la facture ${dejaFacture.facture.numero}.`,
+          };
+        }
+      }
+
+      /* =====================================================
+         MONTANT
+      ===================================================== */
+
+      const montant =
+        roundMoney(
+          quantite *
+            prixUnitaire,
+        );
+
+      /* =====================================================
+         AJOUT LIGNE
+      ===================================================== */
 
       lignes.push({
         designation,
         quantite,
-        prixUnitaire: roundMoney(
-          prixUnitaire
-        ),
+
+        prixUnitaire:
+          roundMoney(
+            prixUnitaire,
+          ),
+
         montant,
+
+        /*
+         * ACTE DU CATALOGUE
+         */
         acteId,
-        serviceId: ligneServiceId,
+
+        /*
+         * ACTE RÉELLEMENT RÉALISÉ
+         */
+        consultationActeId,
+
+        serviceId:
+          ligneServiceId,
+
+        demandeLaboratoireLigneId,
+
+        demandeImagerieId,
+
+        dispensationLigneId,
+
         reference:
-          cleanString(ligne?.reference) ||
-          undefined,
+          cleanString(
+            ligne?.reference,
+          ) || undefined,
       });
     }
+
+    /* =======================================================
+       VALIDATION FINALE
+    ======================================================= */
 
     if (lignes.length === 0) {
       return {
@@ -813,21 +1258,25 @@ export async function createFacture(input: {
       };
     }
 
-    /* -------------------------------------------------------
+    /* =======================================================
        MONTANT BRUT
-    ------------------------------------------------------- */
+    ======================================================= */
 
-    const montantBrut = roundMoney(
-      lignes.reduce(
-        (total, ligne) =>
-          total + Number(ligne.montant ?? 0),
-        0
-      )
-    );
+    const montantBrut =
+      roundMoney(
+        lignes.reduce(
+          (total, ligne) =>
+            total +
+            Number(
+              ligne.montant ?? 0,
+            ),
+          0,
+        ),
+      );
 
-    /* -------------------------------------------------------
-       TYPE DE RÉDUCTION
-    ------------------------------------------------------- */
+    /* =======================================================
+       TYPE RÉDUCTION
+    ======================================================= */
 
     const typeReduction =
       input.typeReduction ===
@@ -835,16 +1284,19 @@ export async function createFacture(input: {
         ? "POURCENTAGE"
         : "MONTANT";
 
-    /* -------------------------------------------------------
+    /* =======================================================
        RÉDUCTION
-    ------------------------------------------------------- */
+    ======================================================= */
 
-    let reductionInput = Number(
-      input.reduction ?? 0
-    );
+    let reductionInput =
+      Number(
+        input.reduction ?? 0,
+      );
 
     if (
-      !Number.isFinite(reductionInput) ||
+      !Number.isFinite(
+        reductionInput,
+      ) ||
       reductionInput < 0
     ) {
       reductionInput = 0;
@@ -856,66 +1308,113 @@ export async function createFacture(input: {
       typeReduction ===
       "POURCENTAGE"
     ) {
-      reductionInput = Math.min(
-        reductionInput,
-        100
-      );
-
-      reduction = roundMoney(
-        montantBrut *
-          (reductionInput / 100)
-      );
-    } else {
-      reduction = roundMoney(
+      reductionInput =
         Math.min(
           reductionInput,
-          montantBrut
-        )
-      );
+          100,
+        );
+
+      reduction =
+        roundMoney(
+          montantBrut *
+            (reductionInput /
+              100),
+        );
+    } else {
+      reduction =
+        roundMoney(
+          Math.min(
+            reductionInput,
+            montantBrut,
+          ),
+        );
     }
 
-    /* -------------------------------------------------------
+    /* =======================================================
        TOTAL
-    ------------------------------------------------------- */
+    ======================================================= */
 
-    const montantTotal = roundMoney(
-      Math.max(
-        0,
-        montantBrut - reduction
-      )
-    );
+    const montantTotal =
+      roundMoney(
+        Math.max(
+          0,
+          montantBrut -
+            reduction,
+        ),
+      );
 
-    /* -------------------------------------------------------
+    /* =======================================================
        DEVISE
-    ------------------------------------------------------- */
+    ======================================================= */
 
     const devise =
-      cleanString(input.devise)
-        .toUpperCase() || "USD";
+      cleanString(
+        input.devise,
+      ).toUpperCase() ||
+      "USD";
 
-    /* -------------------------------------------------------
-       STATUT INITIAL
-    ------------------------------------------------------- */
+    /* =======================================================
+       STATUT
+    ======================================================= */
 
     const statut =
       montantTotal === 0
         ? "PAYEE"
         : "IMPAYEE";
 
-    /* -------------------------------------------------------
-       NUMÉRO UNIQUE
-    ------------------------------------------------------- */
+    /* =======================================================
+       NUMÉRO FACTURE
+    ======================================================= */
 
     const numero =
       await generateUniqueFactureNumero();
 
-    /* -------------------------------------------------------
+    /* =======================================================
        TRANSACTION
-    ------------------------------------------------------- */
+    ======================================================= */
 
     const facture =
       await prisma.$transaction(
         async (tx) => {
+
+          /* =================================================
+             DOUBLE FACTURATION DANS TRANSACTION
+          ================================================= */
+
+          for (const ligne of lignes) {
+            if (
+              ligne.consultationActeId
+            ) {
+              const existe =
+                await tx.ligneFacture.findFirst({
+                  where: {
+                    consultationActeId:
+                      ligne.consultationActeId,
+                  },
+
+                  select: {
+                    id: true,
+
+                    facture: {
+                      select: {
+                        numero: true,
+                      },
+                    },
+                  },
+                });
+
+              if (existe) {
+                throw new Error(
+                  `L'acte de consultation #${ligne.consultationActeId} est déjà facturé dans la facture ${existe.facture.numero}.`,
+                );
+              }
+            }
+          }
+
+          /* =================================================
+             CRÉATION FACTURE
+          ================================================= */
+
           const nouvelleFacture =
             await tx.facture.create({
               data: {
@@ -925,22 +1424,18 @@ export async function createFacture(input: {
                   input.patientId,
 
                 consultationId,
-
                 admissionId,
-
                 hospitalisationId,
-
                 proformaId,
 
                 montantBrut,
-
                 reduction,
-
                 montantTotal,
 
                 montantPaye: 0,
 
-                reste: montantTotal,
+                reste:
+                  montantTotal,
 
                 typeReduction,
 
@@ -949,30 +1444,67 @@ export async function createFacture(input: {
                 statut,
 
                 lignes: {
-                  create: lignes.map(
-                    (ligne) => ({
-                      designation:
-                        ligne.designation,
+                  create:
+                    lignes.map(
+                      (ligne) => ({
+                        designation:
+                          ligne.designation,
 
-                      quantite:
-                        ligne.quantite,
+                        quantite:
+                          ligne.quantite,
 
-                      prixUnitaire:
-                        ligne.prixUnitaire,
+                        prixUnitaire:
+                          ligne.prixUnitaire,
 
-                      montant:
-                        ligne.montant!,
+                        montant:
+                          ligne.montant!,
 
-                      acteId:
-                        ligne.acteId,
+                        /*
+                         * ACTE CATALOGUE
+                         */
+                        acteId:
+                          ligne.acteId,
 
-                      serviceId:
-                        ligne.serviceId,
+                        /*
+                         * ⭐ ACTE RÉALISÉ
+                         *
+                         * C'EST CETTE VALEUR QUI DOIT
+                         * ÊTRE ENREGISTRÉE.
+                         */
+                        consultationActeId:
+                          ligne.consultationActeId,
 
-                      reference:
-                        ligne.reference,
-                    })
-                  ),
+                        /*
+                         * SERVICE
+                         */
+                        serviceId:
+                          ligne.serviceId,
+
+                        /*
+                         * LABORATOIRE
+                         */
+                        demandeLaboratoireLigneId:
+                          ligne.demandeLaboratoireLigneId,
+
+                        /*
+                         * IMAGERIE
+                         */
+                        demandeImagerieId:
+                          ligne.demandeImagerieId,
+
+                        /*
+                         * PHARMACIE
+                         */
+                        dispensationLigneId:
+                          ligne.dispensationLigneId,
+
+                        /*
+                         * RÉFÉRENCE
+                         */
+                        reference:
+                          ligne.reference,
+                      }),
+                    ),
                 },
               },
 
@@ -1004,14 +1536,33 @@ export async function createFacture(input: {
                   include: {
                     service: true,
                     acte: true,
+
+                    /*
+                     * ⭐ TRÈS IMPORTANT
+                     */
+                    consultationActe: {
+                      include: {
+                        acte: true,
+                        consultation: true,
+                      },
+                    },
+
+                    demandeLaboratoireLigne:
+                      true,
+
+                    demandeImagerie:
+                      true,
+
+                    dispensationLigne:
+                      true,
                   },
                 },
               },
             });
 
-          /* -------------------------------------------------
-             PROFORMA → FACTURÉE
-          ------------------------------------------------- */
+          /* =================================================
+             PROFORMA → FACTUREE
+          ================================================= */
 
           if (proformaId) {
             await tx.proforma.update({
@@ -1020,47 +1571,74 @@ export async function createFacture(input: {
               },
 
               data: {
-                statut: "FACTUREE",
+                statut:
+                  "FACTUREE",
               },
             });
           }
 
           return nouvelleFacture;
-        }
+        },
       );
 
-    /* -------------------------------------------------------
+    /* =======================================================
        REVALIDATION
-    ------------------------------------------------------- */
+    ======================================================= */
 
-    revalidatePath("/facturation");
-    revalidatePath("/facturation/factures");
-    revalidatePath("/facturation/proformas");
-    revalidatePath("/facturation/paiements");
-    revalidatePath("/facturation/actes");
     revalidatePath(
-      "/facturation/factures/nouveau"
+      "/facturation",
     );
+
+    revalidatePath(
+      "/facturation/factures",
+    );
+
+    revalidatePath(
+      "/facturation/proformas",
+    );
+
+    revalidatePath(
+      "/facturation/paiements",
+    );
+
+    revalidatePath(
+      "/facturation/actes",
+    );
+
+    revalidatePath(
+      "/facturation/factures/nouveau",
+    );
+
+    /* =======================================================
+       RETOUR
+    ======================================================= */
 
     return {
       success: true,
+
       message:
         "Facture créée avec succès.",
+
       data: facture,
     };
+
   } catch (error) {
     console.error(
       "ERREUR createFacture :",
-      error
+      error,
     );
 
     return {
       success: false,
+
       message:
-        "Erreur lors de la création de la facture.",
+        error instanceof Error
+          ? error.message
+          : "Erreur lors de la création de la facture.",
     };
   }
 }
+
 
 /* ==========================================================
    ACTES MÉDICAUX — LISTE

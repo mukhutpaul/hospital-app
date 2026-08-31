@@ -13,6 +13,8 @@ import {
 
 import {
   ChevronDown,
+  ChevronLeft,
+  ChevronRight,
   ChevronUp,
   ChevronsUpDown,
   Eye,
@@ -23,6 +25,8 @@ import {
   Power,
   Search,
   Trash2,
+  Users,
+  X,
 } from "lucide-react";
 
 import { useMemo, useState } from "react";
@@ -80,71 +84,50 @@ type Props = {
    COMPOSANT
 ========================================================= */
 
-export default function UtilisateurTable({
-  data,
-}: Props) {
+export default function UtilisateurTable({ data }: Props) {
   const router = useRouter();
 
   /* =======================================================
      ÉTATS
   ======================================================= */
 
-  const [sorting, setSorting] =
-    useState<SortingState>([]);
+  const [sorting, setSorting] = useState<SortingState>([]);
 
-  const [globalFilter, setGlobalFilter] =
-    useState("");
+  const [globalFilter, setGlobalFilter] = useState("");
 
-  const [loadingId, setLoadingId] =
-    useState<number | null>(null);
+  const [loadingId, setLoadingId] = useState<number | null>(null);
 
   /* =======================================================
      VOIR LE PROFIL
   ======================================================= */
 
-  function handleVoir(
-    utilisateur: Utilisateur
-  ) {
+  function handleVoir(utilisateur: Utilisateur) {
     if (loadingId !== null) return;
 
-    router.push(
-      `/utilisateurs/${utilisateur.id}`
-    );
+    router.push(`/utilisateurs/${utilisateur.id}`);
   }
 
   /* =======================================================
      MODIFIER
   ======================================================= */
 
-  function handleModifier(
-    utilisateur: Utilisateur
-  ) {
+  function handleModifier(utilisateur: Utilisateur) {
     if (loadingId !== null) return;
 
-    router.push(
-      `/utilisateurs/${utilisateur.id}/modifier`
-    );
+    router.push(`/utilisateurs/${utilisateur.id}/modifier`);
   }
 
   /* =======================================================
      RÉINITIALISER LE MOT DE PASSE
   ======================================================= */
 
-  async function handleResetPassword(
-    utilisateur: Utilisateur
-  ) {
+  async function handleResetPassword(utilisateur: Utilisateur) {
     if (loadingId !== null) {
       return;
     }
 
     const nomUtilisateur =
-      utilisateur.name?.trim() ||
-      utilisateur.email ||
-      "cet utilisateur";
-
-    /* -----------------------------------------------------
-       CONFIRMATION
-    ----------------------------------------------------- */
+      utilisateur.name?.trim() || utilisateur.email || "cet utilisateur";
 
     const result = await Swal.fire({
       title: "Réinitialiser le mot de passe ?",
@@ -158,7 +141,7 @@ export default function UtilisateurTable({
           </p>
 
           <p style="
-            margin-top:10px;
+            margin-top:12px;
             color:#6b7280;
             font-size:13px;
           ">
@@ -172,19 +155,15 @@ export default function UtilisateurTable({
 
       showCancelButton: true,
 
-      confirmButtonText:
-        "Oui, réinitialiser",
+      confirmButtonText: "Oui, réinitialiser",
 
-      cancelButtonText:
-        "Annuler",
+      cancelButtonText: "Annuler",
 
       reverseButtons: true,
 
-      confirmButtonColor:
-        "#f59e0b",
+      confirmButtonColor: "#f59e0b",
 
-      cancelButtonColor:
-        "#6b7280",
+      cancelButtonColor: "#6b7280",
 
       focusCancel: true,
     });
@@ -193,37 +172,15 @@ export default function UtilisateurTable({
       return;
     }
 
-    /* -----------------------------------------------------
-       TRAITEMENT
-    ----------------------------------------------------- */
-
     try {
       setLoadingId(utilisateur.id);
 
-      /*
-       * Génération du nouveau mot de passe.
-       */
-      const newPassword =
-        generateTemporaryPassword();
+      const newPassword = generateTemporaryPassword();
 
-      /*
-       * Appel de l'action serveur.
-       *
-       * resetUtilisateurPassword(
-       *   utilisateur.id,
-       *   newPassword
-       * )
-       */
-
-      const response =
-        await resetUtilisateurPassword(
-          utilisateur.id,
-          newPassword
-        );
-
-      /*
-       * Gestion d'une réponse d'échec.
-       */
+      const response = await resetUtilisateurPassword(
+        utilisateur.id,
+        newPassword,
+      );
 
       if (
         response &&
@@ -234,25 +191,20 @@ export default function UtilisateurTable({
         toast.error(
           "message" in response
             ? String(response.message)
-            : "Impossible de réinitialiser le mot de passe."
+            : "Impossible de réinitialiser le mot de passe.",
         );
 
         return;
       }
 
-      /* ---------------------------------------------------
-         AFFICHAGE DU NOUVEAU MOT DE PASSE
-      --------------------------------------------------- */
-
       await Swal.fire({
-        title:
-          "Mot de passe réinitialisé",
+        title: "Mot de passe réinitialisé",
 
         html: `
           <div style="text-align:left">
 
             <p style="
-              margin-bottom:12px;
+              margin-bottom:14px;
               font-size:14px;
             ">
               Le nouveau mot de passe temporaire de
@@ -263,8 +215,8 @@ export default function UtilisateurTable({
             </p>
 
             <div style="
-              padding:14px;
-              border-radius:10px;
+              padding:16px;
+              border-radius:12px;
               background:#f3f4f6;
               border:1px solid #e5e7eb;
               font-size:20px;
@@ -290,30 +242,23 @@ export default function UtilisateurTable({
 
         icon: "success",
 
-        confirmButtonText:
-          "Fermer",
+        confirmButtonText: "Fermer",
 
-        confirmButtonColor:
-          "#22c55e",
+        confirmButtonColor: "#22c55e",
 
         allowOutsideClick: false,
       });
 
-      toast.success(
-        "Mot de passe réinitialisé avec succès."
-      );
+      toast.success("Mot de passe réinitialisé avec succès.");
 
       router.refresh();
     } catch (error) {
-      console.error(
-        "Erreur réinitialisation mot de passe :",
-        error
-      );
+      console.error("Erreur réinitialisation mot de passe :", error);
 
       toast.error(
         error instanceof Error
           ? error.message
-          : "Impossible de réinitialiser le mot de passe."
+          : "Impossible de réinitialiser le mot de passe.",
       );
     } finally {
       setLoadingId(null);
@@ -324,22 +269,15 @@ export default function UtilisateurTable({
      ACTIVER / DÉSACTIVER
   ======================================================= */
 
-  async function handleToggle(
-    utilisateur: Utilisateur
-  ) {
+  async function handleToggle(utilisateur: Utilisateur) {
     if (loadingId !== null) {
       return;
     }
 
-    const action =
-      utilisateur.actif
-        ? "désactiver"
-        : "activer";
+    const action = utilisateur.actif ? "désactiver" : "activer";
 
     const nomUtilisateur =
-      utilisateur.name?.trim() ||
-      utilisateur.email ||
-      "cet utilisateur";
+      utilisateur.name?.trim() || utilisateur.email || "cet utilisateur";
 
     const result = await Swal.fire({
       title: utilisateur.actif
@@ -352,23 +290,15 @@ export default function UtilisateurTable({
 
       showCancelButton: true,
 
-      confirmButtonText:
-        utilisateur.actif
-          ? "Oui, désactiver"
-          : "Oui, activer",
+      confirmButtonText: utilisateur.actif ? "Oui, désactiver" : "Oui, activer",
 
-      cancelButtonText:
-        "Annuler",
+      cancelButtonText: "Annuler",
 
       reverseButtons: true,
 
-      confirmButtonColor:
-        utilisateur.actif
-          ? "#f59e0b"
-          : "#22c55e",
+      confirmButtonColor: utilisateur.actif ? "#f59e0b" : "#22c55e",
 
-      cancelButtonColor:
-        "#6b7280",
+      cancelButtonColor: "#6b7280",
 
       focusCancel: true,
     });
@@ -380,10 +310,7 @@ export default function UtilisateurTable({
     try {
       setLoadingId(utilisateur.id);
 
-      const response =
-        await toggleUtilisateur(
-          utilisateur.id
-        );
+      const response = await toggleUtilisateur(utilisateur.id);
 
       if (
         response &&
@@ -394,7 +321,7 @@ export default function UtilisateurTable({
         toast.error(
           "message" in response
             ? String(response.message)
-            : "Impossible de modifier le statut."
+            : "Impossible de modifier le statut.",
         );
 
         return;
@@ -403,20 +330,17 @@ export default function UtilisateurTable({
       toast.success(
         utilisateur.actif
           ? "Utilisateur désactivé avec succès."
-          : "Utilisateur activé avec succès."
+          : "Utilisateur activé avec succès.",
       );
 
       router.refresh();
     } catch (error) {
-      console.error(
-        "Erreur activation/désactivation :",
-        error
-      );
+      console.error("Erreur activation/désactivation :", error);
 
       toast.error(
         error instanceof Error
           ? error.message
-          : "Impossible de modifier le statut de l'utilisateur."
+          : "Impossible de modifier le statut de l'utilisateur.",
       );
     } finally {
       setLoadingId(null);
@@ -427,21 +351,16 @@ export default function UtilisateurTable({
      SUPPRIMER
   ======================================================= */
 
-  async function handleDelete(
-    utilisateur: Utilisateur
-  ) {
+  async function handleDelete(utilisateur: Utilisateur) {
     if (loadingId !== null) {
       return;
     }
 
     const nomUtilisateur =
-      utilisateur.name?.trim() ||
-      utilisateur.email ||
-      "cet utilisateur";
+      utilisateur.name?.trim() || utilisateur.email || "cet utilisateur";
 
     const result = await Swal.fire({
-      title:
-        "Supprimer l'utilisateur ?",
+      title: "Supprimer l'utilisateur ?",
 
       html: `
         <p>
@@ -465,19 +384,15 @@ export default function UtilisateurTable({
 
       showCancelButton: true,
 
-      confirmButtonText:
-        "Oui, supprimer",
+      confirmButtonText: "Oui, supprimer",
 
-      cancelButtonText:
-        "Annuler",
+      cancelButtonText: "Annuler",
 
       reverseButtons: true,
 
-      confirmButtonColor:
-        "#dc2626",
+      confirmButtonColor: "#dc2626",
 
-      cancelButtonColor:
-        "#6b7280",
+      cancelButtonColor: "#6b7280",
 
       focusCancel: true,
     });
@@ -489,10 +404,7 @@ export default function UtilisateurTable({
     try {
       setLoadingId(utilisateur.id);
 
-      const response =
-        await deleteUtilisateur(
-          utilisateur.id
-        );
+      const response = await deleteUtilisateur(utilisateur.id);
 
       if (
         response &&
@@ -503,27 +415,22 @@ export default function UtilisateurTable({
         toast.error(
           "message" in response
             ? String(response.message)
-            : "Impossible de supprimer l'utilisateur."
+            : "Impossible de supprimer l'utilisateur.",
         );
 
         return;
       }
 
-      toast.success(
-        "Utilisateur supprimé avec succès."
-      );
+      toast.success("Utilisateur supprimé avec succès.");
 
       router.refresh();
     } catch (error) {
-      console.error(
-        "Erreur suppression utilisateur :",
-        error
-      );
+      console.error("Erreur suppression utilisateur :", error);
 
       toast.error(
         error instanceof Error
           ? error.message
-          : "Impossible de supprimer l'utilisateur."
+          : "Impossible de supprimer l'utilisateur.",
       );
     } finally {
       setLoadingId(null);
@@ -534,809 +441,637 @@ export default function UtilisateurTable({
      COLONNES
   ======================================================= */
 
-  const columns =
-    useMemo<ColumnDef<Utilisateur>[]>(
-      () => [
-
-        /* ===================================================
+  const columns = useMemo<ColumnDef<Utilisateur>[]>(
+    () => [
+      /* ===============================================
            UTILISATEUR
-        =================================================== */
+        =============================================== */
 
-        {
-          id: "utilisateur",
+      {
+        id: "utilisateur",
 
-          accessorFn: (row) =>
-            row.name ?? "",
+        accessorFn: (row) => row.name ?? "",
 
-          header: "Utilisateur",
+        header: "Utilisateur",
 
-          cell: ({ row }) => {
-            const utilisateur =
-              row.original;
+        cell: ({ row }) => {
+          const utilisateur = row.original;
 
-            const initial =
-              utilisateur.name
-                ?.trim()
-                .charAt(0)
-                .toUpperCase() || "U";
+          const initial =
+            utilisateur.name?.trim().charAt(0).toUpperCase() || "U";
 
-            return (
-              <div className="flex items-center gap-3">
-
-                <div className="avatar placeholder shrink-0">
-                  <div
-                    className="
-                      w-10
-                      h-10
-                      rounded-full
-                      bg-primary
-                      text-primary-content
-                      flex
-                      items-center
-                      justify-center
-                    "
-                  >
-                    <span className="font-bold">
-                      {initial}
-                    </span>
-                  </div>
+          return (
+            <div className="flex items-center gap-3">
+              {/* AVATAR */}
+              <div className="avatar placeholder shrink-0">
+                <div className="flex h-12 w-12 items-center justify-center overflow-hidden rounded-2xl bg-primary text-primary-content shadow-md ring-1 ring-base-300">
+                  <span className="text-base font-bold uppercase">
+                    {initial}
+                  </span>
                 </div>
-
-                <div className="min-w-0">
-                  <p className="font-semibold truncate max-w-48">
-                    {utilisateur.name ||
-                      "Sans nom"}
-                  </p>
-
-                  {utilisateur.employe && (
-                    <p className="text-xs text-base-content/50">
-                      {
-                        utilisateur
-                          .employe
-                          .matricule
-                      }
-                    </p>
-                  )}
-                </div>
-
               </div>
-            );
-          },
-        },
 
-        /* ===================================================
+              {/* INFORMATIONS */}
+              <div className="min-w-0">
+                <p className="max-w-[220px] truncate font-semibold text-base-content">
+                  {utilisateur.name || "Sans nom"}
+                </p>
+
+                <div className="mt-1 flex items-center gap-2">
+                  <span className="h-2 w-2 rounded-full bg-success" />
+
+                  <p className="truncate text-xs text-base-content/50">
+                    {utilisateur.employe
+                      ? utilisateur.employe.matricule
+                      : "Aucun employé associé"}
+                  </p>
+                </div>
+              </div>
+            </div>
+          );
+        },
+      },
+
+      /* ===============================================
            EMAIL
-        =================================================== */
+        =============================================== */
 
-        {
-          accessorKey: "email",
+      {
+        accessorKey: "email",
 
-          header: "Email",
+        header: "Email",
 
-          cell: ({ row }) => (
-            <span className="text-sm">
-              {row.original.email ||
-                "-"}
-            </span>
-          ),
-        },
+        cell: ({ row }) => (
+          <span className="max-w-60 truncate text-sm text-base-content/80">
+            {row.original.email || "Non renseigné"}
+          </span>
+        ),
+      },
 
-        /* ===================================================
-           TELEPHONE
-        =================================================== */
+      /* ===============================================
+           TÉLÉPHONE
+        =============================================== */
 
-        {
-          accessorKey: "telephone",
+      {
+        accessorKey: "telephone",
 
-          header: "Téléphone",
+        header: "Téléphone",
 
-          cell: ({ row }) => (
-            <span className="text-sm">
-              {row.original.telephone ||
-                "-"}
-            </span>
-          ),
-        },
+        cell: ({ row }) => (
+          <span className="text-sm text-base-content/80">
+            {row.original.telephone || "Non renseigné"}
+          </span>
+        ),
+      },
 
-        /* ===================================================
-           ROLE
-        =================================================== */
+      /* ===============================================
+           RÔLE
+        =============================================== */
 
-        {
-          id: "role",
+      {
+        id: "role",
 
-          accessorFn: (row) =>
-            row.role?.nom ?? "",
+        accessorFn: (row) => row.role?.nom ?? "",
 
-          header: "Rôle",
+        header: "Rôle",
 
-          cell: ({ row }) => {
-            const role =
-              row.original.role;
+        cell: ({ row }) => {
+          const role = row.original.role;
 
-            if (!role) {
-              return (
-                <span className="badge badge-ghost">
-                  Aucun rôle
-                </span>
-              );
-            }
-
+          if (!role) {
             return (
-              <span className="badge badge-primary badge-outline">
-                {role.nom}
-              </span>
+              <span className="badge badge-ghost badge-sm">Aucun rôle</span>
             );
-          },
-        },
+          }
 
-        /* ===================================================
+          return (
+            <span className="badge badge-primary badge-outline">
+              {role.nom}
+            </span>
+          );
+        },
+      },
+
+      /* ===============================================
            STATUT
-        =================================================== */
+        =============================================== */
 
-        {
-          id: "statut",
+      {
+        id: "statut",
 
-          accessorFn: (row) =>
-            row.actif
-              ? "Actif"
-              : "Inactif",
+        accessorFn: (row) => (row.actif ? "Actif" : "Inactif"),
 
-          header: "Statut",
+        header: "Statut",
 
-          cell: ({ row }) => {
-            const actif =
-              row.original.actif;
+        cell: ({ row }) => {
+          const actif = row.original.actif;
 
-            return actif ? (
-              <span className="badge badge-success gap-1">
-                <span className="w-1.5 h-1.5 rounded-full bg-current" />
-                Actif
-              </span>
-            ) : (
-              <span className="badge badge-error gap-1">
-                <span className="w-1.5 h-1.5 rounded-full bg-current" />
-                Inactif
-              </span>
-            );
-          },
+          return actif ? (
+            <span className="badge badge-success gap-2">
+              <span className="h-1.5 w-1.5 rounded-full bg-current" />
+              Actif
+            </span>
+          ) : (
+            <span className="badge badge-error gap-2">
+              <span className="h-1.5 w-1.5 rounded-full bg-current" />
+              Inactif
+            </span>
+          );
         },
+      },
 
-        /* ===================================================
+      /* ===============================================
            DATE
-        =================================================== */
+        =============================================== */
 
-        {
-          accessorKey: "createdAt",
+      {
+        accessorKey: "createdAt",
 
-          header: "Créé le",
+        header: "Créé le",
 
-          cell: ({ row }) => {
-            const date =
-              new Date(
-                row.original.createdAt
-              );
+        cell: ({ row }) => {
+          const date = new Date(row.original.createdAt);
 
-            return (
-              <span className="text-sm text-base-content/70">
-                {date.toLocaleDateString(
-                  "fr-FR"
-                )}
-              </span>
-            );
-          },
+          return (
+            <span className="text-sm text-base-content/70">
+              {Number.isNaN(date.getTime())
+                ? "-"
+                : date.toLocaleDateString("fr-FR", {
+                    day: "2-digit",
+                    month: "short",
+                    year: "numeric",
+                  })}
+            </span>
+          );
         },
+      },
 
-        /* ===================================================
+      /* ===============================================
            ACTIONS
-        =================================================== */
+        =============================================== */
 
-        {
-          id: "actions",
+      {
+        id: "actions",
 
-          header: "Actions",
+        header: "Actions",
 
-          enableSorting: false,
+        enableSorting: false,
 
-          enableGlobalFilter: false,
+        enableGlobalFilter: false,
 
-          cell: ({ row }) => {
-            const utilisateur =
-              row.original;
+        cell: ({ row }) => {
+          const utilisateur = row.original;
 
-            const loading =
-              loadingId ===
-              utilisateur.id;
+          const loading = loadingId === utilisateur.id;
 
-            return (
-              <div className="dropdown dropdown-end">
+          return (
+            <div className="dropdown dropdown-end">
+              <button
+                type="button"
+                tabIndex={0}
+                className="btn btn-ghost btn-sm btn-square rounded-lg"
+                disabled={loadingId !== null}
+                title="Actions"
+              >
+                {loading ? (
+                  <Loader2 size={18} className="animate-spin" />
+                ) : (
+                  <MoreHorizontal size={19} />
+                )}
+              </button>
 
-                {/* BOUTON ACTIONS */}
-
-                <button
-                  type="button"
+              {!loading && (
+                <ul
                   tabIndex={0}
-                  className="btn btn-ghost btn-sm btn-square"
-                  disabled={
-                    loadingId !== null
-                  }
-                  title="Actions"
-                >
-                  {loading ? (
-                    <Loader2
-                      size={18}
-                      className="animate-spin"
-                    />
-                  ) : (
-                    <MoreHorizontal
-                      size={18}
-                    />
-                  )}
-                </button>
-
-                {/* MENU */}
-
-                {!loading && (
-                  <ul
-                    tabIndex={0}
-                    className="
+                  className="
                       dropdown-content
                       menu
-                      bg-base-100
-                      rounded-box
-                      shadow-xl
+                      z-50
+                      mt-2
+                      w-64
+                      rounded-2xl
                       border
                       border-base-200
-                      w-64
-                      z-50
+                      bg-base-100
                       p-2
+                      shadow-xl
                     "
-                  >
+                >
+                  <li>
+                    <button
+                      type="button"
+                      onClick={() => handleVoir(utilisateur)}
+                    >
+                      <Eye size={17} />
+                      Voir le profil
+                    </button>
+                  </li>
 
-                    {/* VOIR PROFIL */}
+                  <li>
+                    <button
+                      type="button"
+                      onClick={() => handleModifier(utilisateur)}
+                    >
+                      <Pencil size={17} />
+                      Modifier
+                    </button>
+                  </li>
 
-                    <li>
-                      <button
-                        type="button"
-                        onClick={() =>
-                          handleVoir(
-                            utilisateur
-                          )
-                        }
-                      >
-                        <Eye size={17} />
+                  <li>
+                    <button
+                      type="button"
+                      onClick={() => handleResetPassword(utilisateur)}
+                    >
+                      <KeyRound size={17} />
+                      Réinitialiser le mot de passe
+                    </button>
+                  </li>
 
-                        Voir le profil
-                      </button>
-                    </li>
+                  <div className="divider my-1" />
 
-                    {/* MODIFIER */}
+                  <li>
+                    <button
+                      type="button"
+                      onClick={() => handleToggle(utilisateur)}
+                      className={
+                        utilisateur.actif ? "text-warning" : "text-success"
+                      }
+                    >
+                      <Power size={17} />
 
-                    <li>
-                      <button
-                        type="button"
-                        onClick={() =>
-                          handleModifier(
-                            utilisateur
-                          )
-                        }
-                      >
-                        <Pencil size={17} />
+                      {utilisateur.actif ? "Désactiver" : "Activer"}
+                    </button>
+                  </li>
 
-                        Modifier
-                      </button>
-                    </li>
-
-                    {/* RÉINITIALISER MOT DE PASSE */}
-
-                    <li>
-                      <button
-                        type="button"
-                        onClick={() =>
-                          handleResetPassword(
-                            utilisateur
-                          )
-                        }
-                      >
-                        <KeyRound
-                          size={17}
-                        />
-
-                        Réinitialiser le mot de passe
-                      </button>
-                    </li>
-
-                    <div className="divider my-1" />
-
-                    {/* ACTIVER / DÉSACTIVER */}
-
-                    <li>
-                      <button
-                        type="button"
-                        onClick={() =>
-                          handleToggle(
-                            utilisateur
-                          )
-                        }
-                        className={
-                          utilisateur.actif
-                            ? "text-warning"
-                            : "text-success"
-                        }
-                      >
-                        <Power size={17} />
-
-                        {utilisateur.actif
-                          ? "Désactiver"
-                          : "Activer"}
-                      </button>
-                    </li>
-
-                    {/* SUPPRIMER */}
-
-                    <li>
-                      <button
-                        type="button"
-                        onClick={() =>
-                          handleDelete(
-                            utilisateur
-                          )
-                        }
-                        className="text-error"
-                      >
-                        <Trash2 size={17} />
-
-                        Supprimer
-                      </button>
-                    </li>
-
-                  </ul>
-                )}
-
-              </div>
-            );
-          },
+                  <li>
+                    <button
+                      type="button"
+                      onClick={() => handleDelete(utilisateur)}
+                      className="text-error"
+                    >
+                      <Trash2 size={17} />
+                      Supprimer
+                    </button>
+                  </li>
+                </ul>
+              )}
+            </div>
+          );
         },
-      ],
+      },
+    ],
 
-      [loadingId]
-    );
+    [loadingId],
+  );
 
   /* =======================================================
-     TANSTACK TABLE
+     TABLE
   ======================================================= */
 
-  const table =
-    useReactTable({
-      data,
+  const table = useReactTable({
+    data,
 
-      columns,
+    columns,
 
-      state: {
-        sorting,
-        globalFilter,
+    state: {
+      sorting,
+      globalFilter,
+    },
+
+    onSortingChange: setSorting,
+
+    onGlobalFilterChange: setGlobalFilter,
+
+    getCoreRowModel: getCoreRowModel(),
+
+    getSortedRowModel: getSortedRowModel(),
+
+    getFilteredRowModel: getFilteredRowModel(),
+
+    getPaginationRowModel: getPaginationRowModel(),
+
+    initialState: {
+      pagination: {
+        pageSize: 10,
       },
+    },
+  });
 
-      onSortingChange:
-        setSorting,
+  const filteredCount = table.getFilteredRowModel().rows.length;
 
-      onGlobalFilterChange:
-        setGlobalFilter,
+  const pageCount = table.getPageCount();
 
-      getCoreRowModel:
-        getCoreRowModel(),
-
-      getSortedRowModel:
-        getSortedRowModel(),
-
-      getFilteredRowModel:
-        getFilteredRowModel(),
-
-      getPaginationRowModel:
-        getPaginationRowModel(),
-
-      initialState: {
-        pagination: {
-          pageSize: 10,
-        },
-      },
-    });
+  const currentPage = table.getState().pagination.pageIndex;
 
   /* =======================================================
      RENDER
   ======================================================= */
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-6">
+      {/* ===============================================
+         EN-TÊTE
+      =============================================== */}
 
-      {/* ===================================================
-          RECHERCHE
-      =================================================== */}
+      <div className="overflow-hidden rounded-2xl border border-base-200 bg-base-100 shadow-sm">
+        <div className="flex flex-col gap-5 p-5 lg:flex-row lg:items-center lg:justify-between">
+          <div className="flex items-center gap-4">
+            <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl bg-primary/10 text-primary">
+              <Users size={26} />
+            </div>
 
-      <div className="
-        flex
-        flex-col
-        gap-3
-        lg:flex-row
-        lg:items-center
-        lg:justify-between
-      ">
+            <div>
+              <h2 className="text-xl font-bold">Gestion des utilisateurs</h2>
 
-        <label className="
-          input
-          input-bordered
-          flex
-          items-center
-          gap-2
-          w-full
-          lg:w-96
-        ">
+              <p className="mt-1 text-sm text-base-content/60">
+                Gérez les comptes, les rôles et les accès.
+              </p>
+            </div>
+          </div>
 
-          <Search
-            size={18}
-            className="text-base-content/50"
-          />
-
-          <input
-            type="search"
-            placeholder="Rechercher un utilisateur..."
-            className="grow"
-            value={globalFilter}
-            onChange={(event) =>
-              setGlobalFilter(
-                event.target.value
-              )
-            }
-          />
-
-        </label>
-
-        <div className="text-sm text-base-content/60">
-          {
-            table
-              .getFilteredRowModel()
-              .rows.length
-          }{" "}
-          utilisateur(s)
+          <div className="badge badge-primary badge-lg gap-2 px-4">
+            <Users size={16} />
+            {filteredCount}
+            utilisateur
+            {filteredCount > 1 ? "s" : ""}
+          </div>
         </div>
 
+        {/* =============================================
+           RECHERCHE
+        ============================================= */}
+
+        <div className="border-t border-base-200 bg-base-200/30 p-5">
+          <div className="relative w-full lg:max-w-xl">
+            <Search
+              size={19}
+              className="
+                pointer-events-none
+                absolute
+                left-4
+                top-1/2
+                -translate-y-1/2
+                text-base-content/40
+              "
+            />
+
+            <input
+              type="search"
+              placeholder="Rechercher un utilisateur..."
+              className="
+                input
+                input-bordered
+                h-12
+                w-full
+                rounded-xl
+                pl-11
+                pr-11
+                shadow-sm
+              "
+              value={globalFilter}
+              onChange={(event) => setGlobalFilter(event.target.value)}
+            />
+
+            {globalFilter && (
+              <button
+                type="button"
+                className="
+                  btn
+                  btn-ghost
+                  btn-xs
+                  btn-circle
+                  absolute
+                  right-3
+                  top-1/2
+                  -translate-y-1/2
+                "
+                onClick={() => setGlobalFilter("")}
+                title="Effacer la recherche"
+              >
+                <X size={15} />
+              </button>
+            )}
+          </div>
+        </div>
       </div>
 
-      {/* ===================================================
-          TABLE
-      =================================================== */}
+      {/* ===============================================
+         TABLEAU
+      =============================================== */}
 
-      <div className="
-        overflow-x-auto
-        rounded-box
-        border
-        border-base-300
-      ">
+      <div className="overflow-hidden rounded-2xl border border-base-200 bg-base-100 shadow-sm">
+        <div className="overflow-x-auto">
+          <table className="table">
+            {/* ===========================================
+               HEADER
+            =========================================== */}
 
-        <table className="table table-zebra">
+            <thead className="bg-base-200/70">
+              {table.getHeaderGroups().map((headerGroup) => (
+                <tr key={headerGroup.id}>
+                  {headerGroup.headers.map((header) => {
+                    const canSort = header.column.getCanSort();
 
-          {/* HEADER */}
+                    const sorted = header.column.getIsSorted();
 
-          <thead>
-            {table
-              .getHeaderGroups()
-              .map((headerGroup) => (
-                <tr
-                  key={
-                    headerGroup.id
-                  }
-                >
-
-                  {headerGroup.headers.map(
-                    (header) => {
-                      const canSort =
-                        header.column.getCanSort();
-
-                      const sorted =
-                        header.column.getIsSorted();
-
-                      return (
-                        <th
-                          key={
-                            header.id
-                          }
-                        >
-
-                          {header.isPlaceholder
-                            ? null
-                            : (
-                              <button
-                                type="button"
-                                className={`
-                                  flex
-                                  items-center
-                                  gap-1
-                                  text-left
-                                  ${
-                                    canSort
-                                      ? "cursor-pointer select-none"
-                                      : ""
-                                  }
-                                `}
-                                onClick={
-                                  canSort
-                                    ? header.column.getToggleSortingHandler()
-                                    : undefined
-                                }
-                              >
-
-                                {flexRender(
-                                  header
-                                    .column
-                                    .columnDef
-                                    .header,
-                                  header.getContext()
-                                )}
-
-                                {canSort && (
-                                  <>
-                                    {sorted ===
-                                      "asc" && (
-                                      <ChevronUp
-                                        size={15}
-                                      />
-                                    )}
-
-                                    {sorted ===
-                                      "desc" && (
-                                      <ChevronDown
-                                        size={15}
-                                      />
-                                    )}
-
-                                    {!sorted && (
-                                      <ChevronsUpDown
-                                        size={15}
-                                        className="opacity-40"
-                                      />
-                                    )}
-                                  </>
-                                )}
-
-                              </button>
-                            )}
-
-                        </th>
-                      );
-                    }
-                  )}
-
-                </tr>
-              ))}
-          </thead>
-
-          {/* BODY */}
-
-          <tbody>
-
-            {table.getRowModel().rows
-              .length === 0 ? (
-
-              <tr>
-
-                <td
-                  colSpan={
-                    columns.length
-                  }
-                  className="text-center py-12"
-                >
-
-                  <div className="
-                    flex
-                    flex-col
-                    items-center
-                    gap-2
-                  ">
-
-                    <div className="text-4xl opacity-30">
-                      👤
-                    </div>
-
-                    <p className="font-semibold">
-                      Aucun utilisateur trouvé
-                    </p>
-
-                    <p className="text-sm text-base-content/50">
-                      Essayez de modifier votre recherche.
-                    </p>
-
-                  </div>
-
-                </td>
-
-              </tr>
-
-            ) : (
-
-              table
-                .getRowModel()
-                .rows
-                .map((row) => (
-
-                  <tr
-                    key={row.id}
-                  >
-
-                    {row
-                      .getVisibleCells()
-                      .map(
-                        (cell) => (
-
-                          <td
-                            key={
-                              cell.id
+                    return (
+                      <th
+                        key={header.id}
+                        className="
+                                h-14
+                                whitespace-nowrap
+                                text-xs
+                                font-bold
+                                uppercase
+                                tracking-wider
+                                text-base-content/60
+                              "
+                      >
+                        {header.isPlaceholder ? null : (
+                          <button
+                            type="button"
+                            className={`
+                                      flex
+                                      items-center
+                                      gap-2
+                                      text-left
+                                      transition-colors
+                                      ${
+                                        canSort
+                                          ? "cursor-pointer hover:text-primary"
+                                          : "cursor-default"
+                                      }
+                                    `}
+                            onClick={
+                              canSort
+                                ? header.column.getToggleSortingHandler()
+                                : undefined
                             }
                           >
                             {flexRender(
-                              cell
-                                .column
-                                .columnDef
-                                .cell,
-                              cell.getContext()
+                              header.column.columnDef.header,
+                              header.getContext(),
                             )}
-                          </td>
 
-                        )
+                            {canSort && (
+                              <>
+                                {sorted === "asc" && <ChevronUp size={15} />}
+
+                                {sorted === "desc" && <ChevronDown size={15} />}
+
+                                {!sorted && (
+                                  <ChevronsUpDown
+                                    size={15}
+                                    className="opacity-30"
+                                  />
+                                )}
+                              </>
+                            )}
+                          </button>
+                        )}
+                      </th>
+                    );
+                  })}
+                </tr>
+              ))}
+            </thead>
+
+            {/* ===========================================
+               BODY
+            =========================================== */}
+
+            <tbody>
+              {table.getRowModel().rows.length === 0 ? (
+                <tr>
+                  <td colSpan={columns.length} className="py-20 text-center">
+                    <div className="flex flex-col items-center gap-4">
+                      <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-base-200 text-base-content/40">
+                        <Users size={30} />
+                      </div>
+
+                      <div>
+                        <p className="font-semibold">
+                          Aucun utilisateur trouvé
+                        </p>
+
+                        <p className="mt-1 text-sm text-base-content/50">
+                          Essayez de modifier votre recherche.
+                        </p>
+                      </div>
+
+                      {globalFilter && (
+                        <button
+                          type="button"
+                          className="btn btn-primary btn-sm"
+                          onClick={() => setGlobalFilter("")}
+                        >
+                          Réinitialiser la recherche
+                        </button>
                       )}
-
+                    </div>
+                  </td>
+                </tr>
+              ) : (
+                table.getRowModel().rows.map((row) => (
+                  <tr
+                    key={row.id}
+                    className="
+                          border-base-200
+                          transition-colors
+                          hover:bg-base-200/40
+                        "
+                  >
+                    {row.getVisibleCells().map((cell) => (
+                      <td key={cell.id} className="py-4">
+                        {flexRender(
+                          cell.column.columnDef.cell,
+                          cell.getContext(),
+                        )}
+                      </td>
+                    ))}
                   </tr>
-
                 ))
-
-            )}
-
-          </tbody>
-
-        </table>
-
-      </div>
-
-      {/* ===================================================
-          PAGINATION
-      =================================================== */}
-
-      <div className="
-        flex
-        flex-col
-        sm:flex-row
-        items-center
-        justify-between
-        gap-3
-      ">
-
-        {/* INFORMATION */}
-
-        <p className="text-sm text-base-content/60">
-
-          Page{" "}
-
-          <span className="font-semibold">
-            {table.getState()
-              .pagination
-              .pageIndex + 1}
-          </span>
-
-          {" "}sur{" "}
-
-          <span className="font-semibold">
-            {Math.max(
-              table.getPageCount(),
-              1
-            )}
-          </span>
-
-        </p>
-
-        {/* BOUTONS */}
-
-        <div className="join">
-
-          <button
-            type="button"
-            className="join-item btn btn-sm"
-            onClick={() =>
-              table.previousPage()
-            }
-            disabled={
-              !table.getCanPreviousPage()
-            }
-          >
-            «
-          </button>
-
-          {Array.from(
-            {
-              length:
-                table.getPageCount(),
-            },
-            (_, index) => (
-
-              <button
-                key={index}
-                type="button"
-                className={`
-                  join-item
-                  btn
-                  btn-sm
-                  ${
-                    table.getState()
-                      .pagination
-                      .pageIndex ===
-                    index
-                      ? "btn-primary"
-                      : ""
-                  }
-                `}
-                onClick={() =>
-                  table.setPageIndex(
-                    index
-                  )
-                }
-              >
-                {index + 1}
-              </button>
-
-            )
-          )}
-
-          <button
-            type="button"
-            className="join-item btn btn-sm"
-            onClick={() =>
-              table.nextPage()
-            }
-            disabled={
-              !table.getCanNextPage()
-            }
-          >
-            »
-          </button>
-
+              )}
+            </tbody>
+          </table>
         </div>
 
-        {/* NOMBRE PAR PAGE */}
+        {/* ===============================================
+           PAGINATION
+        =============================================== */}
 
-        <select
-          className="select select-bordered select-sm"
-          value={
-            table.getState()
-              .pagination
-              .pageSize
-          }
-          onChange={(event) =>
-            table.setPageSize(
-              Number(
-                event.target.value
-              )
-            )
-          }
-        >
+        <div className="flex flex-col gap-4 border-t border-base-200 bg-base-200/20 px-5 py-4 lg:flex-row lg:items-center lg:justify-between">
+          {/* INFORMATION */}
 
-          <option value={10}>
-            10 / page
-          </option>
+          <div className="text-sm text-base-content/60">
+            Affichage de{" "}
+            <span className="font-semibold text-base-content">
+              {table.getRowModel().rows.length}
+            </span>{" "}
+            sur{" "}
+            <span className="font-semibold text-base-content">
+              {filteredCount}
+            </span>{" "}
+            utilisateur
+            {filteredCount > 1 ? "s" : ""}
+          </div>
 
-          <option value={20}>
-            20 / page
-          </option>
+          <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
+            {/* NAVIGATION */}
 
-          <option value={50}>
-            50 / page
-          </option>
+            <div className="flex items-center justify-center gap-2">
+              <button
+                type="button"
+                className="btn btn-sm btn-outline"
+                onClick={() => table.previousPage()}
+                disabled={!table.getCanPreviousPage()}
+                title="Page précédente"
+              >
+                <ChevronLeft size={17} />
+              </button>
 
-          <option value={100}>
-            100 / page
-          </option>
+              <span className="min-w-28 text-center text-sm text-base-content/70">
+                Page{" "}
+                <span className="font-bold text-base-content">
+                  {currentPage + 1}
+                </span>{" "}
+                sur{" "}
+                <span className="font-bold text-base-content">
+                  {Math.max(pageCount, 1)}
+                </span>
+              </span>
 
-        </select>
+              <button
+                type="button"
+                className="btn btn-sm btn-outline"
+                onClick={() => table.nextPage()}
+                disabled={!table.getCanNextPage()}
+                title="Page suivante"
+              >
+                <ChevronRight size={17} />
+              </button>
+            </div>
 
+            {/* NOMBRE PAR PAGE */}
+
+            <select
+              className="select select-bordered select-sm"
+              value={table.getState().pagination.pageSize}
+              onChange={(event) =>
+                table.setPageSize(Number(event.target.value))
+              }
+            >
+              <option value={10}>10 / page</option>
+
+              <option value={20}>20 / page</option>
+
+              <option value={50}>50 / page</option>
+
+              <option value={100}>100 / page</option>
+            </select>
+          </div>
+        </div>
       </div>
-
     </div>
   );
 }
@@ -1349,19 +1084,12 @@ export default function UtilisateurTable({
  * Génère un mot de passe temporaire.
  */
 function generateTemporaryPassword(): string {
-  const chars =
-    "ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz23456789";
+  const chars = "ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz23456789";
 
   let password = "";
 
   for (let i = 0; i < 10; i++) {
-    password +=
-      chars.charAt(
-        Math.floor(
-          Math.random() *
-            chars.length
-        )
-      );
+    password += chars.charAt(Math.floor(Math.random() * chars.length));
   }
 
   return password;
@@ -1371,9 +1099,7 @@ function generateTemporaryPassword(): string {
  * Protection minimale avant insertion
  * dans le HTML de SweetAlert.
  */
-function escapeHtml(
-  value: string
-): string {
+function escapeHtml(value: string): string {
   return value
     .replace(/&/g, "&amp;")
     .replace(/</g, "&lt;")

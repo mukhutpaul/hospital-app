@@ -889,34 +889,33 @@ model Dispensation {
 }
 
 model DispensationLigne {
-  id Int @id @default(autoincrement())
-
-  dispensationId Int
-  dispensation   Dispensation @relation(fields: [dispensationId], references: [id], onDelete: Cascade)
+  id                  Int                @id @default(autoincrement())
+  dispensationId      Int
+  dispensation        Dispensation       @relation(fields: [dispensationId], references: [id], onDelete: Cascade)
 
   prescriptionLigneId Int?
   prescriptionLigne   PrescriptionLigne? @relation(fields: [prescriptionLigneId], references: [id])
 
-  medicamentId Int
-  medicament   Medicament @relation(fields: [medicamentId], references: [id])
+  medicamentId        Int
+  medicament          Medicament         @relation(fields: [medicamentId], references: [id])
 
-  stockId Int?
-  stock   StockMedicament? @relation(fields: [stockId], references: [id])
+  stockId             Int?
+  stock               StockMedicament?   @relation(fields: [stockId], references: [id])
 
-  pharmacienId Int?
-  pharmacien   User? @relation(fields: [pharmacienId], references: [id])
+  pharmacienId        Int?
+  pharmacien          User?              @relation(fields: [pharmacienId], references: [id])
 
-  quantitePrescrite Float?
-  quantiteDispensee Float
+  ligneFacture        LigneFacture?
 
-  prixUnitaire Float @default(0)
-  montant      Float @default(0)
-
-  observation String?
-
-  createdAt DateTime @default(now())
+  quantitePrescrite   Float?
+  quantiteDispensee   Float
+  prixUnitaire        Float              @default(0)
+  montant             Float              @default(0)
+  observation         String?
+  createdAt            DateTime           @default(now())
 
   @@index([dispensationId])
+  @@index([prescriptionLigneId])
   @@index([medicamentId])
   @@index([stockId])
   @@index([pharmacienId])
@@ -1132,42 +1131,41 @@ model Facture {
 }
 
 model LigneFacture {
-  id Int @id @default(autoincrement())
+  id                        Int                       @id @default(autoincrement())
+  factureId                 Int
+  facture                   Facture                   @relation(fields: [factureId], references: [id], onDelete: Cascade)
 
-  factureId Int
-  facture Facture @relation(fields: [factureId],references: [id],onDelete: Cascade)
+  acteId                    Int?
+  acte                      ActeMedical?              @relation(fields: [acteId], references: [id])
 
-  acteId Int?
-  acte ActeMedical? @relation(fields: [acteId],references: [id])
+  consultationActeId        Int?
+  consultationActe          ConsultationActe?         @relation(fields: [consultationActeId], references: [id])
 
-  consultationActeId Int?
-  consultationActe ConsultationActe? @relation(fields: [consultationActeId],references: [id])
-
-  serviceId Int?
-  service Service? @relation(fields: [serviceId],references: [id])
+  serviceId                 Int?
+  service                   Service?                  @relation(fields: [serviceId], references: [id])
 
   demandeLaboratoireLigneId Int?
+  demandeLaboratoireLigne   DemandeLaboratoireLigne?  @relation(fields: [demandeLaboratoireLigneId], references: [id])
 
-  demandeLaboratoireLigne DemandeLaboratoireLigne? @relation(fields: [demandeLaboratoireLigneId],references: [id])
+  demandeImagerieId         Int?
+  demandeImagerie            DemandeImagerie?          @relation(fields: [demandeImagerieId], references: [id])
 
-  demandeImagerieId Int?
+  dispensationLigneId       Int?                      @unique
+  dispensationLigne         DispensationLigne?        @relation(fields: [dispensationLigneId], references: [id])
 
-  demandeImagerie DemandeImagerie? @relation(fields: [demandeImagerieId],references: [id])
-
-  designation String
-  quantite Float @default(1)
-
-  prixUnitaire Float
-  montant Float
-
-  reference String?
-
-  createdAt DateTime @default(now())
+  designation               String
+  quantite                  Float                     @default(1)
+  prixUnitaire              Float
+  montant                   Float
+  reference                 String?
+  createdAt                 DateTime                  @default(now())
 
   @@index([factureId])
   @@index([acteId])
   @@index([consultationActeId])
   @@index([serviceId])
+  @@index([demandeLaboratoireLigneId])
+  @@index([demandeImagerieId])
 }
 
 /**

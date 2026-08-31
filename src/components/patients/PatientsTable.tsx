@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useMemo, useState } from "react";
@@ -24,6 +25,10 @@ import {
   X,
 } from "lucide-react";
 
+/* ==========================================================
+   TYPE PATIENT
+========================================================== */
+
 type Patient = {
   id: number;
 
@@ -45,35 +50,64 @@ type Patient = {
   createdAt?: Date | string;
 };
 
+/* ==========================================================
+   PROPS
+========================================================== */
+
+type PatientsTableProps = {
+  patients: Patient[];
+
+  /**
+   * Permission de lecture
+   */
+  canRead?: boolean;
+
+  /**
+   * Permission de modification
+   */
+  canUpdate?: boolean;
+
+  /**
+   * Permission de suppression
+   */
+  canDelete?: boolean;
+
+  /**
+   * Fonction serveur de suppression
+   */
+  onDelete?: (id: number) => Promise<void>;
+};
+
 const ELEMENTS_PAR_PAGE = 10;
+
+/* ==========================================================
+   COMPOSANT
+========================================================== */
 
 export default function PatientsTable({
   patients,
+  canRead = false,
+  canUpdate = false,
+  canDelete = false,
   onDelete,
-}: {
-  patients: Patient[];
-  onDelete?: (id: number) => Promise<void>;
-}) {
-  /* ==========================================================
+}: PatientsTableProps) {
+  /* ========================================================
      STATES
-  ========================================================== */
+  ======================================================== */
 
   const [search, setSearch] = useState("");
-
   const [statut, setStatut] = useState("TOUS");
-
   const [sexe, setSexe] = useState("TOUS");
-
   const [page, setPage] = useState(1);
 
   const [loadingDelete, setLoadingDelete] =
     useState<number | null>(null);
 
-  /* ==========================================================
+  /* ========================================================
      NOM COMPLET
-  ========================================================== */
+  ======================================================== */
 
-  function getFullName(patient: Patient) {
+  function getFullName(patient: Patient): string {
     return [
       patient.nom,
       patient.postNom,
@@ -83,47 +117,42 @@ export default function PatientsTable({
       .join(" ");
   }
 
-  /* ==========================================================
+  /* ========================================================
      STATISTIQUES
-  ========================================================== */
+  ======================================================== */
 
   const totalPatients = patients.length;
 
   const patientsActifs = patients.filter(
-    (patient) => patient.actif
+    (patient) => patient.actif === true,
   ).length;
 
   const patientsInactifs =
     totalPatients - patientsActifs;
 
-  /* ==========================================================
+  /* ========================================================
      FILTRAGE
-  ========================================================== */
+  ======================================================== */
 
   const filteredPatients = useMemo(() => {
-    const value = search
-      .trim()
-      .toLowerCase();
+    const value = search.trim().toLowerCase();
 
     return patients.filter((patient) => {
       const fullName =
         getFullName(patient).toLowerCase();
 
       const numeroDossier =
-        patient.numeroDossier
-          ?.toLowerCase() ?? "";
+        patient.numeroDossier?.toLowerCase() ?? "";
 
       const telephone =
-        patient.telephone
-          ?.toLowerCase() ?? "";
+        patient.telephone?.toLowerCase() ?? "";
 
       const email =
-        patient.email
-          ?.toLowerCase() ?? "";
+        patient.email?.toLowerCase() ?? "";
 
-      /* ------------------------------------------------------
+      /* ----------------------------------------------------
          RECHERCHE
-      ------------------------------------------------------ */
+      ---------------------------------------------------- */
 
       const matchSearch =
         !value ||
@@ -132,9 +161,9 @@ export default function PatientsTable({
         telephone.includes(value) ||
         email.includes(value);
 
-      /* ------------------------------------------------------
+      /* ----------------------------------------------------
          STATUT
-      ------------------------------------------------------ */
+      ---------------------------------------------------- */
 
       const matchStatut =
         statut === "TOUS" ||
@@ -143,9 +172,9 @@ export default function PatientsTable({
         (statut === "INACTIF" &&
           patient.actif === false);
 
-      /* ------------------------------------------------------
+      /* ----------------------------------------------------
          SEXE
-      ------------------------------------------------------ */
+      ---------------------------------------------------- */
 
       const matchSexe =
         sexe === "TOUS" ||
@@ -157,28 +186,23 @@ export default function PatientsTable({
         matchSexe
       );
     });
-  }, [
-    patients,
-    search,
-    statut,
-    sexe,
-  ]);
+  }, [patients, search, statut, sexe]);
 
-  /* ==========================================================
+  /* ========================================================
      PAGINATION
-  ========================================================== */
+  ======================================================== */
 
   const totalPages = Math.max(
     1,
     Math.ceil(
       filteredPatients.length /
-        ELEMENTS_PAR_PAGE
-    )
+        ELEMENTS_PAR_PAGE,
+    ),
   );
 
   const currentPage = Math.min(
     page,
-    totalPages
+    totalPages,
   );
 
   const paginatedPatients =
@@ -186,12 +210,12 @@ export default function PatientsTable({
       (currentPage - 1) *
         ELEMENTS_PAR_PAGE,
       currentPage *
-        ELEMENTS_PAR_PAGE
+        ELEMENTS_PAR_PAGE,
     );
 
-  /* ==========================================================
+  /* ========================================================
      RESET FILTRES
-  ========================================================== */
+  ======================================================== */
 
   function resetFilters() {
     setSearch("");
@@ -201,22 +225,44 @@ export default function PatientsTable({
   }
 
   const hasFilters =
-    search ||
+    search.trim() !== "" ||
     statut !== "TOUS" ||
     sexe !== "TOUS";
 
-  /* ==========================================================
+  /* ========================================================
      SUPPRESSION
-  ========================================================== */
+  ======================================================== */
 
   async function handleDelete(
-    patient: Patient
+    patient: Patient,
   ) {
+    /*
+     * Double protection côté interface.
+     * La vraie autorisation doit également être
+     * vérifiée dans l'action serveur.
+     */
+
+    if (!canDelete) {
+      toast.error(
+        "Vous n'avez pas l'autorisation de supprimer un patient.",
+      );
+      return;
+    }
+
     if (!onDelete) {
       toast.error(
-        "La suppression n'est pas configurée."
+        "La suppression n'est pas configurée.",
       );
+      return;
+    }
 
+    if (
+      !Number.isInteger(patient.id) ||
+      patient.id <= 0
+    ) {
+      toast.error(
+        "Identifiant du patient invalide.",
+      );
       return;
     }
 
@@ -227,8 +273,8 @@ export default function PatientsTable({
         <div class="text-sm">
           Vous êtes sur le point de supprimer
           <br/>
-          <strong>${getFullName(
-            patient
+          <strong>${escapeHtml(
+            getFullName(patient),
           )}</strong>
           <br/><br/>
           Cette opération peut avoir des conséquences
@@ -246,7 +292,8 @@ export default function PatientsTable({
       cancelButtonText:
         "Annuler",
 
-      confirmButtonColor: "#dc2626",
+      confirmButtonColor:
+        "#dc2626",
 
       reverseButtons: true,
     });
@@ -261,31 +308,44 @@ export default function PatientsTable({
       await onDelete(patient.id);
 
       toast.success(
-        "Patient supprimé avec succès."
+        "Patient supprimé avec succès.",
       );
     } catch (error) {
-      console.error(error);
+      console.error(
+        "Erreur suppression patient:",
+        error,
+      );
 
       toast.error(
-        "Impossible de supprimer le patient."
+        "Impossible de supprimer le patient.",
       );
     } finally {
       setLoadingDelete(null);
     }
   }
 
-  /* ==========================================================
+  /* ========================================================
+     PROTECTION XSS POUR LE HTML SWEETALERT
+  ======================================================== */
+
+  function escapeHtml(value: string): string {
+    return value
+      .replaceAll("&", "&amp;")
+      .replaceAll("<", "&lt;")
+      .replaceAll(">", "&gt;")
+      .replaceAll('"', "&quot;")
+      .replaceAll("'", "&#039;");
+  }
+
+  /* ========================================================
      EMPTY GLOBAL
-  ========================================================== */
+  ======================================================== */
 
   if (patients.length === 0) {
     return (
       <div className="rounded-3xl border border-base-300 bg-base-100 p-12 text-center shadow-sm">
-
         <div className="mx-auto mb-5 flex h-20 w-20 items-center justify-center rounded-full bg-primary/10 text-primary">
-
           <Users size={38} />
-
         </div>
 
         <h3 className="text-xl font-bold">
@@ -297,38 +357,36 @@ export default function PatientsTable({
           enregistré dans le système.
         </p>
 
-        <Link
-          href="/patients/nouveau"
-          className="btn btn-primary mt-6"
-        >
-          Ajouter un patient
-        </Link>
-
+        {canUpdate && (
+          <Link
+            href="/patients/nouveau"
+            className="btn btn-primary mt-6"
+          >
+            Ajouter un patient
+          </Link>
+        )}
       </div>
     );
   }
 
-  /* ==========================================================
+  /* ========================================================
      UI
-  ========================================================== */
+  ======================================================== */
 
   return (
     <div className="space-y-6">
 
-      {/* ======================================================
+      {/* ====================================================
           STATISTIQUES
-      ======================================================= */}
+      ==================================================== */}
 
       <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
 
         {/* TOTAL */}
 
         <div className="rounded-2xl border border-base-200 bg-base-100 p-5 shadow-sm">
-
           <div className="flex items-center justify-between">
-
             <div>
-
               <p className="text-sm text-base-content/60">
                 Total patients
               </p>
@@ -336,27 +394,19 @@ export default function PatientsTable({
               <p className="mt-1 text-3xl font-black">
                 {totalPatients}
               </p>
-
             </div>
 
             <div className="rounded-2xl bg-primary/10 p-4 text-primary">
-
               <Users size={28} />
-
             </div>
-
           </div>
-
         </div>
 
         {/* ACTIFS */}
 
         <div className="rounded-2xl border border-base-200 bg-base-100 p-5 shadow-sm">
-
           <div className="flex items-center justify-between">
-
             <div>
-
               <p className="text-sm text-base-content/60">
                 Patients actifs
               </p>
@@ -364,27 +414,19 @@ export default function PatientsTable({
               <p className="mt-1 text-3xl font-black text-success">
                 {patientsActifs}
               </p>
-
             </div>
 
             <div className="rounded-2xl bg-success/10 p-4 text-success">
-
               <UserCheck size={28} />
-
             </div>
-
           </div>
-
         </div>
 
         {/* INACTIFS */}
 
         <div className="rounded-2xl border border-base-200 bg-base-100 p-5 shadow-sm">
-
           <div className="flex items-center justify-between">
-
             <div>
-
               <p className="text-sm text-base-content/60">
                 Patients inactifs
               </p>
@@ -392,24 +434,19 @@ export default function PatientsTable({
               <p className="mt-1 text-3xl font-black text-error">
                 {patientsInactifs}
               </p>
-
             </div>
 
             <div className="rounded-2xl bg-error/10 p-4 text-error">
-
               <UserX size={28} />
-
             </div>
-
           </div>
-
         </div>
 
       </div>
 
-      {/* ======================================================
+      {/* ====================================================
           FILTRES
-      ======================================================= */}
+      ==================================================== */}
 
       <div className="rounded-2xl border border-base-200 bg-base-100 p-5 shadow-sm">
 
@@ -418,13 +455,10 @@ export default function PatientsTable({
           <div className="flex items-center gap-2">
 
             <div className="rounded-lg bg-primary/10 p-2 text-primary">
-
               <Filter size={18} />
-
             </div>
 
             <div>
-
               <h2 className="font-bold">
                 Recherche et filtres
               </h2>
@@ -432,25 +466,19 @@ export default function PatientsTable({
               <p className="text-xs text-base-content/50">
                 Trouvez rapidement un patient
               </p>
-
             </div>
 
           </div>
 
           {hasFilters && (
-
             <button
               type="button"
               onClick={resetFilters}
               className="btn btn-sm btn-ghost"
             >
-
               <RotateCcw size={16} />
-
               Réinitialiser
-
             </button>
-
           )}
 
         </div>
@@ -460,7 +488,6 @@ export default function PatientsTable({
           {/* RECHERCHE */}
 
           <label className="input input-bordered flex items-center gap-2 lg:col-span-6">
-
             <Search
               size={18}
               className="text-base-content/50"
@@ -471,32 +498,29 @@ export default function PatientsTable({
               value={search}
               onChange={(event) => {
                 setSearch(
-                  event.target.value
+                  event.target.value,
                 );
-
                 setPage(1);
               }}
               placeholder="Nom, prénom, dossier, téléphone ou email..."
               className="grow"
+              maxLength={100}
+              autoComplete="off"
             />
 
             {search && (
-
               <button
                 type="button"
+                aria-label="Effacer la recherche"
                 onClick={() => {
                   setSearch("");
                   setPage(1);
                 }}
                 className="text-base-content/50 hover:text-error"
               >
-
                 <X size={18} />
-
               </button>
-
             )}
-
           </label>
 
           {/* STATUT */}
@@ -506,13 +530,11 @@ export default function PatientsTable({
             value={statut}
             onChange={(event) => {
               setStatut(
-                event.target.value
+                event.target.value,
               );
-
               setPage(1);
             }}
           >
-
             <option value="TOUS">
               Tous les statuts
             </option>
@@ -524,7 +546,6 @@ export default function PatientsTable({
             <option value="INACTIF">
               Patients inactifs
             </option>
-
           </select>
 
           {/* SEXE */}
@@ -534,13 +555,11 @@ export default function PatientsTable({
             value={sexe}
             onChange={(event) => {
               setSexe(
-                event.target.value
+                event.target.value,
               );
-
               setPage(1);
             }}
           >
-
             <option value="TOUS">
               Tous les sexes
             </option>
@@ -552,7 +571,6 @@ export default function PatientsTable({
             <option value="FEMININ">
               Féminin
             </option>
-
           </select>
 
         </div>
@@ -560,36 +578,32 @@ export default function PatientsTable({
         <div className="mt-4 flex items-center justify-between border-t border-base-200 pt-4">
 
           <p className="text-sm text-base-content/60">
-
             <span className="font-bold text-base-content">
               {filteredPatients.length}
-            </span>
-
-            {" "}patient
+            </span>{" "}
+            patient
             {filteredPatients.length > 1
               ? "s"
-              : ""} trouvé
+              : ""}{" "}
+            trouvé
             {filteredPatients.length > 1
               ? "s"
               : ""}
-
           </p>
 
           {hasFilters && (
-
             <span className="badge badge-primary badge-outline">
               Filtres actifs
             </span>
-
           )}
 
         </div>
 
       </div>
 
-      {/* ======================================================
+      {/* ====================================================
           TABLEAU
-      ======================================================= */}
+      ==================================================== */}
 
       <div className="overflow-hidden rounded-2xl border border-base-200 bg-base-100 shadow-sm">
 
@@ -598,7 +612,6 @@ export default function PatientsTable({
           <div className="flex items-center justify-between">
 
             <div>
-
               <h2 className="font-bold">
                 Liste des patients
               </h2>
@@ -606,7 +619,6 @@ export default function PatientsTable({
               <p className="text-sm text-base-content/60">
                 Gestion des dossiers patients
               </p>
-
             </div>
 
             <div className="badge badge-neutral">
@@ -622,27 +634,17 @@ export default function PatientsTable({
           <table className="table table-zebra">
 
             <thead>
-
               <tr>
-
                 <th>#</th>
-
                 <th>Patient</th>
-
                 <th>Dossier</th>
-
                 <th>Sexe</th>
-
                 <th>Contact</th>
-
                 <th>Statut</th>
-
                 <th className="text-right">
                   Actions
                 </th>
-
               </tr>
-
             </thead>
 
             <tbody>
@@ -650,12 +652,10 @@ export default function PatientsTable({
               {paginatedPatients.length === 0 ? (
 
                 <tr>
-
                   <td
                     colSpan={7}
                     className="py-16"
                   >
-
                     <div className="flex flex-col items-center text-center">
 
                       <Search
@@ -676,15 +676,11 @@ export default function PatientsTable({
                         onClick={resetFilters}
                         className="btn btn-sm btn-primary mt-4"
                       >
-
                         Réinitialiser les filtres
-
                       </button>
 
                     </div>
-
                   </td>
-
                 </tr>
 
               ) : (
@@ -693,22 +689,22 @@ export default function PatientsTable({
                   (patient, index) => {
 
                     const loading =
-                      loadingDelete === patient.id;
+                      loadingDelete ===
+                      patient.id;
 
                     return (
-
                       <tr
                         key={patient.id}
                         className="hover:bg-base-200/50"
                       >
 
-                        <td className="text-base-content/50">
+                        {/* NUMÉRO */}
 
+                        <td className="text-base-content/50">
                           {(currentPage - 1) *
                             ELEMENTS_PAR_PAGE +
                             index +
                             1}
-
                         </td>
 
                         {/* PATIENT */}
@@ -725,12 +721,18 @@ export default function PatientsTable({
 
                                   <img
                                     src={patient.photo}
-                                    alt={getFullName(patient)}
+                                    alt={getFullName(
+                                      patient,
+                                    )}
+                                    loading="lazy"
+                                    referrerPolicy="no-referrer"
                                   />
 
                                 ) : (
 
-                                  <UserRound size={20} />
+                                  <UserRound
+                                    size={20}
+                                  />
 
                                 )}
 
@@ -741,21 +743,16 @@ export default function PatientsTable({
                             <div>
 
                               <div className="font-semibold">
-
-                                {getFullName(patient)}
-
+                                {getFullName(
+                                  patient,
+                                )}
                               </div>
 
                               {patient.email && (
-
                                 <div className="flex items-center gap-1 text-xs text-base-content/50">
-
                                   <Mail size={12} />
-
                                   {patient.email}
-
                                 </div>
-
                               )}
 
                             </div>
@@ -776,9 +773,7 @@ export default function PatientsTable({
                             />
 
                             <span className="badge badge-outline">
-
                               {patient.numeroDossier}
-
                             </span>
 
                           </div>
@@ -788,13 +783,9 @@ export default function PatientsTable({
                         {/* SEXE */}
 
                         <td>
-
                           <span className="badge badge-ghost">
-
                             {patient.sexe || "—"}
-
                           </span>
-
                         </td>
 
                         {/* CONTACT */}
@@ -804,14 +795,12 @@ export default function PatientsTable({
                           {patient.telephone ? (
 
                             <div className="flex items-center gap-2">
-
                               <Phone
                                 size={15}
                                 className="text-base-content/50"
                               />
 
                               {patient.telephone}
-
                             </div>
 
                           ) : (
@@ -831,21 +820,15 @@ export default function PatientsTable({
                           {patient.actif ? (
 
                             <span className="badge badge-success gap-1">
-
                               <UserCheck size={13} />
-
                               Actif
-
                             </span>
 
                           ) : (
 
                             <span className="badge badge-error gap-1">
-
                               <UserX size={13} />
-
                               Inactif
-
                             </span>
 
                           )}
@@ -858,62 +841,72 @@ export default function PatientsTable({
 
                           <div className="flex justify-end gap-1">
 
-                            <Link
-                              href={`/patients/${patient.id}`}
-                              className="btn btn-sm btn-ghost tooltip"
-                              data-tip="Voir"
-                            >
+                            {/* VOIR */}
 
-                              <Eye size={17} />
-
-                            </Link>
-
-                            <Link
-                              href={`/patients/${patient.id}/modifier`}
-                              className="btn btn-sm btn-warning btn-outline tooltip"
-                              data-tip="Modifier"
-                            >
-
-                              <Pencil size={16} />
-
-                            </Link>
-
-                            {onDelete && (
-
-                              <button
-                                type="button"
-                                disabled={loading}
-                                onClick={() =>
-                                  handleDelete(patient)
-                                }
-                                className="btn btn-sm btn-error btn-outline tooltip"
-                                data-tip="Supprimer"
+                            {/* {canRead && ( */}
+                              <Link
+                                href={`/patients/${patient.id}`}
+                                className="btn btn-sm btn-ghost tooltip"
+                                data-tip="Voir"
+                                aria-label={`Voir ${getFullName(
+                                  patient,
+                                )}`}
                               >
+                                <Eye size={17} />
+                              </Link>
+                            {/* )} */}
 
-                                {loading ? (
+                            {/* MODIFIER */}
 
-                                  <span className="loading loading-spinner loading-xs" />
-
-                                ) : (
-
-                                  <Trash2 size={16} />
-
-                                )}
-
-                              </button>
-
+                            {canUpdate && (
+                              <Link
+                                href={`/patients/${patient.id}/modifier`}
+                                className="btn btn-sm btn-warning btn-outline tooltip"
+                                data-tip="Modifier"
+                                aria-label={`Modifier ${getFullName(
+                                  patient,
+                                )}`}
+                              >
+                                <Pencil size={16} />
+                              </Link>
                             )}
+
+                            {/* SUPPRIMER */}
+
+                            {canDelete &&
+                              onDelete && (
+                                <button
+                                  type="button"
+                                  disabled={loading}
+                                  onClick={() =>
+                                    handleDelete(
+                                      patient,
+                                    )
+                                  }
+                                  className="btn btn-sm btn-error btn-outline tooltip"
+                                  data-tip="Supprimer"
+                                  aria-label={`Supprimer ${getFullName(
+                                    patient,
+                                  )}`}
+                                >
+                                  {loading ? (
+                                    <span className="loading loading-spinner loading-xs" />
+                                  ) : (
+                                    <Trash2
+                                      size={16}
+                                    />
+                                  )}
+                                </button>
+                              )}
 
                           </div>
 
                         </td>
 
                       </tr>
-
                     );
-                  }
+                  },
                 )
-
               )}
 
             </tbody>
@@ -922,44 +915,34 @@ export default function PatientsTable({
 
         </div>
 
-        {/* ====================================================
+        {/* ==================================================
             PAGINATION
-        ===================================================== */}
+        =================================================== */}
 
         {filteredPatients.length > 0 && (
 
           <div className="flex flex-col gap-4 border-t border-base-200 p-4 sm:flex-row sm:items-center sm:justify-between">
 
             <p className="text-sm text-base-content/60">
-
               Affichage de{" "}
-
               <strong>
                 {(currentPage - 1) *
                   ELEMENTS_PAR_PAGE +
                   1}
-              </strong>
-
-              {" "}à{" "}
-
+              </strong>{" "}
+              à{" "}
               <strong>
-
                 {Math.min(
                   currentPage *
                     ELEMENTS_PAR_PAGE,
-                  filteredPatients.length
+                  filteredPatients.length,
                 )}
-
-              </strong>
-
-              {" "}sur{" "}
-
+              </strong>{" "}
+              sur{" "}
               <strong>
                 {filteredPatients.length}
-              </strong>
-
-              {" "}patients
-
+              </strong>{" "}
+              patients
             </p>
 
             <div className="join">
@@ -967,48 +950,48 @@ export default function PatientsTable({
               <button
                 type="button"
                 className="join-item btn btn-sm"
-                disabled={currentPage === 1}
+                disabled={
+                  currentPage === 1
+                }
                 onClick={() =>
                   setPage(
                     Math.max(
                       1,
-                      currentPage - 1
-                    )
+                      currentPage - 1,
+                    ),
                   )
                 }
+                aria-label="Page précédente"
               >
-
                 <ChevronLeft size={17} />
-
               </button>
 
               <button
                 type="button"
                 className="join-item btn btn-sm pointer-events-none"
               >
-
-                Page {currentPage} / {totalPages}
-
+                Page {currentPage} /{" "}
+                {totalPages}
               </button>
 
               <button
                 type="button"
                 className="join-item btn btn-sm"
                 disabled={
-                  currentPage === totalPages
+                  currentPage ===
+                  totalPages
                 }
                 onClick={() =>
                   setPage(
                     Math.min(
                       totalPages,
-                      currentPage + 1
-                    )
+                      currentPage + 1,
+                    ),
                   )
                 }
+                aria-label="Page suivante"
               >
-
                 <ChevronRight size={17} />
-
               </button>
 
             </div>

@@ -1,3 +1,5 @@
+
+
 import {
   FlaskConical,
   ClipboardList,
@@ -5,6 +7,7 @@ import {
   Clock3,
   AlertTriangle,
   CheckCircle2,
+  ShieldCheck,
 } from "lucide-react";
 
 import {
@@ -20,12 +23,44 @@ import ExamenLaboratoireForm from "@/components/laboratoire/ExamenLaboratoireFor
 import ExamenLaboratoireTable from "@/components/laboratoire/ExamenLaboratoireTable";
 
 import DemandeLaboratoireTable from "@/components/laboratoire/DemandeLaboratoireTable";
+import { auth } from "@/lib/auth";
 
 /* ==========================================================
    PAGE LABORATOIRE
 ========================================================== */
 
 export default async function LaboratoirePage() {
+  /* ========================================================
+     AUTHENTIFICATION
+  ======================================================== */
+
+  const session = await auth();
+
+  /*
+   * On convertit le rôle en string afin d'éviter les problèmes
+   * TypeScript lorsque le type exact de session.user.role varie
+   * selon la configuration Auth.js.
+   */
+  const role = String(
+    session?.user?.role ?? "",
+  );
+
+  /* ========================================================
+     AUTORISATION CATALOGUE
+  ======================================================== */
+
+  /*
+   * Ces rôles peuvent créer un examen dans le catalogue.
+   *
+   * IMPORTANT :
+   * Cette vérification protège l'affichage du formulaire.
+   * La Server Action createExamenLaboratoire() doit également
+   * effectuer exactement le même contrôle côté serveur.
+   */
+  const peutGererCatalogue =
+    role === "ADMIN" ||
+    role === "RESPONSABLE_LABORATOIRE";
+
   /* ========================================================
      CHARGEMENT DU CATALOGUE DES EXAMENS
   ======================================================== */
@@ -61,12 +96,14 @@ export default async function LaboratoirePage() {
 
   const examensActifs =
     examens.filter(
-      (examen) => examen.actif === true,
+      (examen) =>
+        examen.actif === true,
     ).length;
 
   const examensDesactives =
     examens.filter(
-      (examen) => examen.actif === false,
+      (examen) =>
+        examen.actif === false,
     ).length;
 
   /* ========================================================
@@ -120,6 +157,7 @@ export default async function LaboratoirePage() {
           </div>
 
           <div>
+
             <h1 className="text-2xl font-bold">
               Laboratoire
             </h1>
@@ -128,6 +166,7 @@ export default async function LaboratoirePage() {
               Gestion des examens, demandes et résultats
               de laboratoire
             </p>
+
           </div>
 
         </div>
@@ -143,11 +182,13 @@ export default async function LaboratoirePage() {
         {/* TOTAL */}
 
         <div className="card border border-base-200 bg-base-100 shadow-sm">
+
           <div className="card-body">
 
             <div className="flex items-center justify-between">
 
               <div>
+
                 <p className="text-sm text-base-content/50">
                   Demandes reçues
                 </p>
@@ -155,6 +196,7 @@ export default async function LaboratoirePage() {
                 <p className="text-3xl font-bold text-primary">
                   {totalDemandes}
                 </p>
+
               </div>
 
               <div className="rounded-xl bg-primary/10 p-3 text-primary">
@@ -164,16 +206,19 @@ export default async function LaboratoirePage() {
             </div>
 
           </div>
+
         </div>
 
         {/* EN ATTENTE */}
 
         <div className="card border border-base-200 bg-base-100 shadow-sm">
+
           <div className="card-body">
 
             <div className="flex items-center justify-between">
 
               <div>
+
                 <p className="text-sm text-base-content/50">
                   En attente
                 </p>
@@ -181,6 +226,7 @@ export default async function LaboratoirePage() {
                 <p className="text-3xl font-bold text-warning">
                   {demandesEnAttente}
                 </p>
+
               </div>
 
               <div className="rounded-xl bg-warning/10 p-3 text-warning">
@@ -190,16 +236,19 @@ export default async function LaboratoirePage() {
             </div>
 
           </div>
+
         </div>
 
         {/* EN COURS */}
 
         <div className="card border border-base-200 bg-base-100 shadow-sm">
+
           <div className="card-body">
 
             <div className="flex items-center justify-between">
 
               <div>
+
                 <p className="text-sm text-base-content/50">
                   En cours
                 </p>
@@ -207,6 +256,7 @@ export default async function LaboratoirePage() {
                 <p className="text-3xl font-bold text-info">
                   {demandesEnCours}
                 </p>
+
               </div>
 
               <div className="rounded-xl bg-info/10 p-3 text-info">
@@ -216,16 +266,19 @@ export default async function LaboratoirePage() {
             </div>
 
           </div>
+
         </div>
 
         {/* URGENTES */}
 
         <div className="card border border-base-200 bg-base-100 shadow-sm">
+
           <div className="card-body">
 
             <div className="flex items-center justify-between">
 
               <div>
+
                 <p className="text-sm text-base-content/50">
                   Demandes urgentes
                 </p>
@@ -233,6 +286,7 @@ export default async function LaboratoirePage() {
                 <p className="text-3xl font-bold text-error">
                   {demandesUrgentes}
                 </p>
+
               </div>
 
               <div className="rounded-xl bg-error/10 p-3 text-error">
@@ -242,6 +296,7 @@ export default async function LaboratoirePage() {
             </div>
 
           </div>
+
         </div>
 
       </div>
@@ -324,10 +379,12 @@ export default async function LaboratoirePage() {
       ==================================================== */}
 
       <div className="divider">
+
         <div className="flex items-center gap-2">
           <BookOpen size={18} />
           Catalogue du laboratoire
         </div>
+
       </div>
 
       {/* ====================================================
@@ -339,11 +396,13 @@ export default async function LaboratoirePage() {
         {/* TOTAL EXAMENS */}
 
         <div className="card border border-base-200 bg-base-100 shadow-sm">
+
           <div className="card-body">
 
             <div className="flex items-center justify-between">
 
               <div>
+
                 <p className="text-sm text-base-content/50">
                   Examens disponibles
                 </p>
@@ -351,6 +410,7 @@ export default async function LaboratoirePage() {
                 <p className="text-3xl font-bold text-primary">
                   {totalExamens}
                 </p>
+
               </div>
 
               <div className="rounded-xl bg-primary/10 p-3 text-primary">
@@ -360,16 +420,19 @@ export default async function LaboratoirePage() {
             </div>
 
           </div>
+
         </div>
 
         {/* EXAMENS ACTIFS */}
 
         <div className="card border border-base-200 bg-base-100 shadow-sm">
+
           <div className="card-body">
 
             <div className="flex items-center justify-between">
 
               <div>
+
                 <p className="text-sm text-base-content/50">
                   Examens actifs
                 </p>
@@ -377,6 +440,7 @@ export default async function LaboratoirePage() {
                 <p className="text-3xl font-bold text-success">
                   {examensActifs}
                 </p>
+
               </div>
 
               <div className="rounded-xl bg-success/10 p-3 text-success">
@@ -386,16 +450,19 @@ export default async function LaboratoirePage() {
             </div>
 
           </div>
+
         </div>
 
         {/* EXAMENS DÉSACTIVÉS */}
 
         <div className="card border border-base-200 bg-base-100 shadow-sm">
+
           <div className="card-body">
 
             <div className="flex items-center justify-between">
 
               <div>
+
                 <p className="text-sm text-base-content/50">
                   Examens désactivés
                 </p>
@@ -403,6 +470,7 @@ export default async function LaboratoirePage() {
                 <p className="text-3xl font-bold text-error">
                   {examensDesactives}
                 </p>
+
               </div>
 
               <div className="rounded-xl bg-error/10 p-3 text-error">
@@ -412,6 +480,7 @@ export default async function LaboratoirePage() {
             </div>
 
           </div>
+
         </div>
 
       </div>
@@ -420,28 +489,81 @@ export default async function LaboratoirePage() {
           AJOUT D'UN EXAMEN
       ==================================================== */}
 
-      <div className="card border border-base-200 bg-base-100 shadow-sm">
+      {peutGererCatalogue ? (
 
-        <div className="card-body">
+        <div className="card border border-base-200 bg-base-100 shadow-sm">
 
-          <div className="mb-5">
+          <div className="card-body">
 
-            <h2 className="text-lg font-semibold">
-              Ajouter un examen de laboratoire
-            </h2>
+            <div className="mb-5">
 
-            <p className="text-sm text-base-content/60">
-              Enregistrez les examens disponibles
-              dans le catalogue du laboratoire.
-            </p>
+              <div className="flex items-center gap-2">
+
+                <h2 className="text-lg font-semibold">
+                  Ajouter un examen de laboratoire
+                </h2>
+
+                <span className="badge badge-success badge-sm">
+                  Autorisé
+                </span>
+
+              </div>
+
+              <p className="mt-1 text-sm text-base-content/60">
+                Enregistrez les examens disponibles
+                dans le catalogue du laboratoire.
+              </p>
+
+            </div>
+
+            {/* ==================================================
+                FORMULAIRE PROTÉGÉ
+            ================================================== */}
+
+            <ExamenLaboratoireForm />
 
           </div>
 
-          <ExamenLaboratoireForm />
+        </div>
+
+      ) : (
+
+        /* ==================================================
+           UTILISATEUR SANS DROIT DE GESTION DU CATALOGUE
+        ================================================== */
+
+        <div className="card border border-base-200 bg-base-100 shadow-sm">
+
+          <div className="card-body">
+
+            <div className="flex items-start gap-4">
+
+              <div className="rounded-xl bg-base-200 p-3 text-base-content/60">
+                <ShieldCheck size={24} />
+              </div>
+
+              <div>
+
+                <h2 className="font-semibold">
+                  Catalogue en consultation seule
+                </h2>
+
+                <p className="mt-1 text-sm text-base-content/60">
+                  Vous pouvez consulter les examens
+                  disponibles, mais vous n'avez pas
+                  l'autorisation de créer ou modifier
+                  les examens du catalogue.
+                </p>
+
+              </div>
+
+            </div>
+
+          </div>
 
         </div>
 
-      </div>
+      )}
 
       {/* ====================================================
           CATALOGUE DES EXAMENS

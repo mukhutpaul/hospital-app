@@ -754,6 +754,7 @@ export const LigneFactureScalarFieldEnum = {
   serviceId: 'serviceId',
   demandeLaboratoireLigneId: 'demandeLaboratoireLigneId',
   demandeImagerieId: 'demandeImagerieId',
+  dispensationLigneId: 'dispensationLigneId',
   designation: 'designation',
   quantite: 'quantite',
   prixUnitaire: 'prixUnitaire',

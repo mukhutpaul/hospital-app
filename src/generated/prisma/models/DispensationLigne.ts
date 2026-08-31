@@ -313,6 +313,7 @@ export type DispensationLigneWhereInput = {
   medicament?: Prisma.XOR<Prisma.MedicamentScalarRelationFilter, Prisma.MedicamentWhereInput>
   stock?: Prisma.XOR<Prisma.StockMedicamentNullableScalarRelationFilter, Prisma.StockMedicamentWhereInput> | null
   pharmacien?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
+  ligneFacture?: Prisma.XOR<Prisma.LigneFactureNullableScalarRelationFilter, Prisma.LigneFactureWhereInput> | null
 }
 
 export type DispensationLigneOrderByWithRelationInput = {
@@ -333,6 +334,7 @@ export type DispensationLigneOrderByWithRelationInput = {
   medicament?: Prisma.MedicamentOrderByWithRelationInput
   stock?: Prisma.StockMedicamentOrderByWithRelationInput
   pharmacien?: Prisma.UserOrderByWithRelationInput
+  ligneFacture?: Prisma.LigneFactureOrderByWithRelationInput
 }
 
 export type DispensationLigneWhereUniqueInput = Prisma.AtLeast<{
@@ -356,6 +358,7 @@ export type DispensationLigneWhereUniqueInput = Prisma.AtLeast<{
   medicament?: Prisma.XOR<Prisma.MedicamentScalarRelationFilter, Prisma.MedicamentWhereInput>
   stock?: Prisma.XOR<Prisma.StockMedicamentNullableScalarRelationFilter, Prisma.StockMedicamentWhereInput> | null
   pharmacien?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
+  ligneFacture?: Prisma.XOR<Prisma.LigneFactureNullableScalarRelationFilter, Prisma.LigneFactureWhereInput> | null
 }, "id">
 
 export type DispensationLigneOrderByWithAggregationInput = {
@@ -408,6 +411,7 @@ export type DispensationLigneCreateInput = {
   medicament: Prisma.MedicamentCreateNestedOneWithoutDispensationLignesInput
   stock?: Prisma.StockMedicamentCreateNestedOneWithoutDispensationLignesInput
   pharmacien?: Prisma.UserCreateNestedOneWithoutDispensationLignesInput
+  ligneFacture?: Prisma.LigneFactureCreateNestedOneWithoutDispensationLigneInput
 }
 
 export type DispensationLigneUncheckedCreateInput = {
@@ -423,6 +427,7 @@ export type DispensationLigneUncheckedCreateInput = {
   montant?: number
   observation?: string | null
   createdAt?: Date | string
+  ligneFacture?: Prisma.LigneFactureUncheckedCreateNestedOneWithoutDispensationLigneInput
 }
 
 export type DispensationLigneUpdateInput = {
@@ -437,6 +442,7 @@ export type DispensationLigneUpdateInput = {
   medicament?: Prisma.MedicamentUpdateOneRequiredWithoutDispensationLignesNestedInput
   stock?: Prisma.StockMedicamentUpdateOneWithoutDispensationLignesNestedInput
   pharmacien?: Prisma.UserUpdateOneWithoutDispensationLignesNestedInput
+  ligneFacture?: Prisma.LigneFactureUpdateOneWithoutDispensationLigneNestedInput
 }
 
 export type DispensationLigneUncheckedUpdateInput = {
@@ -452,6 +458,7 @@ export type DispensationLigneUncheckedUpdateInput = {
   montant?: Prisma.FloatFieldUpdateOperationsInput | number
   observation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  ligneFacture?: Prisma.LigneFactureUncheckedUpdateOneWithoutDispensationLigneNestedInput
 }
 
 export type DispensationLigneCreateManyInput = {
@@ -572,6 +579,11 @@ export type DispensationLigneSumOrderByAggregateInput = {
   quantiteDispensee?: Prisma.SortOrder
   prixUnitaire?: Prisma.SortOrder
   montant?: Prisma.SortOrder
+}
+
+export type DispensationLigneNullableScalarRelationFilter = {
+  is?: Prisma.DispensationLigneWhereInput | null
+  isNot?: Prisma.DispensationLigneWhereInput | null
 }
 
 export type DispensationLigneCreateNestedManyWithoutPharmacienInput = {
@@ -784,6 +796,22 @@ export type DispensationLigneUncheckedUpdateManyWithoutDispensationNestedInput =
   deleteMany?: Prisma.DispensationLigneScalarWhereInput | Prisma.DispensationLigneScalarWhereInput[]
 }
 
+export type DispensationLigneCreateNestedOneWithoutLigneFactureInput = {
+  create?: Prisma.XOR<Prisma.DispensationLigneCreateWithoutLigneFactureInput, Prisma.DispensationLigneUncheckedCreateWithoutLigneFactureInput>
+  connectOrCreate?: Prisma.DispensationLigneCreateOrConnectWithoutLigneFactureInput
+  connect?: Prisma.DispensationLigneWhereUniqueInput
+}
+
+export type DispensationLigneUpdateOneWithoutLigneFactureNestedInput = {
+  create?: Prisma.XOR<Prisma.DispensationLigneCreateWithoutLigneFactureInput, Prisma.DispensationLigneUncheckedCreateWithoutLigneFactureInput>
+  connectOrCreate?: Prisma.DispensationLigneCreateOrConnectWithoutLigneFactureInput
+  upsert?: Prisma.DispensationLigneUpsertWithoutLigneFactureInput
+  disconnect?: Prisma.DispensationLigneWhereInput | boolean
+  delete?: Prisma.DispensationLigneWhereInput | boolean
+  connect?: Prisma.DispensationLigneWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.DispensationLigneUpdateToOneWithWhereWithoutLigneFactureInput, Prisma.DispensationLigneUpdateWithoutLigneFactureInput>, Prisma.DispensationLigneUncheckedUpdateWithoutLigneFactureInput>
+}
+
 export type DispensationLigneCreateWithoutPharmacienInput = {
   quantitePrescrite?: number | null
   quantiteDispensee: number
@@ -795,6 +823,7 @@ export type DispensationLigneCreateWithoutPharmacienInput = {
   prescriptionLigne?: Prisma.PrescriptionLigneCreateNestedOneWithoutDispensationLignesInput
   medicament: Prisma.MedicamentCreateNestedOneWithoutDispensationLignesInput
   stock?: Prisma.StockMedicamentCreateNestedOneWithoutDispensationLignesInput
+  ligneFacture?: Prisma.LigneFactureCreateNestedOneWithoutDispensationLigneInput
 }
 
 export type DispensationLigneUncheckedCreateWithoutPharmacienInput = {
@@ -809,6 +838,7 @@ export type DispensationLigneUncheckedCreateWithoutPharmacienInput = {
   montant?: number
   observation?: string | null
   createdAt?: Date | string
+  ligneFacture?: Prisma.LigneFactureUncheckedCreateNestedOneWithoutDispensationLigneInput
 }
 
 export type DispensationLigneCreateOrConnectWithoutPharmacienInput = {
@@ -865,6 +895,7 @@ export type DispensationLigneCreateWithoutPrescriptionLigneInput = {
   medicament: Prisma.MedicamentCreateNestedOneWithoutDispensationLignesInput
   stock?: Prisma.StockMedicamentCreateNestedOneWithoutDispensationLignesInput
   pharmacien?: Prisma.UserCreateNestedOneWithoutDispensationLignesInput
+  ligneFacture?: Prisma.LigneFactureCreateNestedOneWithoutDispensationLigneInput
 }
 
 export type DispensationLigneUncheckedCreateWithoutPrescriptionLigneInput = {
@@ -879,6 +910,7 @@ export type DispensationLigneUncheckedCreateWithoutPrescriptionLigneInput = {
   montant?: number
   observation?: string | null
   createdAt?: Date | string
+  ligneFacture?: Prisma.LigneFactureUncheckedCreateNestedOneWithoutDispensationLigneInput
 }
 
 export type DispensationLigneCreateOrConnectWithoutPrescriptionLigneInput = {
@@ -917,6 +949,7 @@ export type DispensationLigneCreateWithoutMedicamentInput = {
   prescriptionLigne?: Prisma.PrescriptionLigneCreateNestedOneWithoutDispensationLignesInput
   stock?: Prisma.StockMedicamentCreateNestedOneWithoutDispensationLignesInput
   pharmacien?: Prisma.UserCreateNestedOneWithoutDispensationLignesInput
+  ligneFacture?: Prisma.LigneFactureCreateNestedOneWithoutDispensationLigneInput
 }
 
 export type DispensationLigneUncheckedCreateWithoutMedicamentInput = {
@@ -931,6 +964,7 @@ export type DispensationLigneUncheckedCreateWithoutMedicamentInput = {
   montant?: number
   observation?: string | null
   createdAt?: Date | string
+  ligneFacture?: Prisma.LigneFactureUncheckedCreateNestedOneWithoutDispensationLigneInput
 }
 
 export type DispensationLigneCreateOrConnectWithoutMedicamentInput = {
@@ -969,6 +1003,7 @@ export type DispensationLigneCreateWithoutStockInput = {
   prescriptionLigne?: Prisma.PrescriptionLigneCreateNestedOneWithoutDispensationLignesInput
   medicament: Prisma.MedicamentCreateNestedOneWithoutDispensationLignesInput
   pharmacien?: Prisma.UserCreateNestedOneWithoutDispensationLignesInput
+  ligneFacture?: Prisma.LigneFactureCreateNestedOneWithoutDispensationLigneInput
 }
 
 export type DispensationLigneUncheckedCreateWithoutStockInput = {
@@ -983,6 +1018,7 @@ export type DispensationLigneUncheckedCreateWithoutStockInput = {
   montant?: number
   observation?: string | null
   createdAt?: Date | string
+  ligneFacture?: Prisma.LigneFactureUncheckedCreateNestedOneWithoutDispensationLigneInput
 }
 
 export type DispensationLigneCreateOrConnectWithoutStockInput = {
@@ -1021,6 +1057,7 @@ export type DispensationLigneCreateWithoutDispensationInput = {
   medicament: Prisma.MedicamentCreateNestedOneWithoutDispensationLignesInput
   stock?: Prisma.StockMedicamentCreateNestedOneWithoutDispensationLignesInput
   pharmacien?: Prisma.UserCreateNestedOneWithoutDispensationLignesInput
+  ligneFacture?: Prisma.LigneFactureCreateNestedOneWithoutDispensationLigneInput
 }
 
 export type DispensationLigneUncheckedCreateWithoutDispensationInput = {
@@ -1035,6 +1072,7 @@ export type DispensationLigneUncheckedCreateWithoutDispensationInput = {
   montant?: number
   observation?: string | null
   createdAt?: Date | string
+  ligneFacture?: Prisma.LigneFactureUncheckedCreateNestedOneWithoutDispensationLigneInput
 }
 
 export type DispensationLigneCreateOrConnectWithoutDispensationInput = {
@@ -1062,6 +1100,80 @@ export type DispensationLigneUpdateManyWithWhereWithoutDispensationInput = {
   data: Prisma.XOR<Prisma.DispensationLigneUpdateManyMutationInput, Prisma.DispensationLigneUncheckedUpdateManyWithoutDispensationInput>
 }
 
+export type DispensationLigneCreateWithoutLigneFactureInput = {
+  quantitePrescrite?: number | null
+  quantiteDispensee: number
+  prixUnitaire?: number
+  montant?: number
+  observation?: string | null
+  createdAt?: Date | string
+  dispensation: Prisma.DispensationCreateNestedOneWithoutLignesInput
+  prescriptionLigne?: Prisma.PrescriptionLigneCreateNestedOneWithoutDispensationLignesInput
+  medicament: Prisma.MedicamentCreateNestedOneWithoutDispensationLignesInput
+  stock?: Prisma.StockMedicamentCreateNestedOneWithoutDispensationLignesInput
+  pharmacien?: Prisma.UserCreateNestedOneWithoutDispensationLignesInput
+}
+
+export type DispensationLigneUncheckedCreateWithoutLigneFactureInput = {
+  id?: number
+  dispensationId: number
+  prescriptionLigneId?: number | null
+  medicamentId: number
+  stockId?: number | null
+  pharmacienId?: number | null
+  quantitePrescrite?: number | null
+  quantiteDispensee: number
+  prixUnitaire?: number
+  montant?: number
+  observation?: string | null
+  createdAt?: Date | string
+}
+
+export type DispensationLigneCreateOrConnectWithoutLigneFactureInput = {
+  where: Prisma.DispensationLigneWhereUniqueInput
+  create: Prisma.XOR<Prisma.DispensationLigneCreateWithoutLigneFactureInput, Prisma.DispensationLigneUncheckedCreateWithoutLigneFactureInput>
+}
+
+export type DispensationLigneUpsertWithoutLigneFactureInput = {
+  update: Prisma.XOR<Prisma.DispensationLigneUpdateWithoutLigneFactureInput, Prisma.DispensationLigneUncheckedUpdateWithoutLigneFactureInput>
+  create: Prisma.XOR<Prisma.DispensationLigneCreateWithoutLigneFactureInput, Prisma.DispensationLigneUncheckedCreateWithoutLigneFactureInput>
+  where?: Prisma.DispensationLigneWhereInput
+}
+
+export type DispensationLigneUpdateToOneWithWhereWithoutLigneFactureInput = {
+  where?: Prisma.DispensationLigneWhereInput
+  data: Prisma.XOR<Prisma.DispensationLigneUpdateWithoutLigneFactureInput, Prisma.DispensationLigneUncheckedUpdateWithoutLigneFactureInput>
+}
+
+export type DispensationLigneUpdateWithoutLigneFactureInput = {
+  quantitePrescrite?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  quantiteDispensee?: Prisma.FloatFieldUpdateOperationsInput | number
+  prixUnitaire?: Prisma.FloatFieldUpdateOperationsInput | number
+  montant?: Prisma.FloatFieldUpdateOperationsInput | number
+  observation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  dispensation?: Prisma.DispensationUpdateOneRequiredWithoutLignesNestedInput
+  prescriptionLigne?: Prisma.PrescriptionLigneUpdateOneWithoutDispensationLignesNestedInput
+  medicament?: Prisma.MedicamentUpdateOneRequiredWithoutDispensationLignesNestedInput
+  stock?: Prisma.StockMedicamentUpdateOneWithoutDispensationLignesNestedInput
+  pharmacien?: Prisma.UserUpdateOneWithoutDispensationLignesNestedInput
+}
+
+export type DispensationLigneUncheckedUpdateWithoutLigneFactureInput = {
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  dispensationId?: Prisma.IntFieldUpdateOperationsInput | number
+  prescriptionLigneId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  medicamentId?: Prisma.IntFieldUpdateOperationsInput | number
+  stockId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  pharmacienId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  quantitePrescrite?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  quantiteDispensee?: Prisma.FloatFieldUpdateOperationsInput | number
+  prixUnitaire?: Prisma.FloatFieldUpdateOperationsInput | number
+  montant?: Prisma.FloatFieldUpdateOperationsInput | number
+  observation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
 export type DispensationLigneCreateManyPharmacienInput = {
   id?: number
   dispensationId: number
@@ -1087,6 +1199,7 @@ export type DispensationLigneUpdateWithoutPharmacienInput = {
   prescriptionLigne?: Prisma.PrescriptionLigneUpdateOneWithoutDispensationLignesNestedInput
   medicament?: Prisma.MedicamentUpdateOneRequiredWithoutDispensationLignesNestedInput
   stock?: Prisma.StockMedicamentUpdateOneWithoutDispensationLignesNestedInput
+  ligneFacture?: Prisma.LigneFactureUpdateOneWithoutDispensationLigneNestedInput
 }
 
 export type DispensationLigneUncheckedUpdateWithoutPharmacienInput = {
@@ -1101,6 +1214,7 @@ export type DispensationLigneUncheckedUpdateWithoutPharmacienInput = {
   montant?: Prisma.FloatFieldUpdateOperationsInput | number
   observation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  ligneFacture?: Prisma.LigneFactureUncheckedUpdateOneWithoutDispensationLigneNestedInput
 }
 
 export type DispensationLigneUncheckedUpdateManyWithoutPharmacienInput = {
@@ -1142,6 +1256,7 @@ export type DispensationLigneUpdateWithoutPrescriptionLigneInput = {
   medicament?: Prisma.MedicamentUpdateOneRequiredWithoutDispensationLignesNestedInput
   stock?: Prisma.StockMedicamentUpdateOneWithoutDispensationLignesNestedInput
   pharmacien?: Prisma.UserUpdateOneWithoutDispensationLignesNestedInput
+  ligneFacture?: Prisma.LigneFactureUpdateOneWithoutDispensationLigneNestedInput
 }
 
 export type DispensationLigneUncheckedUpdateWithoutPrescriptionLigneInput = {
@@ -1156,6 +1271,7 @@ export type DispensationLigneUncheckedUpdateWithoutPrescriptionLigneInput = {
   montant?: Prisma.FloatFieldUpdateOperationsInput | number
   observation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  ligneFacture?: Prisma.LigneFactureUncheckedUpdateOneWithoutDispensationLigneNestedInput
 }
 
 export type DispensationLigneUncheckedUpdateManyWithoutPrescriptionLigneInput = {
@@ -1197,6 +1313,7 @@ export type DispensationLigneUpdateWithoutMedicamentInput = {
   prescriptionLigne?: Prisma.PrescriptionLigneUpdateOneWithoutDispensationLignesNestedInput
   stock?: Prisma.StockMedicamentUpdateOneWithoutDispensationLignesNestedInput
   pharmacien?: Prisma.UserUpdateOneWithoutDispensationLignesNestedInput
+  ligneFacture?: Prisma.LigneFactureUpdateOneWithoutDispensationLigneNestedInput
 }
 
 export type DispensationLigneUncheckedUpdateWithoutMedicamentInput = {
@@ -1211,6 +1328,7 @@ export type DispensationLigneUncheckedUpdateWithoutMedicamentInput = {
   montant?: Prisma.FloatFieldUpdateOperationsInput | number
   observation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  ligneFacture?: Prisma.LigneFactureUncheckedUpdateOneWithoutDispensationLigneNestedInput
 }
 
 export type DispensationLigneUncheckedUpdateManyWithoutMedicamentInput = {
@@ -1252,6 +1370,7 @@ export type DispensationLigneUpdateWithoutStockInput = {
   prescriptionLigne?: Prisma.PrescriptionLigneUpdateOneWithoutDispensationLignesNestedInput
   medicament?: Prisma.MedicamentUpdateOneRequiredWithoutDispensationLignesNestedInput
   pharmacien?: Prisma.UserUpdateOneWithoutDispensationLignesNestedInput
+  ligneFacture?: Prisma.LigneFactureUpdateOneWithoutDispensationLigneNestedInput
 }
 
 export type DispensationLigneUncheckedUpdateWithoutStockInput = {
@@ -1266,6 +1385,7 @@ export type DispensationLigneUncheckedUpdateWithoutStockInput = {
   montant?: Prisma.FloatFieldUpdateOperationsInput | number
   observation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  ligneFacture?: Prisma.LigneFactureUncheckedUpdateOneWithoutDispensationLigneNestedInput
 }
 
 export type DispensationLigneUncheckedUpdateManyWithoutStockInput = {
@@ -1307,6 +1427,7 @@ export type DispensationLigneUpdateWithoutDispensationInput = {
   medicament?: Prisma.MedicamentUpdateOneRequiredWithoutDispensationLignesNestedInput
   stock?: Prisma.StockMedicamentUpdateOneWithoutDispensationLignesNestedInput
   pharmacien?: Prisma.UserUpdateOneWithoutDispensationLignesNestedInput
+  ligneFacture?: Prisma.LigneFactureUpdateOneWithoutDispensationLigneNestedInput
 }
 
 export type DispensationLigneUncheckedUpdateWithoutDispensationInput = {
@@ -1321,6 +1442,7 @@ export type DispensationLigneUncheckedUpdateWithoutDispensationInput = {
   montant?: Prisma.FloatFieldUpdateOperationsInput | number
   observation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  ligneFacture?: Prisma.LigneFactureUncheckedUpdateOneWithoutDispensationLigneNestedInput
 }
 
 export type DispensationLigneUncheckedUpdateManyWithoutDispensationInput = {
@@ -1357,6 +1479,7 @@ export type DispensationLigneSelect<ExtArgs extends runtime.Types.Extensions.Int
   medicament?: boolean | Prisma.MedicamentDefaultArgs<ExtArgs>
   stock?: boolean | Prisma.DispensationLigne$stockArgs<ExtArgs>
   pharmacien?: boolean | Prisma.DispensationLigne$pharmacienArgs<ExtArgs>
+  ligneFacture?: boolean | Prisma.DispensationLigne$ligneFactureArgs<ExtArgs>
 }, ExtArgs["result"]["dispensationLigne"]>
 
 export type DispensationLigneSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -1421,6 +1544,7 @@ export type DispensationLigneInclude<ExtArgs extends runtime.Types.Extensions.In
   medicament?: boolean | Prisma.MedicamentDefaultArgs<ExtArgs>
   stock?: boolean | Prisma.DispensationLigne$stockArgs<ExtArgs>
   pharmacien?: boolean | Prisma.DispensationLigne$pharmacienArgs<ExtArgs>
+  ligneFacture?: boolean | Prisma.DispensationLigne$ligneFactureArgs<ExtArgs>
 }
 export type DispensationLigneIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   dispensation?: boolean | Prisma.DispensationDefaultArgs<ExtArgs>
@@ -1445,6 +1569,7 @@ export type $DispensationLignePayload<ExtArgs extends runtime.Types.Extensions.I
     medicament: Prisma.$MedicamentPayload<ExtArgs>
     stock: Prisma.$StockMedicamentPayload<ExtArgs> | null
     pharmacien: Prisma.$UserPayload<ExtArgs> | null
+    ligneFacture: Prisma.$LigneFacturePayload<ExtArgs> | null
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: number
@@ -1858,6 +1983,7 @@ export interface Prisma__DispensationLigneClient<T, Null = never, ExtArgs extend
   medicament<T extends Prisma.MedicamentDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.MedicamentDefaultArgs<ExtArgs>>): Prisma.Prisma__MedicamentClient<runtime.Types.Result.GetResult<Prisma.$MedicamentPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   stock<T extends Prisma.DispensationLigne$stockArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.DispensationLigne$stockArgs<ExtArgs>>): Prisma.Prisma__StockMedicamentClient<runtime.Types.Result.GetResult<Prisma.$StockMedicamentPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   pharmacien<T extends Prisma.DispensationLigne$pharmacienArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.DispensationLigne$pharmacienArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+  ligneFacture<T extends Prisma.DispensationLigne$ligneFactureArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.DispensationLigne$ligneFactureArgs<ExtArgs>>): Prisma.Prisma__LigneFactureClient<runtime.Types.Result.GetResult<Prisma.$LigneFacturePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -2352,6 +2478,25 @@ export type DispensationLigne$pharmacienArgs<ExtArgs extends runtime.Types.Exten
    */
   include?: Prisma.UserInclude<ExtArgs> | null
   where?: Prisma.UserWhereInput
+}
+
+/**
+ * DispensationLigne.ligneFacture
+ */
+export type DispensationLigne$ligneFactureArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the LigneFacture
+   */
+  select?: Prisma.LigneFactureSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the LigneFacture
+   */
+  omit?: Prisma.LigneFactureOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.LigneFactureInclude<ExtArgs> | null
+  where?: Prisma.LigneFactureWhereInput
 }
 
 /**

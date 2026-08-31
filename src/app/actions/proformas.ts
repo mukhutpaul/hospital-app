@@ -225,9 +225,9 @@ export async function getProformaById(id: number): Promise<ActionResult> {
 /* ==========================================================
    PRESTATIONS DU PATIENT
 ========================================================== */
-
 export async function getPatientPrestations(
   patientId: number,
+  consultationId?: number,
 ): Promise<ActionResult> {
   try {
     /* ======================================================
@@ -238,6 +238,16 @@ export async function getPatientPrestations(
       return {
         success: false,
         message: "Patient invalide.",
+      };
+    }
+
+    if (
+      consultationId !== undefined &&
+      (!Number.isInteger(consultationId) || consultationId <= 0)
+    ) {
+      return {
+        success: false,
+        message: "Consultation invalide.",
       };
     }
 
@@ -267,12 +277,18 @@ export async function getPatientPrestations(
     }
 
     /* ======================================================
-       FACTURES DU PATIENT
-       
+       FACTURES EXISTANTES DU PATIENT
+
        IMPORTANT :
-       On travaille maintenant avec FACTURE + LIGNEFACTURE.
-       Une prestation n'est considérée comme consommée que
-       lorsqu'elle existe réellement dans une facture.
+       LigneFacture ne possède PAS directement :
+       - consultationId
+       - hospitalisationId
+
+       Ces informations sont portées par :
+       - Facture.consultationId
+       - Facture.hospitalisationId
+       - LigneFacture.consultationActeId
+       - LigneFacture.hospitalisationId n'existe pas
     ====================================================== */
 
     const factures = await prisma.facture.findMany({
@@ -282,18 +298,24 @@ export async function getPatientPrestations(
 
       select: {
         id: true,
-        numero: true,
+
         consultationId: true,
+        admissionId: true,
         hospitalisationId: true,
 
         lignes: {
           select: {
             id: true,
+
             acteId: true,
             consultationActeId: true,
+
             serviceId: true,
+
             demandeLaboratoireLigneId: true,
             demandeImagerieId: true,
+
+            dispensationLigneId: true,
 
             designation: true,
             quantite: true,
@@ -306,291 +328,339 @@ export async function getPatientPrestations(
     });
 
     /* ======================================================
-       ENSEMBLES DES PRESTATIONS DÉJÀ FACTURÉES
+       PRESTATIONS DÉJÀ FACTURÉES
     ====================================================== */
 
-    /**
-     * LABORATOIRE
-     *
-     * Ici on utilise :
-     * LigneFacture.demandeLaboratoireLigneId
-     */
     const lignesLaboratoireFacturees = new Set<number>();
 
-    /**
-     * IMAGERIE
-     *
-     * Ici on utilise :
-     * LigneFacture.demandeImagerieId
-     */
     const demandesImagerieFacturees = new Set<number>();
 
-    /**
-     * ACTES DE CONSULTATION
-     *
-     * Ici on utilise :
-     * LigneFacture.consultationActeId
-     */
     const consultationsActesFactures = new Set<number>();
 
-    /**
-     * ACTES MÉDICAUX DU CATALOGUE
-     */
-    const actesFactures = new Set<number>();
+    const dispensationsLignesFacturees = new Set<number>();
 
-    /**
-     * CONSULTATIONS
-     */
     const consultationsFacturees = new Set<number>();
 
-    /**
-     * HOSPITALISATIONS
-     *
-     * Ici on récupère directement Facture.hospitalisationId.
-     */
     const hospitalisationsFacturees = new Set<number>();
 
     for (const facture of factures) {
-      /* ----------------------------------------------------
-         CONSULTATION
-      ---------------------------------------------------- */
+      /* --------------------------------------------------
+         CONSULTATION FACTURÉE
+      -------------------------------------------------- */
 
       if (facture.consultationId !== null) {
         consultationsFacturees.add(facture.consultationId);
       }
 
-      /* ----------------------------------------------------
-         HOSPITALISATION
-      ---------------------------------------------------- */
+      /* --------------------------------------------------
+         HOSPITALISATION FACTURÉE
+      -------------------------------------------------- */
 
       if (facture.hospitalisationId !== null) {
-        hospitalisationsFacturees.add(facture.hospitalisationId);
+        hospitalisationsFacturees.add(
+          facture.hospitalisationId,
+        );
       }
 
-      /* ----------------------------------------------------
+      /* --------------------------------------------------
          LIGNES DE FACTURE
-      ---------------------------------------------------- */
+      -------------------------------------------------- */
 
       for (const ligne of facture.lignes) {
+        /* -----------------------------------------------
+           LABORATOIRE
+        ------------------------------------------------ */
+
         if (ligne.demandeLaboratoireLigneId !== null) {
-          lignesLaboratoireFacturees.add(ligne.demandeLaboratoireLigneId);
+          lignesLaboratoireFacturees.add(
+            ligne.demandeLaboratoireLigneId,
+          );
         }
+
+        /* -----------------------------------------------
+           IMAGERIE
+        ------------------------------------------------ */
 
         if (ligne.demandeImagerieId !== null) {
-          demandesImagerieFacturees.add(ligne.demandeImagerieId);
+          demandesImagerieFacturees.add(
+            ligne.demandeImagerieId,
+          );
         }
+
+        /* -----------------------------------------------
+           ACTE DE CONSULTATION
+        ------------------------------------------------ */
 
         if (ligne.consultationActeId !== null) {
-          consultationsActesFactures.add(ligne.consultationActeId);
+          consultationsActesFactures.add(
+            ligne.consultationActeId,
+          );
         }
 
-        if (ligne.acteId !== null) {
-          actesFactures.add(ligne.acteId);
+        /* -----------------------------------------------
+           PHARMACIE
+        ------------------------------------------------ */
+
+        if (ligne.dispensationLigneId !== null) {
+          dispensationsLignesFacturees.add(
+            ligne.dispensationLigneId,
+          );
         }
       }
     }
 
     /* ======================================================
        PHARMACIE
-       
-       ATTENTION :
-       Ton modèle LigneFacture ne possède actuellement
-       aucun dispensationId ni dispensationLigneId.
-
-       On récupère donc les dispensations, mais on ne peut
-       PAS déterminer avec certitude qu'une dispensation
-       particulière a déjà été facturée.
-
-       On les retourne donc pour le moment.
     ====================================================== */
 
-    const dispensations = await prisma.dispensation.findMany({
-      where: {
-        patientId,
+    const dispensations =
+      await prisma.dispensation.findMany({
+        where: {
+          patientId,
 
-        statut: {
-          not: "ANNULEE",
+          statut: {
+            not: "ANNULEE",
+          },
         },
-      },
 
-      orderBy: {
-        dateDispensation: "desc",
-      },
+        orderBy: {
+          dateDispensation: "desc",
+        },
 
-      select: {
-        id: true,
-        numero: true,
-        dateDispensation: true,
-        statut: true,
+        select: {
+          id: true,
+          numero: true,
+          dateDispensation: true,
+          statut: true,
 
-        lignes: {
-          select: {
-            id: true,
-            quantiteDispensee: true,
-            prixUnitaire: true,
-            montant: true,
+          lignes: {
+            select: {
+              id: true,
+              quantiteDispensee: true,
+              prixUnitaire: true,
+              montant: true,
 
-            medicament: {
-              select: {
-                id: true,
-                nom: true,
-                code: true,
-                forme: true,
-                dosage: true,
+              medicament: {
+                select: {
+                  id: true,
+                  nom: true,
+                  code: true,
+                  forme: true,
+                  dosage: true,
+                },
               },
             },
           },
         },
-      },
-    });
-
-    const pharmacie = dispensations.flatMap((dispensation) => {
-      return dispensation.lignes.map((ligne) => {
-        const quantite = toPositiveNumber(ligne.quantiteDispensee);
-
-        const prix = toPositiveNumber(ligne.prixUnitaire);
-
-        const montant = toPositiveNumber(ligne.montant ?? quantite * prix);
-
-        return {
-          id: `PHARMACIE-${dispensation.id}-${ligne.id}`,
-
-          sourceId: ligne.id,
-
-          typeOrigine: "PHARMACIE",
-
-          designation:
-            `Médicament : ${ligne.medicament.nom}` +
-            (ligne.medicament.dosage ? ` ${ligne.medicament.dosage}` : "") +
-            (ligne.medicament.forme ? ` (${ligne.medicament.forme})` : ""),
-
-          quantite,
-
-          prixUnitaire: prix,
-
-          montant,
-
-          reference: dispensation.numero,
-
-          dispensationId: dispensation.id,
-
-          dispensationLigneId: ligne.id,
-        };
       });
-    });
+
+    const pharmacie = dispensations.flatMap(
+      (dispensation) =>
+        dispensation.lignes
+          .filter(
+            (ligne) =>
+              !dispensationsLignesFacturees.has(
+                ligne.id,
+              ),
+          )
+          .map((ligne) => {
+            const quantite = toPositiveNumber(
+              ligne.quantiteDispensee,
+            );
+
+            const prix = toPositiveNumber(
+              ligne.prixUnitaire,
+            );
+
+            const montant = toPositiveNumber(
+              ligne.montant ??
+                quantite * prix,
+            );
+
+            return {
+              id: `PHARMACIE-${dispensation.id}-${ligne.id}`,
+
+              sourceId: ligne.id,
+
+              typeOrigine: "PHARMACIE",
+
+              designation:
+                `Médicament : ${ligne.medicament.nom}` +
+                (ligne.medicament.dosage
+                  ? ` ${ligne.medicament.dosage}`
+                  : "") +
+                (ligne.medicament.forme
+                  ? ` (${ligne.medicament.forme})`
+                  : ""),
+
+              quantite,
+
+              prixUnitaire: prix,
+
+              montant,
+
+              reference: dispensation.numero,
+
+              dispensationId: dispensation.id,
+
+              dispensationLigneId: ligne.id,
+
+              devise: "USD",
+            };
+          }),
+    );
 
     /* ======================================================
        LABORATOIRE
     ====================================================== */
 
-    const demandesLabo = await prisma.demandeLaboratoire.findMany({
-      where: {
-        patientId,
-      },
+    const demandesLabo =
+      await prisma.demandeLaboratoire.findMany({
+        where: {
+          patientId,
 
-      orderBy: {
-        dateDemande: "desc",
-      },
+          ...(consultationId !== undefined
+            ? {
+                consultationId,
+              }
+            : {}),
+        },
 
-      select: {
-        id: true,
-        numero: true,
-        dateDemande: true,
-        statut: true,
+        orderBy: {
+          dateDemande: "desc",
+        },
 
-        serviceId: true,
-        consultationId: true,
+        select: {
+          id: true,
+          numero: true,
+          dateDemande: true,
+          statut: true,
 
-        lignes: {
-          select: {
-            id: true,
-            prix: true,
+          serviceId: true,
+          consultationId: true,
 
-            examen: {
-              select: {
-                id: true,
-                code: true,
-                nom: true,
-                prix: true,
+          lignes: {
+            select: {
+              id: true,
+              prix: true,
+
+              examen: {
+                select: {
+                  id: true,
+                  code: true,
+                  nom: true,
+                  prix: true,
+                },
               },
             },
           },
         },
-      },
-    });
+      });
 
-    const laboratoire = demandesLabo.flatMap((demande) => {
-      return demande.lignes
-        .filter((ligne) => !lignesLaboratoireFacturees.has(ligne.id))
-        .map((ligne) => {
-          const prix = toPositiveNumber(ligne.prix ?? ligne.examen.prix);
+    const laboratoire =
+      demandesLabo.flatMap(
+        (demande) =>
+          demande.lignes
+            .filter(
+              (ligne) =>
+                !lignesLaboratoireFacturees.has(
+                  ligne.id,
+                ),
+            )
+            .map((ligne) => {
+              const prix = toPositiveNumber(
+                ligne.prix ??
+                  ligne.examen.prix,
+              );
 
-          return {
-            id: `LABO-${demande.id}-${ligne.id}`,
+              return {
+                id: `LABO-${demande.id}-${ligne.id}`,
 
-            sourceId: ligne.id,
+                sourceId: ligne.id,
 
-            typeOrigine: "LABORATOIRE",
+                typeOrigine: "LABORATOIRE",
 
-            designation: `Examen laboratoire : ${ligne.examen.nom}`,
+                designation:
+                  `Examen laboratoire : ${ligne.examen.nom}`,
 
-            quantite: 1,
+                quantite: 1,
 
-            prixUnitaire: prix,
+                prixUnitaire: prix,
 
-            montant: prix,
+                montant: prix,
 
-            reference: demande.numero,
+                reference: demande.numero,
 
-            demandeLaboratoireId: demande.id,
+                demandeLaboratoireId:
+                  demande.id,
 
-            demandeLaboratoireLigneId: ligne.id,
+                demandeLaboratoireLigneId:
+                  ligne.id,
 
-            serviceId: demande.serviceId ?? null,
+                serviceId:
+                  demande.serviceId ?? null,
 
-            consultationId: demande.consultationId ?? null,
-          };
-        });
-    });
+                consultationId:
+                  demande.consultationId ?? null,
+
+                devise: "USD",
+              };
+            }),
+      );
 
     /* ======================================================
        IMAGERIE
     ====================================================== */
 
-    const demandesImagerie = await prisma.demandeImagerie.findMany({
-      where: {
-        patientId,
-      },
+    const demandesImagerie =
+      await prisma.demandeImagerie.findMany({
+        where: {
+          patientId,
 
-      orderBy: {
-        dateDemande: "desc",
-      },
+          ...(consultationId !== undefined
+            ? {
+                consultationId,
+              }
+            : {}),
+        },
 
-      select: {
-        id: true,
-        numero: true,
-        dateDemande: true,
-        statut: true,
+        orderBy: {
+          dateDemande: "desc",
+        },
 
-        serviceId: true,
-        consultationId: true,
+        select: {
+          id: true,
+          numero: true,
+          dateDemande: true,
+          statut: true,
 
-        examen: {
-          select: {
-            id: true,
-            code: true,
-            nom: true,
-            type: true,
-            prix: true,
+          serviceId: true,
+          consultationId: true,
+
+          examen: {
+            select: {
+              id: true,
+              code: true,
+              nom: true,
+              type: true,
+              prix: true,
+              devise: true,
+            },
           },
         },
-      },
-    });
+      });
 
     const imagerie = demandesImagerie
-      .filter((demande) => !demandesImagerieFacturees.has(demande.id))
+      .filter(
+        (demande) =>
+          !demandesImagerieFacturees.has(
+            demande.id,
+          ),
+      )
       .map((demande) => {
-        const prix = toPositiveNumber(demande.examen.prix);
+        const prix = toPositiveNumber(
+          demande.examen.prix,
+        );
 
         return {
           id: `IMAGERIE-${demande.id}`,
@@ -599,7 +669,8 @@ export async function getPatientPrestations(
 
           typeOrigine: "IMAGERIE",
 
-          designation: `Imagerie : ${demande.examen.nom}`,
+          designation:
+            `Imagerie : ${demande.examen.nom}`,
 
           quantite: 1,
 
@@ -609,11 +680,17 @@ export async function getPatientPrestations(
 
           reference: demande.numero,
 
-          demandeImagerieId: demande.id,
+          demandeImagerieId:
+            demande.id,
 
-          serviceId: demande.serviceId ?? null,
+          serviceId:
+            demande.serviceId ?? null,
 
-          consultationId: demande.consultationId ?? null,
+          consultationId:
+            demande.consultationId ?? null,
+
+          devise:
+            demande.examen.devise ?? "USD",
         };
       });
 
@@ -621,128 +698,415 @@ export async function getPatientPrestations(
        HOSPITALISATION
     ====================================================== */
 
-    const hospitalisations = await prisma.hospitalisation.findMany({
-      where: {
-        patientId,
-      },
+    const hospitalisations =
+      await prisma.hospitalisation.findMany({
+        where: {
+          patientId,
+        },
 
-      orderBy: {
-        dateEntree: "desc",
-      },
+        orderBy: {
+          dateEntree: "desc",
+        },
 
-      select: {
-        id: true,
-        numero: true,
-        dateEntree: true,
-        dateSortie: true,
-        statut: true,
+        select: {
+          id: true,
+          numero: true,
+          dateEntree: true,
+          dateSortie: true,
+          statut: true,
 
-        serviceId: true,
+          serviceId: true,
 
-        lit: {
-          select: {
-            numero: true,
+          lit: {
+            select: {
+              numero: true,
 
-            chambre: {
-              select: {
-                numero: true,
-                type: true,
-                prixJournalier: true,
+              chambre: {
+                select: {
+                  numero: true,
+                  type: true,
+                  prixJournalier: true,
+                },
+              },
+            },
+          },
+
+          service: {
+            select: {
+              id: true,
+              nom: true,
+            },
+          },
+
+          soins: {
+            select: {
+              id: true,
+              type: true,
+              description: true,
+              dateSoin: true,
+            },
+          },
+        },
+      });
+
+    const hospitalisationPrestations =
+      hospitalisations.flatMap(
+        (hospitalisation) => {
+          /* -----------------------------------------------
+             HOSPITALISATION DÉJÀ FACTURÉE
+          ------------------------------------------------ */
+
+          if (
+            hospitalisationsFacturees.has(
+              hospitalisation.id,
+            )
+          ) {
+            return [];
+          }
+
+          const result: any[] = [];
+
+          /* -----------------------------------------------
+             CHAMBRE
+          ------------------------------------------------ */
+
+          const prixJournalier =
+            toPositiveNumber(
+              hospitalisation.lit
+                ?.chambre
+                ?.prixJournalier,
+            );
+
+          if (prixJournalier > 0) {
+            const dateDebut =
+              new Date(
+                hospitalisation.dateEntree,
+              );
+
+            const dateFin =
+              hospitalisation.dateSortie
+                ? new Date(
+                    hospitalisation.dateSortie,
+                  )
+                : new Date();
+
+            const difference =
+              Math.max(
+                0,
+                dateFin.getTime() -
+                  dateDebut.getTime(),
+              );
+
+            const jours =
+              Math.max(
+                1,
+                Math.ceil(
+                  difference /
+                    (1000 *
+                      60 *
+                      60 *
+                      24),
+                ),
+              );
+
+            result.push({
+              id:
+                `HOSPITALISATION-${hospitalisation.id}-CHAMBRE`,
+
+              sourceId:
+                hospitalisation.id,
+
+              typeOrigine:
+                "HOSPITALISATION",
+
+              designation:
+                `Hospitalisation - Chambre ${
+                  hospitalisation.lit
+                    ?.chambre
+                    ?.numero ||
+                  hospitalisation.lit
+                    ?.numero ||
+                  "N/A"
+                }`,
+
+              quantite: jours,
+
+              prixUnitaire:
+                prixJournalier,
+
+              montant:
+                jours *
+                prixJournalier,
+
+              reference:
+                hospitalisation.numero,
+
+              hospitalisationId:
+                hospitalisation.id,
+
+              serviceId:
+                hospitalisation.serviceId ??
+                null,
+            });
+          }
+
+          /* -----------------------------------------------
+             SOINS
+          ------------------------------------------------ */
+
+          for (
+            const soin of hospitalisation.soins
+          ) {
+            result.push({
+              id:
+                `HOSPITALISATION-${hospitalisation.id}-SOIN-${soin.id}`,
+
+              sourceId: soin.id,
+
+              typeOrigine:
+                "HOSPITALISATION",
+
+              designation:
+                soin.description
+                  ? `${soin.type} - ${soin.description}`
+                  : `Soin : ${soin.type}`,
+
+              quantite: 1,
+
+              prixUnitaire: 0,
+
+              montant: 0,
+
+              reference:
+                hospitalisation.numero,
+
+              hospitalisationId:
+                hospitalisation.id,
+
+              serviceId:
+                hospitalisation.serviceId ??
+                null,
+            });
+          }
+
+          return result;
+        },
+      );
+
+    /* ======================================================
+       CONSULTATIONS
+    ====================================================== */
+
+    const consultations =
+      await prisma.consultation.findMany({
+        where: {
+          patientId,
+
+          ...(consultationId !== undefined
+            ? {
+                idConsultation:
+                  consultationId,
+              }
+            : {}),
+        },
+
+        orderBy: {
+          dateConsultation: "desc",
+        },
+
+        select: {
+          idConsultation: true,
+          dateConsultation: true,
+          diagnostic: true,
+          motif: true,
+
+          medecin: {
+            select: {
+              id: true,
+              matricule: true,
+              nom: true,
+              postNom: true,
+              prenom: true,
+            },
+          },
+
+          service: {
+            select: {
+              id: true,
+              code: true,
+              nom: true,
+            },
+          },
+
+          specialite: {
+            select: {
+              id: true,
+              code: true,
+              nom: true,
+            },
+          },
+
+          admission: {
+            select: {
+              id: true,
+              numero: true,
+              type: true,
+              statut: true,
+              dateAdmission: true,
+            },
+          },
+
+          actes: {
+            select: {
+              id: true,
+              acteId: true,
+
+              quantite: true,
+              prixUnitaire: true,
+              montant: true,
+
+              acte: {
+                select: {
+                  id: true,
+                  code: true,
+                  libelle: true,
+                  categorie: true,
+                  montant: true,
+                  devise: true,
+                },
               },
             },
           },
         },
+      });
 
-        service: {
-          select: {
-            id: true,
-            nom: true,
-          },
-        },
+    /* ======================================================
+       ACTES LIÉS À LA CONSULTATION
+    ====================================================== */
 
-        soins: {
-          select: {
-            id: true,
-            type: true,
-            description: true,
-            dateSoin: true,
-          },
-        },
-      },
-    });
+    const actesConsultation =
+      consultations.flatMap(
+        (consultation) =>
+          consultation.actes
+            .filter(
+              (ligne) =>
+                !consultationsActesFactures.has(
+                  ligne.id,
+                ),
+            )
+            .map((ligne) => {
+              const quantite =
+                Math.max(
+                  1,
+                  toPositiveNumber(
+                    ligne.quantite,
+                  ),
+                );
 
-    const hospitalisationPrestations = hospitalisations.flatMap(
-      (hospitalisation) => {
-        /*
-         * Si une facture possède hospitalisationId,
-         * on considère cette hospitalisation comme déjà
-         * facturée.
-         */
-        if (hospitalisationsFacturees.has(hospitalisation.id)) {
-          return [];
-        }
+              const prix =
+                toPositiveNumber(
+                  ligne.prixUnitaire ??
+                    ligne.acte.montant,
+                );
 
-        const result: ProformaLigneInput[] = [];
+              const montant =
+                toPositiveNumber(
+                  ligne.montant ??
+                    quantite * prix,
+                );
 
-        /* ==============================================
-             CHAMBRE
-          ============================================== */
+              /*
+               * ligne.id correspond au véritable
+               * ConsultationActe.id.
+               */
 
-        const prixJournalier = toPositiveNumber(
-          hospitalisation.lit?.chambre?.prixJournalier,
-        );
+              const consultationActeId =
+                ligne.id;
 
-        if (prixJournalier > 0) {
-          const dateDebut = new Date(hospitalisation.dateEntree);
+              return {
+                id:
+                  `CONSULTATION-ACTE-${consultation.idConsultation}-${consultationActeId}`,
 
-          const dateFin = hospitalisation.dateSortie
-            ? new Date(hospitalisation.dateSortie)
-            : new Date();
+                sourceId:
+                  consultationActeId,
 
-          const difference = Math.max(
-            0,
-            dateFin.getTime() - dateDebut.getTime(),
-          );
+                typeOrigine:
+                  "ACTE_MEDICAL",
 
-          const jours = Math.max(
-            1,
-            Math.ceil(difference / (1000 * 60 * 60 * 24)),
-          );
+                designation:
+                  ligne.acte.categorie
+                    ? `${ligne.acte.libelle} (${ligne.acte.categorie})`
+                    : ligne.acte.libelle,
 
-          result.push({
-            typeOrigine: "HOSPITALISATION",
+                quantite,
 
-            designation: `Hospitalisation - Chambre ${
-              hospitalisation.lit?.chambre?.numero ||
-              hospitalisation.lit?.numero ||
-              "N/A"
-            }`,
+                prixUnitaire:
+                  prix,
 
-            quantite: jours,
+                montant,
 
-            prixUnitaire: prixJournalier,
+                reference:
+                  ligne.acte.code ??
+                  `ACTE-${ligne.acte.id}`,
 
-            montant: jours * prixJournalier,
+                acteId:
+                  ligne.acteId,
 
-            reference: hospitalisation.numero,
+                consultationActeId,
 
-            hospitalisationId: hospitalisation.id,
+                consultationId:
+                  consultation.idConsultation,
 
-            serviceId: hospitalisation.serviceId ?? null,
-          });
-        }
+                serviceId:
+                  consultation.service?.id ??
+                  null,
 
-        /* ==============================================
-             SOINS
-          ============================================== */
+                devise:
+                  ligne.acte.devise ??
+                  "USD",
+              };
+            }),
+      );
 
-        for (const soin of hospitalisation.soins) {
-          result.push({
-            typeOrigine: "HOSPITALISATION",
+    /* ======================================================
+       CONSULTATION COMME PRESTATION
+    ====================================================== */
 
-            designation: soin.description
-              ? `${soin.type} - ${soin.description}`
-              : `Soin : ${soin.type}`,
+    const autres =
+      consultations
+        .filter(
+          (consultation) =>
+            !consultationsFacturees.has(
+              consultation.idConsultation,
+            ),
+        )
+        .map((consultation) => {
+          const nomMedecin =
+            consultation.medecin
+              ? [
+                  consultation.medecin.nom,
+                  consultation.medecin.postNom,
+                  consultation.medecin.prenom,
+                ]
+                  .filter(Boolean)
+                  .join(" ")
+              : "";
+
+          return {
+            id:
+              `AUTRE-CONSULTATION-${consultation.idConsultation}`,
+
+            sourceId:
+              consultation.idConsultation,
+
+            typeOrigine:
+              "AUTRES",
+
+            designation:
+              `Consultation médicale` +
+              (nomMedecin
+                ? ` - Dr ${nomMedecin}`
+                : ""),
 
             quantite: 1,
 
@@ -750,180 +1114,104 @@ export async function getPatientPrestations(
 
             montant: 0,
 
-            reference: hospitalisation.numero,
+            reference:
+              `CONS-${consultation.idConsultation}`,
 
-            hospitalisationId: hospitalisation.id,
+            consultationId:
+              consultation.idConsultation,
 
-            serviceId: hospitalisation.serviceId ?? null,
-          });
-        }
-
-        return result;
-      },
-    );
+            serviceId:
+              consultation.service?.id ??
+              null,
+          };
+        });
 
     /* ======================================================
-       CONSULTATIONS
+       ACTES DU CATALOGUE
     ====================================================== */
 
-    const consultations = await prisma.consultation.findMany({
-      where: {
-        patientId,
-      },
-
-      orderBy: {
-        dateConsultation: "desc",
-      },
-
-      select: {
-        idConsultation: true,
-        dateConsultation: true,
-        diagnostic: true,
-
-        medecin: {
-          select: {
-            nom: true,
-            postNom: true,
-            prenom: true,
-          },
+    const actes =
+      await prisma.acteMedical.findMany({
+        where: {
+          actif: true,
         },
 
-        service: {
-          select: {
-            id: true,
-            nom: true,
-          },
+        orderBy: {
+          libelle: "asc",
         },
 
-        actes: {
-          select: {
-            id: true,
-            acteId: true,
-            quantite: true,
-            prixUnitaire: true,
-            montant: true,
-
-            acte: {
-              select: {
-                id: true,
-                code: true,
-                libelle: true,
-                categorie: true,
-                montant: true,
-                devise: true,
-              },
-            },
-          },
+        select: {
+          id: true,
+          code: true,
+          libelle: true,
+          categorie: true,
+          montant: true,
+          devise: true,
         },
-      },
-    });
+      });
 
-    const autres = consultations
-      .filter(
-        (consultation) =>
-          !consultationsFacturees.has(consultation.idConsultation),
-      )
-      .map((consultation) => {
-        const nomMedecin = consultation.medecin
-          ? [
-              consultation.medecin.nom,
-              consultation.medecin.postNom,
-              consultation.medecin.prenom,
-            ]
-              .filter(Boolean)
-              .join(" ")
-          : "";
+    const actesMedicaux =
+      actes.map((acte) => {
+        const prix =
+          toPositiveNumber(
+            acte.montant,
+          );
 
         return {
-          id: `AUTRE-CONSULTATION-${consultation.idConsultation}`,
+          id:
+            `ACTE-${acte.id}`,
 
-          sourceId: consultation.idConsultation,
+          sourceId:
+            acte.id,
 
-          typeOrigine: "AUTRES",
+          typeOrigine:
+            "ACTE_MEDICAL",
 
           designation:
-            `Consultation médicale` + (nomMedecin ? ` - Dr ${nomMedecin}` : ""),
+            acte.categorie
+              ? `${acte.libelle} (${acte.categorie})`
+              : acte.libelle,
 
           quantite: 1,
 
-          prixUnitaire: 0,
+          prixUnitaire:
+            prix,
 
-          montant: 0,
+          montant:
+            prix,
 
-          reference: `CONS-${consultation.idConsultation}`,
+          reference:
+            acte.code,
 
-          consultationId: consultation.idConsultation,
+          acteId:
+            acte.id,
 
-          serviceId: consultation.service?.id ?? null,
+          /*
+           * Un acte du catalogue n'est pas
+           * un ConsultationActe.
+           */
+
+          consultationActeId:
+            null,
+
+          consultationId:
+            null,
+
+          devise:
+            acte.devise ??
+            "USD",
         };
       });
 
     /* ======================================================
-       ACTES MÉDICAUX DU CATALOGUE
-       
-       IMPORTANT :
-       Les actes médicaux sont un catalogue.
-       On ne les supprime pas simplement parce qu'un autre
-       patient les a déjà facturés.
-
-       Ils restent disponibles pour être ajoutés.
-    ====================================================== */
-
-    const actes = await prisma.acteMedical.findMany({
-      where: {
-        actif: true,
-      },
-
-      orderBy: {
-        libelle: "asc",
-      },
-
-      select: {
-        id: true,
-        code: true,
-        libelle: true,
-        categorie: true,
-        montant: true,
-        devise: true,
-      },
-    });
-
-    const actesMedicaux = actes.map((acte) => {
-      const prix = toPositiveNumber(acte.montant);
-
-      return {
-        id: `ACTE-${acte.id}`,
-
-        sourceId: acte.id,
-
-        typeOrigine: "ACTE_MEDICAL",
-
-        designation: acte.categorie
-          ? `${acte.libelle} (${acte.categorie})`
-          : acte.libelle,
-
-        quantite: 1,
-
-        prixUnitaire: prix,
-
-        montant: prix,
-
-        reference: acte.code,
-
-        acteId: acte.id,
-
-        devise: acte.devise,
-      };
-    });
-
-    /* ======================================================
-       LIGNES AUTOMATIQUES
+       LIGNES GLOBALES
     ====================================================== */
 
     const lignes = [
       ...pharmacie,
       ...laboratoire,
       ...imagerie,
+      ...actesConsultation,
       ...hospitalisationPrestations,
       ...autres,
     ];
@@ -935,7 +1223,8 @@ export async function getPatientPrestations(
     return {
       success: true,
 
-      message: "Prestations disponibles du patient récupérées.",
+      message:
+        "Prestations disponibles du patient récupérées.",
 
       data: {
         patient,
@@ -946,9 +1235,12 @@ export async function getPatientPrestations(
 
         imagerie,
 
-        hospitalisation: hospitalisationPrestations,
+        hospitalisation:
+          hospitalisationPrestations,
 
         actesMedicaux,
+
+        actesConsultation,
 
         autres,
 
@@ -956,26 +1248,41 @@ export async function getPatientPrestations(
       },
     };
   } catch (error) {
-    console.error("getPatientPrestations:", error);
+    console.error(
+      "getPatientPrestations:",
+      error,
+    );
 
     return {
       success: false,
 
-      message: "Erreur lors du chargement des prestations du patient.",
+      message:
+        "Erreur lors du chargement des prestations du patient.",
 
       data: {
         patient: null,
+
         pharmacie: [],
+
         laboratoire: [],
+
         imagerie: [],
+
         hospitalisation: [],
+
         actesMedicaux: [],
+
+        actesConsultation: [],
+
         autres: [],
+
         lignes: [],
       },
     };
   }
 }
+
+
 
 /* ==========================================================
    COMPATIBILITÉ

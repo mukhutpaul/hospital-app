@@ -1,13 +1,10 @@
 "use client";
 
-import Link from "next/link";
-
 import {
   Activity,
   BedDouble,
   CalendarDays,
   ClipboardList,
-  FileText,
   HeartPulse,
   Hospital,
   Stethoscope,
@@ -18,9 +15,7 @@ type Props = {
   admission: any;
 };
 
-function statutLabel(
-  statut: string
-) {
+function statutLabel(statut: string) {
   switch (statut) {
     case "EN_ATTENTE":
       return "En attente";
@@ -45,9 +40,7 @@ function statutLabel(
   }
 }
 
-function statutClass(
-  statut: string
-) {
+function statutClass(statut: string) {
   switch (statut) {
     case "EN_ATTENTE":
       return "badge-warning";
@@ -72,9 +65,7 @@ function statutClass(
   }
 }
 
-function typeLabel(
-  type: string
-) {
+function typeLabel(type: string) {
   switch (type) {
     case "PROGRAMMEE":
       return "Admission programmée";
@@ -90,24 +81,74 @@ function typeLabel(
   }
 }
 
+function hospitalisationStatutLabel(statut: string | null | undefined) {
+  switch (statut) {
+    case "EN_COURS":
+      return "En cours";
+
+    case "TERMINEE":
+      return "Terminée";
+
+    case "SORTIE":
+      return "Sorti";
+
+    case "ANNULEE":
+      return "Annulée";
+
+    default:
+      return statut || "—";
+  }
+}
+
 export default function AdmissionDetail({
   admission,
 }: Props) {
+  const patient = admission.patient;
 
-  const patient =
-    admission.patient;
+  const triage = admission.triage;
 
-  const triage =
-    admission.triage;
+  const consultation = admission.consultation;
 
-  const consultation =
-    admission.consultation;
-
-  const hospitalisation =
-    admission.hospitalisation;
+  const hospitalisation = admission.hospitalisation;
 
   const derniereConstante =
     admission.constantes?.[0];
+
+  /*
+  ==========================================================
+  GESTION DU PARCOURS
+  ==========================================================
+  */
+
+  const patientEstSorti =
+    admission.statut === "TERMINEE" ||
+    admission.statut === "SORTIE" ||
+    admission.statut === "TERMINE";
+
+  /*
+  Une hospitalisation existe peut-être toujours dans la base,
+  même après la sortie du patient.
+
+  On vérifie donc si elle est réellement terminée.
+  */
+
+  const hospitalisationTerminee =
+    hospitalisation &&
+    (
+      hospitalisation.statut === "TERMINEE" ||
+      hospitalisation.statut === "SORTIE" ||
+      hospitalisation.statut === "SORTI" ||
+      hospitalisation.dateSortie
+    );
+
+  const hospitalisationEnCours =
+    hospitalisation &&
+    !hospitalisationTerminee &&
+    !patientEstSorti;
+
+  const sortieEffectuee =
+    patientEstSorti ||
+    hospitalisationTerminee;
 
   return (
     <div className="space-y-6">
@@ -286,8 +327,7 @@ export default function AdmissionDetail({
               <InfoItem
                 label="Service"
                 value={
-                  admission.service
-                    ?.nom
+                  admission.service?.nom
                 }
               />
 
@@ -303,9 +343,7 @@ export default function AdmissionDetail({
               <InfoItem
                 label="Créée par"
                 value={
-                  admission
-                    .createdBy
-                    ?.name
+                  admission.createdBy?.name
                 }
               />
 
@@ -349,9 +387,13 @@ export default function AdmissionDetail({
 
             <ul className="steps steps-vertical lg:steps-horizontal w-full">
 
+              {/* ADMISSION */}
+
               <li className="step step-primary">
                 Admission
               </li>
+
+              {/* TRIAGE */}
 
               <li
                 className={
@@ -363,6 +405,8 @@ export default function AdmissionDetail({
                 Triage
               </li>
 
+              {/* CONSULTATION */}
+
               <li
                 className={
                   consultation
@@ -372,6 +416,8 @@ export default function AdmissionDetail({
               >
                 Consultation
               </li>
+
+              {/* HOSPITALISATION */}
 
               <li
                 className={
@@ -383,10 +429,11 @@ export default function AdmissionDetail({
                 Hospitalisation
               </li>
 
+              {/* SORTIE */}
+
               <li
                 className={
-                  admission.statut ===
-                  "TERMINEE"
+                  sortieEffectuee
                     ? "step step-primary"
                     : "step"
                 }
@@ -503,7 +550,7 @@ export default function AdmissionDetail({
               <Metric
                 label="Température"
                 value={
-                  derniereConstante.temperature
+                  derniereConstante.temperature != null
                     ? `${derniereConstante.temperature} °C`
                     : "—"
                 }
@@ -512,8 +559,8 @@ export default function AdmissionDetail({
               <Metric
                 label="Tension"
                 value={
-                  derniereConstante.tensionSystolique &&
-                  derniereConstante.tensionDiastolique
+                  derniereConstante.tensionSystolique != null &&
+                  derniereConstante.tensionDiastolique != null
                     ? `${derniereConstante.tensionSystolique}/${derniereConstante.tensionDiastolique}`
                     : "—"
                 }
@@ -522,7 +569,7 @@ export default function AdmissionDetail({
               <Metric
                 label="Pouls"
                 value={
-                  derniereConstante.pouls
+                  derniereConstante.pouls != null
                     ? `${derniereConstante.pouls} bpm`
                     : "—"
                 }
@@ -531,7 +578,7 @@ export default function AdmissionDetail({
               <Metric
                 label="SpO₂"
                 value={
-                  derniereConstante.saturation
+                  derniereConstante.saturation != null
                     ? `${derniereConstante.saturation}%`
                     : "—"
                 }
@@ -540,7 +587,7 @@ export default function AdmissionDetail({
               <Metric
                 label="Poids"
                 value={
-                  derniereConstante.poids
+                  derniereConstante.poids != null
                     ? `${derniereConstante.poids} kg`
                     : "—"
                 }
@@ -549,7 +596,7 @@ export default function AdmissionDetail({
               <Metric
                 label="Taille"
                 value={
-                  derniereConstante.taille
+                  derniereConstante.taille != null
                     ? `${derniereConstante.taille} cm`
                     : "—"
                 }
@@ -558,8 +605,9 @@ export default function AdmissionDetail({
               <Metric
                 label="Glycémie"
                 value={
-                  derniereConstante.glycemie ??
-                  "—"
+                  derniereConstante.glycemie != null
+                    ? derniereConstante.glycemie
+                    : "—"
                 }
               />
 
@@ -603,9 +651,8 @@ export default function AdmissionDetail({
                 <InfoItem
                   label="Médecin"
                   value={
-                    consultation
-                      .medecin
-                      ? `Dr ${consultation.medecin.nom} ${consultation.medecin.postNom || ""} ${consultation.medecin.prenom}`
+                    consultation.medecin
+                      ? `Dr ${consultation.medecin.nom} ${consultation.medecin.postNom || ""} ${consultation.medecin.prenom || ""}`
                       : null
                   }
                 />
@@ -613,18 +660,14 @@ export default function AdmissionDetail({
                 <InfoItem
                   label="Service"
                   value={
-                    consultation
-                      .service
-                      ?.nom
+                    consultation.service?.nom
                   }
                 />
 
                 <InfoItem
                   label="Spécialité"
                   value={
-                    consultation
-                      .specialite
-                      ?.nom
+                    consultation.specialite?.nom
                   }
                 />
 
@@ -695,70 +738,99 @@ export default function AdmissionDetail({
 
           ) : (
 
-            <div className="mt-5 grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div className="mt-5 space-y-5">
 
-              <InfoItem
-                label="Numéro"
-                value={
-                  hospitalisation.numero
-                }
-              />
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
 
-              <InfoItem
-                label="Service"
-                value={
-                  hospitalisation
-                    .service
-                    ?.nom
-                }
-              />
+                <InfoItem
+                  label="Numéro"
+                  value={
+                    hospitalisation.numero
+                  }
+                />
 
-              <InfoItem
-                label="Médecin"
-                value={
-                  hospitalisation
-                    .medecin
-                    ? `Dr ${hospitalisation.medecin.nom} ${hospitalisation.medecin.prenom}`
-                    : null
-                }
-              />
+                <InfoItem
+                  label="Service"
+                  value={
+                    hospitalisation.service?.nom
+                  }
+                />
 
-              <InfoItem
-                label="Chambre"
-                value={
-                  hospitalisation
-                    .lit
-                    ?.chambre
-                    ?.numero
-                }
-              />
+                <InfoItem
+                  label="Médecin"
+                  value={
+                    hospitalisation.medecin
+                      ? `Dr ${hospitalisation.medecin.nom} ${hospitalisation.medecin.prenom || ""}`
+                      : null
+                  }
+                />
 
-              <InfoItem
-                label="Lit"
-                value={
-                  hospitalisation
-                    .lit
-                    ?.numero
-                }
-              />
+                <InfoItem
+                  label="Chambre"
+                  value={
+                    hospitalisation.lit?.chambre?.numero
+                  }
+                />
 
-              <InfoItem
-                label="Date entrée"
-                value={
-                  new Date(
+                <InfoItem
+                  label="Lit"
+                  value={
+                    hospitalisation.lit?.numero
+                  }
+                />
+
+                <InfoItem
+                  label="Date entrée"
+                  value={
                     hospitalisation.dateEntree
-                  ).toLocaleString(
-                    "fr-FR"
-                  )
-                }
-              />
+                      ? new Date(
+                          hospitalisation.dateEntree
+                        ).toLocaleString("fr-FR")
+                      : null
+                  }
+                />
 
-              <InfoItem
-                label="Statut"
-                value={
-                  hospitalisation.statut
-                }
-              />
+                <InfoItem
+                  label="Statut"
+                  value={hospitalisationStatutLabel(
+                    hospitalisation.statut
+                  )}
+                />
+
+                {hospitalisation.dateSortie && (
+
+                  <InfoItem
+                    label="Date sortie"
+                    value={
+                      new Date(
+                        hospitalisation.dateSortie
+                      ).toLocaleString("fr-FR")
+                    }
+                  />
+
+                )}
+
+              </div>
+
+              {sortieEffectuee && (
+
+                <div className="alert alert-success">
+
+                  <div>
+
+                    <h3 className="font-bold">
+                      Patient sorti
+                    </h3>
+
+                    <p className="text-sm">
+                      Cette hospitalisation est terminée et le patient a quitté le service.
+                    </p>
+
+                  </div>
+
+                </div>
+
+              )}
 
             </div>
 
@@ -792,19 +864,15 @@ export default function AdmissionDetail({
               <InfoItem
                 label="Numéro"
                 value={
-                  admission
-                    .rendezVous
-                    .numero
+                  admission.rendezVous.numero
                 }
               />
 
               <InfoItem
                 label="Médecin"
                 value={
-                  admission
-                    .rendezVous
-                    .medecin
-                    ? `Dr ${admission.rendezVous.medecin.nom} ${admission.rendezVous.medecin.prenom}`
+                  admission.rendezVous.medecin
+                    ? `Dr ${admission.rendezVous.medecin.nom} ${admission.rendezVous.medecin.prenom || ""}`
                     : null
                 }
               />
@@ -812,20 +880,14 @@ export default function AdmissionDetail({
               <InfoItem
                 label="Spécialité"
                 value={
-                  admission
-                    .rendezVous
-                    .specialite
-                    ?.nom
+                  admission.rendezVous.specialite?.nom
                 }
               />
 
               <InfoItem
                 label="Service"
                 value={
-                  admission
-                    .rendezVous
-                    .service
-                    ?.nom
+                  admission.rendezVous.service?.nom
                 }
               />
 
@@ -884,7 +946,7 @@ function InfoItem({
       </div>
 
       <div className="font-medium">
-        {value || "—"}
+        {value ?? "—"}
       </div>
 
     </div>
